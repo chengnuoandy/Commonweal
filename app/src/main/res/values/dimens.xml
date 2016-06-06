@@ -3,8 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+
     <!-- 字体大小 -->
     <dimen name="title_text_size">20sp</dimen>
     <dimen name="text_size_default">18sp</dimen>
@@ -14,5 +13,5 @@
     <dimen name="little_space">5dp</dimen>
 
     <!-- 高度 -->
-    <dimen name="normal_input_height">30dp</dimen>
+    <dimen name="normal_input_height">45dp</dimen>
 </resources>

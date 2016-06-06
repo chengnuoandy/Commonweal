@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_space"
-            android:drawableLeft="@mipmap/login_ic_password"
+            android:drawableLeft="@mipmap/login_ic_account"
             android:drawablePadding="@dimen/normal_space"
             android:hint="请输入手机号"
             android:inputType="phone"

@@ -1,0 +1,16 @@
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision 4704b3db6f097db4ed74261041f9fe81a13ef4f7)
++++ app/src/main/res/layout/activity_main.xml	(revision )
+@@ -6,7 +6,6 @@
+     android:paddingBottom="@dimen/activity_vertical_margin"
+     android:paddingLeft="@dimen/activity_horizontal_margin"
+     android:paddingRight="@dimen/activity_horizontal_margin"
+-    android:paddingTop="@dimen/activity_vertical_margin"
+-    tools:context="com.goldenratio.commonweal.ui.activity.MainActivity">
++    android:paddingTop="@dimen/activity_vertical_margin">
+ 
+ </RelativeLayout>

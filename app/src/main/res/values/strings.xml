@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Commonweal</string>
+    <string name="login">立即登陆</string>
 </resources>

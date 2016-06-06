@@ -34,7 +34,8 @@
 
             android:drawableLeft="@mipmap/user_name"
             android:ems="10"
-            android:id="@+id/ed_name"
+            android:hint="请输入用户名"
+            android:id="@+id/et_name"
             android:layout_gravity="center_horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="30dp"
@@ -50,11 +51,12 @@
             android:layout_width="280dp"
             android:layout_height="40dp"
             android:inputType="textPersonName"
+            android:hint="请输入手机号"
 
 
             android:drawableLeft="@mipmap/user_name"
             android:ems="10"
-            android:id="@+id/ed_phone"
+            android:id="@+id/et_phone"
             android:layout_gravity="center_horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="30dp"
@@ -76,6 +78,7 @@
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:ems="10"
+         android:hint="请输入验证码"
         android:paddingLeft="10dp"
         android:background="@color/bac_kuang"
         android:drawableLeft="@mipmap/msg"/>
@@ -101,11 +104,12 @@
             android:layout_width="280dp"
             android:layout_height="40dp"
             android:inputType="textPersonName"
+            android:hint="请输入密码"
 
 
             android:drawableLeft="@mipmap/user_name"
             android:ems="10"
-            android:id="@+id/ed_password"
+            android:id="@+id/et_password"
             android:layout_gravity="center_horizontal"
             android:paddingLeft="10dp"
             android:paddingRight="30dp"

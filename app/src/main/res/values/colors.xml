@@ -2,5 +2,17 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="main_hue">#fe5722</color>
+    <color name="stress">#e4393c</color>
+    <color name="title_words">#222222</color>
+    <color name="ordinary">#666666</color>
+    <color name="assist">#999999</color>
+    <color name="split">#d7d7d7</color>
+    <color name="main_bg">#f3f5f7</color>
+    <color name="split_module_bg">#f8f8f8</color>
+    <color name="bac_kuang">FF877373</color>
+
+
+
+
 </resources>

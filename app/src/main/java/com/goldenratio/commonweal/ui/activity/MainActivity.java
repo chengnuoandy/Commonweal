@@ -15,7 +15,10 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodsFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
+import com.goldenratio.commonweal.ui.fragment.LoginFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+
+import cn.bmob.v3.Bmob;
 
 /**
  * Created by Administrator on 2016/6/6.
@@ -31,6 +34,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //初始化Bmob
+        Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
         // 初始化fragmentManager
         mFmMain = getSupportFragmentManager();
         // 设置进入app时默认选中
@@ -55,7 +60,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
                 changeFragment(new DynamicFragment(), true);
                 break;
             case R.id.rb_my:// 我
-                changeFragment(new MyFragment(), true);
+                //changeFragment(new MyFragment(), true);
+                changeFragment(new LoginFragment(), true);
                 break;
             default:
                 break;

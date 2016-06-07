@@ -74,7 +74,7 @@
         </RelativeLayout>
 
         <EditText
-            android:id="@+id/my_register_get_check_upass"
+            android:id="@+id/et_yzm"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/normal_space"
@@ -83,7 +83,7 @@
             android:hint="请输入验证码" />
 
         <EditText
-            android:id="@+id/my_register_password"
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/normal_space"
@@ -94,7 +94,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/my_register_btn"
+        android:id="@+id/btn_zc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/normal_space"
@@ -106,9 +106,9 @@
 
     <CheckBox
         android:id="@+id/checkBox1"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:button="@drawable/login_checkbox_checked_normal"
         android:checked="true"
         android:text="我已看过并同意扔吧(用户使用协议)" />
 

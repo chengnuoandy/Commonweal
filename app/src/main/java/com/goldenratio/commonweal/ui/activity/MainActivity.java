@@ -36,6 +36,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         setContentView(R.layout.activity_main);
         //初始化Bmob
         Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
+        String libName = "bmob"; // 库名, 注意没有前缀lib和后缀.so
+        System.loadLibrary(libName);
         // 初始化fragmentManager
         mFmMain = getSupportFragmentManager();
         // 设置进入app时默认选中

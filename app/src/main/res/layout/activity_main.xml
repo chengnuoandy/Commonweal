@@ -3,27 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-  >
+    android:orientation="vertical">
+
     <include
         android:id="@+id/show_main_title"
         layout="@layout/title_layout" />
+
     <FrameLayout
-        android:id="@+id/main_content"
+        android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
-    </FrameLayout>
+        android:layout_weight="1"></FrameLayout>
 
     <RadioGroup
-        android:id="@+id/main_bottom_tabs"
+        android:id="@+id/rg_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/app_bg"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/main_home"
+            android:id="@+id/rb_help"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,7 +36,7 @@
             android:textColor="@color/gray" />
 
         <RadioButton
-            android:id="@+id/main_video"
+            android:id="@+id/rb_goods"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -49,7 +49,7 @@
             android:textColor="@color/gray" />
 
         <RadioButton
-            android:id="@+id/maim_dynamic"
+            android:id="@+id/rb_dynamic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -62,7 +62,7 @@
             android:textColor="@color/gray" />
 
         <RadioButton
-            android:id="@+id/main_my"
+            android:id="@+id/rb_my"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

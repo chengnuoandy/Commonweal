@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -15,7 +14,6 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodsFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
-import com.goldenratio.commonweal.ui.fragment.LoginFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
 import cn.bmob.v3.Bmob;
@@ -63,7 +61,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
                 break;
             case R.id.rb_my:// 我
                 //changeFragment(new MyFragment(), true);
-                changeFragment(new LoginFragment(), true);
+                changeFragment(new MyFragment(), true);
                 break;
             default:
                 break;

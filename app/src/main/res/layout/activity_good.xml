@@ -14,7 +14,7 @@
         >
 
         <ImageView
-            android:id="@+id/iv_input_back"
+            android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -34,7 +34,7 @@
     </RelativeLayout>
 
     <EditText
-        android:id="@+id/et_input_title"
+        android:id="@+id/et_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/normal_input_height"
         android:hint="标题"
@@ -43,7 +43,7 @@
         android:gravity="center_vertical"/>
 
     <EditText
-        android:id="@+id/tv_input_express"
+        android:id="@+id/tv_express"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="描述一下的你的物品"
@@ -60,24 +60,24 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content">
        <ImageButton
-           android:id="@+id/ib_inout_picture"
+           android:id="@+id/ib_picture"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:src="@mipmap/ic_launcher"
            android:layout_marginLeft="@dimen/normal_space"/>
        <ImageButton
-           android:id="@+id/ib_inout_video"
+           android:id="@+id/ib_video"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:src="@mipmap/ic_launcher"
            android:layout_marginLeft="@dimen/normal_space"
-           android:layout_toRightOf="@+id/ib_inout_picture"/>
+           android:layout_toRightOf="@+id/ib_picture"/>
 
 
 
    </RelativeLayout>
     <TextView
-        android:id="@+id/tv_input_location"
+        android:id="@+id/tv_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="位置"
@@ -91,9 +91,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/assist"/>
+        android:background="@color/normal_bg_color"/>
     <EditText
-        android:id="@+id/et_input_price"
+        android:id="@+id/et_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
@@ -103,5 +103,30 @@
         android:background="@color/main_bg"
 
         />
+    <TextView
+        android:id="@+id/tv_tupe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="类型:   "
+        android:textSize="@dimen/title_text_size"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:background="@color/main_bg"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/normal_bg_color"/>
+    <Button
+        android:id="@+id/bt_push"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/register_reset"
+
+        android:text="发布"/>
+
 
 </LinearLayout>

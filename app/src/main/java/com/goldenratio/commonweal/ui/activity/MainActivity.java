@@ -19,7 +19,7 @@ import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import cn.bmob.v3.Bmob;
 
 /**
- * Created by Administrator on 2016/6/6.
+ * Created by Kiuber on 2016/6/6.
  */
 public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener {
 

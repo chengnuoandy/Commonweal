@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/normal_bg_color"
+        android:padding="5dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_input_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/normal_space"
+            android:src="@mipmap/ic_back" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/normal_space"
+            android:text="发布"
+            android:textSize="@dimen/title_text_size" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_input_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/normal_input_height"
+        android:hint="标题"
+        android:textSize="@dimen/title_text_size"
+        android:paddingLeft="@dimen/normal_space"
+        android:gravity="center_vertical"/>
+
+    <EditText
+        android:id="@+id/tv_input_express"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="描述一下的你的物品"
+        android:textSize="@dimen/title_text_size"
+        android:paddingLeft="@dimen/normal_space"
+        android:background="@color/main_bg"
+        android:paddingTop="@dimen/normal_space"
+       />
+
+
+
+    <RelativeLayout
+       android:layout_marginTop="100dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <ImageButton
+           android:id="@+id/ib_inout_picture"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@mipmap/ic_launcher"
+           android:layout_marginLeft="@dimen/normal_space"/>
+       <ImageButton
+           android:id="@+id/ib_inout_video"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@mipmap/ic_launcher"
+           android:layout_marginLeft="@dimen/normal_space"
+           android:layout_toRightOf="@+id/ib_inout_picture"/>
+
+
+
+   </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_input_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="位置"
+        android:textSize="@dimen/title_text_size"
+        android:padding="@dimen/normal_space"
+        android:gravity="center_vertical"
+        android:drawableLeft="@mipmap/login_ic_check_pass"
+
+
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/assist"/>
+    <EditText
+        android:id="@+id/et_input_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="价格:   "
+        android:textSize="@dimen/title_text_size"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:background="@color/main_bg"
+
+        />
+
+</LinearLayout>

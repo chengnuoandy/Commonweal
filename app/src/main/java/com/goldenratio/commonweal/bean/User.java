@@ -5,9 +5,9 @@ import cn.bmob.v3.BmobObject;
 /**
  * Created by lvxue on 2016/6/7 0007.
  */
-public class UserBean extends BmobObject {
+public class User extends BmobObject {
     private String User_NO;     //用户注册顺序
-    private String User_ID用户ID;     //随机产生，唯一（User+随机码）
+    private String User_ID;//用户ID随机产生，唯一（User+随机码）
     private String User_Name;//用户昵称
     private String User_Phone;//用户手机号
     private String User_Password;   //用户密码
@@ -19,8 +19,8 @@ public class UserBean extends BmobObject {
         User_Address = user_Address;
     }
 
-    public void setUser_ID用户ID(String user_ID用户ID) {
-        User_ID用户ID = user_ID用户ID;
+    public void setUser_ID(String user_ID) {
+        User_ID = user_ID;
     }
 
     public void setUser_Integral(String user_Integral) {
@@ -51,8 +51,8 @@ public class UserBean extends BmobObject {
         return User_Address;
     }
 
-    public String getUser_ID用户ID() {
-        return User_ID用户ID;
+    public String getUser_ID() {
+        return User_ID;
     }
 
     public String getUser_Integral() {

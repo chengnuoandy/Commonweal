@@ -28,7 +28,8 @@
             android:layout_marginLeft="@dimen/normal_space"
             android:padding="@dimen/normal_space"
             android:text="1输入手机号"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            />
 
         <ImageButton
             android:layout_width="wrap_content"

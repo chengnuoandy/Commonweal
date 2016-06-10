@@ -12,8 +12,9 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!--获取sd卡写的权限，用于文件上传和下载-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--允许读取手机状态 用于创建BmobInstallation-->
+    <!--允许读取手机状态 用于创建BmobInstallation   用于调用 JNI-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -29,6 +30,12 @@
             </intent-filter>
         </activity>
 
+        <!-- 必须注册在微博授权，分享微博时候用到 -->
+        <activity android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
+                  android:configChanges="keyboardHidden|orientation"
+                  android:windowSoftInputMode="adjustResize"
+                  android:exported="false" >
+        </activity>
     </application>
 
 </manifest>

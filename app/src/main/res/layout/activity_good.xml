@@ -33,6 +33,8 @@
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
+
+
     <EditText
         android:id="@+id/et_title"
         android:layout_width="match_parent"
@@ -40,10 +42,15 @@
         android:hint="标题"
         android:textSize="@dimen/title_text_size"
         android:paddingLeft="@dimen/normal_space"
+        android:background="@color/main_bg"
         android:gravity="center_vertical"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@color/normal_bg_color"/>
 
     <EditText
-        android:id="@+id/tv_express"
+        android:id="@+id/et_describe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="描述一下的你的物品"

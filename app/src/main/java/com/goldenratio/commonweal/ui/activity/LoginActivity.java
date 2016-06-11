@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,12 +16,15 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.AccessTokenKeeper;
 import com.goldenratio.commonweal.api.Constants;
-import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.api.ErrorInfo;
+import com.goldenratio.commonweal.api.UsersAPI;
+import com.goldenratio.commonweal.api.User;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
+import com.sina.weibo.sdk.net.RequestListener;
 
 import java.text.SimpleDateFormat;
 
@@ -48,8 +52,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     EditText mLoginPassword;
     @BindView(R.id.login_btn)
     Button mLoginBtn;
-    @BindView(R.id.imageView1)
-    ImageView mImageView1;
 
     /** 显示认证后的信息，如 AccessToken */
     private AuthInfo mAuthInfo;
@@ -59,6 +61,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
     /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
     private SsoHandler mSsoHandler;
+
+    /**
+     * 用户信息接口
+     */
+    private UsersAPI mUsersAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +86,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         if (mAccessToken.isSessionValid()) {
             updateTokenView(true);
         }
+        mUsersAPI = new UsersAPI(this,Constants.APP_KEY,mAccessToken);
     }
 
     @Override
@@ -92,14 +100,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     }
 
     private void isLogin(String Phone, final String Password) {
-        BmobQuery<User> bmobQuery = new BmobQuery<User>();
-        bmobQuery.getObject(this, "hdYuaaaf", new GetListener<User>() {
+        BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+        bmobQuery.getObject(this, "hdYuaaaf", new GetListener<com.goldenratio.commonweal.bean.User>() {
             @Override
-            public void onSuccess(User user) {
+            public void onSuccess(com.goldenratio.commonweal.bean.User user) {
                 if (Password.equals(user.getUser_Password())) {
                     Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(LoginActivity.this, "登陆失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -123,9 +131,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         public void onComplete(Bundle values) {
             // 从 Bundle 中解析 Token
             mAccessToken = Oauth2AccessToken.parseAccessToken(values);
-            //从这里获取用户输入的 电话号码信息
-            String  phoneNum =  mAccessToken.getPhoneNum();
             if (mAccessToken.isSessionValid()) {
+                //openAPI相关
+                long uid = Long.parseLong(mAccessToken.getUid());
+                mUsersAPI.show(uid, mListener);
                 // 显示 Token
                 updateTokenView(false);
 
@@ -169,6 +178,35 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
+
+    /**
+     * 微博 OpenAPI 回调接口。
+     */
+    private RequestListener mListener = new RequestListener() {
+        @Override
+        public void onComplete(String response) {
+            if (!TextUtils.isEmpty(response)) {
+                // 调用 User#parse 将JSON串解析成User对象
+                User user = User.parse(response);
+                if (user != null) {
+                    String uss = user.profile_image_url; //用户头像地址 50*50
+
+//                    mUser.setText(user.screen_name);
+//                    mIco.setImageURI(Uri.parse(user.avatar_large));
+                    Log.d("lxc","微博认证用户："+user.verified);
+                } else {
+                    Toast.makeText(LoginActivity.this, response,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+
+        @Override
+        public void onWeiboException(WeiboException e) {
+            ErrorInfo info = ErrorInfo.parse(e.getMessage());
+            Log.d("lxc", "onWeiboException: "+info);
+        }
+    };
 
     /**
      * 显示当前 Token 信息。

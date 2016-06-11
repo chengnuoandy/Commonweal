@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -77,7 +78,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         }
         transaction.commit();
     }
-
 
     // 监听返回键，然后退出
     @Override

@@ -12,6 +12,7 @@ public class User extends BmobObject {
     private String User_NO;//用户注册顺序
     private String User_ID;//用户ID随机产生，唯一（User+随机码）
     private String User_Name;//用户昵称
+    private String User_Autograph;//用户昵称
     private String User_Phone;//用户手机号
     private String User_Password;//用户密码
     private String User_Address;//用户地址
@@ -28,6 +29,14 @@ public class User extends BmobObject {
 
     public void setUser_Is_Real_Name(boolean user_Is_Real_Name) {
         User_Is_Real_Name = user_Is_Real_Name;
+    }
+
+    public String getUser_Autograph() {
+        return User_Autograph;
+    }
+
+    public void setUser_Autograph(String user_Autograph) {
+        User_Autograph = user_Autograph;
     }
 
     public void setUser_Is_CW_Org(boolean user_Is_CW_Org) {

@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -71,6 +72,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mSsoHandler = new SsoHandler(this, mAuthInfo);
 
         mLoginBtn.setOnClickListener(this);
+
+        // 从 SharedPreferences 中读取上次已保存好 AccessToken 等信息，
+        // 第一次启动本应用，AccessToken 不可用
+        mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        if (mAccessToken.isSessionValid()) {
+            updateTokenView(true);
+        }
     }
 
     @Override
@@ -149,6 +157,16 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         public void onWeiboException(WeiboException e) {
             Toast.makeText(LoginActivity.this,
                     "Auth exception : " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // SSO 授权回调
+        // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
+        if (mSsoHandler != null) {
+            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
     }
 

@@ -27,6 +27,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     private FragmentManager mFmMain;// 管理fragment的类
     private RadioGroup mRgTabs;
     private RadioButton mRbDefalut;
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,5 +77,23 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
             transaction.addToBackStack(null);
         }
         transaction.commit();
+    }
+
+    // 监听返回键，然后退出
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次返回键退出",
+                        Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

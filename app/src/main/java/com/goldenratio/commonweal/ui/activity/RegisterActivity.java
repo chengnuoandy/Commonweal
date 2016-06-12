@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,6 +84,14 @@ public class RegisterActivity extends AppCompatActivity {
         SMSSDK.submitVerificationCode("86", mPhone, ver);
     }
 
+    //添加用户信息到数据库
+    private void addUserinfo() {
+        User u = new User();
+        u.setUser_Phone(mPhone);
+        u.setUser_Password(mEtPassword.getText().toString());
+        u.save(this);
+    }
+
     //检测验证码提交状态
     Handler handler = new Handler() {
         @Override
@@ -128,10 +137,6 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(mEtPhone.getText().toString())) {
                     Log.d("send", "发送");
                     mPhone = mEtPhone.getText().toString();
-/*                    String regPhone = "(^(13\\d|15[^4,\\D]|17[13678]|18\\d)\\d{8}|170[^346,\\D]\\d{7})$";
-                    Pattern p = Pattern.compile(regPhone);
-                    Matcher m = p.matcher(mPhone);
-                    m.matches();*/
                     sendVerification();
                 } else {
                     Toast.makeText(RegisterActivity.this, "电话不能为空", Toast.LENGTH_SHORT).show();
@@ -149,6 +154,17 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.d("comm", "提交成功");
                 break;
             case R.id.btn_register:
+                if (!TextUtils.isEmpty(mEtPassword.getText().toString())) {
+                    String mPassword = mEtPassword.getText().toString();
+                    Log.d("pass", "注册");
+                    if (mPassword.length() >= 8)
+                  //  ^[a-zA-Z]\w{5,17}$
+                        addUserinfo();
+                    else
+                        Toast.makeText(getApplicationContext(), "密码不能低于8位", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

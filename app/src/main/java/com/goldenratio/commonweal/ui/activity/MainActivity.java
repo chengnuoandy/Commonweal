@@ -1,10 +1,12 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.widget.RadioButton;
@@ -12,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.receiver.NetworkReceiver;
 import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodsFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
@@ -22,7 +25,7 @@ import cn.bmob.v3.Bmob;
 /**
  * Created by Kiuber on 2016/6/6.
  */
-public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener, NetworkReceiver.NetEventHandle {
 
     private FragmentManager mFmMain;// 管理fragment的类
     private RadioGroup mRgTabs;
@@ -33,6 +36,12 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        NetworkReceiver.ehList.add(this);
+
+        //检测网络状态
+        new NetworkReceiver().onReceive(getApplicationContext(), new Intent());
+
         String libName = "bmob"; // 库名, 注意没有前缀lib和后缀.so
         System.loadLibrary(libName);
         //初始化Bmob
@@ -89,11 +98,42 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
                         Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
-                finish();
+                //      finish();
                 System.exit(0);
             }
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NetworkReceiver.ehList.remove(this);
+    }
+
+    //网络改变时检测网络状态，并提示用户
+    @Override
+    public void netState(NetworkReceiver.NetState netCode) {
+        switch (netCode) {
+            case NET_NO:
+                Toast.makeText(this, "亲，没有网络哟", Toast.LENGTH_SHORT).show();
+                break;
+            case NET_2G:
+            case NET_3G:
+            case NET_4G:
+                Toast.makeText(getApplicationContext(), "当前处于2G/3G/4G网络，请注意您的网络流量", Toast.LENGTH_SHORT).show();
+                break;
+            case NET_WIFI:
+                break;
+            case NET_UNKNOWN:
+                Toast.makeText(this, "未知网络", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this, "不知道什么情况~>_<~", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        Log.d("net00", netCode + "");
+    }
 }
+

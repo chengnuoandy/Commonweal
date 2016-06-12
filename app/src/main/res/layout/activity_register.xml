@@ -166,8 +166,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
             android:checked="true"
-            android:text="我已阅读并同意"
-            />
+            android:text="我已阅读并同意"/>
 
         <TextView
             android:id="@+id/tv_agreement"
@@ -177,6 +176,4 @@
             android:text="扔吧用户协议"
             android:textColor="@color/colorPrimaryDark"/>
     </LinearLayout>
-
-
 </LinearLayout>

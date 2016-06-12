@@ -2,13 +2,16 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,8 +20,8 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.AccessTokenKeeper;
 import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
-import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.api.User;
+import com.goldenratio.commonweal.api.UsersAPI;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -26,14 +29,20 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
-import java.text.SimpleDateFormat;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.GetListener;
 
 /**
  * Created by lvxue on 2016/6/7 0007.
@@ -42,18 +51,18 @@ import cn.bmob.v3.listener.GetListener;
 public class LoginActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "lxc";
-    @BindView(R.id.my_login_back)
-    ImageView mMyLoginBack;
-    @BindView(R.id.my_login_register)
-    TextView mMyLoginRegister;
-    @BindView(R.id.relativeLayout1)
-    RelativeLayout mRelativeLayout1;
     @BindView(R.id.login_phone)
     EditText mLoginPhone;
     @BindView(R.id.login_password)
     EditText mLoginPassword;
+    @BindView(R.id.tv_register)
+    TextView mTvRegister;
     @BindView(R.id.login_btn)
     Button mLoginBtn;
+    @BindView(R.id.ib_sina)
+    ImageButton mIbSina;
+    @BindView(R.id.tv_sina)
+    TextView mTvSina;
 
     /**
      * 显示认证后的信息，如 AccessToken
@@ -78,11 +87,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     //用户登陆ID
     private String userID;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ButterKnife.bind(this); //注解框架
+        ButterKnife.bind(this);
+
         // 创建微博实例
         //mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
         // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
@@ -90,6 +102,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mSsoHandler = new SsoHandler(this, mAuthInfo);
 
         mLoginBtn.setOnClickListener(this);
+        mIbSina.setOnClickListener(this);
+        mTvRegister.setOnClickListener(this);
 
         // 从 SharedPreferences 中读取上次已保存好 AccessToken 等信息，
         // 第一次启动本应用，AccessToken 不可用
@@ -97,7 +111,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         if (mAccessToken.isSessionValid()) {
             updateTokenView(true);
         }
-        mUsersAPI = new UsersAPI(this, Constants.APP_KEY, mAccessToken);
+        mUsersAPI = new UsersAPI(LoginActivity.this, Constants.APP_KEY, mAccessToken);
     }
 
     @Override
@@ -107,11 +121,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 //判断密码是否正确
                 isLogin(mLoginPhone.getText().toString(), mLoginPassword.getText().toString());
                 break;
+            case R.id.ib_sina:
+                mSsoHandler.authorize(new AuthListener());
+                break;
+            case R.id.tv_register:
+                Intent mIntent = new Intent(this,RegisterActivity.class);
+                startActivity(mIntent);
         }
     }
 
     /**
-     * 登陆相关逻辑
+     * 登陆相关逻辑(正常登陆)
      */
     private void isLogin(String Phone, final String Password) {
         BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
@@ -127,14 +147,42 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                         //获得数据的objectId信息
                         userID = mUser.getObjectId();
+                        finish();
                     } else {
                         Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
+
             @Override
             public void onError(int code, String msg) {
-                Toast.makeText(LoginActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * 登陆相关逻辑(第三方授权)
+     */
+    private void isLogin(String id) {
+        BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+        bmobQuery.addWhereEqualTo("wb_id", id);
+        //执行查询方法
+        bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+            @Override
+            public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+                //判断查询到的行数
+                if (object.size() == 1) {
+                    //如果此用户已存在，获得数据的objectId信息
+                    com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                    userID = mUser.getObjectId();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(int code, String msg) {
+                Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -210,11 +258,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 // 调用 User#parse 将JSON串解析成User对象
                 User user = User.parse(response);
                 if (user != null) {
-
-//                    String uss = user.profile_image_url; //用户头像地址 50*50
-//                    mUser.setText(user.screen_name);
-//                    mIco.setImageURI(Uri.parse(user.avatar_large));
-                    Log.d("lxc", "微博认证用户：" + user.verified);
+                    isLogin(user.id); //是否已经注册
+//                    Log.d(TAG, "onComplete: " + user.profile_image_url);
+//                    Log.d(TAG, "是否认真: " + user.verified);
+//                    Log.d(TAG, "认证原因: " + user.verified_reason);
+//                    Log.d(TAG, "onComplete: " + user.province);
+//                    Log.d(TAG, "onComplete: " + user.avatar_hd);
+//                    Log.d(TAG, "onComplete: " + user.city);
+//                    Log.d(TAG, "onComplete: "+user.gender);
+                    new myAsyncTask(user).execute(user.profile_image_url);
                 } else {
                     Toast.makeText(LoginActivity.this, response,
                             Toast.LENGTH_LONG).show();
@@ -238,8 +290,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         if (hasExisted) {
             // Token 仍在有效期内，无需再次登录。
             long uid = Long.parseLong(mAccessToken.getUid());
-//            mUsersAPI.show(uid, mListener);
             //如果直接返回一个用户ID
+            isLogin(uid + "");
+//            Log.d(TAG, "uid="+uid);
         }
     }
 
@@ -248,16 +301,52 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         super.onDestroy();
         //向上一个activity发送登陆用户的ID
         Intent intent = new Intent();
-        intent.putExtra("objectId",userID);
-        setResult(RESULT_OK,intent);
+        intent.putExtra("objectId", userID);
+        setResult(RESULT_OK, intent);
     }
 
+
     /**
+     * 异步加载 内部类实现
      * 将获取到的第三方数据发送到数据库
      */
-    private void sendDB(User wbuser) {
-        com.goldenratio.commonweal.bean.User user = new com.goldenratio.commonweal.bean.User();
-        user.setUser_Name(wbuser.screen_name);
-        user.setUser_Is_Real_Name(wbuser.verified);
+    class myAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private com.goldenratio.commonweal.bean.User user = new com.goldenratio.commonweal.bean.User();
+        private User wbuser;
+
+        public myAsyncTask(User wbuser) {
+            this.wbuser = wbuser;
+        }
+
+        //耗时部分执行前运行，主线程中运行，可用来初始化需要的数据
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        //耗时执行部分,只有此部分是运行在WorkerThread线程中
+        //有关网络的一般都是耗时操作，因为网络状况不确定
+        @Override
+        protected Void doInBackground(String... params) {
+            //提交数据
+            user.setUser_Name(wbuser.screen_name);
+            user.setUser_Is_Real_Name(wbuser.verified);
+            if ("m".equals(wbuser.gender)){
+                user.setUser_sex("男");
+            }else if ("f".equals(wbuser.gender)){
+                user.setUser_sex("女");
+            }else {
+                user.setUser_sex("未知");
+            }
+            user.setUser_WbID(wbuser.id);
+            user.setUser_image_max(wbuser.avatar_large);
+            user.setUser_image_min(wbuser.profile_image_url);
+            user.setUser_image_hd(wbuser.avatar_hd);
+            user.setVerified_reason(wbuser.verified_reason); //认证原因
+            user.setUser_Autograph(wbuser.description);
+
+            return null;
+        }
     }
 }

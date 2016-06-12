@@ -3,76 +3,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical">
-
-    <include
-        android:id="@+id/show_main_title"
-        layout="@layout/title_layout" />
-
+    android:orientation="vertical"
+    >
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></FrameLayout>
+        android:layout_weight="1" >
+    </FrameLayout>
 
     <RadioGroup
         android:id="@+id/rg_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/app_bg"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="1dp" >
 
         <RadioButton
             android:id="@+id/rb_help"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@null"
             android:button="@null"
+            android:drawablePadding="3dp"
             android:drawableTop="@mipmap/help"
-            android:gravity="center"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
+            android:gravity="center_horizontal"
             android:text="项目"
-            android:textColor="@color/gray" />
+            android:textColor="@color/black" />
 
         <RadioButton
-            android:id="@+id/rb_goods"
-            android:layout_width="wrap_content"
+            android:id="@+id/rb_good"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@null"
             android:button="@null"
+            android:drawablePadding="3dp"
             android:drawableTop="@mipmap/goods"
-            android:gravity="center"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
+            android:gravity="center_horizontal"
             android:text="物品"
-            android:textColor="@color/gray" />
+            android:textColor="@color/black" />
 
         <RadioButton
             android:id="@+id/rb_dynamic"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@null"
             android:button="@null"
+            android:drawablePadding="3dp"
             android:drawableTop="@mipmap/dynamic"
-            android:gravity="center"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
+            android:gravity="center_horizontal"
             android:text="动态"
-            android:textColor="@color/gray" />
+            android:textColor="@color/black" />
 
         <RadioButton
             android:id="@+id/rb_my"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@null"
             android:button="@null"
+            android:drawablePadding="3dp"
             android:drawableTop="@mipmap/my"
-            android:gravity="center"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
-            android:text="我"
-            android:textColor="@color/gray" />
+            android:gravity="center_horizontal"
+            android:text="我的"
+            android:textColor="@color/black" />
     </RadioGroup>
 
 </LinearLayout>

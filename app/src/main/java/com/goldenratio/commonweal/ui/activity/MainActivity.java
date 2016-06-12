@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,18 +7,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.receiver.NetworkReceiver;
 import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodsFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
-
+import com.goldenratio.commonweal.R;
 import cn.bmob.v3.Bmob;
 
 /**
@@ -32,7 +29,9 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     private RadioButton mRbDefalut;
     private long exitTime = 0;
 
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -63,7 +62,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
             case R.id.rb_help:// 项目
                 changeFragment(new HelpFragment(), true);
                 break;
-            case R.id.rb_goods:// 物品
+            case R.id.rb_good:// 物品
                 changeFragment(new GoodsFragment(), true);
                 break;
             case R.id.rb_dynamic:// 动态

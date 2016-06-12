@@ -13,7 +13,6 @@
         android:gravity="bottom"
         android:orientation="vertical">
 
-
         <EditText
             android:id="@+id/login_phone"
             android:layout_width="match_parent"
@@ -100,6 +99,7 @@
                 android:layout_marginLeft="@dimen/normal_space"
                 android:layout_marginRight="@dimen/normal_space"
                 android:gravity="center_horizontal"
+                android:textColor="@color/black"
                 android:text="其他方式登陆" />
 
             <TextView
@@ -121,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/normal_bg_color"
-                android:src="@mipmap/sina_icon" />
+                android:src="@mipmap/login_sina_ic" />
 
             <TextView
                 android:id="@+id/tv_sina"

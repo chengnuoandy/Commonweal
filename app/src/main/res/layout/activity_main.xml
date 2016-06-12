@@ -32,10 +32,10 @@
             android:background="@null"
             android:button="@null"
             android:drawablePadding="3dp"
-            android:drawableTop="@mipmap/help"
+            android:drawableTop="@mipmap/help_press"
             android:gravity="center_horizontal"
             android:text="项目"
-            android:textColor="@color/black" />
+            android:textColor="@color/main_hue" />
 
         <RadioButton
             android:id="@+id/rb_good"

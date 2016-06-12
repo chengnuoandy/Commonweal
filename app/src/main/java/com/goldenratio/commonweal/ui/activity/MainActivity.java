@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         NetworkReceiver.ehList.add(this);
 
         //检测网络状态
-        new NetworkReceiver().onReceive(getApplicationContext(), new Intent());
+        new NetworkReceiver().onReceive(getApplicationContext(), null);
 
         String libName = "bmob"; // 库名, 注意没有前缀lib和后缀.so
         System.loadLibrary(libName);
@@ -88,6 +88,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         transaction.commit();
     }
 
+
     // 监听返回键，然后退出
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -107,8 +108,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         NetworkReceiver.ehList.remove(this);
     }
 

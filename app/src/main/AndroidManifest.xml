@@ -47,6 +47,12 @@
         </activity>
         <activity android:name=".ui.activity.RegisterActivity">
         </activity>
+
+        <receiver android:name=".receiver.NetworkReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -13,12 +13,13 @@
         android:gravity="bottom"
         android:orientation="vertical">
 
+
         <EditText
             android:id="@+id/login_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_space"
-            android:drawableLeft="@mipmap/login_ic_account"
+            android:drawableLeft="@mipmap/login_user_icon"
             android:drawablePadding="@dimen/normal_space"
             android:hint="请输入手机号"
             android:inputType="phone"
@@ -30,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/little_space"
-            android:drawableLeft="@mipmap/login_ic_password"
+            android:drawableLeft="@mipmap/login_pwd_icon"
             android:drawablePadding="@dimen/normal_space"
             android:hint="请输入密码"
             android:inputType="numberPassword"
@@ -119,7 +120,7 @@
                 android:id="@+id/ib_sina"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/app_bg"
+                android:background="@color/normal_bg_color"
                 android:src="@mipmap/sina_icon" />
 
             <TextView

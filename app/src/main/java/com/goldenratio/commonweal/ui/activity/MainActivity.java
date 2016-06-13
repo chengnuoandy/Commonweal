@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -111,6 +113,22 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("activityresu", "onActivityResult: 执行");
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    String registerReturnPhone = data.getStringExtra("regi_phone");
+                    String registerReturnPassword = data.getStringExtra("regi_password");
+                    Log.d("password000", registerReturnPassword);
+                }
+                break;
+            default:
+                Log.d("activityresu", requestCode + "");
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         NetworkReceiver.ehList.remove(this);
@@ -139,5 +157,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         }
         Log.d("net00", netCode + "");
     }
+
+
 }
 

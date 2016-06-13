@@ -21,6 +21,8 @@ public class User extends BmobObject {
     private String User_Money;//用户余额
     private boolean User_Is_V;//是否是大V用户
     private boolean User_Is_Real_Name;//是否实名认证
+
+
     private boolean User_Is_CW_Org;//是否是公益组织
 
     public void setUser_Is_V(boolean user_Is_V) {

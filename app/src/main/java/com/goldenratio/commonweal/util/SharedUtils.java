@@ -29,4 +29,5 @@ public class SharedUtils {
     public static String getKeyValueString(Context context, String key) {
         return context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE).getString(key, "");
     }
+
 }

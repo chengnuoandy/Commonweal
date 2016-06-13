@@ -16,18 +16,15 @@ import com.goldenratio.commonweal.adapter.MyGridAdapter;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 
 public class MyFragment extends Fragment {
-    private GridView gridview;
-
+    private GridView gridView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
         TextView tt = (TextView) view.findViewById(R.id.text);
-        gridview = (GridView) view.findViewById(R.id.gridview);
-        gridview.setAdapter(new MyGridAdapter(getContext()));
-
-
-       tt.setOnClickListener(new View.OnClickListener() {
+        gridView=(GridView)view.findViewById(R.id.gridview);
+        gridView.setAdapter(new MyGridAdapter(getContext()));
+        tt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);

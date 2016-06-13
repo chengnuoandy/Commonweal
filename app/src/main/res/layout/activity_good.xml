@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back"/>
+            android:src="@mipmap/ic_return"/>
 
         <TextView
             android:layout_width="wrap_content"

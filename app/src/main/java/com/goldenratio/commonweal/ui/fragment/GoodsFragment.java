@@ -13,7 +13,7 @@ public class GoodsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_goods, null);
+		View view = inflater.inflate(R.layout.fragment_good, null);
 		return view;
 	}
 }

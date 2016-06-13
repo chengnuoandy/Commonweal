@@ -12,21 +12,71 @@ public class User extends BmobObject {
     private String User_NO;//用户注册顺序
     private String User_ID;//用户ID随机产生，唯一（User+随机码）
     private String User_Name;//用户昵称
-    private String User_Autograph;//用户个性签名
+    private String User_Autograph;//用户签名
     private String User_Phone;//用户手机号
     private String User_Password;//用户密码
     private String User_Address;//用户地址
     private List User_Receive_Address;//用户收货地址
     private String User_Integral;//用户积分
     private String User_Money;//用户余额
+    private String User_WbID; //绑定的微博ID
+    private String User_sex; //用户性别
+    /** 用户头像地址，50×50像素 */
+    public String User_image_min;
+    /** 用户大头像地址 */
+    public String User_image_max;
+    /** 用户高清大头像地址 */
+    public String User_image_hd;
+    /** 认证原因 */
+    public String verified_reason;
+
+
     private boolean User_Is_V;//是否是大V用户
     private boolean User_Is_Real_Name;//是否实名认证
-
-
     private boolean User_Is_CW_Org;//是否是公益组织
 
     public void setUser_Is_V(boolean user_Is_V) {
         User_Is_V = user_Is_V;
+    }
+
+    public void setUser_image_hd(String user_image_hd) {
+        User_image_hd = user_image_hd;
+    }
+
+    public void setUser_image_max(String user_image_max) {
+        User_image_max = user_image_max;
+    }
+
+    public void setUser_image_min(String user_image_min) {
+        User_image_min = user_image_min;
+    }
+
+    public void setUser_sex(String user_sex) {
+        User_sex = user_sex;
+    }
+
+    public void setVerified_reason(String verified_reason) {
+        this.verified_reason = verified_reason;
+    }
+
+    public String getUser_image_hd() {
+        return User_image_hd;
+    }
+
+    public String getUser_image_max() {
+        return User_image_max;
+    }
+
+    public String getUser_image_min() {
+        return User_image_min;
+    }
+
+    public String getUser_sex() {
+        return User_sex;
+    }
+
+    public String getVerified_reason() {
+        return verified_reason;
     }
 
     public void setUser_Is_Real_Name(boolean user_Is_Real_Name) {
@@ -48,6 +98,14 @@ public class User extends BmobObject {
     public boolean isUser_Is_V() {
 
         return User_Is_V;
+    }
+
+    public void setUser_WbID(String user_WbID) {
+        User_WbID = user_WbID;
+    }
+
+    public String getUser_WbID() {
+        return User_WbID;
     }
 
     public boolean isUser_Is_Real_Name() {

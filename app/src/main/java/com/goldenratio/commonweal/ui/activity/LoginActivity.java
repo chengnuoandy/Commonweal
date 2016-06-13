@@ -1,17 +1,21 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +53,7 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by lvxue on 2016/6/7 0007.
  * 登陆的相关功能
  */
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener,View.OnFocusChangeListener {
 
     private static final String TAG = "lxc";
     @BindView(R.id.login_phone)
@@ -64,6 +68,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     ImageButton mIbSina;
     @BindView(R.id.tv_sina)
     TextView mTvSina;
+    @BindView(R.id.iv_return)
+    ImageView mReturn;
+
 
     /**
      * 显示认证后的信息，如 AccessToken
@@ -88,6 +95,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     //用户登陆ID
     private String userID;
 
+    Drawable draw1;
+    Drawable draw2;
 
 
     @Override
@@ -105,6 +114,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mLoginBtn.setOnClickListener(this);
         mIbSina.setOnClickListener(this);
         mTvRegister.setOnClickListener(this);
+        mReturn.setOnClickListener(this);
+        mLoginPassword.setOnFocusChangeListener(this);
+        mLoginPhone.setOnFocusChangeListener(this);
 
         // 从 SharedPreferences 中读取上次已保存好 AccessToken 等信息，
         // 第一次启动本应用，AccessToken 不可用
@@ -127,7 +139,36 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.tv_register:
                 Intent mIntent = new Intent(this,RegisterActivity.class);
-                startActivity(mIntent);
+                startActivityForResult(mIntent,1);
+                break;
+            case R.id.iv_return:
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()){
+            case R.id.login_password:
+                Log.d(TAG, "onClick: ");
+                draw1 = ContextCompat.getDrawable(this,R.mipmap.user_name);
+                draw2 = ContextCompat.getDrawable(this,R.mipmap.password_fill);
+                // 这一步必须要做,否则不会显示.
+                draw1.setBounds(0, 0, draw1.getMinimumWidth(), draw1.getMinimumHeight());
+                draw2.setBounds(0, 0, draw2.getMinimumWidth(), draw2.getMinimumHeight());
+                mLoginPhone.setCompoundDrawables(draw1,null,null,null);
+                mLoginPassword.setCompoundDrawables(draw2,null,null,null);
+                break;
+            case R.id.login_phone:
+                draw1 = ContextCompat.getDrawable(this,R.mipmap.user_fill);
+                draw2 = ContextCompat.getDrawable(this,R.mipmap.login_ic_password);
+                // 这一步必须要做,否则不会显示.
+                draw1.setBounds(0, 0, draw1.getMinimumWidth(), draw1.getMinimumHeight());
+                draw2.setBounds(0, 0, draw2.getMinimumWidth(), draw2.getMinimumHeight());
+                mLoginPhone.setCompoundDrawables(draw1,null,null,null);
+                mLoginPassword.setCompoundDrawables(draw2,null,null,null);
+                break;
         }
     }
 
@@ -191,6 +232,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         });
     }
 
+
+
     /**
      * 微博认证授权回调类。
      * 1. SSO 授权时，需要在 {@link #onActivityResult} 中调用 {@link SsoHandler#authorizeCallBack} 后，
@@ -250,6 +293,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         if (mSsoHandler != null) {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
+        //注册页面回调
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    String registerReturnPhone = data.getStringExtra("regi_phone");
+                    String registerReturnPassword = data.getStringExtra("regi_password");
+                    mLoginPhone.setText(registerReturnPhone);
+                    mLoginPassword.setText(registerReturnPassword);
+                }
+                break;
+        }
     }
 
     /**
@@ -263,13 +317,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 User user = User.parse(response);
                 if (user != null) {
                     isLogin(user.id); //是否已经注册
-//                    Log.d(TAG, "onComplete: " + user.profile_image_url);
-//                    Log.d(TAG, "是否认真: " + user.verified);
-//                    Log.d(TAG, "认证原因: " + user.verified_reason);
-//                    Log.d(TAG, "onComplete: " + user.province);
-//                    Log.d(TAG, "onComplete: " + user.avatar_hd);
-//                    Log.d(TAG, "onComplete: " + user.city);
-//                    Log.d(TAG, "onComplete: "+user.gender);
+                    //异步上传数据
                     new myAsyncTask(user).execute(user.profile_image_url);
                 } else {
                     Toast.makeText(LoginActivity.this, response,

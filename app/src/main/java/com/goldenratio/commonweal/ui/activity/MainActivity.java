@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -110,6 +112,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         return super.onKeyDown(keyCode, event);
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -139,5 +142,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         }
         Log.d("net00", netCode + "");
     }
+
+
 }
 

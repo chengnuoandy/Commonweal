@@ -42,7 +42,7 @@ import cn.smssdk.SMSSDK;
 
 /*
 *
-* fengmtx创建于2016/06/01
+*       LXT创建于2016/06/01
 *
 * */
 public class RegisterActivity extends AppCompatActivity {

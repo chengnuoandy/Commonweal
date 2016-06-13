@@ -379,7 +379,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,View
         }
 
         //耗时执行部分,只有此部分是运行在WorkerThread线程中
-        //有关网络的一般都是耗时操作，因为网络状况不确定
+        //ad c`因为网络状况不确定
         @Override
         protected Void doInBackground(String... params) {
             //提交数据

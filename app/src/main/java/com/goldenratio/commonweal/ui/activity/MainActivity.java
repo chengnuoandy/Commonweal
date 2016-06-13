@@ -113,25 +113,32 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     }
 
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         NetworkReceiver.ehList.remove(this);
     }
 
     //网络改变时检测网络状态，并提示用户
+    boolean isNet = false;
+
     @Override
     public void netState(NetworkReceiver.NetState netCode) {
         switch (netCode) {
             case NET_NO:
                 Toast.makeText(this, "亲，没有网络哟", Toast.LENGTH_SHORT).show();
+                isNet = true;
+                break;
+            case NET_WIFI:
+                if (isNet)
+                    Toast.makeText(getApplicationContext(), "网络已恢复", Toast.LENGTH_SHORT).show();
+                isNet = false;
                 break;
             case NET_2G:
             case NET_3G:
             case NET_4G:
                 Toast.makeText(getApplicationContext(), "当前处于2G/3G/4G网络，请注意您的网络流量", Toast.LENGTH_SHORT).show();
-                break;
-            case NET_WIFI:
                 break;
             case NET_UNKNOWN:
                 Toast.makeText(this, "未知网络", Toast.LENGTH_SHORT).show();

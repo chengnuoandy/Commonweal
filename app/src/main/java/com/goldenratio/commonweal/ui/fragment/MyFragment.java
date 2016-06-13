@@ -8,23 +8,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.adapter.MyGridAdapter;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 
 public class MyFragment extends Fragment {
-
+    private GridView gridView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
-        TextView tt = (TextView) view.findViewById(R.id.tv_name);
+        TextView tt = (TextView) view.findViewById(R.id.text);
+        gridView=(GridView)view.findViewById(R.id.gridview);
+        gridView.setAdapter(new MyGridAdapter(getContext()));
         tt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent,1);
             }
         });
         return view;
@@ -32,11 +36,11 @@ public class MyFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
+        switch (requestCode){
             case 1:
-                if (resultCode == Activity.RESULT_OK) {
+                if(resultCode == Activity.RESULT_OK){
                     String objectId = data.getStringExtra("objectId");
-                    Log.d("lxc", "onActivityResult: " + objectId);
+                    Log.d("lxc", "onActivityResult: "+objectId);
                 }
         }
     }

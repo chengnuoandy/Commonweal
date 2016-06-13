@@ -22,12 +22,12 @@ public class MyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
-       /* TextView tt = (TextView) view.findViewById(R.id.text);*/
+        TextView tt = (TextView) view.findViewById(R.id.text);
         gridview = (GridView) view.findViewById(R.id.gridview);
         gridview.setAdapter(new MyGridAdapter(getContext()));
 
 
-       /* tt.setOnClickListener(new View.OnClickListener() {
+       tt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -46,7 +46,5 @@ public class MyFragment extends Fragment {
                     Log.d("lxc", "onActivityResult: "+objectId);
                 }
         }
-    }*/
-        return view;
     }
 }

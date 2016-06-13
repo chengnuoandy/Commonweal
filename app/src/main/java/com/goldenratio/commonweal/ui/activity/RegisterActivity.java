@@ -1,9 +1,7 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -14,23 +12,21 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User;
-import com.mob.tools.utils.LocalDB;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.KeyStore;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,6 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
     CheckBox chCheck;
     @BindView(R.id.tv_agreement)
     TextView tvAgreement;
+    @BindView(R.id.ib_back)
+    ImageButton mIbBack;
 
     private String APPKEY = "139216e4958f6";
     private String APPSECRET = "63512a2fcc9c9e2f5c00bbdce60d920e";
@@ -136,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     //    为按钮添加点击事件
-    @OnClick({R.id.btn_againSendCode, R.id.btn_sendCode, R.id.btn_commitCode, R.id.btn_register})
+    @OnClick({R.id.btn_againSendCode, R.id.btn_sendCode, R.id.btn_commitCode, R.id.btn_register, R.id.ib_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_sendCode:
@@ -171,6 +169,9 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.ib_back:
+                checkWhichStep();
                 break;
         }
     }
@@ -294,7 +295,6 @@ public class RegisterActivity extends AppCompatActivity {
         } else finish();
     }
 
-
     //实现按钮倒计时
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
@@ -313,7 +313,6 @@ public class RegisterActivity extends AppCompatActivity {
             mBtnAgainSendCode.setBackgroundResource(R.drawable.register_reset);
             mBtnAgainSendCode.setText("重发");
         }
-
     }
 
     /*

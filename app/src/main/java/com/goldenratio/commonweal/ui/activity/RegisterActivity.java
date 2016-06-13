@@ -97,6 +97,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /*
+    *
+    * 为控件添加监听事件
+    *
+    * */
+
     //添加文本改变监听事件
     private void addTextChangeEvent(EditText mEtInput) {
         mEtInput.addTextChangedListener(new TextWatcher() {
@@ -104,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
+            //   设置控件的相关属性
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (mEtPhone.getText().length() >= 11 && mEtCode.getText().length() == 0) {
@@ -133,20 +140,17 @@ public class RegisterActivity extends AppCompatActivity {
         SMSSDK.unregisterEventHandler(mEh);  //取消短信回调
     }
 
+    //    为按钮添加点击事件
     @OnClick({R.id.btn_againSendCode, R.id.btn_sendCode, R.id.btn_commitCode, R.id.btn_register})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_sendCode:
-                if (!TextUtils.isEmpty(mEtPhone.getText().toString())) {
-                    mPhone = mEtPhone.getText().toString();
-                    Log.d("send", "发送");
-                    isRegister();
+                mPhone = mEtPhone.getText().toString();
+                Log.d("send", "发送");
+                isRegister();
                    /* showWhichStep(View.GONE, View.VISIBLE, View.GONE);
                     changeStepTextColor(R.color.ordinary, R.color.main_hue, R.color.ordinary);
                     */
-                } else {
-                    Toast.makeText(getApplicationContext(), "电话不能为空", Toast.LENGTH_SHORT).show();
-                }
                 break;
             case R.id.btn_againSendCode:
                 if (!TextUtils.isEmpty(mPhone)) {
@@ -158,10 +162,9 @@ public class RegisterActivity extends AppCompatActivity {
             case R.id.btn_commitCode:
                 String verification = mEtCode.getText().toString();
                 submitVerification(verification);
-
-             /*   showWhichStep(View.GONE, View.GONE, View.VISIBLE);
+             /*  showWhichStep(View.GONE, View.GONE, View.VISIBLE);
                 changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.main_hue);
-*/
+                */
                 Log.d("comm", "提交验证码");
                 break;
             case R.id.btn_register:
@@ -183,7 +186,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    //初始化短信回调
+    //注册短信回调
     private void registerEventHandler() {
         SMSSDK.initSDK(this, APPKEY, APPSECRET);
         mEh = new EventHandler() {
@@ -231,6 +234,26 @@ public class RegisterActivity extends AppCompatActivity {
         mTvPassword.setTextColor(getResources().getColor(color3));
     }
 
+    //检测哪一步（如果进行完第一步，则会给用户弹出提示框）
+    private void checkWhichStep() {
+        Log.d("111", "弹出提示");
+        if (mTvCode.getTextColors() == getResources().getColorStateList(R.color.main_hue) ||
+                mTvPassword.getTextColors() == getResources().getColorStateList(R.color.main_hue)) {
+            Log.d("333", "成功判断");
+            AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this);
+            dialog.setTitle("提示");
+            dialog.setMessage("您确定要返回到注册前的界面？");
+            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            dialog.setNegativeButton("取消", null);
+            dialog.show();
+            Log.d("222", "弹出成功");
+        } else finish();
+    }
 
     //检测验证码提交状态
     Handler handler = new Handler() {
@@ -348,26 +371,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void checkWhichStep() {
-        Log.d("111", "弹出提示");
-        if (mTvCode.getTextColors() == getResources().getColorStateList(R.color.main_hue) ||
-                mTvPassword.getTextColors() == getResources().getColorStateList(R.color.main_hue)) {
-            Log.d("333", "成功判断");
-            AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this);
-            dialog.setTitle("提示");
-            dialog.setMessage("您确定要返回到注册前的界面？");
-            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                }
-            });
-            dialog.setNegativeButton("取消", null);
-            dialog.show();
-            Log.d("222", "弹出成功");
-        } else finish();
-    }
 
+    //检测密码强度（必须为8~16数字与字母组合）
     private boolean checkPassword(String pw) {
         String regPw = "[\\da-zA-Z]*\\d+[a-zA-Z]+[\\da-zA-Z]*";
         Pattern p = Pattern.compile(regPw);

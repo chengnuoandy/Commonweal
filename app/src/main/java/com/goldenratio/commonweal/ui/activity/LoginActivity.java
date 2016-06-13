@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     ImageButton mIbSina;
     @BindView(R.id.tv_sina)
     TextView mTvSina;
+    @BindView(R.id.iv_return)
+    ImageView mReturn;
+
 
     /**
      * 显示认证后的信息，如 AccessToken
@@ -105,6 +109,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mLoginBtn.setOnClickListener(this);
         mIbSina.setOnClickListener(this);
         mTvRegister.setOnClickListener(this);
+        mReturn.setOnClickListener(this);
 
         // 从 SharedPreferences 中读取上次已保存好 AccessToken 等信息，
         // 第一次启动本应用，AccessToken 不可用
@@ -127,7 +132,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.tv_register:
                 Intent mIntent = new Intent(this,RegisterActivity.class);
-                startActivity(mIntent);
+                startActivityForResult(mIntent,1);
+                break;
+            case R.id.iv_return:
+                finish();
+                break;
         }
     }
 
@@ -250,6 +259,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         if (mSsoHandler != null) {
             mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
+        //注册页面回调
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    String registerReturnPhone = data.getStringExtra("regi_phone");
+                    String registerReturnPassword = data.getStringExtra("regi_password");
+                    mLoginPhone.setText(registerReturnPhone);
+                    mLoginPassword.setText(registerReturnPassword);
+                }
+                break;
+        }
     }
 
     /**
@@ -263,13 +283,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 User user = User.parse(response);
                 if (user != null) {
                     isLogin(user.id); //是否已经注册
-//                    Log.d(TAG, "onComplete: " + user.profile_image_url);
-//                    Log.d(TAG, "是否认真: " + user.verified);
-//                    Log.d(TAG, "认证原因: " + user.verified_reason);
-//                    Log.d(TAG, "onComplete: " + user.province);
-//                    Log.d(TAG, "onComplete: " + user.avatar_hd);
-//                    Log.d(TAG, "onComplete: " + user.city);
-//                    Log.d(TAG, "onComplete: "+user.gender);
+                    //异步上传数据
                     new myAsyncTask(user).execute(user.profile_image_url);
                 } else {
                     Toast.makeText(LoginActivity.this, response,

@@ -112,21 +112,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("activityresu", "onActivityResult: 执行");
-        switch (requestCode) {
-            case 1:
-                if (resultCode == RESULT_OK) {
-                    String registerReturnPhone = data.getStringExtra("regi_phone");
-                    String registerReturnPassword = data.getStringExtra("regi_password");
-                    Log.d("password000", registerReturnPassword);
-                }
-                break;
-            default:
-                Log.d("activityresu", requestCode + "");
-        }
-    }
 
     @Override
     protected void onPause() {

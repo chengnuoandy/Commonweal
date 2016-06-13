@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2016/6/11.
+ *
  */
 
 public class GoodActivity extends Activity implements View.OnClickListener {

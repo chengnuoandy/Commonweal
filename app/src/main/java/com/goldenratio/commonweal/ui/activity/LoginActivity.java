@@ -151,7 +151,6 @@ public class LoginActivity extends Activity implements View.OnClickListener,View
     public void onFocusChange(View v, boolean hasFocus) {
         switch (v.getId()){
             case R.id.login_password:
-                Log.d(TAG, "onClick: ");
                 draw1 = ContextCompat.getDrawable(this,R.mipmap.user_name);
                 draw2 = ContextCompat.getDrawable(this,R.mipmap.password_fill);
                 // 这一步必须要做,否则不会显示.
@@ -194,6 +193,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,View
                     } else {
                         Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                     }
+                }else {
+                    Toast.makeText(LoginActivity.this, "账户数据异常", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -329,7 +330,8 @@ public class LoginActivity extends Activity implements View.OnClickListener,View
         @Override
         public void onWeiboException(WeiboException e) {
             ErrorInfo info = ErrorInfo.parse(e.getMessage());
-            Log.d("lxc", "onWeiboException: " + info);
+            Log.d("lxc", "onWeiboException: openAPI访问错误 " + info);
+            Toast.makeText(LoginActivity.this, "网络访问异常！", Toast.LENGTH_SHORT).show();
         }
     };
 

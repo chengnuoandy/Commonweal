@@ -145,7 +145,7 @@
                 android:id="@+id/ib_sina"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/normal_bg_color"
+                android:background="@color/app_bg"
                 android:src="@mipmap/login_sina_ic"/>
 
             <TextView

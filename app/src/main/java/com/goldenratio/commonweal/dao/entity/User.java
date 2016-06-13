@@ -12,12 +12,21 @@ public class User {
     private String User_Autograph;
     private String User_Avatar;
 
-    public User(String objectId,String user_ID, String user_Name, String user_Autograph,String user_Avatar) {
-        ObjectId=objectId;
+    public User(String objectId, String user_ID, String user_Name, String user_Autograph, String user_Avatar) {
+        ObjectId = objectId;
         User_ID = user_ID;
         User_Name = user_Name;
         User_Autograph = user_Autograph;
         User_Avatar = user_Avatar;
+    }
+
+    public void setUser_Avatar(String user_Avatar) {
+        User_Avatar = user_Avatar;
+    }
+
+    public String getUser_Avatar() {
+
+        return User_Avatar;
     }
 
     public String getObjectId() {

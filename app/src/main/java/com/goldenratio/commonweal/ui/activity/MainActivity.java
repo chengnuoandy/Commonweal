@@ -65,7 +65,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
             case R.id.rb_help:// 项目
                 changeFragment(new HelpFragment(), true);
                 break;
-            case R.id.rb_goods:// 物品
+            case R.id.rb_good:// 物品
                 changeFragment(new GoodsFragment(), true);
                 break;
             case R.id.rb_dynamic:// 动态

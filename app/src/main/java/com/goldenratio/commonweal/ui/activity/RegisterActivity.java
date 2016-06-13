@@ -134,11 +134,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SMSSDK.unregisterEventHandler(mEh);  //取消短信回调
-    }
 
     //    为按钮添加点击事件
     @OnClick({R.id.btn_againSendCode, R.id.btn_sendCode, R.id.btn_commitCode, R.id.btn_register})
@@ -148,9 +143,6 @@ public class RegisterActivity extends AppCompatActivity {
                 mPhone = mEtPhone.getText().toString();
                 Log.d("send", "发送");
                 isRegister();
-                   /* showWhichStep(View.GONE, View.VISIBLE, View.GONE);
-                    changeStepTextColor(R.color.ordinary, R.color.main_hue, R.color.ordinary);
-                    */
                 break;
             case R.id.btn_againSendCode:
                 if (!TextUtils.isEmpty(mPhone)) {
@@ -162,9 +154,6 @@ public class RegisterActivity extends AppCompatActivity {
             case R.id.btn_commitCode:
                 String verification = mEtCode.getText().toString();
                 submitVerification(verification);
-             /*  showWhichStep(View.GONE, View.GONE, View.VISIBLE);
-                changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.main_hue);
-                */
                 Log.d("comm", "提交验证码");
                 break;
             case R.id.btn_register:
@@ -186,7 +175,13 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    //注册短信回调
+
+    /*
+    *
+    * 第三方相关逻辑
+    * */
+
+    //注册短信回调（从远程（本地）获取到短信发送状况，发送给主线程）
     private void registerEventHandler() {
         SMSSDK.initSDK(this, APPKEY, APPSECRET);
         mEh = new EventHandler() {
@@ -212,6 +207,50 @@ public class RegisterActivity extends AppCompatActivity {
     private void submitVerification(String ver) {
         SMSSDK.submitVerificationCode("86", mPhone, ver);
     }
+
+    //检测验证码提交状态（异步）
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            int event = msg.arg1;
+            int result = msg.arg2;
+            Object data = msg.obj;
+            Log.e("event", "event=" + event);
+            if (result == SMSSDK.RESULT_COMPLETE) {
+                //短信注册成功后，返回MainActivity,然后提示新好友
+                if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+                    Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
+
+                    showWhichStep(View.GONE, View.VISIBLE, View.GONE);
+                    changeStepTextColor(R.color.ordinary, R.color.main_hue, R.color.ordinary);
+
+                    new TimeCount(60000, 1000).start();
+                } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                    Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
+                    showWhichStep(View.GONE, View.GONE, View.VISIBLE);
+                    changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.main_hue);
+                }
+            } else {
+                //  ((Throwable) data).printStackTrace();
+                Log.d("ccc", ((Throwable) data).getMessage());
+                String errorInfo = null;
+                try {
+                    //获取错误信息
+                    errorInfo = new JSONObject(((Throwable) data).getMessage()).getString("detail");
+                    Toast.makeText(getApplicationContext(), errorInfo, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "未知的错误", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
+
+    /*
+    *
+    *   改变控件属性
+    * */
 
     // 显示哪一步
     private void showWhichStep(int first, int second, int third) {
@@ -255,44 +294,6 @@ public class RegisterActivity extends AppCompatActivity {
         } else finish();
     }
 
-    //检测验证码提交状态
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            super.handleMessage(msg);
-            int event = msg.arg1;
-            int result = msg.arg2;
-            Object data = msg.obj;
-            Log.e("event", "event=" + event);
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                //短信注册成功后，返回MainActivity,然后提示新好友
-                if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
-
-                    showWhichStep(View.GONE, View.VISIBLE, View.GONE);
-                    changeStepTextColor(R.color.ordinary, R.color.main_hue, R.color.ordinary);
-
-                    new TimeCount(60000, 1000).start();
-                } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                    Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
-                    showWhichStep(View.GONE, View.GONE, View.VISIBLE);
-                    changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.main_hue);
-                }
-            } else {
-                //  ((Throwable) data).printStackTrace();
-                Log.d("ccc", ((Throwable) data).getMessage());
-                String errorInfo = null;
-                try {
-                    //获取错误信息
-                    errorInfo = new JSONObject(((Throwable) data).getMessage()).getString("detail");
-                    Toast.makeText(getApplicationContext(), errorInfo, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "未知的错误", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    };
 
     //实现按钮倒计时
     class TimeCount extends CountDownTimer {
@@ -315,6 +316,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /*
+    *
+    *   数据库相关逻辑
+    *
+    * */
+
     //注册完成后添加用户信息到数据库
     private boolean addUserInfoToDB() {
         boolean result = false;
@@ -334,16 +341,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
         return false;
-    }
-
-    //返回用户信息给myFragment
-    private void returnUInfoToMyFra() {
-        Intent intent = new Intent();
-        intent.putExtra("regi_phone", mPhone);
-        intent.putExtra("regi_password", mEtPassword.getText().toString());
-        setResult(RESULT_OK, intent);
-        Log.d("return", "已返回数据");
-        finish();
     }
 
     //判断此用户是否已经注册
@@ -372,6 +369,16 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    //返回用户信息给myFragment
+    private void returnUInfoToMyFra() {
+        Intent intent = new Intent();
+        intent.putExtra("regi_phone", mPhone);
+        intent.putExtra("regi_password", mEtPassword.getText().toString());
+        setResult(RESULT_OK, intent);
+        Log.d("return", "已返回数据");
+        finish();
+    }
+
     //检测密码强度（必须为8~16数字与字母组合）
     private boolean checkPassword(String pw) {
         String regPw = "[\\da-zA-Z]*\\d+[a-zA-Z]+[\\da-zA-Z]*";
@@ -384,4 +391,11 @@ public class RegisterActivity extends AppCompatActivity {
     public void onBackPressed() {
         checkWhichStep();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SMSSDK.unregisterEventHandler(mEh);  //取消短信回调
+    }
+
 }

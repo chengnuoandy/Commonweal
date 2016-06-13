@@ -19,7 +19,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //创建数据库sql语句
-        String sql="create table user(User_ID int primary key(User_ID),User_Name varchar(20),User_Autograph varchar(20))";
+        String sql="CREATE TABLE [User] ([User_ID] VARCHAR(20), [User_Name] VARCHAR(40), [User_Autograph] VARCHAR(50), CONSTRAINT [] PRIMARY KEY ([User_ID]))"
+                ;
         //执行创建数据库操作
         db.execSQL(sql);
     }

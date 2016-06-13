@@ -12,4 +12,10 @@
         android:text="Help"
         android:textSize="@dimen/text_size_default" />
 
+    <Button
+        android:id="@+id/btn_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="测试" />
+
 </LinearLayout>

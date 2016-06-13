@@ -43,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by lvxue on 2016/6/7 0007.
@@ -109,7 +110,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         // 第一次启动本应用，AccessToken 不可用
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
         if (mAccessToken.isSessionValid()) {
-            updateTokenView(true);
+            updateTokenView();
         }
         mUsersAPI = new UsersAPI(LoginActivity.this, Constants.APP_KEY, mAccessToken);
     }
@@ -147,6 +148,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                         //获得数据的objectId信息
                         userID = mUser.getObjectId();
+                        returnData();
                         finish();
                     } else {
                         Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
@@ -166,7 +168,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
      */
     private void isLogin(String id) {
         BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
-        bmobQuery.addWhereEqualTo("wb_id", id);
+        bmobQuery.addWhereEqualTo("User_WbID", id);
         //执行查询方法
         bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
             @Override
@@ -176,6 +178,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     //如果此用户已存在，获得数据的objectId信息
                     com.goldenratio.commonweal.bean.User mUser = object.get(0);
                     userID = mUser.getObjectId();
+                    Toast.makeText(LoginActivity.this, "登陆成功！", Toast.LENGTH_SHORT).show();
+                    returnData();
                     finish();
                 }
             }
@@ -205,7 +209,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 long uid = Long.parseLong(mAccessToken.getUid());
                 mUsersAPI.show(uid, mListener);
                 // 显示 Token
-                updateTokenView(false);
+                updateTokenView();
 
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
@@ -284,21 +288,20 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     /**
      * 显示当前 Token 信息。
      *
-     * @param hasExisted 配置文件中是否已存在 token 信息并且合法
+     * 配置文件中是否已存在 token 信息并且合法
      */
-    private void updateTokenView(boolean hasExisted) {
-        if (hasExisted) {
+    private void updateTokenView() {
             // Token 仍在有效期内，无需再次登录。
             long uid = Long.parseLong(mAccessToken.getUid());
             //如果直接返回一个用户ID
             isLogin(uid + "");
 //            Log.d(TAG, "uid="+uid);
-        }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    /**
+     * 回传数据
+     */
+    private void returnData(){
         //向上一个activity发送登陆用户的ID
         Intent intent = new Intent();
         intent.putExtra("objectId", userID);
@@ -345,7 +348,19 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             user.setUser_image_hd(wbuser.avatar_hd);
             user.setVerified_reason(wbuser.verified_reason); //认证原因
             user.setUser_Autograph(wbuser.description);
+            user.save(LoginActivity.this, new SaveListener() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(LoginActivity.this, "成功提交数据", Toast.LENGTH_SHORT).show();
+                    returnData();
+                    finish();
+                }
 
+                @Override
+                public void onFailure(int i, String s) {
+                    Toast.makeText(LoginActivity.this, "提交数据失败", Toast.LENGTH_SHORT).show();
+                }
+            });
             return null;
         }
     }

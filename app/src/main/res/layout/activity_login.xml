@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/normal_bg_color"
+              android:background="@color/main_bg"
               android:orientation="vertical">
 
     <RelativeLayout
@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/normal_space"
+            android:background="@color/white"
             android:drawableLeft="@mipmap/user_fill"
             android:drawablePadding="@dimen/normal_space"
             android:hint="请输入手机号"
@@ -52,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/little_space"
+            android:background="@color/white"
             android:drawableLeft="@mipmap/login_pwd_icon"
             android:drawablePadding="@dimen/normal_space"
             android:hint="请输入密码"

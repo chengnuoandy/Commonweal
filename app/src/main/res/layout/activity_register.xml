@@ -4,14 +4,24 @@
               android:layout_height="match_parent"
               android:background="@color/normal_bg_color"
               android:orientation="vertical">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="注册"
-
+        android:layout_centerHorizontal="true"
         android:textSize="30sp"/>
+    <ImageButton
+        android:id="@+id/ib_back"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/normal_space"
+        android:src="@mipmap/ic_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,46 +33,37 @@
 
         <TextView
             android:id="@+id/tv_phone"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/normal_space"
+            android:drawableRight="@mipmap/news_cate_arr"
             android:padding="@dimen/normal_space"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_weight="1"
             android:text="1输入手机号"
             android:textColor="@color/main_hue"
             />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/normal_space"
-            android:background="@color/app_bg"
-            android:src="@mipmap/news_cate_arr"/>
+
 
         <TextView
             android:id="@+id/tv_code"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/normal_space"
-            android:padding="@dimen/normal_space"
+            android:drawableRight="@mipmap/news_cate_arr"
 
+            android:padding="@dimen/normal_space"
+            android:layout_weight="1"
             android:text="2输入验证码"/>
 
-        <ImageButton
-            android:layout_width="wrap_content"
 
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/normal_space"
-            android:background="@color/app_bg"
-            android:src="@mipmap/news_cate_arr"/>
 
         <TextView
             android:id="@+id/tv_password"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/normal_space"
+
             android:padding="@dimen/normal_space"
+            android:layout_weight="1"
             android:text="3输入密码"/>
 
     </LinearLayout>

@@ -5,7 +5,7 @@
     android:background="@color/normal_bg_color"
     android:orientation="vertical">
     <include
-        android:id="@+id/show_login_title"
+        android:id="@+id/login_title"
         layout="@layout/title_layout" />
 
     <LinearLayout

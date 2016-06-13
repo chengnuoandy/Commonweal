@@ -37,6 +37,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
     compile 'cn.bmob.android:bmob-sdk:3.4.7-aar'
-
+    compile 'de.hdodenhof:circleimageview:2.0.0'
     compile name: 'SMSSDK-2.0.2', ext: 'aar'
 }

@@ -19,4 +19,7 @@
     <color name="app_bg">#eeeeee</color>
     <color name="red_deep">#ff0000</color>
     <color name="red_shallow">#cc0000</color>
+
+    <color name="line">#ffd3dde6</color>
+    <color name="commo_text_color">#ff333333</color>
 </resources>

@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -10,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/app_bg"></FrameLayout>
+        android:background="@color/app_bg"/>
 
     <RadioGroup
         android:id="@+id/rg_tabs"
@@ -27,10 +26,10 @@
             android:background="@null"
             android:button="@null"
             android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_help_selector"
+            android:drawableTop="@drawable/tab_help_ic_selector"
             android:gravity="center_horizontal"
             android:text="项目"
-            android:textColor="@color/black" />
+            android:textColor="@drawable/tab_text_color_selector" />
 
         <RadioButton
             android:id="@+id/rb_good"
@@ -41,10 +40,10 @@
             android:background="@null"
             android:button="@null"
             android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_goods_selector"
+            android:drawableTop="@drawable/tab_goods_ic_selector"
             android:gravity="center_horizontal"
             android:text="物品"
-            android:textColor="@color/black" />
+            android:textColor="@drawable/tab_text_color_selector" />
 
         <RadioButton
             android:id="@+id/rb_dynamic"
@@ -55,10 +54,10 @@
             android:background="@null"
             android:button="@null"
             android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_dynamic_selector"
+            android:drawableTop="@drawable/tab_dynamic_ic_selector"
             android:gravity="center_horizontal"
             android:text="动态"
-            android:textColor="@color/black" />
+            android:textColor="@drawable/tab_text_color_selector" />
 
         <RadioButton
             android:id="@+id/rb_my"
@@ -69,10 +68,10 @@
             android:background="@color/white"
             android:button="@null"
             android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_my_selector"
+            android:drawableTop="@drawable/tab_my_ic_selector"
             android:gravity="center_horizontal"
             android:text="我的"
-            android:textColor="@color/black" />
+            android:textColor="@drawable/tab_text_color_selector" />
     </RadioGroup>
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -82,7 +83,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     /**
      * 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能
      */
-    private Oauth2AccessToken mAccessToken;
+    private Oauth2AccessToken mAccessToken = null;
 
     /**
      * 注意：SsoHandler 仅当 SDK 支持 SSO 时有效
@@ -99,6 +100,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private Drawable draw1;
     private Drawable draw2;
     private User upUser = null;
+    private ProgressDialog progd;
 
 
     @Override
@@ -106,7 +108,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
         // 创建微博实例
         //mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
         // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
@@ -120,15 +121,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         mLoginPassword.setOnFocusChangeListener(this);
         mLoginPhone.setOnFocusChangeListener(this);
 
-        // 从 SharedPreferences 中读取上次已保存好 AccessToken 等信息，
-        // 第一次启动本应用，AccessToken 不可用
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
-        /*if (mAccessToken.isSessionValid()) {
-            Log.d(TAG, "缓存有效");
-            long uid = Long.parseLong(mAccessToken.getUid());
-            isLogin(uid + "");
-        }*/
-        mUsersAPI = new UsersAPI(LoginActivity.this, Constants.APP_KEY, mAccessToken);
     }
 
     @Override
@@ -179,6 +171,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      * 登陆相关逻辑(正常登陆)
      */
     private void isLogin(String Phone, final String Password) {
+        Loing();
         BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
         bmobQuery.addWhereEqualTo("User_Phone", Phone);
         //执行查询方法
@@ -195,15 +188,18 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                         returnData();
                         saveDB(mUser);
                     } else {
+                        Completed();
                         Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    Completed();
                     Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onError(int code, String msg) {
+                Completed();
                 Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
             }
         });
@@ -236,6 +232,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
             @Override
             public void onError(int code, String msg) {
+                Completed();
                 Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
             }
         });
@@ -253,13 +250,15 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
         @Override
         public void onComplete(Bundle values) {
+            Loing();
             // 从 Bundle 中解析 Token
             mAccessToken = Oauth2AccessToken.parseAccessToken(values);
             if (mAccessToken.isSessionValid()) {
+
+                mUsersAPI = new UsersAPI(LoginActivity.this, Constants.APP_KEY, mAccessToken);
+
                 //openAPI相关
                 long uid = Long.parseLong(mAccessToken.getUid());
-                // 保存 Token 到 SharedPreferences
-                AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
 
                 mUsersAPI.show(uid, mListener);
                 Toast.makeText(LoginActivity.this,
@@ -274,6 +273,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 if (!TextUtils.isEmpty(code)) {
                     message = message + "\nObtained the code: " + code;
                 }
+                Completed();
                 Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
             }
         }
@@ -327,6 +327,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     isLogin(upUser.id);
                     Log.d(TAG, "onComplete: openAPI");
                 } else {
+                    Completed();
                     Toast.makeText(LoginActivity.this, response,
                             Toast.LENGTH_LONG).show();
                 }
@@ -337,6 +338,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         public void onWeiboException(WeiboException e) {
             ErrorInfo info = ErrorInfo.parse(e.getMessage());
             Log.d("lxc", "onWeiboException: openAPI访问错误 " + info);
+            Completed();
             Toast.makeText(LoginActivity.this, "网络访问异常！", Toast.LENGTH_SHORT).show();
         }
     };
@@ -427,6 +429,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
                 @Override
                 public void onError(int i, String s) {
+                    Completed();
                     Toast.makeText(LoginActivity.this, "查找数据失败", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -440,7 +443,28 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         UserDao mUserDao = new UserDao(LoginActivity.this);
         mUserDao.insert("insert into User (objectId,User_Name,User_Autograph,User_Avatar) values(?,?,?,?)",
                 new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_max()});
+        Completed();
         finish();
+    }
+
+    /**
+     * 进度条相关
+     */
+    private void Completed() {
+        if (progd != null && progd.isShowing()) {
+            //关闭对话框
+            progd.dismiss();
+            progd = null;
+        }
+    }
+
+    private void Loing() {
+        if (progd == null) {
+            progd = new ProgressDialog(this);
+            progd.setTitle("登陆中...");
+            progd.setCancelable(false);
+            progd.show();
+        }
     }
 
 }

@@ -423,6 +423,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                         saveDB(mUser);
                     }
                 }
+
                 @Override
                 public void onError(int i, String s) {
                     Toast.makeText(LoginActivity.this, "查找数据失败", Toast.LENGTH_SHORT).show();
@@ -430,13 +431,14 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             });
         }
     }
+
     /**
      * 保存数据到本地
      */
     private void saveDB(com.goldenratio.commonweal.bean.User user) {
         UserDao mUserDao = new UserDao(LoginActivity.this);
         mUserDao.insert("insert into User (objectId,User_Name,User_Autograph,User_Avatar) values(?,?,?,?)",
-                new String[]{userID,user.getUser_Name(),user.getUser_Autograph(),user.getUser_image_max()});
+                new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_max()});
         finish();
     }
 

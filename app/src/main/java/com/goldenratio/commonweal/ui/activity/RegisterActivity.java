@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +8,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +44,7 @@ import cn.smssdk.SMSSDK;
 *       LXT创建于2016/06/01
 *
 * */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends Activity {
 
     @BindView(R.id.et_phone)
     EditText mEtPhone;
@@ -73,8 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
     CheckBox chCheck;
     @BindView(R.id.tv_agreement)
     TextView tvAgreement;
-    @BindView(R.id.ib_back)
-    ImageButton mIbBack;
 
     private String APPKEY = "139216e4958f6";
     private String APPSECRET = "63512a2fcc9c9e2f5c00bbdce60d920e";
@@ -134,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     //    为按钮添加点击事件
-    @OnClick({R.id.btn_againSendCode, R.id.btn_sendCode, R.id.btn_commitCode, R.id.btn_register, R.id.ib_back})
+    @OnClick({R.id.btn_againSendCode, R.id.btn_sendCode, R.id.btn_commitCode, R.id.btn_register, R.id.iv_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_sendCode:
@@ -170,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "密码不能为空", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.ib_back:
+            case R.id.iv_back:
                 checkWhichStep();
                 break;
         }

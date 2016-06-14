@@ -11,6 +11,7 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
+
         <ImageView
             android:id="@+id/iv_return"
             android:layout_width="wrap_content"
@@ -27,6 +28,11 @@
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_hue" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -91,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/normal_space"
-            android:background="@color/main_hue"
+            android:background="@drawable/shape"
             android:text="立即登陆"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_default" />

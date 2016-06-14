@@ -155,8 +155,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     public void onFocusChange(View v, boolean hasFocus) {
         switch (v.getId()) {
             case R.id.login_password:
-                draw1 = ContextCompat.getDrawable(this, R.mipmap.login_user_icon);
-                draw2 = ContextCompat.getDrawable(this, R.mipmap.password_fill);
+                draw1 = ContextCompat.getDrawable(this, R.drawable.tab_my_ic);
+                draw2 = ContextCompat.getDrawable(this, R.drawable.user_password);
                 // 这一步必须要做,否则不会显示.
                 draw1.setBounds(0, 0, draw1.getMinimumWidth(), draw1.getMinimumHeight());
                 draw2.setBounds(0, 0, draw2.getMinimumWidth(), draw2.getMinimumHeight());
@@ -164,8 +164,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 mLoginPassword.setCompoundDrawables(draw2, null, null, null);
                 break;
             case R.id.login_phone:
-                draw1 = ContextCompat.getDrawable(this, R.mipmap.user_fill);
-                draw2 = ContextCompat.getDrawable(this, R.mipmap.login_ic_password);
+                draw1 = ContextCompat.getDrawable(this, R.drawable.tab_my_ic_click);
+                draw2 = ContextCompat.getDrawable(this, R.drawable.user_password_unlock);
                 // 这一步必须要做,否则不会显示.
                 draw1.setBounds(0, 0, draw1.getMinimumWidth(), draw1.getMinimumHeight());
                 draw2.setBounds(0, 0, draw2.getMinimumWidth(), draw2.getMinimumHeight());
@@ -277,6 +277,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
             }
         }
+
 
         @Override
         public void onCancel() {

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/app_bg"/>
+        android:background="@color/app_bg" />
 
     <RadioGroup
         android:id="@+id/rg_tabs"
@@ -28,6 +28,8 @@
             android:drawablePadding="3dp"
             android:drawableTop="@drawable/tab_help_ic_selector"
             android:gravity="center_horizontal"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:text="项目"
             android:textColor="@drawable/tab_text_color_selector" />
 
@@ -42,6 +44,8 @@
             android:drawablePadding="3dp"
             android:drawableTop="@drawable/tab_goods_ic_selector"
             android:gravity="center_horizontal"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:text="物品"
             android:textColor="@drawable/tab_text_color_selector" />
 
@@ -56,6 +60,8 @@
             android:drawablePadding="3dp"
             android:drawableTop="@drawable/tab_dynamic_ic_selector"
             android:gravity="center_horizontal"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:text="动态"
             android:textColor="@drawable/tab_text_color_selector" />
 
@@ -70,6 +76,8 @@
             android:drawablePadding="3dp"
             android:drawableTop="@drawable/tab_my_ic_selector"
             android:gravity="center_horizontal"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:text="我的"
             android:textColor="@drawable/tab_text_color_selector" />
     </RadioGroup>

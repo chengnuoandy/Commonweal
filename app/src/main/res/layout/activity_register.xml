@@ -110,12 +110,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@color/app_bg"
+            android:background="@color/white"
+            android:drawableLeft="@mipmap/register_code"
+            android:drawablePadding="@dimen/normal_space"
             android:hint="请输入4位验证码"
             android:inputType="number"
             android:maxLength="4"
             android:paddingBottom="15dp"
-
             android:paddingLeft="20dp"
             android:paddingTop="13dp" />
 
@@ -148,7 +149,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:background="@color/app_bg"
+        android:background="@color/white"
+        android:drawableLeft="@drawable/user_password_unlock"
         android:hint="请输入密码"
         android:inputType="textPassword"
         android:maxLength="16"

@@ -98,7 +98,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private String userID;
     private Drawable draw1;
     private Drawable draw2;
-    private User upUser;
+    private User upUser = null;
 
 
     @Override
@@ -258,10 +258,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             if (mAccessToken.isSessionValid()) {
                 //openAPI相关
                 long uid = Long.parseLong(mAccessToken.getUid());
-                mUsersAPI.show(uid, mListener);
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(LoginActivity.this, mAccessToken);
 
+                mUsersAPI.show(uid, mListener);
                 Toast.makeText(LoginActivity.this,
                         "授权成功", Toast.LENGTH_SHORT).show();
             } else {

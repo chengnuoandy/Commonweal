@@ -19,5 +19,15 @@
             android:text="项目"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
-    </RelativeLayout>
+   </RelativeLayout>
+
+
+        
+        <ListView
+            android:id="@+id/lv_help"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ListView>
+
 </LinearLayout>

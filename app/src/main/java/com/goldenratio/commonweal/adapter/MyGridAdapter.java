@@ -14,9 +14,9 @@ public class MyGridAdapter extends BaseAdapter {
     private Context mContext;
 
     public String[] img_text = {"我的", "收藏", "购物车", "删除", "消息", "添加"};
-    public int[] imgs = {R.mipmap.home, R.mipmap.like,
-            R.mipmap.cart, R.mipmap.delete,
-            R.mipmap.wangwang, R.mipmap.add};
+    public int[] imgs = {R.mipmap.tab_my_test_home, R.mipmap.tab_my_test_like,
+            R.mipmap.tab_my_test_cart, R.mipmap.tab_my_test_delete,
+            R.mipmap.tab_my_test_wangwang, R.mipmap.tab_my_test_add};
 
 
     public MyGridAdapter(Context mContext) {

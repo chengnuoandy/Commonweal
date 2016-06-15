@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/dynamic_press" android:state_checked="true"/>
-    <item android:drawable="@drawable/dynamic"/>
+    <item android:drawable="@drawable/tab_dynamic_ic_click" android:state_checked="true" />
+    <item android:drawable="@drawable/tab_dynamic_ic" />
 
 </selector>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg"
+    android:background="@color/colorContext"
     android:baselineAligned="false"
     android:orientation="vertical"
     android:weightSum="1">
@@ -143,7 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/normal_space"
-            android:background="@color/main_hue"
+            android:background="@color/colorPrimary"
             android:text="确定发布"
             android:textColor="@color/white" />
     </LinearLayout>

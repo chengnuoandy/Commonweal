@@ -141,7 +141,7 @@
                 style="@style/Widget_SKItem"
                 android:layout_weight="2"
                 android:text="@string/label_billSK_ok"
-                android:textColor="@color/main_hue" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/billSK_equal"

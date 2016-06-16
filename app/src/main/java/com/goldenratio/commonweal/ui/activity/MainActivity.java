@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,19 +7,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
-import com.goldenratio.commonweal.dao.entity.User;
 import com.goldenratio.commonweal.receiver.NetworkReceiver;
 import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
-import com.goldenratio.commonweal.ui.fragment.GoodsFragment;
+import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
@@ -68,7 +63,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
                 changeFragment(new HelpFragment(), true);
                 break;
             case R.id.rb_good:// 物品
-                changeFragment(new GoodsFragment(), true);
+                changeFragment(new GoodFragment(), true);
                 break;
             case R.id.rb_dynamic:// 动态
                 changeFragment(new DynamicFragment(), true);

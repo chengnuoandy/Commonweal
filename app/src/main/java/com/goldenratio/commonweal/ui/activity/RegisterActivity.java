@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,16 +17,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.bean.User_Default;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,8 +40,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.FindCallback;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadBatchListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
@@ -76,6 +86,7 @@ public class RegisterActivity extends Activity {
     private String APPKEY = "139216e4958f6";
     private String APPSECRET = "63512a2fcc9c9e2f5c00bbdce60d920e";
 
+    private ProgressDialog mPd;
     private String mPhone;  //暂存手机号
     private EventHandler mEh;
 
@@ -90,6 +101,12 @@ public class RegisterActivity extends Activity {
         addTextChangeEvent(mEtPhone);
         addTextChangeEvent(mEtCode);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SMSSDK.unregisterEventHandler(mEh);  //取消短信回调
     }
 
     /*
@@ -129,7 +146,6 @@ public class RegisterActivity extends Activity {
         });
     }
 
-
     //    为按钮添加点击事件
     @OnClick({R.id.btn_againSendCode, R.id.btn_sendCode, R.id.btn_commitCode, R.id.btn_register, R.id.iv_back})
     public void onClick(View view) {
@@ -137,18 +153,25 @@ public class RegisterActivity extends Activity {
             case R.id.btn_sendCode:
                 mPhone = mEtPhone.getText().toString();
                 Log.d("send", "发送");
+
+                //getUDefAvatarUrl();
+                showProgressDialog();
+                Log.d("dialog", "显示进度条对话框");
                 isRegister();
                 break;
             case R.id.btn_againSendCode:
                 if (!TextUtils.isEmpty(mPhone)) {
                     Log.d("again", "重新发送");
                     sendVerification();
+                    mEtCode.setText("");
+                    mBtnCommitCode.setEnabled(false);
                     mBtnAgainSendCode.setBackgroundResource(R.drawable.register_default);
                 }
                 break;
             case R.id.btn_commitCode:
                 String verification = mEtCode.getText().toString();
                 submitVerification(verification);
+                showProgressDialog();
                 Log.d("comm", "提交验证码");
                 break;
             case R.id.btn_register:
@@ -157,10 +180,12 @@ public class RegisterActivity extends Activity {
                     Log.d("pass", "注册");
                     if (mPassword.length() >= 8) {
                         //  ^[a-zA-Z]\w{5,17}$
-                        if (checkPassword(mPassword))
-                            addUserInfoToDB();
-                        else
-                            Toast.makeText(RegisterActivity.this, "密码强度过低", Toast.LENGTH_SHORT).show();
+                        if (checkPassword(mPassword)) {
+                            mBtnRegister.setClickable(false);
+                            showProgressDialog();
+                            getUDefAvatarUrl();
+                        } else
+                            Toast.makeText(RegisterActivity.this, "密码强度过低,请输入8~16位数字加字母组合", Toast.LENGTH_SHORT).show();
                     } else
                         Toast.makeText(getApplicationContext(), "密码不能低于8位", Toast.LENGTH_SHORT).show();
                 } else {
@@ -180,6 +205,7 @@ public class RegisterActivity extends Activity {
     * */
 
     //注册短信回调（从远程（本地）获取到短信发送状况，发送给主线程）
+
     private void registerEventHandler() {
         SMSSDK.initSDK(this, APPKEY, APPSECRET);
         mEh = new EventHandler() {
@@ -215,23 +241,26 @@ public class RegisterActivity extends Activity {
             int event = msg.arg1;
             int result = msg.arg2;
             Object data = msg.obj;
-            Log.e("event", "event=" + event);
+            closeProgressDialog();
+            Log.d("dialog", "关闭进度条对话框");
+            Log.d("event", "event=" + event);
             if (result == SMSSDK.RESULT_COMPLETE) {
                 //短信注册成功后，返回MainActivity,然后提示新好友
                 if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    Toast.makeText(getApplicationContext(), "验证码已经发送", Toast.LENGTH_SHORT).show();
-
-                    showWhichStep(View.GONE, View.VISIBLE, View.GONE);
-                    changeStepTextColor(R.color.ordinary, R.color.main_hue, R.color.ordinary);
-
+                    Toast.makeText(getApplicationContext(), "验证码发送成功", Toast.LENGTH_SHORT).show();
                     new TimeCount(60000, 1000).start();
+                    showWhichStep(View.GONE, View.VISIBLE, View.GONE);
+                    changeStepTextColor(R.color.ordinary, R.color.colorPrimary, R.color.ordinary);
+
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
                     showWhichStep(View.GONE, View.GONE, View.VISIBLE);
-                    changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.main_hue);
+                    changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.colorPrimary);
                 }
             } else {
                 //  ((Throwable) data).printStackTrace();
+                mBtnSendCode.setClickable(true);
+                mEtCode.setText("");
                 Log.d("ccc", ((Throwable) data).getMessage());
                 String errorInfo = null;
                 try {
@@ -274,8 +303,8 @@ public class RegisterActivity extends Activity {
     //检测哪一步（如果进行完第一步，则会给用户弹出提示框）
     private void checkWhichStep() {
         Log.d("111", "弹出提示");
-        if (mTvCode.getTextColors() == getResources().getColorStateList(R.color.main_hue) ||
-                mTvPassword.getTextColors() == getResources().getColorStateList(R.color.main_hue)) {
+        if (mTvCode.getTextColors() == getResources().getColorStateList(R.color.colorPrimary) ||
+                mTvPassword.getTextColors() == getResources().getColorStateList(R.color.colorPrimary)) {
             Log.d("333", "成功判断");
             AlertDialog.Builder dialog = new AlertDialog.Builder(RegisterActivity.this);
             dialog.setTitle("提示");
@@ -310,6 +339,25 @@ public class RegisterActivity extends Activity {
             mBtnAgainSendCode.setBackgroundResource(R.drawable.register_reset);
             mBtnAgainSendCode.setText("重发");
         }
+
+    }
+
+
+    private void closeProgressDialog() {
+        if (mPd != null && mPd.isShowing()) {
+            //关闭对话框
+            mPd.dismiss();
+            mPd = null;
+        }
+    }
+
+    private void showProgressDialog() {
+        if (mPd == null) {
+            mPd = new ProgressDialog(this);
+            mPd.setMessage("加载中");
+            mPd.setCancelable(false);
+            mPd.show();
+        }
     }
 
     /*
@@ -319,24 +367,29 @@ public class RegisterActivity extends Activity {
     * */
 
     //注册完成后添加用户信息到数据库
-    private boolean addUserInfoToDB() {
-        boolean result = false;
+    private void addUserInfoToDB(String hdUrl, String maxUrl, String minUrl, String aut) {
         User u = new User();
         u.setUser_Phone(mPhone);
         u.setUser_Password(mEtPassword.getText().toString());
+        u.setUser_image_hd(hdUrl);
+        u.setUser_image_max(maxUrl);
+        u.setUser_image_min(minUrl);
+        u.setUser_Autograph(aut);
         u.save(this, new SaveListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                closeProgressDialog();
                 returnUInfoToMyFra();
             }
 
             @Override
             public void onFailure(int i, String s) {
-                Toast.makeText(getApplicationContext(), "注册失败，请检查网络", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                closeProgressDialog();
+                mBtnRegister.setClickable(true);
             }
         });
-        return false;
     }
 
     //判断此用户是否已经注册
@@ -347,9 +400,12 @@ public class RegisterActivity extends Activity {
         bmobQuery.findObjects(this, new FindListener<User>() {
             @Override
             public void onSuccess(List<User> list) {
-                if (list.isEmpty())
+                closeProgressDialog();
+                if (list.isEmpty()) {
+                    mBtnSendCode.setClickable(false);
                     sendVerification();
-                else {
+
+                } else {
                     Log.d("query", "查询成功");
                     Log.d("info", list + "");
                     Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
@@ -358,10 +414,48 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void onError(int i, String s) {
+                closeProgressDialog();
                 Log.d("query", "查询失败");
                 Toast.makeText(RegisterActivity.this, "网络不给力", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // List<String> dataList = new ArrayList<String>();
+
+    //获取头像URL
+    private void getUDefAvatarUrl() {
+        int rndNum = (int) (Math.random() * 9);
+        BmobQuery bmobQuery = new BmobQuery("User_Default");
+        bmobQuery.addWhereEqualTo("User_Default_Res_ID", rndNum);
+        bmobQuery.addQueryKeys("User_Def_Av_Hd_Url,User_Def_Av_Max_Url,User_Def_Av_Min_Url,User_Def_Aut");
+        bmobQuery.findObjects(this, new FindCallback() {
+            @Override
+            public void onSuccess(JSONArray jsonArray) {
+                String data = jsonArray.toString();
+                try {
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String UDefAvHdUrl = jsonObject.getString("User_Def_Av_Hd_Url");
+                    String UDefAvMaxUrl = jsonObject.getString("User_Def_Av_Max_Url");
+                    String UDefAvMinUrl = jsonObject.getString("User_Def_Av_Min_Url");
+                    String UDefAut = jsonObject.getString("User_Def_Aut");
+
+                    Log.d("url", UDefAvHdUrl);
+                    Log.d("aut", UDefAut);
+                    addUserInfoToDB(UDefAvHdUrl, UDefAvMaxUrl, UDefAvMinUrl, UDefAut);
+                } catch (JSONException e) {
+                    Log.d("jsexc", e + "，出现异常");
+                }
+                Log.d("data", data);
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Log.d("data1", i + "");
+                Log.d("data2", s);
+            }
+        });
+
     }
 
 
@@ -388,10 +482,5 @@ public class RegisterActivity extends Activity {
         checkWhichStep();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SMSSDK.unregisterEventHandler(mEh);  //取消短信回调
-    }
 
 }

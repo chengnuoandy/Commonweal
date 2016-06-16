@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">Commonweal</string>
     <string name="action_search">查找</string>
+
+    <string name="label_billSK_one">1</string>
+    <string name="label_billSK_two">2</string>
+    <string name="label_billSK_three">3</string>
+    <string name="label_billSK_four">4</string>
+    <string name="label_billSK_five">5</string>
+    <string name="label_billSK_six">6</string>
+    <string name="label_billSK_seven">7</string>
+    <string name="label_billSK_eight">8</string>
+    <string name="label_billSK_nine">9</string>
+    <string name="label_billSK_zero">0</string>
+    <string name="label_billSK_dot">.</string>
+    <string name="label_billSK_backspace">删除</string>
+    <string name="label_billSK_ok">确定</string>
+    <string name="label_billSK_equal">=</string>
 </resources>

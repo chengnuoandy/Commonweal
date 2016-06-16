@@ -22,4 +22,7 @@
 
     <color name="line">#ffd3dde6</color>
     <color name="commo_text_color">#ff333333</color>
+
+    <color name="bg_white_light_1">#f3f3f3</color>
+    <color name="bg_white_light_2">#e4e4e4</color>
 </resources>

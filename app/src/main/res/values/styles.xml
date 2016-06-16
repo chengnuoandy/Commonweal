@@ -8,4 +8,29 @@
 
     </style>
 
+    <!-- VLine View -->
+    <style name="Widget_MoneySK_Line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.3dp</item>
+        <item name="android:background">#e1e1e1</item>
+    </style>
+
+    <!--SKItem-->
+    <style name="Widget_SKItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#999999</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:background">@drawable/money_item_selector</item>
+    </style>
+
+    <!-- VLine View -->
+    <style name="Widget_MoneySK_VLine">
+        <item name="android:layout_width">0.3dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">#e1e1e1</item>
+    </style>
 </resources>

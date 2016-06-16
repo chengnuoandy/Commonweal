@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg"
+    android:background="@color/colorContext"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -24,7 +24,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/color_FMy_Context">
 
         <TextView
             android:id="@+id/tv_name"
@@ -32,9 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="HELLO WORD"
-            android:textColor="@color/main_hue"
+            android:textColor="@color/black"
             android:textSize="20sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:scaleX="0.6"
             android:scaleY="0.6"
-            android:src="@drawable/user_default_avatar_v1_8_888"
+            android:src="@drawable/user_default_avatar_v2_3_180"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:id="@+id/circleImageView" />
@@ -79,9 +79,9 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="2dp"
+            android:layout_width="1dp"
             android:layout_height="50dp"
-            android:background="@color/main_bg" />
+            android:background="@color/color_FMy_Context" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -106,7 +106,10 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_FMy_Context" />
 
     <GridView
         android:id="@+id/gridview"

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg"
+    android:background="@color/colorContext"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -31,7 +31,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_hue" />
+        android:background="@color/colorPrimary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             android:drawableRight="@mipmap/news_cate_arr"
             android:gravity="center"
             android:text="1输入手机号"
-            android:textColor="@color/main_hue" />
+            android:textColor="@color/colorPrimary" />
 
 
         <TextView
@@ -191,6 +191,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="扔吧用户协议"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 </LinearLayout>

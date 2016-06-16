@@ -13,11 +13,10 @@ import com.goldenratio.commonweal.R;
 public class MyGridAdapter extends BaseAdapter {
     private Context mContext;
 
-    public String[] img_text = {"我的", "收藏", "购物车", "删除", "消息", "添加"};
-    public int[] imgs = {R.mipmap.tab_my_test_home, R.mipmap.tab_my_test_like,
-            R.mipmap.tab_my_test_cart, R.mipmap.tab_my_test_delete,
-            R.mipmap.tab_my_test_wangwang, R.mipmap.tab_my_test_add};
-
+    public String[] img_text = {"我的", "收藏", "购物车", "个人", "消息", "添加"};
+    public int[] imgs = {R.mipmap.my_home, R.mipmap.my_collect,
+            R.mipmap.my_cart, R.mipmap.my_personalcenter,
+            R.mipmap.my_news, R.mipmap.my_search};
 
     public MyGridAdapter(Context mContext) {
         super();

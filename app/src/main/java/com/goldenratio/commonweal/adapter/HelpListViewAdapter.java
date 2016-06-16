@@ -15,10 +15,10 @@ import com.goldenratio.commonweal.R;
  */
 public class HelpListViewAdapter extends BaseAdapter {
 
-    public String[] img_text = {"我的ddsddd", "收藏ssfs", "购物车sdfsfs", "删除sfsfs", "消息sfsf", "添加sfsfdsfs"};
-    public int[] imgs = {R.mipmap.meinv, R.mipmap.meinv,
-            R.mipmap.meinv, R.mipmap.meinv,
-            R.mipmap.meinv, R.mipmap.meinv};
+    public String[] img_text = {"我的", "收藏", "购物车", "身份", "消息", "查找"};
+    public int[] imgs = {R.mipmap.my_home, R.mipmap.my_collect,
+            R.mipmap.my_cart, R.mipmap.my_personalcenter,
+            R.mipmap.my_news, R.mipmap.my_search};
 
 
     public Context mContext;

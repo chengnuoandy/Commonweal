@@ -11,7 +11,7 @@
         android:padding="1dp"
         android:scaleType="fitXY"
         android:layout_marginRight="5dp"
-        android:src="@mipmap/meinv" />
+         />
 
     <TextView
         android:id="@+id/tv_title"

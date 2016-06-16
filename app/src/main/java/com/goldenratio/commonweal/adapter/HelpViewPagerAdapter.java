@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.goldenratio.commonweal.R;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 /**
  * Created by 两个人 on 2016-06-14.
@@ -18,7 +19,7 @@ public class HelpViewPagerAdapter extends PagerAdapter {
 
     private ArrayList<ImageView> mImageViewList;
     private Context mContext;
-
+    private Handler mHandler;
     private  int[] mImageIds = new int[]{R.mipmap.ic_launcher
                 ,R.mipmap.ic_launcher,R.mipmap.ic_launcher};
    public HelpViewPagerAdapter(Context context) {
@@ -35,6 +36,7 @@ public class HelpViewPagerAdapter extends PagerAdapter {
            mImageViewList.add(view);
        }
    }
+
 
     public int getCount() {
             return mImageViewList.size();

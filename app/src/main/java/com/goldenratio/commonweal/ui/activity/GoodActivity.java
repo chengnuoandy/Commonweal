@@ -12,6 +12,9 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.ViewHolder;
 
 /**
  * Created by Kiuber on 2016/6/11.
@@ -49,7 +52,7 @@ public class GoodActivity extends Activity implements View.OnClickListener {
     }
 
     private void showPriceView() {
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        /*WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();//屏幕宽度
         Toast.makeText(GoodActivity.this, width + "", Toast.LENGTH_SHORT).show();
         View view = mLi.inflate(R.layout.view_good_price, null);
@@ -61,6 +64,15 @@ public class GoodActivity extends Activity implements View.OnClickListener {
         dialog.getWindow().setAttributes(layoutParams);
         dialog.setView(view);
         window.setGravity(Gravity.BOTTOM);
-        dialog.show();
+        dialog.show();*/
+        DialogPlus.newDialog(this)
+                .setContentHolder(new ViewHolder(R.layout.view_good_price))
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        //
+                    }
+                })
+                .create().show();
     }
 }

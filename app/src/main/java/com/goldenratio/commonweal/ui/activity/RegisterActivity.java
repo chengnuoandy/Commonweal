@@ -162,6 +162,7 @@ public class RegisterActivity extends Activity {
             case R.id.btn_againSendCode:
                 if (!TextUtils.isEmpty(mPhone)) {
                     Log.d("again", "重新发送");
+                    showProgressDialog();
                     sendVerification();
                     mEtCode.setText("");
                     mBtnCommitCode.setEnabled(false);
@@ -170,8 +171,8 @@ public class RegisterActivity extends Activity {
                 break;
             case R.id.btn_commitCode:
                 String verification = mEtCode.getText().toString();
-                submitVerification(verification);
                 showProgressDialog();
+                submitVerification(verification);
                 Log.d("comm", "提交验证码");
                 break;
             case R.id.btn_register:
@@ -237,7 +238,7 @@ public class RegisterActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
-            super.handleMessage(msg);
+           // super.handleMessage(msg);
             int event = msg.arg1;
             int result = msg.arg2;
             Object data = msg.obj;

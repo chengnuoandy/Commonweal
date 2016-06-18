@@ -133,6 +133,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
             case NET_WIFI:
                 if (x) {
                     Toast.makeText(MainActivity.this, "网络连接已恢复", Toast.LENGTH_SHORT).show();
+                    x = false;
                 }
                 break;
             case NET_UNKNOWN:

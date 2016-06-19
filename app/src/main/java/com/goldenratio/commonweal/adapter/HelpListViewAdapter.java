@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import it.sephiroth.android.library.picasso.Picasso;
 
 /**
  * Created by 两个人 on 2016-06-14.

@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
+
+import com.goldenratio.commonweal.ui.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +75,7 @@ public class NetworkReceiver extends BroadcastReceiver {
                         case TelephonyManager.NETWORK_TYPE_1xRTT:
                         case TelephonyManager.NETWORK_TYPE_IDEN:
                             stateCode = NetState.NET_2G;
-                            break;
+
                         case TelephonyManager.NETWORK_TYPE_EVDO_A: //电信3g
                         case TelephonyManager.NETWORK_TYPE_UMTS:
                         case TelephonyManager.NETWORK_TYPE_EVDO_0:
@@ -83,9 +86,9 @@ public class NetworkReceiver extends BroadcastReceiver {
                         case TelephonyManager.NETWORK_TYPE_EHRPD:
                         case TelephonyManager.NETWORK_TYPE_HSPAP:
                             stateCode = NetState.NET_3G;
-                            break;
                         case TelephonyManager.NETWORK_TYPE_LTE:
                             stateCode = NetState.NET_4G;
+
                             break;
                         default:
                             stateCode = NetState.NET_UNKNOWN;

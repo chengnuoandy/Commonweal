@@ -1,8 +1,10 @@
 package com.goldenratio.commonweal.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,14 @@ import android.widget.ListView;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
+import com.goldenratio.commonweal.bean.Help;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 
 public class HelpFragment extends Fragment {
 
@@ -23,45 +29,70 @@ public class HelpFragment extends Fragment {
 
     private ListView mListView;
 
-   // private Handler mHandler;
+
 
     private CirclePageIndicator indicator;
 
-    private HelpListViewAdapter adapter;
+    // private HelpListViewAdapter adapter;
+    private View mHeaderView;
+
     // 初始化fragment的布局
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       View view= initView();
+        View view = initView();
+
         return view;
     }
 
 
-    private  View initView(){
 
-        View view = View.inflate(getContext(),R.layout.fragment_help, null);
+    private View initView() {
+
+        View view = View.inflate(getContext(), R.layout.fragment_help, null);
         mListView = (ListView) view.findViewById(R.id.lv_help);
 
-        View mHeaderView =View.inflate(getContext(),R.layout.view_help_hander,null);
+        mHeaderView = View.inflate(getContext(), R.layout.view_help_hander, null);
         indicator = (CirclePageIndicator) mHeaderView.findViewById(R.id.indicator);
 
         //头文件
-        mViewPager= (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
+        mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
         mViewPager.setAdapter(new HelpViewPagerAdapter(getContext()));
+
+//       adapter= new HelpListViewAdapter(getContext(),help_url);
+//      mListView.setAdapter(adapter);
 
         indicator.setViewPager(mViewPager);
         indicator.setSnap(true);
-
         mListView.addHeaderView(mHeaderView);
-        adapter= new HelpListViewAdapter(getContext());
-        mListView.setAdapter(adapter);
 
+        initData();
 
         return view;
     }
 
+    public void initData() {
+        BmobQuery<Help> bmobQuery =new BmobQuery<>();
+        bmobQuery.order("-createdAt");
+        bmobQuery.findObjects(getContext(), new FindListener<Help>() {
+            @Override
+            public void onSuccess(List<Help> list) {
+
+                mListView.setAdapter(new HelpListViewAdapter(getContext(),list));
+
+
+
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                Log.i("bmob","下载失败："+s);
+            }
+        });
 
 
 
     }
+}
+
 

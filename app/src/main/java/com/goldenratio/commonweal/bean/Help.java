@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.bean;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 
 /**

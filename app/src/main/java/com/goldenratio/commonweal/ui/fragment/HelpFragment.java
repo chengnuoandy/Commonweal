@@ -14,6 +14,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
 import com.goldenratio.commonweal.bean.Help;
+import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
@@ -66,10 +67,14 @@ public class HelpFragment extends Fragment {
         indicator.setSnap(true);
         mListView.addHeaderView(mHeaderView);
 
+
         initData();
 
         return view;
     }
+
+
+
 
     public void initData() {
         BmobQuery<Help> bmobQuery =new BmobQuery<>();

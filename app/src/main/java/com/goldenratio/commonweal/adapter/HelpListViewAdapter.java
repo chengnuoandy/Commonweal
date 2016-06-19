@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,19 +27,17 @@ public class HelpListViewAdapter extends BaseAdapter {
 //            R.mipmap.my_news, R.mipmap.my_search};
 
 
-
-
-
     List<Help> help;
 
 
     public Context mContext;
 
+    private Object[] imgUrl;
+
     public HelpListViewAdapter(Context mContext, List<Help> help) {
 
         this.mContext = mContext;
         this.help = help;
-
 
 
     }
@@ -76,7 +75,9 @@ public class HelpListViewAdapter extends BaseAdapter {
         //holder.iv_icon.setBackgroundResource(imgs[position]);
 
         holder.tv_title.setText(help.get(position).getHelp_Title());
-        Picasso.with(mContext).load(help.get(position).getHelp_pic().toString()).into(holder.iv_icon);
+        imgUrl = help.get(position).getHelp_pic().toArray();
+        Log.d("TAGGGGG", "getView: "+imgUrl[0]);
+        Picasso.with(mContext).load(imgUrl[0].toString()).into(holder.iv_icon);
 //        Picasso.with(mContext).load(url.get(position)).getPicUrl()).into(holder.iv_icon);
 
 

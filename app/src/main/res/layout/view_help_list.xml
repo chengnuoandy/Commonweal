@@ -2,28 +2,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-   android:padding="@dimen/normal_space">
+    android:padding="@dimen/normal_space">
+
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="100dp"
-        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:background="#a000"
         android:padding="1dp"
-        android:scaleType="fitXY"
-        android:layout_marginRight="5dp"
-         />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/iv_icon"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/iv_icon"
+        android:layout_marginTop="13dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="锋娟昆仑山大军阀昆仑山大军阀绿卡傻蛋家风口浪尖阿斯顿飞快乐四大可否接口乐山大佛就快啦束带结发"
         android:textColor="#000"
         android:textSize="18sp" />
 
+    <com.goldenratio.commonweal.ui.view.Help_ProgressBar
+        android:id="@+id/pb_progressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_Day"
+        android:text="倒计时："
+        android:textSize="26dp"
+        android:layout_below="@+id/pb_progressBar"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_Person"
+        android:text="参与："
+        android:textColor="@color/colorPrimary"
+        android:textSize="26dp"
+        android:layout_below="@+id/pb_progressBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

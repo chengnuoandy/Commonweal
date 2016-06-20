@@ -9,19 +9,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
 import com.goldenratio.commonweal.bean.Help;
+import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 public class HelpFragment extends Fragment {
 
@@ -49,7 +55,6 @@ public class HelpFragment extends Fragment {
 
 
     private View initView() {
-
         View view = View.inflate(getContext(), R.layout.fragment_help, null);
         mListView = (PullToRefreshListView) view.findViewById(R.id.lv_help);
 

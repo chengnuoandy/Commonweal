@@ -19,9 +19,9 @@ public class HelpViewPagerAdapter extends PagerAdapter {
 
     private ArrayList<ImageView> mImageViewList;
     private Context mContext;
-    private Handler mHandler;
-    private  int[] mImageIds = new int[]{R.mipmap.ic_launcher
-                ,R.mipmap.ic_launcher,R.mipmap.ic_launcher};
+
+    private  int[] mImageIds = new int[]{R.mipmap.hander_one
+                ,R.mipmap.hander_two,R.mipmap.hander_three};
    public HelpViewPagerAdapter(Context context) {
        super();
        mContext = context;

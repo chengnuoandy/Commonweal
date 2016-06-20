@@ -24,15 +24,10 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 
 public class HelpFragment extends Fragment {
-
-
     private ViewPager mViewPager;
-
     private PullToRefreshListView mListView;
-
-
-
     private CirclePageIndicator indicator;
+    private List<Help> list;
 
     // private HelpListViewAdapter adapter;
     private View mHeaderView;
@@ -42,11 +37,8 @@ public class HelpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = initView();
-
         return view;
     }
-
-
 
     private View initView() {
 
@@ -59,16 +51,14 @@ public class HelpFragment extends Fragment {
         //头文件
         mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
         mViewPager.setAdapter(new HelpViewPagerAdapter(getContext()));
-
-//       adapter= new HelpListViewAdapter(getContext(),help_url);
-//      mListView.setAdapter(adapter);
-
         indicator.setViewPager(mViewPager);
         indicator.setSnap(true);
+
         mListView.addHeaderView(mHeaderView);
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 initData();
             }
 
@@ -84,33 +74,29 @@ public class HelpFragment extends Fragment {
         return view;
     }
 
-
-
-
     public void initData() {
-        BmobQuery<Help> bmobQuery =new BmobQuery<>();
+        BmobQuery<Help> bmobQuery = new BmobQuery<>();
         bmobQuery.order("-createdAt");
         bmobQuery.findObjects(getContext(), new FindListener<Help>() {
             @Override
             public void onSuccess(List<Help> list) {
 
-                mListView.setAdapter(new HelpListViewAdapter(getContext(),list));
+                list = list;
+                mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
                 mListView.onRefreshComplete();
-
-
             }
+
 
             @Override
             public void onError(int i, String s) {
 
-                Log.i("bmob","下载失败："+s);
+                Log.i("bmob", "下载失败：" + s);
                 mListView.onRefreshComplete();
             }
         });
-
-
-
     }
 }
+
+
 
 

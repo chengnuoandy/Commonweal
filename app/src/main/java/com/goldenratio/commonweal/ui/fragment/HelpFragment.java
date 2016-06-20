@@ -28,7 +28,7 @@ public class HelpFragment extends Fragment {
 
     private ViewPager mViewPager;
 
-    private ListView mListView;
+    private PullToRefreshListView mListView;
 
 
 
@@ -51,7 +51,7 @@ public class HelpFragment extends Fragment {
     private View initView() {
 
         View view = View.inflate(getContext(), R.layout.fragment_help, null);
-        mListView = (ListView) view.findViewById(R.id.lv_help);
+        mListView = (PullToRefreshListView) view.findViewById(R.id.lv_help);
 
         mHeaderView = View.inflate(getContext(), R.layout.view_help_hander, null);
         indicator = (CirclePageIndicator) mHeaderView.findViewById(R.id.indicator);
@@ -66,6 +66,17 @@ public class HelpFragment extends Fragment {
         indicator.setViewPager(mViewPager);
         indicator.setSnap(true);
         mListView.addHeaderView(mHeaderView);
+        mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initData();
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
 
 
         initData();
@@ -84,14 +95,16 @@ public class HelpFragment extends Fragment {
             public void onSuccess(List<Help> list) {
 
                 mListView.setAdapter(new HelpListViewAdapter(getContext(),list));
-
+                mListView.onRefreshComplete();
 
 
             }
 
             @Override
             public void onError(int i, String s) {
+
                 Log.i("bmob","下载失败："+s);
+                mListView.onRefreshComplete();
             }
         });
 

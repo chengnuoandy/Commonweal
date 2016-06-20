@@ -22,8 +22,8 @@
    </RelativeLayout>
 
 
-    <ListView
+    <com.goldenratio.commonweal.ui.view.PullToRefreshListView
         android:id="@+id/lv_help"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"></com.goldenratio.commonweal.ui.view.PullToRefreshListView>
 </LinearLayout>

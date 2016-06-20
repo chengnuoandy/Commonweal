@@ -226,7 +226,7 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
     /**
      * 刷新结束,收起控件
      */
-    public void onRefreshComplete(boolean success) {
+    public void onRefreshComplete() {
         if(!isLoadMore) {
             mHeaderView.setPadding(0, -mHeaderViewHeight, 0, 0);
 
@@ -235,13 +235,13 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
             pbProgress.setVisibility(View.INVISIBLE);
             ivArrow.setVisibility(View.VISIBLE);
 
-            if (success) {// 只有刷新成功之后才更新时间
-                setCurrentTime();
-            }
-        }else {
-            //加载更多
-            mFooterView.setPadding(0, -mFooterViewHeight, 0, 0);//隐藏布局
-            isLoadMore = false;
+//            if (success) {// 只有刷新成功之后才更新时间
+//                setCurrentTime();
+//            }
+//        }else {
+//            //加载更多
+//            mFooterView.setPadding(0, -mFooterViewHeight, 0, 0);//隐藏布局
+//            isLoadMore = false;
         }
     }
 

@@ -1,20 +1,23 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.widget.GridView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.adapter.PhotoGridViewAdapter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+
+import java.util.ArrayList;
+
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Kiuber on 2016/6/11.
@@ -23,6 +26,9 @@ import com.orhanobut.dialogplus.ViewHolder;
 public class GoodActivity extends Activity implements View.OnClickListener {
 
     private LayoutInflater mLi;
+    private ArrayList<String> mSelectPath;
+    private static final int REQUEST_IMAGE = 2;
+    private GridView mGvShowPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class GoodActivity extends Activity implements View.OnClickListener {
         mLi = LayoutInflater.from(GoodActivity.this);
         findViewById(R.id.tv_type).setOnClickListener(this);
         findViewById(R.id.tv_price).setOnClickListener(this);
+        mGvShowPhoto = (GridView) findViewById(R.id.gv_show_photos);
     }
 
     @Override
@@ -52,19 +59,6 @@ public class GoodActivity extends Activity implements View.OnClickListener {
     }
 
     private void showPriceView() {
-        /*WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        int width = wm.getDefaultDisplay().getWidth();//屏幕宽度
-        Toast.makeText(GoodActivity.this, width + "", Toast.LENGTH_SHORT).show();
-        View view = mLi.inflate(R.layout.view_good_price, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(GoodActivity.this);
-        AlertDialog dialog = builder.create();
-        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-        layoutParams.width = width;
-        Window window = dialog.getWindow();
-        dialog.getWindow().setAttributes(layoutParams);
-        dialog.setView(view);
-        window.setGravity(Gravity.BOTTOM);
-        dialog.show();*/
         DialogPlus.newDialog(this)
                 .setContentHolder(new ViewHolder(R.layout.view_good_price))
                 .setOnClickListener(new OnClickListener() {

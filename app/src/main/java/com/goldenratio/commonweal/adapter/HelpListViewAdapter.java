@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import it.sephiroth.android.library.picasso.Picasso;
 
 /**
  * Created by 两个人 on 2016-06-14.
@@ -75,9 +75,9 @@ public class HelpListViewAdapter extends BaseAdapter {
         //holder.iv_icon.setBackgroundResource(imgs[position]);
 
         holder.tv_title.setText(help.get(position).getHelp_Title());
-        imgUrl = help.get(position).getHelp_pic().toArray();
-        Log.d("TAGGGGG", "getView: "+imgUrl[0]);
-        Picasso.with(mContext).load(imgUrl[0].toString()).into(holder.iv_icon);
+//        imgUrl = help.get(position).getHelp_pic().toArray();
+//        Log.d("TAGGGGG", "getView: "+imgUrl[0]);
+       // Picasso.with(mContext).load(imgUrl[0].toString()).into(holder.iv_icon);
 //        Picasso.with(mContext).load(url.get(position)).getPicUrl()).into(holder.iv_icon);
 
 

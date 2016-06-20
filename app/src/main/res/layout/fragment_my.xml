@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorContext"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorContext"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_centerInParent="true"
             android:text="我的"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size" />
+            android:textSize="@dimen/title_text_size"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -33,19 +33,19 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:padding="15dp"
-            android:text="HELLO WORD"
+            android:text="HELLO WORLD"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
+            android:layout_centerInParent="true"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
             android:src="@drawable/user_default_avatar_v2_3_180"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/circleImageView" />
+            android:tag="1"/>
 
 
     </RelativeLayout>
@@ -68,20 +68,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="¥ 500"
-                android:textSize="25sp" />
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/tv_done"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="今日成交"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
         </LinearLayout>
 
         <TextView
             android:layout_width="1dp"
             android:layout_height="50dp"
-            android:background="@color/color_FMy_Context" />
+            android:background="@color/color_FMy_Context"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -95,21 +95,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2365"
-                android:textSize="25sp" />
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/tv_glance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="今日浏览"
-                android:textSize="15sp" />
+                android:textSize="15sp"/>
         </LinearLayout>
 
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color_FMy_Context" />
+        android:background="@color/color_FMy_Context"/>
 
     <GridView
         android:id="@+id/gridview"
@@ -120,6 +121,6 @@
         android:numColumns="3"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="0.0dip" />
+        android:verticalSpacing="0.0dip"/>
 
 </LinearLayout>

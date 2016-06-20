@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
                 changeFragment(new DynamicFragment(), true);
                 break;
             case R.id.rb_my:// 我
-                UserDao userDao = new UserDao(MainActivity.this);
+                //UserDao userDao = new UserDao(MainActivity.this);
                 changeFragment(new MyFragment(), true);
                 break;
             default:

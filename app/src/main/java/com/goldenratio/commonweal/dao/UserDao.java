@@ -17,7 +17,7 @@ public class UserDao {
 
     public UserDao(Context context) {
         DBHelper dbHelper = new DBHelper(context);
-        this.db = dbHelper.getWritableDatabase();
+        this.db = dbHelper.getReadableDatabase();
     }
 
     public void insert(String sql) {

@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/normal_space">
 
+
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="match_parent"

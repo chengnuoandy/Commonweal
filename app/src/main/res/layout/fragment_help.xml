@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorContext"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorContext"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,12 +18,12 @@
             android:layout_centerInParent="true"
             android:text="项目"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size" />
-   </RelativeLayout>
-
+            android:textSize="@dimen/title_text_size"/>
+    </RelativeLayout>
 
     <com.goldenratio.commonweal.ui.view.PullToRefreshListView
         android:id="@+id/lv_help"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.goldenratio.commonweal.ui.view.PullToRefreshListView>
+        android:layout_height="wrap_content">
+    </com.goldenratio.commonweal.ui.view.PullToRefreshListView>
 </LinearLayout>

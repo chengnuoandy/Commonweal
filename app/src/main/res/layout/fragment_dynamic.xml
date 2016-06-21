@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorContext"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -20,4 +20,66 @@
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
+
+    <LinearLayout
+
+        android:id="@+id/id_switch_tab_ll"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:padding="@dimen/little_space"
+            android:id="@+id/tv_official"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="官方"
+            android:layout_weight="1"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/ordinary" />
+
+        <TextView
+            android:layout_weight="1"
+            android:padding="@dimen/little_space"
+            android:id="@+id/tv_dynamic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="项目"
+            android:textColor="@color/ordinary" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/black" />
+
+        <TextView
+            android:padding="@dimen/little_space"
+            android:layout_weight="1"
+            android:id="@+id/tv_personal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="个人"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_dynamic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </android.support.v4.view.ViewPager>
+
 </LinearLayout>

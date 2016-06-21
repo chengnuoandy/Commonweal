@@ -150,7 +150,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:background="@color/white"
-        android:drawableLeft="@drawable/user_password_unlock"
+        android:drawableLeft="@drawable/user_password"
         android:hint="请输入密码"
         android:inputType="textPassword"
         android:maxLength="16"

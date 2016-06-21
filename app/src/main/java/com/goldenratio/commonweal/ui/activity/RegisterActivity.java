@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,9 +49,7 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 /*
-*
-*       LXT创建于2016/06/01
-*
+*  Created by 龙啸天 on 2016/6/20 0020.
 * */
 public class RegisterActivity extends Activity {
 
@@ -110,9 +107,7 @@ public class RegisterActivity extends Activity {
     }
 
     /*
-    *
     * 为控件添加监听事件
-    *
     * */
 
     //添加文本改变监听事件
@@ -242,23 +237,23 @@ public class RegisterActivity extends Activity {
             int event = msg.arg1;
             int result = msg.arg2;
             Object data = msg.obj;
-            closeProgressDialog();
-            Log.d("dialog", "关闭进度条对话框");
-            Log.d("event", "event=" + event);
             if (result == SMSSDK.RESULT_COMPLETE) {
                 //短信注册成功后，返回MainActivity,然后提示新好友
                 if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     Toast.makeText(getApplicationContext(), "验证码发送成功", Toast.LENGTH_SHORT).show();
                     new TimeCount(60000, 1000).start();
+                    closeProgressDialog();
                     showWhichStep(View.GONE, View.VISIBLE, View.GONE);
                     changeStepTextColor(R.color.ordinary, R.color.colorPrimary, R.color.ordinary);
 
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
+                    closeProgressDialog();
                     showWhichStep(View.GONE, View.GONE, View.VISIBLE);
                     changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.colorPrimary);
                 }
             } else {
+                closeProgressDialog();
                 //  ((Throwable) data).printStackTrace();
                 mBtnSendCode.setClickable(true);
                 mEtCode.setText("");
@@ -276,7 +271,6 @@ public class RegisterActivity extends Activity {
     };
 
     /*
-    *
     *   改变控件属性
     * */
 

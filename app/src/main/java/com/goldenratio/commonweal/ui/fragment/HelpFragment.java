@@ -27,6 +27,11 @@ public class HelpFragment extends Fragment {
     private CirclePageIndicator indicator;
     private Handler mHandler;
 
+    private int participant;  //参与人数
+    private int Day;           //剩余日期
+    private int sum;           //项目所需总数
+    private int AtPresent;    //项目现在进程
+
 
     private View mHeaderView;
 
@@ -34,7 +39,6 @@ public class HelpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = initView();
-
 
         return view;
     }
@@ -46,7 +50,7 @@ public class HelpFragment extends Fragment {
 
         mHeaderView = View.inflate(getContext(), R.layout.view_help_hander, null);
         indicator = (CirclePageIndicator) mHeaderView.findViewById(R.id.indicator);
-
+        Log.d("CN", "initView: ++++++++++++++++++++++++++++++++++++++");
         //头文件
         mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
         mViewPager.setAdapter(new HelpViewPagerAdapter(getContext()));
@@ -108,7 +112,6 @@ public class HelpFragment extends Fragment {
                     mHandler.sendEmptyMessageDelayed(0, 3000);// 继续发送延时3秒的消息,形成内循环
                 }
 
-                ;
             };
 
             // 保证启动自动轮播逻辑只执行一次
@@ -116,7 +119,3 @@ public class HelpFragment extends Fragment {
         }
     }
 }
-
-
-
-

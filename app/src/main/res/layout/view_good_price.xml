@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:orientation="vertical">
 
     <LinearLayout
+        style="@style/Widget_SKItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -19,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="价格"
+                android:text="底价"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_default"/>
 
@@ -28,8 +29,10 @@
                 android:layout_height="wrap_content"
                 android:text="￥"/>
 
-            <EditText
-                android:layout_width="wrap_content"
+
+            <com.goldenratio.commonweal.ui.lib.GoodEditText
+                android:id="@+id/release1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:hint="0.00"/>
@@ -54,10 +57,14 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_default"/>
 
-            <EditText
-                android:layout_width="wrap_content"
+
+            <com.goldenratio.commonweal.ui.lib.GoodEditText
+                android:id="@+id/release2"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"/>
+                android:layout_weight="3"
+                android:maxLength="3"
+                android:hint="0"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,6 +74,12 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        style="@style/Widget_SKItem"
+        android:gravity="center"
+        android:id="@+id/show_re"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <include
         layout="@layout/include_money"
         android:layout_width="match_parent"

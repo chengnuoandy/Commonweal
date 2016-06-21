@@ -21,4 +21,7 @@
 
     <color name="line">#ffd3dde6</color>
     <color name="commo_text_color">#ff333333</color>
+
+    <color name="keypad_white_up">#f3f3f3</color>
+    <color name="keypad_white_press">#e4e4e4</color>
 </resources>

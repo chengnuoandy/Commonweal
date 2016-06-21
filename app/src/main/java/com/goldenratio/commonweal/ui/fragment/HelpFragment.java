@@ -1,14 +1,13 @@
 package com.goldenratio.commonweal.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
@@ -17,10 +16,7 @@ import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
@@ -29,7 +25,7 @@ public class HelpFragment extends Fragment {
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
-    private  Handler mHandler;
+    private Handler mHandler;
 
 
     private View mHeaderView;
@@ -44,7 +40,6 @@ public class HelpFragment extends Fragment {
     }
 
 
-
     private View initView() {
         View view = View.inflate(getContext(), R.layout.fragment_help, null);
         mListView = (PullToRefreshListView) view.findViewById(R.id.lv_help);
@@ -55,12 +50,10 @@ public class HelpFragment extends Fragment {
         //头文件
         mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
         mViewPager.setAdapter(new HelpViewPagerAdapter(getContext()));
-
-
-
-
         indicator.setViewPager(mViewPager);
         indicator.setSnap(true);
+
+
         mListView.addHeaderView(mHeaderView);
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
@@ -100,6 +93,27 @@ public class HelpFragment extends Fragment {
                 mListView.onRefreshComplete();
             }
         });
+        if (mHandler == null) {
+            mHandler = new android.os.Handler() {
+                public void handleMessage(android.os.Message msg) {
+                    int currentItem = mViewPager.getCurrentItem();
+                    currentItem++;
+
+                    if (currentItem > 2) {
+                        currentItem = 0;// 如果已经到了最后一个页面,跳到第一页
+                    }
+
+                    mViewPager.setCurrentItem(currentItem);
+
+                    mHandler.sendEmptyMessageDelayed(0, 3000);// 继续发送延时3秒的消息,形成内循环
+                }
+
+                ;
+            };
+
+            // 保证启动自动轮播逻辑只执行一次
+            mHandler.sendEmptyMessageDelayed(0, 3000);// 发送延时3秒的消息
+        }
     }
 }
 

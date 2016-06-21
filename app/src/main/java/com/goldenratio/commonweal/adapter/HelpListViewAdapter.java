@@ -67,6 +67,7 @@ public class HelpListViewAdapter extends BaseAdapter {
                     R.layout.view_help_list, parent, false);
             holder.tv_title = (TextView) convertView.findViewById(R.id.tv_title);
             holder.iv_icon = (ImageView) convertView.findViewById(R.id.iv_icon);
+            holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
             convertView.setTag(holder);
         } else {
 
@@ -75,6 +76,7 @@ public class HelpListViewAdapter extends BaseAdapter {
         //holder.iv_icon.setBackgroundResource(imgs[position]);
 
         holder.tv_title.setText(help.get(position).getHelp_Title());
+        holder.tv_content.setText(help.get(position).getHelp_Content());
         imgUrl = help.get(position).getHelp_pic().toArray();
         Log.d("TAGGGGG", "getView: "+imgUrl[0]);
         Picasso.with(mContext).load(imgUrl[0].toString()).into(holder.iv_icon);
@@ -87,7 +89,7 @@ public class HelpListViewAdapter extends BaseAdapter {
     private class ViewHolder {
         private ImageView iv_icon;
         private TextView tv_title;
-
+        private TextView tv_content;
     }
 }
 

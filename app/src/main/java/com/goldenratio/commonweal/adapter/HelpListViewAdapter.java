@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
@@ -74,7 +75,8 @@ public class HelpListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         //holder.iv_icon.setBackgroundResource(imgs[position]);
-
+        Toast.makeText(mContext,"dddasda3d5as5d3a5d3as",0).show();
+        Log.d("CN", "getView: +++++++++++++++++++++++++++++++++++++++88888888888888888888888888888888888");
         holder.tv_title.setText(help.get(position).getHelp_Title());
         holder.tv_content.setText(help.get(position).getHelp_Content());
         imgUrl = help.get(position).getHelp_pic().toArray();
@@ -92,4 +94,3 @@ public class HelpListViewAdapter extends BaseAdapter {
         private TextView tv_content;
     }
 }
-

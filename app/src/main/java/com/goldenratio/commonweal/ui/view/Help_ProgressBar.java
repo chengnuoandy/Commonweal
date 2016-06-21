@@ -74,7 +74,7 @@ public class Help_ProgressBar extends ProgressBar {
     //设置文字内容
     private void setText(int progress){
         int i = (progress * 100)/this.getMax();
-        this.text = String.valueOf(i) + "30%";
+        this.text = String.valueOf(i) + "%";
     }
 
 }

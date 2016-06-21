@@ -27,6 +27,11 @@ public class HelpFragment extends Fragment {
     private CirclePageIndicator indicator;
     private Handler mHandler;
 
+    private int participant;  //参与人数
+    private int Day;           //剩余日期
+    private int sum;           //项目所需总数
+    private int AtPresent;    //项目现在进程
+
 
     private View mHeaderView;
 

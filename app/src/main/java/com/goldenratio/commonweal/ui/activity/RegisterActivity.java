@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,9 +49,7 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 /*
-*
-*       LXT创建于2016/06/01
-*
+*  Created by 龙啸天 on 2016/6/20 0020.
 * */
 public class RegisterActivity extends Activity {
 

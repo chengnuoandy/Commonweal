@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorContext"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/colorContext"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,6 +18,20 @@
             android:layout_centerInParent="true"
             android:text="动态"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size" />
+            android:textSize="@dimen/title_text_size"/>
     </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_dynamic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pts_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top">
+        </android.support.v4.view.PagerTabStrip>
+
+    </android.support.v4.view.ViewPager>
 </LinearLayout>

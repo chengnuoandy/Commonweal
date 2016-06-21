@@ -5,39 +5,61 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
 import com.goldenratio.commonweal.receiver.NetworkReceiver;
 import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
 
 /**
  * Created by Kiuber on 2016/6/6.
  */
-public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener, NetworkReceiver.NetEventHandle {
+public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener, NetworkReceiver.NetEventHandle, ViewPager.OnPageChangeListener {
 
-    private FragmentManager mFmMain;// 管理fragment的类
-    private RadioGroup mRgTabs;
-    private RadioButton mRbDefalut;
+    @BindView(R.id.fl_content)
+    FrameLayout flContent;
+    @BindView(R.id.vp_content)
+    ViewPager mVpContent;
+    @BindView(R.id.rb_help)
+    RadioButton mRbDefault;
+    @BindView(R.id.rb_good)
+    RadioButton mRbGood;
+    @BindView(R.id.rb_dynamic)
+    RadioButton mRbDynamic;
+    @BindView(R.id.rb_my)
+    RadioButton mRbMy;
+    @BindView(R.id.rg_tabs)
+    RadioGroup mRgTabs;
+
+    private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private long exitTime = 0;
+
+    public static final int PAGE_ONE = 0;
+    public static final int PAGE_TWO = 1;
+    public static final int PAGE_THREE = 2;
+    public static final int PAGE_FOUR = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         NetworkReceiver.ehList.add(this);
-
         //检测网络状态
         new NetworkReceiver().onReceive(getApplicationContext(), null);
 
@@ -45,40 +67,75 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         System.loadLibrary(libName);
         //初始化Bmob
         Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
-        // 初始化fragmentManager
-        mFmMain = getSupportFragmentManager();
-        // 设置进入app时默认选中
-        mRgTabs = (RadioGroup) findViewById(R.id.rg_tabs);
+        // 初始化ragmentManager
+
+        mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+
         mRgTabs.setOnCheckedChangeListener(this);
-        mRbDefalut = (RadioButton) findViewById(R.id.rb_help);
-        mRbDefalut.setChecked(true);
+        mRbDefault.setChecked(true);
+
         // 切换不同的fragment
-        changeFragment(new HelpFragment(), false);
+        //  changeFragment(new HelpFragment(), false);
+
+        mVpContent.setAdapter(mMyFragmentPagerAdapter);
+        mVpContent.setCurrentItem(0);
+        mVpContent.addOnPageChangeListener(this);
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.rb_help:// 项目
-                changeFragment(new HelpFragment(), true);
+                mVpContent.setCurrentItem(PAGE_ONE);
                 break;
             case R.id.rb_good:// 物品
-                changeFragment(new GoodFragment(), true);
+                mVpContent.setCurrentItem(PAGE_TWO);
                 break;
             case R.id.rb_dynamic:// 动态
-                changeFragment(new DynamicFragment(), true);
+                mVpContent.setCurrentItem(PAGE_THREE);
                 break;
             case R.id.rb_my:// 我
                 //UserDao userDao = new UserDao(MainActivity.this);
-                changeFragment(new MyFragment(), true);
+                mVpContent.setCurrentItem(PAGE_FOUR);
                 break;
             default:
                 break;
         }
     }
 
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        if (state == 2) {
+            switch (mVpContent.getCurrentItem()) {
+                case PAGE_ONE:
+                    mRbDefault.setChecked(true);
+                    break;
+                case PAGE_TWO:
+                    mRbGood.setChecked(true);
+                    break;
+                case PAGE_THREE:
+                    mRbDynamic.setChecked(true);
+                    break;
+                case PAGE_FOUR:
+                    mRbMy.setChecked(true);
+                    break;
+            }
+        }
+    }
+
     // 封装切换不同的fragment
-    public void changeFragment(Fragment fragment, boolean isInit) {
+ /*   public void changeFragment(Fragment fragment, boolean isInit) {
         // 开启事务
         FragmentTransaction transaction = mFmMain.beginTransaction();
         transaction.replace(R.id.fl_content, fragment);
@@ -86,7 +143,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
             transaction.addToBackStack(null);
         }
         transaction.commit();
-    }
+    }*/
 
 
     // 监听返回键，然后退出

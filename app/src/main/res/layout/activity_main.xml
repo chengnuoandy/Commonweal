@@ -1,15 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fl_content"
-        android:layout_width="match_parent"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_content"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/colorContext" />
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/fl_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorContext"/>
+    </android.support.v4.view.ViewPager>
+
 
     <RadioGroup
         android:id="@+id/rg_tabs"
@@ -31,7 +38,7 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:text="项目"
-            android:textColor="@drawable/tab_text_color_selector" />
+            android:textColor="@drawable/tab_text_color_selector"/>
 
         <RadioButton
             android:id="@+id/rb_good"
@@ -47,7 +54,7 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:text="物品"
-            android:textColor="@drawable/tab_text_color_selector" />
+            android:textColor="@drawable/tab_text_color_selector"/>
 
         <RadioButton
             android:id="@+id/rb_dynamic"
@@ -63,7 +70,7 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:text="动态"
-            android:textColor="@drawable/tab_text_color_selector" />
+            android:textColor="@drawable/tab_text_color_selector"/>
 
         <RadioButton
             android:id="@+id/rb_my"
@@ -79,7 +86,8 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:text="我的"
-            android:textColor="@drawable/tab_text_color_selector" />
+            android:textColor="@drawable/tab_text_color_selector"/>
     </RadioGroup>
+
 
 </LinearLayout>

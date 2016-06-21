@@ -48,7 +48,6 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mPtsTitle.setDrawFullUnderline(false);
         mPtsTitle.setTabIndicatorColor(Color.RED);*/
         ButterKnife.bind(this, view);
-
         mVpDynamic.setAdapter(new MyDynFragmentPagerAdapter(getFragmentManager(), mFragmentList));
         mVpDynamic.addOnPageChangeListener(this);
         return view;
@@ -83,6 +82,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         }
     }
 
+    //改变标题颜色
     private void changeTitleColor(int color1, int color2, int color3) {
         mTvOfficial.setTextColor(getResources().getColor(color1));
         mTvDynamic.setTextColor(getResources().getColor(color2));

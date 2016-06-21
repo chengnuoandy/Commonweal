@@ -107,9 +107,7 @@ public class RegisterActivity extends Activity {
     }
 
     /*
-    *
     * 为控件添加监听事件
-    *
     * */
 
     //添加文本改变监听事件
@@ -271,7 +269,6 @@ public class RegisterActivity extends Activity {
     };
 
     /*
-    *
     *   改变控件属性
     * */
 

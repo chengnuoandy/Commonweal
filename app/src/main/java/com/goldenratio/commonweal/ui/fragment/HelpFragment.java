@@ -9,42 +9,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
 import com.goldenratio.commonweal.bean.Help;
-import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UploadFileListener;
 
 public class HelpFragment extends Fragment {
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
-    private List<Help> list;
+    private  Handler mHandler;
 
-    // private HelpListViewAdapter adapter;
+
     private View mHeaderView;
 
-    // 初始化fragment的布局
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = initView();
+
+
         return view;
     }
+
+
 
     private View initView() {
         View view = View.inflate(getContext(), R.layout.fragment_help, null);
@@ -56,9 +55,12 @@ public class HelpFragment extends Fragment {
         //头文件
         mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
         mViewPager.setAdapter(new HelpViewPagerAdapter(getContext()));
+
+
+
+
         indicator.setViewPager(mViewPager);
         indicator.setSnap(true);
-
         mListView.addHeaderView(mHeaderView);
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
@@ -86,7 +88,6 @@ public class HelpFragment extends Fragment {
             @Override
             public void onSuccess(List<Help> list) {
 
-                list = list;
                 mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
                 mListView.onRefreshComplete();
             }

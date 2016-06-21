@@ -5,12 +5,10 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 
 import java.util.ArrayList;
-import java.util.logging.Handler;
 
 /**
  * Created by 两个人 on 2016-06-14.

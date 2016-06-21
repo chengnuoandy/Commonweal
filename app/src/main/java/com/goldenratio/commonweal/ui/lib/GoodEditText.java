@@ -30,19 +30,22 @@ public class GoodEditText extends EditText {
 
     public GoodEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setSelection(this.getText().length());
     }
 
 
     public void clickNum(String mStr) {
         //设置点击的数字 并移动游标
-        this.getText().insert(this.getSelectionStart(),mStr);
+        this.setSelection(this.getText().length());
+        this.getText().insert(this.getSelectionStart(), mStr);
     }
 
-    public void clickOther(int i){
+    public void clickOther(int i) {
         //删除键
-        if (i == 0){
-            if(this.getText().length() != 0){
-                this.getText().delete(this.getSelectionStart()-1, this.getSelectionStart());
+        if (i == 0) {
+            if (this.getText().length() != 0) {
+                this.setSelection(this.getText().length());
+                this.getText().delete(this.getSelectionStart() - 1, this.getSelectionStart());
             }
         }
     }

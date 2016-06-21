@@ -24,8 +24,6 @@ public class GoodKeypad {
     private TextView num0TV;
     private TextView dotTV;
     private TextView backTV;
-    private TextView okTV;
-    private TextView doneTV;
     private GoodEditText mGoodEditText;
 
     public GoodKeypad(View view,GoodEditText goodEditText){
@@ -96,7 +94,6 @@ public class GoodKeypad {
                 num0TV,
                 dotTV,
                 backTV,
-                okTV,
         };
         for (View view : views) {
             view.setOnClickListener(onClickListener);
@@ -116,6 +113,5 @@ public class GoodKeypad {
         num0TV = (TextView) mView.findViewById(R.id.billSK_zero);
         dotTV = (TextView) mView.findViewById(R.id.billSK_dot);
         backTV = (TextView) mView.findViewById(R.id.billSK_backspace);
-        okTV = (TextView) mView.findViewById(R.id.billSK_ok);
     }
 }

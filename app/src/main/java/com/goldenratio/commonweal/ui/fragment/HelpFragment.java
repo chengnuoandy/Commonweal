@@ -35,7 +35,6 @@ public class HelpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = initView();
 
-
         return view;
     }
 

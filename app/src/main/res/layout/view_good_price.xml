@@ -28,13 +28,7 @@
                 android:layout_height="wrap_content"
                 android:text="￥"/>
 
-            <!--<EditText-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="3"-->
-                <!--android:hint="0.00"/>-->
-            <com.goldenratio.commonweal.ui.lib.GoodEditText
-                android:id="@+id/release1"
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -60,16 +54,10 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_default"/>
 
-            <!--<EditText-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="3"/>-->
-            <com.goldenratio.commonweal.ui.lib.GoodEditText
-                android:id="@+id/release2"
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:hint="0"/>
+                android:layout_weight="3"/>
 
             <TextView
                 android:layout_width="wrap_content"

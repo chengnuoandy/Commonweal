@@ -70,7 +70,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         // 初始化ragmentManager
 
         mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-
         mRgTabs.setOnCheckedChangeListener(this);
         mRbDefault.setChecked(true);
 
@@ -80,6 +79,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         mVpContent.setAdapter(mMyFragmentPagerAdapter);
         mVpContent.setCurrentItem(0);
         mVpContent.addOnPageChangeListener(this);
+        mVpContent.setOffscreenPageLimit(4);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        if (state == 2) {
+        if (state == ViewPager.SCROLL_STATE_SETTLING) {
             switch (mVpContent.getCurrentItem()) {
                 case PAGE_ONE:
                     mRbDefault.setChecked(true);
@@ -133,18 +133,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
             }
         }
     }
-
-    // 封装切换不同的fragment
- /*   public void changeFragment(Fragment fragment, boolean isInit) {
-        // 开启事务
-        FragmentTransaction transaction = mFmMain.beginTransaction();
-        transaction.replace(R.id.fl_content, fragment);
-        if (!isInit) {
-            transaction.addToBackStack(null);
-        }
-        transaction.commit();
-    }*/
-
 
     // 监听返回键，然后退出
     @Override

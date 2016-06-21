@@ -3,6 +3,8 @@ package com.goldenratio.commonweal.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
+import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -17,7 +19,6 @@ public class MyDynFragmentPagerAdapter extends FragmentPagerAdapter {
     public MyDynFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
         this.mFragmentList = fragmentList;
-
     }
 
     @Override
@@ -29,4 +30,16 @@ public class MyDynFragmentPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return PAGER_COUNT;
     }
+
+    @Override
+    public Object instantiateItem(ViewGroup vg, int position) {
+        return super.instantiateItem(vg, position);
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        Log.i("dynamic", "destroyItem: " + position);
+        super.destroyItem(container, position, object);
+    }
+
 }

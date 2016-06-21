@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.goldenratio.commonweal.ui.activity.MainActivity;
@@ -44,7 +45,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        System.out.println("position Destory" + position);
+        Log.i("main", "destroyItem: " + position);
         super.destroyItem(container, position, object);
     }
 
@@ -64,12 +65,6 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
             case MainActivity.PAGE_FOUR:
                 fragment = mMyFragment;
                 break;
- /*         case 4:
-                fragment = mGoodFragment;
-                break;
-            case 5:
-                fragment = mHelpFragment;
-                break;*/
         }
         return fragment;
     }

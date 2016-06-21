@@ -240,8 +240,6 @@ public class RegisterActivity extends Activity {
             int result = msg.arg2;
             Object data = msg.obj;
             closeProgressDialog();
-            Log.d("dialog", "关闭进度条对话框");
-            Log.d("event", "event=" + event);
             if (result == SMSSDK.RESULT_COMPLETE) {
                 //短信注册成功后，返回MainActivity,然后提示新好友
                 if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {

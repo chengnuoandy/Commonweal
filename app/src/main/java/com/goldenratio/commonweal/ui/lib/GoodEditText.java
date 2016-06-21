@@ -35,6 +35,12 @@ public class GoodEditText extends EditText {
 
 
     public void clickNum(String mStr) {
+        if (mStr == "."){
+            if (this.getId() == R.id.release2){
+                return;
+            }
+        }
+
         //设置点击的数字 并移动游标
         this.setSelection(this.getText().length());
         this.getText().insert(this.getSelectionStart(), mStr);

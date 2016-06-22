@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -8,11 +9,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
 import com.goldenratio.commonweal.bean.Help;
+import com.goldenratio.commonweal.ui.activity.HelpContentActivity;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -21,11 +26,13 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 
-public class HelpFragment extends Fragment {
+public class HelpFragment extends Fragment implements AdapterView.OnItemClickListener{
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
     private Handler mHandler;
+
+    private TextView mTV_Item;
 
     private int participant;  //参与人数
     private int Day;           //剩余日期
@@ -40,6 +47,8 @@ public class HelpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = initView();
 
+       mListView.setOnItemClickListener(this);
+
         return view;
     }
 
@@ -50,7 +59,10 @@ public class HelpFragment extends Fragment {
 
         mHeaderView = View.inflate(getContext(), R.layout.view_help_hander, null);
         indicator = (CirclePageIndicator) mHeaderView.findViewById(R.id.indicator);
-        Log.d("CN", "initView: ++++++++++++++++++++++++++++++++++++++");
+
+
+
+
         //头文件
         mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
         mViewPager.setAdapter(new HelpViewPagerAdapter(getContext()));
@@ -59,6 +71,7 @@ public class HelpFragment extends Fragment {
 
 
         mListView.addHeaderView(mHeaderView);
+
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -77,6 +90,7 @@ public class HelpFragment extends Fragment {
 
         return view;
     }
+    List<Help> mList;
 
     public void initData() {
         BmobQuery<Help> bmobQuery = new BmobQuery<>();
@@ -84,7 +98,7 @@ public class HelpFragment extends Fragment {
         bmobQuery.findObjects(getContext(), new FindListener<Help>() {
             @Override
             public void onSuccess(List<Help> list) {
-
+                mList = list;
                 mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
                 mListView.onRefreshComplete();
             }
@@ -117,5 +131,14 @@ public class HelpFragment extends Fragment {
             // 保证启动自动轮播逻辑只执行一次
             mHandler.sendEmptyMessageDelayed(0, 3000);// 发送延时3秒的消息
         }
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getContext(),HelpContentActivity.class);
+        intent.putExtra("title",mList.get(position-2).getHelp_Title());
+        Log.d("CN", "onItemClick: "+mList.get(position).getHelp_Title());
+        startActivity(intent);
     }
 }

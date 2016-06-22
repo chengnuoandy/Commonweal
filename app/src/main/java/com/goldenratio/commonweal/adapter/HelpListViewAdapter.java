@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
@@ -59,8 +58,8 @@ public class HelpListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ;
+    public View getView(final int position, View convertView, ViewGroup parent) {
+
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -75,17 +74,20 @@ public class HelpListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         //holder.iv_icon.setBackgroundResource(imgs[position]);
-        Log.d("CN", "getView: +++++++++++++++++++++++++++++++++++++++88888888888888888888888888888888888");
         holder.tv_title.setText(help.get(position).getHelp_Title());
         holder.tv_content.setText(help.get(position).getHelp_Content());
         imgUrl = help.get(position).getHelp_pic().toArray();
-        Log.d("TAGGGGG", "getView: " + imgUrl[0]);
+        Log.d("TAGGGGG", "getView: "+imgUrl[0]);
         Picasso.with(mContext).load(imgUrl[0].toString()).into(holder.iv_icon);
 //        Picasso.with(mContext).load(url.get(position)).getPicUrl()).into(holder.iv_icon);
 
 
+
+
+
         return convertView;
     }
+
 
     private class ViewHolder {
         private ImageView iv_icon;

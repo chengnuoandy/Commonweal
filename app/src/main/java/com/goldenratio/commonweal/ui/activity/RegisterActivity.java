@@ -364,9 +364,10 @@ public class RegisterActivity extends Activity {
     }
 
 
+    //关闭对话框
+
     private void closeProgressDialog() {
         if (mPd != null && mPd.isShowing()) {
-            //关闭对话框
             mPd.dismiss();
             mPd = null;
         }
@@ -382,9 +383,7 @@ public class RegisterActivity extends Activity {
     }
 
     /*
-    *
     *   数据库相关逻辑
-    *
     * */
 
     //注册完成后添加用户信息到数据库
@@ -413,6 +412,7 @@ public class RegisterActivity extends Activity {
         });
     }
 
+    //更新用户密码
     private void updateUserPwdToDb() {
         User u = new User();
         u.setUser_Password(mEtPassword.getText().toString());
@@ -420,7 +420,7 @@ public class RegisterActivity extends Activity {
         u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(RegisterActivity.this, "密码修改成功，不要再粗心大意了", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
                 returnUInfoToMyFra();
             }
 
@@ -441,7 +441,7 @@ public class RegisterActivity extends Activity {
             public void onSuccess(List<User> list) {
                 closeProgressDialog();
                 if (list.isEmpty()) {
-                    //判断是否点击的是注册按钮
+                    //判断点击的是否是注册按钮
                     if (isClickRegisterBtn) {
                         mBtnSendCode.setClickable(false);
                         sendVerification();
@@ -486,6 +486,7 @@ public class RegisterActivity extends Activity {
             public void onSuccess(JSONArray jsonArray) {
                 String data = jsonArray.toString();
                 try {
+
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                     String UDefAvHdUrl = jsonObject.getString("User_Def_Av_Hd_Url");
                     String UDefAvMaxUrl = jsonObject.getString("User_Def_Av_Max_Url");

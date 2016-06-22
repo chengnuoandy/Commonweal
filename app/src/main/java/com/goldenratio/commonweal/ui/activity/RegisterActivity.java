@@ -161,6 +161,7 @@ public class RegisterActivity extends Activity {
                     sendVerification();
                     mEtCode.setText("");
                     mBtnCommitCode.setEnabled(false);
+                    mBtnCommitCode.setBackgroundResource(R.drawable.register_default);
                     mBtnAgainSendCode.setBackgroundResource(R.drawable.register_default);
                 }
                 break;
@@ -194,9 +195,7 @@ public class RegisterActivity extends Activity {
         }
     }
 
-
     /*
-    *
     * 第三方相关逻辑
     * */
 
@@ -233,7 +232,7 @@ public class RegisterActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
-           // super.handleMessage(msg);
+            // super.handleMessage(msg);
             int event = msg.arg1;
             int result = msg.arg2;
             Object data = msg.obj;
@@ -245,7 +244,6 @@ public class RegisterActivity extends Activity {
                     closeProgressDialog();
                     showWhichStep(View.GONE, View.VISIBLE, View.GONE);
                     changeStepTextColor(R.color.ordinary, R.color.colorPrimary, R.color.ordinary);
-
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
                     closeProgressDialog();
@@ -257,6 +255,8 @@ public class RegisterActivity extends Activity {
                 //  ((Throwable) data).printStackTrace();
                 mBtnSendCode.setClickable(true);
                 mEtCode.setText("");
+                mBtnCommitCode.setEnabled(false);
+                mBtnCommitCode.setBackgroundResource(R.drawable.register_default);
                 Log.d("ccc", ((Throwable) data).getMessage());
                 String errorInfo = null;
                 try {

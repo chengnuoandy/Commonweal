@@ -149,6 +149,7 @@ public class RegisterActivity extends Activity {
                     mBtnCommitCode.setEnabled(true);
                     mBtnCommitCode.setBackgroundResource(R.drawable.register_reset);
                 } else {
+
                     mBtnSendCode.setEnabled(false);
                     mBtnCommitCode.setEnabled(false);
                     mBtnSendCode.setBackgroundResource(R.drawable.register_default);

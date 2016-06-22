@@ -18,11 +18,11 @@ public class HelpContentActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help_content_fragment);
-        TextView tv_ceshi = (TextView) findViewById(R.id.textView2);
+        TextView tv_content_title = (TextView) findViewById(R.id.tv_content_title);
         Intent intent = getIntent();
         String s = intent.getStringExtra("title");
         Log.d("CN", "Activity+++++++++++++onCreate: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+s);
-        tv_ceshi.setText(s);
+        tv_content_title .setText(s);
 
 
     }

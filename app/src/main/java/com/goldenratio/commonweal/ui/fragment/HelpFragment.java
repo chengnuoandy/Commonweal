@@ -138,7 +138,7 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(),HelpContentActivity.class);
         intent.putExtra("title",mList.get(position-2).getHelp_Title());
-        Log.d("CN", "onItemClick: "+mList.get(position).getHelp_Title());
+        Log.d("CN", "onItemClick: "+mList.get(position-2).getHelp_Title());
         startActivity(intent);
     }
 }

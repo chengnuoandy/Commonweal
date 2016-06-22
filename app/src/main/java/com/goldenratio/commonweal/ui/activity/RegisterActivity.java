@@ -17,20 +17,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User;
-import com.goldenratio.commonweal.bean.User_Default;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,17 +38,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindCallback;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UploadBatchListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 /*
 *  Created by 龙啸天 on 2016/6/20 0020.
+*
+*  承担注册与找回密码的职责
 * */
 public class RegisterActivity extends Activity {
 
@@ -79,6 +78,10 @@ public class RegisterActivity extends Activity {
     CheckBox chCheck;
     @BindView(R.id.tv_agreement)
     TextView tvAgreement;
+    @BindView(R.id.tv_registerTitle)
+    TextView mTvRegisterTitle;
+    @BindView(R.id.ll_agreement)
+    LinearLayout mLlAgreement;
 
     private String APPKEY = "139216e4958f6";
     private String APPSECRET = "63512a2fcc9c9e2f5c00bbdce60d920e";
@@ -87,17 +90,35 @@ public class RegisterActivity extends Activity {
     private String mPhone;  //暂存手机号
     private EventHandler mEh;
 
+    private String mObjectId;
+    private boolean isClickRegisterBtn = false;
+    ListView mListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        Log.d("ccc", mTvPhone.getTextColors() + "");
+
+        isClickRegister();
+        if (!isClickRegisterBtn) {
+            mTvRegisterTitle.setText("找回密码");
+            mBtnRegister.setText("修改");
+            mLlAgreement.setVisibility(View.GONE);
+        }
+
         registerEventHandler();  //注册短信回调
 
         addTextChangeEvent(mEtPhone);
         addTextChangeEvent(mEtCode);
 
+    }
+
+    private void isClickRegister() {
+        Intent intent = getIntent();
+        int code = intent.getIntExtra("type", 1);
+        if (code == 0)
+            isClickRegisterBtn = true;
     }
 
     @Override
@@ -134,6 +155,7 @@ public class RegisterActivity extends Activity {
 
                 }
             }
+
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -180,7 +202,9 @@ public class RegisterActivity extends Activity {
                         if (checkPassword(mPassword)) {
                             mBtnRegister.setClickable(false);
                             showProgressDialog();
-                            getUDefAvatarUrl();
+                            if (isClickRegisterBtn)
+                                getUDefAvatarUrl();
+                            else updateUserPwdToDb();
                         } else
                             Toast.makeText(RegisterActivity.this, "密码强度过低,请输入8~16位数字加字母组合", Toast.LENGTH_SHORT).show();
                     } else
@@ -255,6 +279,7 @@ public class RegisterActivity extends Activity {
                 //  ((Throwable) data).printStackTrace();
                 mBtnSendCode.setClickable(true);
                 mEtCode.setText("");
+                mBtnAgainSendCode.setBackgroundResource(R.drawable.register_reset);
                 mBtnCommitCode.setEnabled(false);
                 mBtnCommitCode.setBackgroundResource(R.drawable.register_default);
                 Log.d("ccc", ((Throwable) data).getMessage());
@@ -267,6 +292,7 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(getApplicationContext(), "未知的错误", Toast.LENGTH_SHORT).show();
                 }
             }
+
         }
     };
 
@@ -387,6 +413,24 @@ public class RegisterActivity extends Activity {
         });
     }
 
+    private void updateUserPwdToDb() {
+        User u = new User();
+        u.setUser_Password(mEtPassword.getText().toString());
+        closeProgressDialog();
+        u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(RegisterActivity.this, "密码修改成功，不要再粗心大意了", Toast.LENGTH_SHORT).show();
+                returnUInfoToMyFra();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Toast.makeText(RegisterActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     //判断此用户是否已经注册
     private void isRegister() {
         BmobQuery<User> bmobQuery = new BmobQuery<User>();
@@ -397,13 +441,26 @@ public class RegisterActivity extends Activity {
             public void onSuccess(List<User> list) {
                 closeProgressDialog();
                 if (list.isEmpty()) {
-                    mBtnSendCode.setClickable(false);
-                    sendVerification();
+                    //判断是否点击的是注册按钮
+                    if (isClickRegisterBtn) {
+                        mBtnSendCode.setClickable(false);
+                        sendVerification();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "您好像并未注册哟", Toast.LENGTH_SHORT).show();
+                    }
 
                 } else {
-                    Log.d("query", "查询成功");
-                    Log.d("info", list + "");
-                    Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
+                    if (isClickRegisterBtn) {
+                        Log.d("query", "查询成功");
+                        Log.d("info", list + "");
+                        Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String id = list.get(0).getObjectId();
+                        Log.i("id", "onSuccess: " + list.get(0).getObjectId());
+                        mObjectId = id;
+                        mBtnSendCode.setClickable(false);
+                        sendVerification();
+                    }
                 }
             }
 
@@ -458,7 +515,8 @@ public class RegisterActivity extends Activity {
     private void returnUInfoToMyFra() {
         Intent intent = new Intent();
         intent.putExtra("regi_phone", mPhone);
-        intent.putExtra("regi_password", mEtPassword.getText().toString());
+        if (isClickRegisterBtn)
+            intent.putExtra("regi_password", mEtPassword.getText().toString());
         setResult(RESULT_OK, intent);
         Log.d("return", "已返回数据");
         finish();

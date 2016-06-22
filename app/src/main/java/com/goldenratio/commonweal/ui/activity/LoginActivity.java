@@ -125,12 +125,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 break;
             case R.id.tv_register:
                 Intent mIntent = new Intent(this, RegisterActivity.class);
-                mIntent.putExtra("type",0);
+                mIntent.putExtra("type", 0);
                 startActivityForResult(mIntent, 1);
                 break;
             case R.id.forgetPWD:
-                Intent intent = new Intent(this,RegisterActivity.class);
-                intent.putExtra("type",1);
+                Intent intent = new Intent(this, RegisterActivity.class);
                 startActivity(intent);
             case R.id.iv_return:
                 finish();

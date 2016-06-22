@@ -71,6 +71,16 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
         mEditText1.setText(mIntent.getStringExtra("price"));
         mEditText2.setText(mIntent.getStringExtra("prop"));
 
+        //健壮性判断
+        if (!mEditText1.getText().toString().equals("") && !mEditText2.getText().toString().equals("")){
+            float temp1 = Float.parseFloat(mEditText1.getText().toString()); //底价
+            float temp2 = Float.parseFloat(mEditText2.getText().toString()) / 100;
+            BigDecimal b = new BigDecimal(temp1 * temp2);
+            float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+            TVshow.setText(Html.fromHtml("您将捐出：<font color='#fe5722'>" + f + "</font>  剩余：<font color='#8cc3f6'>" + (temp1 - (temp1 * temp2)) + "</font>"));
+        }
+
+
         mEditText2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -117,7 +127,7 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     //设置textview的显示,保留两位小数
                     BigDecimal b = new BigDecimal(temp1 * temp2);
                     float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                    TVshow.setText(Html.fromHtml("您将捐出：<font color='red'>" + f + "</font>  剩余：<font color='blue'>" + (temp1 - (temp1 * temp2)) + "</font>"));
+                    TVshow.setText(Html.fromHtml("您将捐出：<font color='#fe5722'>" + f + "</font>  剩余：<font color='#8cc3f6'>" + (temp1 - (temp1 * temp2)) + "</font>"));
                     Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
                     return;
                 }
@@ -147,7 +157,7 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     //设置textview的显示,保留两位小数
                     BigDecimal b = new BigDecimal(temp1 * temp2);
                     float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                    TVshow.setText(Html.fromHtml("您将捐出：<font color='red'>" + f + "</font>  剩余：<font color='blue'>" + (temp1 - (temp1 * temp2)) + "</font>"));
+                    TVshow.setText(Html.fromHtml("您将捐出：<font color='#fe5722'>" + f + "</font>  剩余：<font color='#8cc3f6'>" + (temp1 - (temp1 * temp2)) + "</font>"));
                     Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
                     return;
                 }
@@ -174,6 +184,13 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.billSK_ok:
+                if (mEditText1.getText().toString().equals("")){
+                    Toast.makeText(GoodKeypadActivity.this, "请设置底价金额", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if (mEditText2.getText().toString().equals("")){
+                    Toast.makeText(GoodKeypadActivity.this, "请设置捐款比例", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 returnData();
                 finish();
                 break;

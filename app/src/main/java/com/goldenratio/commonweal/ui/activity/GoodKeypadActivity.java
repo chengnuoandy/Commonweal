@@ -80,12 +80,12 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (start > 1) {
-                        int num = Integer.parseInt(s.toString());
-                        if (num > MAX_MARK) {
-                            s = String.valueOf(MAX_MARK);
-                            mEditText2.setText(s);
-                        } else if (num < MIN_MARK)
-                            s = String.valueOf(MIN_MARK);
+                    int num = Integer.parseInt(s.toString());
+                    if (num > MAX_MARK) {
+                        s = String.valueOf(MAX_MARK);
+                        mEditText2.setText(s);
+                    } else if (num < MIN_MARK)
+                        s = String.valueOf(MIN_MARK);
                 }
             }
 
@@ -94,9 +94,14 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                 /**
                  * 限制捐款输入范围 0 - 100
                  */
-                float temp1 = Float.parseFloat(mEditText1.getText().toString()); //底价
-                float temp2 = Float.parseFloat(s.toString()) / 100; //比例
+
                 if (s != null && !s.toString().equals("")) {
+                    float temp1;
+                    if (mEditText1.getText().toString().equals("")) {
+                        temp1 = 0;
+                    } else
+                        temp1 = Float.parseFloat(mEditText1.getText().toString()); //底价
+                    float temp2 = Float.parseFloat(s.toString()) / 100; //比例
                     int markVal = 0;
                     try {
                         markVal = Integer.parseInt(s.toString());
@@ -109,8 +114,38 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                         temp2 = 1;
                     }
                     //设置textview的显示,保留两位小数
-                    BigDecimal   b  =   new  BigDecimal(temp1 * temp2);
-                    float   f   =  b.setScale(2,  BigDecimal.ROUND_HALF_UP).floatValue();
+                    BigDecimal b = new BigDecimal(temp1 * temp2);
+                    float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                    TVshow.setText("您将捐出：" + f + "  剩余：" + (temp1 - (temp1 * temp2)));
+                    Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
+                    return;
+                }
+                TVshow.setText("您未设置捐款");
+            }
+        });
+        mEditText1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && !s.toString().equals("")) {
+                    float temp1 = Float.parseFloat(s.toString()); //底价
+                    float temp2;
+                    if (mEditText2.getText().toString().equals("")) {
+                        temp2 = 0;
+                    } else
+                        temp2 = Float.parseFloat(mEditText2.getText().toString()) / 100; //比例
+                    //设置textview的显示,保留两位小数
+                    BigDecimal b = new BigDecimal(temp1 * temp2);
+                    float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     TVshow.setText("您将捐出：" + f + "  剩余：" + (temp1 - (temp1 * temp2)));
                     Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
                     return;

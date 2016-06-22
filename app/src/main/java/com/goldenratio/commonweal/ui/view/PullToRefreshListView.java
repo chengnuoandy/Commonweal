@@ -43,19 +43,19 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
                                  int defStyle) {
         super(context, attrs, defStyle);
         initHeaderView();
-        initFooterView();
+        //initFooterView();
     }
 
     public PullToRefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initHeaderView();
-        initFooterView();
+       // initFooterView();
     }
 
     public PullToRefreshListView(Context context) {
         super(context);
         initHeaderView();
-        initFooterView();
+        //initFooterView();
     }
 
     /**

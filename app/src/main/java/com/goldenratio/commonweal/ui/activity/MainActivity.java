@@ -67,19 +67,15 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         System.loadLibrary(libName);
         //初始化Bmob
         Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
-        // 初始化ragmentManager
 
         mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
         mRgTabs.setOnCheckedChangeListener(this);
         mRbDefault.setChecked(true);
 
-        // 切换不同的fragment
-        //  changeFragment(new HelpFragment(), false);
-
         mVpContent.setAdapter(mMyFragmentPagerAdapter);
         mVpContent.setCurrentItem(0);
         mVpContent.addOnPageChangeListener(this);
-        mVpContent.setOffscreenPageLimit(4);
+        mVpContent.setOffscreenPageLimit(4);  //设置是适配器缓存fragment数
     }
 
     @Override
@@ -95,7 +91,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
                 mVpContent.setCurrentItem(PAGE_THREE);
                 break;
             case R.id.rb_my:// 我
-                //UserDao userDao = new UserDao(MainActivity.this);
                 mVpContent.setCurrentItem(PAGE_FOUR);
                 break;
             default:
@@ -116,7 +111,9 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
     @Override
     public void onPageScrollStateChanged(int state) {
+
         if (state == ViewPager.SCROLL_STATE_SETTLING) {
+            //滑动已完成
             switch (mVpContent.getCurrentItem()) {
                 case PAGE_ONE:
                     mRbDefault.setChecked(true);
@@ -160,7 +157,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     }
 
 
-    boolean x = false;
+    boolean x = false;  //网络是否连接标识符
 
     //网络改变时检测网络状态，并提示用户
     @Override

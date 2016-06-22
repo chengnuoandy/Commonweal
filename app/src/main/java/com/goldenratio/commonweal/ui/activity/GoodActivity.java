@@ -77,9 +77,11 @@ public class GoodActivity extends Activity implements View.OnClickListener {
                 if (resultCode == Activity.RESULT_OK) {
                     //price 价格
                     //prop 捐款比例
-                    TVprice.setText("已设置 底价："+data.getStringExtra("price")+" 捐款比例："+data.getStringExtra("prop"));
                     price = data.getStringExtra("price");
                     prop = data.getStringExtra("prop");
+                    if (!prop.equals("") && !price.equals(""))
+                        TVprice.setText("已设置 底价："+price+"元 捐款比例："+prop+"%");
+
                     Log.d(TAG, "onActivityResult: price="+data.getStringExtra("price")+"prop="+data.getStringExtra("prop"));
                 }
         }

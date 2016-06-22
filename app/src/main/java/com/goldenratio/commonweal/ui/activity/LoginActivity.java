@@ -2,10 +2,7 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,18 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.api.AccessTokenKeeper;
 import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
 import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.dao.UserDao;
-import com.goldenratio.commonweal.util.SharedUtils;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -36,18 +30,11 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -73,6 +60,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     TextView mTvSina;
     @BindView(R.id.iv_return)
     ImageView mReturn;
+    @BindView(R.id.forgetPWD)
+    TextView mForgetPWD;
 
 
     /**
@@ -118,6 +107,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         mIbSina.setOnClickListener(this);
         mTvRegister.setOnClickListener(this);
         mReturn.setOnClickListener(this);
+        mForgetPWD.setOnClickListener(this);
         mLoginPassword.setOnFocusChangeListener(this);
         mLoginPhone.setOnFocusChangeListener(this);
 
@@ -135,10 +125,17 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 break;
             case R.id.tv_register:
                 Intent mIntent = new Intent(this, RegisterActivity.class);
+                mIntent.putExtra("type", 0);
                 startActivityForResult(mIntent, 1);
+                break;
+            case R.id.forgetPWD:
+                Intent intentFp = new Intent(this, RegisterActivity.class);
+                startActivityForResult(intentFp, 1);
                 break;
             case R.id.iv_return:
                 finish();
+                break;
+            default:
                 break;
         }
     }
@@ -163,6 +160,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 draw2.setBounds(0, 0, draw2.getMinimumWidth(), draw2.getMinimumHeight());
                 mLoginPhone.setCompoundDrawables(draw1, null, null, null);
                 mLoginPassword.setCompoundDrawables(draw2, null, null, null);
+                break;
+            default:
                 break;
         }
     }
@@ -310,6 +309,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     mLoginPhone.setText(registerReturnPhone);
                     mLoginPassword.setText(registerReturnPassword);
                 }
+                break;
+            default:
                 break;
         }
     }

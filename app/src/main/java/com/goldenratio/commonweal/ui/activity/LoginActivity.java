@@ -130,9 +130,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 break;
             case R.id.forgetPWD:
                 Intent intentFp = new Intent(this, RegisterActivity.class);
-                startActivityForResult(intentFp, 2);
+                startActivityForResult(intentFp, 1);
+                break;
             case R.id.iv_return:
                 finish();
+                break;
+            default:
                 break;
         }
     }
@@ -157,6 +160,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 draw2.setBounds(0, 0, draw2.getMinimumWidth(), draw2.getMinimumHeight());
                 mLoginPhone.setCompoundDrawables(draw1, null, null, null);
                 mLoginPassword.setCompoundDrawables(draw2, null, null, null);
+                break;
+            default:
                 break;
         }
     }
@@ -305,12 +310,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     mLoginPassword.setText(registerReturnPassword);
                 }
                 break;
-            case 2:
-                if (resultCode == RESULT_OK) {
-                    String registerReturnPhone = data.getStringExtra("regi_phone");
-                    Log.i("2_data", "onActivityResult: " + registerReturnPhone);
-                    mLoginPhone.setText(registerReturnPhone);
-                }
+            default:
                 break;
         }
     }

@@ -515,12 +515,17 @@ public class RegisterActivity extends Activity {
     }
 
 
-    //返回用户信息给myFragment
+    /*返回用户信息给myFragment--由loginFragment间接传到
+    *
+    * 判断用户是否点击的为忘记密码，是则将密码返回为空。
+     */
     private void returnUInfoToMyFra() {
         Intent intent = new Intent();
         intent.putExtra("regi_phone", mPhone);
+        String pwd = "";
         if (isClickRegisterBtn)
-            intent.putExtra("regi_password", mEtPassword.getText().toString());
+            pwd = mEtPassword.getText().toString();
+        intent.putExtra("regi_password", pwd);
         setResult(RESULT_OK, intent);
         Log.i("return", "已返回数据");
         finish();

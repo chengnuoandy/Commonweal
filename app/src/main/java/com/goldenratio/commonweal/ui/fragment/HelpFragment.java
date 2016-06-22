@@ -17,6 +17,7 @@ import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -27,7 +28,7 @@ public class HelpFragment extends Fragment {
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
     private Handler mHandler;
-    private List<Help> mList;
+
 
     private int participant;  //参与人数
     private int Day;           //剩余日期
@@ -83,7 +84,8 @@ public class HelpFragment extends Fragment {
         bmobQuery.findObjects(getContext(), new FindListener<Help>() {
             @Override
             public void onSuccess(List<Help> list) {
-                mList = list;
+
+
                 mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
                 mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
                 indicator.setViewPager(mViewPager);

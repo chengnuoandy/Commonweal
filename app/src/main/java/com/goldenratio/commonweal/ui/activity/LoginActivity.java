@@ -130,7 +130,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 break;
             case R.id.forgetPWD:
                 Intent intent = new Intent(this, RegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,2);
             case R.id.iv_return:
                 finish();
                 break;
@@ -303,6 +303,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     String registerReturnPassword = data.getStringExtra("regi_password");
                     mLoginPhone.setText(registerReturnPhone);
                     mLoginPassword.setText(registerReturnPassword);
+                }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    String registerReturnPhone = data.getStringExtra("regi_phone");
+                    mLoginPhone.setText(registerReturnPhone);
                 }
                 break;
         }

@@ -2,42 +2,40 @@ package com.goldenratio.commonweal.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Help;
+import com.goldenratio.commonweal.bean.Help_Top;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 两个人 on 2016-06-14.
  */
 public class HelpViewPagerAdapter extends PagerAdapter {
 
-    private ArrayList<ImageView> mImageViewList;
     private Context mContext;
+    private List<Help> list;
+//    private Object[] imgUrl;
 
-    private  int[] mImageIds = new int[]{R.mipmap.hander_one
-                ,R.mipmap.hander_two,R.mipmap.hander_three};
-   public HelpViewPagerAdapter(Context context) {
+    public HelpViewPagerAdapter(Context context, List<Help> mList) {
        super();
        mContext = context;
+       list = mList;
 
 
-     mImageViewList = new ArrayList<ImageView>();
-
-       for (int i = 0; i < mImageIds.length; i++) {
-           ImageView view = new ImageView(mContext);
-           view.setBackgroundResource(mImageIds[i]);// 通过设置背景,可以让宽高填充布局
-           // view.setImageResource(resId)
-           mImageViewList.add(view);
-       }
    }
 
 
+
     public int getCount() {
-            return mImageViewList.size();
+            return list.size();
         }
 
         @Override
@@ -47,8 +45,11 @@ public class HelpViewPagerAdapter extends PagerAdapter {
         //初始化布局
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-
-           ImageView view = mImageViewList.get(position);
+            ImageView view = new ImageView(mContext);
+            view.setScaleType(ImageView.ScaleType.FIT_XY);// 设置图片缩放方式, 宽高填充父控件
+            String url = list.get(position).getHelp_Top_pic();
+           // Log.d("TAGGGGG", "getView: " + imgUrl[0]);
+            Picasso.with(mContext).load(url).into(view);
             container.addView(view);
             return view;
 

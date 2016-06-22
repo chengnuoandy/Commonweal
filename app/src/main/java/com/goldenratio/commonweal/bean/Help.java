@@ -19,6 +19,12 @@ public class Help extends BmobObject {
     private Integer Help_Progress;      //项目进度
     private Integer Help_CountDown;    //项目的时间倒计时
     private String Help_Result;     //项目结果
+    private String Help_Top_pic;
+
+    public String getHelp_Top_pic(){return Help_Top_pic;}
+    public void setHelp_Top_pic(String help_top_pic){
+        Help_Top_pic = help_top_pic;
+    }
 
     public List getHelp_pic() {
         return Help_pic;

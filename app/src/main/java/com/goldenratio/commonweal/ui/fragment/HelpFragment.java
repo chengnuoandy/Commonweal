@@ -13,6 +13,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
 import com.goldenratio.commonweal.bean.Help;
+import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -26,6 +27,7 @@ public class HelpFragment extends Fragment {
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
     private Handler mHandler;
+    private List<Help> mList;
 
     private int participant;  //参与人数
     private int Day;           //剩余日期
@@ -34,16 +36,20 @@ public class HelpFragment extends Fragment {
 
 
     private View mHeaderView;
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private Bundle savedInstanceState;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = initView();
+        initData();
+        topSliding();
 
         return view;
     }
-
-
     private View initView() {
         View view = View.inflate(getContext(), R.layout.fragment_help, null);
         mListView = (PullToRefreshListView) view.findViewById(R.id.lv_help);
@@ -52,10 +58,7 @@ public class HelpFragment extends Fragment {
         indicator = (CirclePageIndicator) mHeaderView.findViewById(R.id.indicator);
         Log.d("CN", "initView: ++++++++++++++++++++++++++++++++++++++");
         //头文件
-        mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
-        mViewPager.setAdapter(new HelpViewPagerAdapter(getContext()));
-        indicator.setViewPager(mViewPager);
-        indicator.setSnap(true);
+
 
 
         mListView.addHeaderView(mHeaderView);
@@ -71,11 +74,7 @@ public class HelpFragment extends Fragment {
 
             }
         });
-
-
-        initData();
-
-        return view;
+         return view;
     }
 
     public void initData() {
@@ -84,26 +83,41 @@ public class HelpFragment extends Fragment {
         bmobQuery.findObjects(getContext(), new FindListener<Help>() {
             @Override
             public void onSuccess(List<Help> list) {
+                mList = list;
+                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
+                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
+                indicator.setViewPager(mViewPager);
+                indicator.setSnap(true);
 
                 mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
                 mListView.onRefreshComplete();
             }
-
-
-            @Override
+             @Override
             public void onError(int i, String s) {
 
                 Log.i("bmob", "下载失败：" + s);
                 mListView.onRefreshComplete();
             }
         });
+
+        // 获取头部数据
+
+
+
+
+    }
+    public void topSliding(){
+          /*
+           实现图片轮播
+         */
+
         if (mHandler == null) {
             mHandler = new android.os.Handler() {
                 public void handleMessage(android.os.Message msg) {
                     int currentItem = mViewPager.getCurrentItem();
                     currentItem++;
 
-                    if (currentItem > 2) {
+                    if (currentItem > 4) {
                         currentItem = 0;// 如果已经到了最后一个页面,跳到第一页
                     }
 

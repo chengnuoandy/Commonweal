@@ -101,6 +101,7 @@ public class RegisterActivity extends Activity {
         ButterKnife.bind(this);
 
         isClickRegister();
+        
         if (!isClickRegisterBtn) {
             mTvRegisterTitle.setText("找回密码");
             mBtnRegister.setText("修改");
@@ -475,7 +476,7 @@ public class RegisterActivity extends Activity {
 
     // List<String> dataList = new ArrayList<String>();
 
-    //获取头像URL
+    //获取用户默认头像URL
     private void getUDefAvatarUrl() {
         int rndNum = (int) (Math.random() * 9);
         BmobQuery bmobQuery = new BmobQuery("User_Default");

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -116,7 +117,7 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     //设置textview的显示,保留两位小数
                     BigDecimal b = new BigDecimal(temp1 * temp2);
                     float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                    TVshow.setText("您将捐出：" + f + "  剩余：" + (temp1 - (temp1 * temp2)));
+                    TVshow.setText(Html.fromHtml("您将捐出：<font color='red'>" + f + "</font>  剩余：<font color='blue'>" + (temp1 - (temp1 * temp2)) + "</font>"));
                     Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
                     return;
                 }
@@ -146,7 +147,7 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     //设置textview的显示,保留两位小数
                     BigDecimal b = new BigDecimal(temp1 * temp2);
                     float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-                    TVshow.setText("您将捐出：" + f + "  剩余：" + (temp1 - (temp1 * temp2)));
+                    TVshow.setText(Html.fromHtml("您将捐出：<font color='red'>" + f + "</font>  剩余：<font color='blue'>" + (temp1 - (temp1 * temp2)) + "</font>"));
                     Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
                     return;
                 }

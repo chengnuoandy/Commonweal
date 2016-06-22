@@ -101,7 +101,7 @@ public class RegisterActivity extends Activity {
         ButterKnife.bind(this);
 
         isClickRegister();
-        
+
         if (!isClickRegisterBtn) {
             mTvRegisterTitle.setText("找回密码");
             mBtnRegister.setText("修改");
@@ -206,7 +206,9 @@ public class RegisterActivity extends Activity {
                             showProgressDialog();
                             if (isClickRegisterBtn)
                                 getUDefAvatarUrl();
-                            else updateUserPwdToDb();
+                            else {
+                                updateUserPwdToDb();
+                            }
                         } else
                             Toast.makeText(RegisterActivity.this, "密码强度过低,请输入8~16位数字加字母组合", Toast.LENGTH_SHORT).show();
                     } else
@@ -281,7 +283,6 @@ public class RegisterActivity extends Activity {
                 //  ((Throwable) data).printStackTrace();
                 mBtnSendCode.setClickable(true);
                 mEtCode.setText("");
-                mBtnAgainSendCode.setBackgroundResource(R.drawable.register_reset);
                 mBtnCommitCode.setEnabled(false);
                 mBtnCommitCode.setBackgroundResource(R.drawable.register_default);
                 Log.d("ccc", ((Throwable) data).getMessage());
@@ -521,7 +522,7 @@ public class RegisterActivity extends Activity {
         if (isClickRegisterBtn)
             intent.putExtra("regi_password", mEtPassword.getText().toString());
         setResult(RESULT_OK, intent);
-        Log.d("return", "已返回数据");
+        Log.i("return", "已返回数据");
         finish();
     }
 

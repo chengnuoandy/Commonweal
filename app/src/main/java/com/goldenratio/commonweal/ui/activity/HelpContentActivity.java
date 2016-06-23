@@ -21,8 +21,10 @@ import org.xutils.x;
  */
 
 public class HelpContentActivity extends Activity {
-   private TextView tv_content_title;
-   private ImageView iv_content_pic;
+   private TextView tv_content_title;//标题
+   private ImageView iv_content_pic;//图片
+    private TextView tv_content_sponsor;//赞助方
+    private TextView tv_content_initiator;//发起方&执行方
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,8 @@ public class HelpContentActivity extends Activity {
 
         tv_content_title = (TextView) findViewById(R.id.tv_content_title);
         iv_content_pic = (ImageView) findViewById(R.id.iv_content_top);
-
+        tv_content_sponsor = (TextView) findViewById(R.id.sponsor);
+        tv_content_initiator = (TextView) findViewById(R.id.initiator);
         //获取屏幕宽高
         DisplayMetrics dm = new DisplayMetrics();
          //获取屏幕信息
@@ -44,8 +47,12 @@ public class HelpContentActivity extends Activity {
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
         String pic = intent.getStringExtra("pic");
+        String patron = intent.getStringExtra("patron");
+        String initiator = intent.getStringExtra("initiator");
         Log.d("CN", "Activity+++++++++++++onCreate: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+title);
         tv_content_title .setText(title);
+        tv_content_sponsor.setText(patron);
+        tv_content_initiator.setText(initiator);
         Picasso.with(HelpContentActivity.this).load(pic).resize(screenWidth,(screenHeigh/3)).into(iv_content_pic);//.override(screenWidth,200)
 
     }

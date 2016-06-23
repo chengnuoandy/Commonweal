@@ -164,8 +164,10 @@ private List<Help> mHelpLlist;
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(),HelpContentActivity.class);
-        intent.putExtra("title",mHelpLlist.get(position-2).getHelp_Title());
-        intent.putExtra("pic",mHelpLlist.get(position-2).getHelp_Top_pic());
+        intent.putExtra("title",mHelpLlist.get(position-2).getHelp_Title());//标题
+        intent.putExtra("pic",mHelpLlist.get(position-2).getHelp_Top_pic());//图片
+        intent.putExtra("sponsor",mHelpLlist.get(position-2).getHelp_Sponsor());//赞助方
+        intent.putExtra("initiator",mHelpLlist.get(position-2).getHelp_Initiator());//发起方，执行方
 //        Log.d("CN", "onItemClick: "+mList.get(position-2).getHelp_Top_Pic());
         startActivity(intent);
     }

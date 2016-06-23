@@ -122,11 +122,19 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mTabLineIv.setLayoutParams(lp);
     }
 
+    /**
+     * position :当前页面，及你点击滑动的页面 offset:当前页面偏移的百分比
+     * offsetPixels:当前页面偏移的像素位置
+     */
     @Override
     public void onPageSelected(int position) {
         currentIndex = position;
     }
 
+
+    /**
+     * state滑动中的状态 有三种状态（0，1，2） 1：正在滑动 2：滑动完毕 0：什么都没做。
+     */
     @Override
     public void onPageScrollStateChanged(int state) {
         if (state == ViewPager.SCROLL_STATE_SETTLING) {
@@ -145,10 +153,14 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         }
     }
 
+
+    /**
+     * 初始化导航条宽度（有屏幕大小计算出）
+     * */
     private void initTabLineWidth() {
-      /*  DisplayMetrics dpMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay()
-                .getMetrics(dpMetrics);*/
+      /* DisplayMetrics dpMetrics = new DisplayMetrics();
+        getWindow().getWindowManager().getDefaultDisplay()
+                .getMetrics(dpMetrics);  */
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv

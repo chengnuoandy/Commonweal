@@ -33,7 +33,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:padding="15dp"
-            android:text="HELLO WORLD"
+            android:text="点击登陆"
             android:textColor="@color/black"
             android:textSize="20sp"/>
 

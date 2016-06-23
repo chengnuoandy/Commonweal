@@ -24,6 +24,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Created by 龙啸天 on 2016/6/21 0021.
+ */
 public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeListener {
 
     @BindView(R.id.tv_official)
@@ -50,13 +53,11 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
      */
     private int screenWidth;
 
-    View view;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_dynamic, null);
+        View view = inflater.inflate(R.layout.fragment_dynamic, null);
 
         ButterKnife.bind(this, view);
 
@@ -70,29 +71,34 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mPtsTitle.setTabIndicatorColor(Color.RED);*/
 
         initTabLineWidth();
-        //screenWidth = 1000;
         mVpDynamic.setAdapter(new MyDynFragmentPagerAdapter(getFragmentManager(), mFragmentList));
         mVpDynamic.addOnPageChangeListener(this);
         return view;
     }
 
 
+    /**
+     * 页面滑动时调用此方法---注意：当页面滑动时会一直调用（循环）
+     *
+     * @param position             当前页面，即你点击滑动的页面
+     * @param positionOffset       当前页面偏移的百分比
+     * @param positionOffsetPixels 当前页面偏移的像素位置
+     */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         /**
-         * 利用currentIndex(当前所在页面)和position(下一个页面)以及offset来
+         * 由左边距来控制导航条移动
+         * 利用currentIndex(上一页面)和position(本页面)以及offset来
          * 设置mTabLineIv的左边距 滑动场景：
-         * 记3个页面,
+         * 记3个页面,  计算公式：左边距 = positionOffset*导航条宽度+上一页面位置*导航条宽度
          * 从左到右分别为0,1,2
          * 0->1; 1->2; 2->1; 1->0
          */
-
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv
                 .getLayoutParams();
 
         Log.e("positionOffset:", positionOffset + "");
 
-        Log.e("11221", "onPageScrolled: " + currentIndex + ",," + position);
         if (currentIndex == 0 && position == 0)// 0->1
         {
             lp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 3) + currentIndex
@@ -116,15 +122,17 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
             lp.leftMargin = (int) (-(1 - positionOffset)
                     * (screenWidth * 1.0 / 3) + currentIndex
                     * (screenWidth / 3));
-            Log.i("由1---2", lp.leftMargin + "");
+            Log.i("由2---1", lp.leftMargin + "");
         }
         Log.i("margin", "onPageScrolled: " + lp.leftMargin);
         mTabLineIv.setLayoutParams(lp);
     }
 
+
     /**
-     * position :当前页面，及你点击滑动的页面 offset:当前页面偏移的百分比
-     * offsetPixels:当前页面偏移的像素位置
+     * 此方法是页面跳转完后得到调用
+     *
+     * @param position 当前选中的页面的位置编号
      */
     @Override
     public void onPageSelected(int position) {
@@ -133,6 +141,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
 
 
     /**
+     * 当页面改变状态后调用
      * state滑动中的状态 有三种状态（0，1，2） 1：正在滑动 2：滑动完毕 0：什么都没做。
      */
     @Override
@@ -155,12 +164,13 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
 
 
     /**
-     * 初始化导航条宽度（有屏幕大小计算出）
-     * */
+     * 初始化导航条宽度（由屏幕大小计算出）
+     */
     private void initTabLineWidth() {
       /* DisplayMetrics dpMetrics = new DisplayMetrics();
         getWindow().getWindowManager().getDefaultDisplay()
                 .getMetrics(dpMetrics);  */
+        //获取屏幕大小像素值
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv

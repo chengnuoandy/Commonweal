@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/iv_content_top"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="200sp" />
 
         <TextView
             android:id="@+id/tv_content_title"
@@ -52,13 +52,29 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:paddingTop="15dp"
             android:layout_height="1dp"
+            android:paddingBottom="15dp"
             android:background="@color/gray" />
 
         <LinearLayout
+            android:paddingTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp"
+                android:lineSpacingMultiplier="1.5"
+                android:textScaleX="1.2"
+                android:id="@+id/tv_content_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="也许有的人天生就很富有，但是没有人注定要贫穷。一个大多数不肯承认的事实是，贫穷的本质是认知的落后，而对财富认知的落后是其中一大因素为此，星公益希望征集20名乡村教师志愿者，为孩子们带来一节财商课，让争取的财富观在贫困的家庭的孩子心中发芽成长！"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -66,15 +82,8 @@
                 android:gravity="center"
                 android:text="来自发起者的话"
                 android:textColor="@color/black"
-                android:textSize="26sp" />
-
-            <TextView
-                android:id="@+id/tv_content_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="也许有的人天生就很富有，但是没有人注定要贫穷。一个大多数不肯承认的事实是，贫穷的本质是认知的落后，而对财富认知的落后是其中一大因素为此，星公益希望征集20名乡村教师志愿者，为孩子们带来一节财商课，让争取的财富观在贫困的家庭的孩子心中发芽成长！"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textSize="26sp"
+                android:id="@+id/textView2" />
 
             <TextView
                 android:id="@+id/tv_reading"
@@ -88,10 +97,13 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:paddingTop="15dp"
             android:layout_height="1dp"
+            android:paddingBottom="15dp"
             android:background="@color/gray" />
 
         <LinearLayout
+            android:paddingTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -133,36 +145,16 @@
                 </LinearLayout>
             </HorizontalScrollView>
         </LinearLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:layout_height="1dp"
+            android:paddingBottom="15dp"
+            android:background="@color/gray" />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/subsidize_logo"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/good_video"
-                />
 
-            <TextView
-                android:paddingTop="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="山东省星公益基金会"
-                android:id="@+id/tv_content_subsidize"
-                android:layout_below="@+id/subsidize_logo"
-                android:layout_centerHorizontal="true" />
-            <TextView
-                android:paddingTop="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="山东省星公益基金会"
-                android:id="@+id/tv_subsidizetitle"
-                android:layout_below="@+id/tv_content_subsidize"
-                android:layout_centerHorizontal="true" />
             <TextView
                 android:paddingTop="20sp"
                 android:layout_width="wrap_content"
@@ -172,47 +164,209 @@
                 android:layout_below="@+id/tv_subsidizetitle"
                 android:layout_centerHorizontal="true" />
 
+            <TextView
+                android:paddingTop="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="山东省星公益基金会"
+                android:id="@+id/tv_subsidizetitle"
+                android:layout_below="@+id/tv_content_subsidize"
+                android:layout_alignLeft="@+id/tv_content_subsidize"
+                android:layout_alignStart="@+id/tv_content_subsidize" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="山东省星公益基金会"
+                android:id="@+id/tv_content_subsidize"
+                android:layout_below="@+id/subsidize_logo"
+                android:layout_centerHorizontal="true" />
+
+            <ImageView
+                android:paddingTop="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/subsidize_logo"
+                android:src="@mipmap/good_video"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
         </RelativeLayout>
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/volunteer_logo"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/good_video"
-                />
 
-            <TextView
-                android:paddingTop="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="山东省星公益基金会"
-                android:id="@+id/tv_content_volunteer"
-                android:layout_below="@+id/volunteer_logo"
-                android:layout_centerHorizontal="true" />
-            <TextView
-                android:paddingTop="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="山东省星公益基金会"
-                android:id="@+id/tv_volunteertitle"
-                android:layout_below="@+id/tv_content_volunteer"
-                android:layout_centerHorizontal="true" />
             <TextView
                 android:paddingTop="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/normal_orange_color"
-                android:text="发起 ＆ 执行方 >"
-                android:layout_below="@+id/tv_volunteertitle"
+                android:text="资助方详情 >"
+                android:layout_below="@+id/tv_publictitle"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:paddingTop="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="山东省星公益基金会"
+                android:id="@+id/tv_publictitle"
+                android:layout_below="@+id/tv_content_public"
+                android:layout_alignLeft="@+id/tv_content_public"
+                android:layout_alignStart="@+id/tv_content_public" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="山东省星公益基金会"
+                android:id="@+id/tv_content_public"
+                android:layout_below="@+id/public_logo"
+                android:layout_centerHorizontal="true" />
+
+            <ImageView
+                android:paddingTop="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/public_logo"
+                android:src="@mipmap/good_video"
+                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:layout_height="1dp"
+            android:paddingBottom="15dp"
+            android:background="@color/gray" />
+        <LinearLayout
+            android:paddingTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="项目进度"
+                android:textSize="26sp"
+                android:textColor="@color/black"
+                android:id="@+id/textView3" />
+
+            <com.goldenratio.commonweal.ui.view.Help_ProgressBar
+                android:id="@+id/pb_progressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tv_content"
+                android:layout_marginTop="16dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_alignParentLeft="true"
+                    android:paddingLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="26sp"
+                        android:text="36"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="参与者"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_centerHorizontal="true"
+                    android:paddingLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="26sp"
+                        android:text="7000k"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="目标任务"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="26sp"
+                        android:text="15"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="剩余天数"/>
+                </LinearLayout>
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="筹集后，科技文化交流协会背景将会于2016年7月执行本项目"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="25dp"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="听听他们怎么说"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:paddingTop="15dp"
+                android:layout_height="1dp"
+                android:paddingBottom="15dp"
+                android:background="@color/gray" />
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></ListView>
+        </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="讨论"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></ListView>
+</LinearLayout>
+
     </LinearLayout>
 </ScrollView>

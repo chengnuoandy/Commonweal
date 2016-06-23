@@ -45,6 +45,9 @@ import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
+/**
+ *
+ */
 /*
 *  Created by 龙啸天 on 2016/6/20 0020.
 *
@@ -128,9 +131,9 @@ public class RegisterActivity extends Activity {
         SMSSDK.unregisterEventHandler(mEh);  //取消短信回调
     }
 
-    /*
-    * 为控件添加监听事件
-    * */
+    /**
+     * 为控件添加监听事件
+     */
 
     //添加文本改变监听事件
     private void addTextChangeEvent(EditText mEtInput) {
@@ -223,12 +226,11 @@ public class RegisterActivity extends Activity {
         }
     }
 
-    /*
-    * 第三方相关逻辑
-    * */
+    /**
+     * 第三方相关逻辑
+     */
 
     //注册短信回调（从远程（本地）获取到短信发送状况，发送给主线程）
-
     private void registerEventHandler() {
         SMSSDK.initSDK(this, APPKEY, APPSECRET);
         mEh = new EventHandler() {
@@ -299,11 +301,14 @@ public class RegisterActivity extends Activity {
         }
     };
 
-    /*
-    *   改变控件属性
-    * */
 
-    // 显示哪一步
+    /**
+     * 改变控件属性
+     *
+     * @param first  第一步 控件的显隐性枚举值
+     * @param second
+     * @param third
+     */
     private void showWhichStep(int first, int second, int third) {
         mEtPhone.setVisibility(first);
         mBtnSendCode.setVisibility(first);
@@ -317,7 +322,13 @@ public class RegisterActivity extends Activity {
         Log.d("sh", "0000");
     }
 
-    //改变步骤标题的文本颜色
+    /**
+     * 改变步骤标题的文本颜色
+     *
+     * @param color1 标题一颜色
+     * @param color2
+     * @param color3
+     */
     private void changeStepTextColor(int color1, int color2, int color3) {
         mTvPhone.setTextColor(getResources().getColor(color1));
         mTvCode.setTextColor(getResources().getColor(color2));
@@ -385,9 +396,15 @@ public class RegisterActivity extends Activity {
         }
     }
 
-    /*
-    *   数据库相关逻辑
-    * */
+    /**
+     * 数据库相关逻辑
+     *
+     * @param hdUrl  高清头像url
+     * @param maxUrl
+     * @param minUrl
+     * @param aut    用户默认签名
+     */
+
 
     //注册完成后添加用户信息到数据库
     private void addUserInfoToDB(String hdUrl, String maxUrl, String minUrl, String aut) {
@@ -434,6 +451,7 @@ public class RegisterActivity extends Activity {
         });
     }
 
+
     //判断此用户是否已经注册
     private void isRegister() {
         BmobQuery<User> bmobQuery = new BmobQuery<User>();
@@ -478,7 +496,7 @@ public class RegisterActivity extends Activity {
 
     // List<String> dataList = new ArrayList<String>();
 
-    //获取用户默认头像URL
+
     private void getUDefAvatarUrl() {
         int rndNum = (int) (Math.random() * 9);
         BmobQuery bmobQuery = new BmobQuery("User_Default");
@@ -515,9 +533,9 @@ public class RegisterActivity extends Activity {
     }
 
 
-    /*返回用户信息给myFragment--由loginFragment间接传到
-    *
-    * 判断用户是否点击的为忘记密码，是则将密码返回为空。
+    /**
+     * 返回用户信息给myFragment--由loginFragment间接传到
+     * 判断用户是否点击的为忘记密码，是则将密码返回为空。
      */
     private void returnUInfoToMyFra() {
         Intent intent = new Intent();
@@ -531,7 +549,12 @@ public class RegisterActivity extends Activity {
         finish();
     }
 
-    //检测密码强度（必须为8~16数字与字母组合）
+    /**
+     * 检测密码强度（必须为8~16数字与字母组合）
+     *
+     * @param pw 要检测的密码
+     * @return 匹配结果
+     */
     private boolean checkPassword(String pw) {
         String regPw = "[\\da-zA-Z]*\\d+[a-zA-Z]+[\\da-zA-Z]*";
         Pattern p = Pattern.compile(regPw);

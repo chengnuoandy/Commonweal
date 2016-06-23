@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
+        android:background="@drawable/register_default"
         android:gravity="center"
         android:orientation="horizontal"
         >

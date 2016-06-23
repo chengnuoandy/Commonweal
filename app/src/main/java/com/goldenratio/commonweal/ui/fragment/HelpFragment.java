@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -8,12 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Top;
+import com.goldenratio.commonweal.ui.activity.HelpContentActivity;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -23,7 +26,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 
-public class HelpFragment extends Fragment {
+public class HelpFragment extends Fragment implements AdapterView.OnItemClickListener{
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
@@ -49,7 +52,7 @@ public class HelpFragment extends Fragment {
         View view = initView();
         initData();
         topSliding();
-
+        mListView.setOnItemClickListener(this);
         return view;
     }
     private View initView() {
@@ -78,14 +81,14 @@ public class HelpFragment extends Fragment {
         });
          return view;
     }
-
+private List<Help> mHelpLlist;
     public void initData() {
         BmobQuery<Help> bmobQuery = new BmobQuery<>();
         bmobQuery.order("-createdAt");
         bmobQuery.findObjects(getContext(), new FindListener<Help>() {
             @Override
             public void onSuccess(List<Help> list) {
-
+                mHelpLlist=list;
 //
 //                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
 //                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
@@ -156,5 +159,14 @@ public class HelpFragment extends Fragment {
             // 保证启动自动轮播逻辑只执行一次
             mHandler.sendEmptyMessageDelayed(0, 3000);// 发送延时3秒的消息
         }
+    }
+
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getContext(),HelpContentActivity.class);
+        intent.putExtra("title",mHelpLlist.get(position-2).getHelp_Title());
+        intent.putExtra("pic",mHelpLlist.get(position-2).getHelp_Top_pic());
+//        Log.d("CN", "onItemClick: "+mList.get(position-2).getHelp_Top_Pic());
+        startActivity(intent);
     }
 }

@@ -10,7 +10,7 @@ import cn.bmob.v3.BmobObject;
 public class Help_Top extends BmobObject {
 
     private String Title;
-    private List Help_Top_Pic;
+    private String Help_Top_Pic;
 
     public String getTitle() {
         return Title;
@@ -20,11 +20,11 @@ public class Help_Top extends BmobObject {
         Title = title;
     }
 
-    public List getHelp_Top_Pic() {
+    public String getHelp_Top_Pic() {
         return Help_Top_Pic;
     }
 
-    public void setHelp_Top_Pic(List help_Top_Pic) {
+    public void setHelp_Top_Pic(String help_Top_Pic) {
         Help_Top_Pic = help_Top_Pic;
     }
 }

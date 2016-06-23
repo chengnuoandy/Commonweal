@@ -28,6 +28,7 @@ public class HelpFragment extends Fragment {
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
     private Handler mHandler;
+    private List<Help_Top> mList;
 
 
     private int participant;  //参与人数
@@ -85,11 +86,11 @@ public class HelpFragment extends Fragment {
             @Override
             public void onSuccess(List<Help> list) {
 
-
-                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
-                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
-                indicator.setViewPager(mViewPager);
-                indicator.setSnap(true);
+//
+//                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
+//                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
+//                indicator.setViewPager(mViewPager);
+//                indicator.setSnap(true);
 
                 mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
                 mListView.onRefreshComplete();
@@ -101,13 +102,35 @@ public class HelpFragment extends Fragment {
                 mListView.onRefreshComplete();
             }
         });
+        BmobQuery<Help_Top> bmobQueryTop = new BmobQuery<>();
+        bmobQueryTop.order("-createdAt");
+        bmobQueryTop.findObjects(getContext(), new FindListener<Help_Top>() {
+            @Override
+            public void onSuccess(List<Help_Top> list) {
 
+                mList = list;
+                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
+                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
+                indicator.setViewPager(mViewPager);
+                indicator.setSnap(true);
+
+
+            }
+            @Override
+            public void onError(int i, String s) {
+
+                Log.i("bmob", "下载失败：" + s);
+                mListView.onRefreshComplete();
+            }
+        });
+
+    }
         // 获取头部数据
 
 
 
 
-    }
+
     public void topSliding(){
           /*
            实现图片轮播
@@ -119,7 +142,7 @@ public class HelpFragment extends Fragment {
                     int currentItem = mViewPager.getCurrentItem();
                     currentItem++;
 
-                    if (currentItem > 4) {
+                    if (currentItem > mList.size()-1) {
                         currentItem = 0;// 如果已经到了最后一个页面,跳到第一页
                     }
 

@@ -21,10 +21,10 @@ import java.util.List;
 public class HelpViewPagerAdapter extends PagerAdapter {
 
     private Context mContext;
-    private List<Help> list;
+    private List<Help_Top> list;
 //    private Object[] imgUrl;
 
-    public HelpViewPagerAdapter(Context context, List<Help> mList) {
+    public HelpViewPagerAdapter(Context context, List<Help_Top> mList) {
        super();
        mContext = context;
        list = mList;
@@ -47,8 +47,9 @@ public class HelpViewPagerAdapter extends PagerAdapter {
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView view = new ImageView(mContext);
             view.setScaleType(ImageView.ScaleType.FIT_XY);// 设置图片缩放方式, 宽高填充父控件
-            String url = list.get(position).getHelp_Top_pic();
-           // Log.d("TAGGGGG", "getView: " + imgUrl[0]);
+            //String url = list.get(position).getHelp_Top_pic();
+            String url = list.get(position).getHelp_Top_Pic();
+            // Log.d("TAGGGGG", "getView: " + imgUrl[0]);
             Picasso.with(mContext).load(url).into(view);
             container.addView(view);
             return view;

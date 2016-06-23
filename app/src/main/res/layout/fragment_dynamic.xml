@@ -35,11 +35,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="15sp"
             android:gravity="center"
             android:padding="@dimen/little_space"
             android:text="官方"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"/>
 
         <ImageView
             android:layout_width="2dp"
@@ -52,11 +52,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="15sp"
             android:gravity="center"
             android:padding="@dimen/little_space"
             android:text="项目"
-            android:textColor="@color/ordinary"/>
+            android:textColor="@color/ordinary"
+            android:textSize="15sp"/>
 
         <ImageView
             android:layout_width="2dp"
@@ -69,18 +69,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="15sp"
             android:gravity="center"
             android:padding="@dimen/little_space"
             android:text="个人"
-            android:textColor="@color/ordinary"/>
+            android:textColor="@color/ordinary"
+            android:textSize="15sp"/>
     </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_tab_line"
         android:layout_width="200dp"
-        android:layout_height="20dp"
-        android:background="@color/colorPrimary"
+        android:layout_height="2dp"
+        android:background="@drawable/tab_dynamic_selected_pressed"
         android:contentDescription="tab">
 
     </ImageView>

@@ -338,7 +338,9 @@ public class RegisterActivity extends Activity {
         mTvPassword.setTextColor(getResources().getColor(color3));
     }
 
-    //检测哪一步（如果进行完第一步，则会给用户弹出提示框）
+    /**
+     * 检测哪一步（如果进行完第一步，则会给用户弹出提示框）
+     */
     private void checkWhichStep() {
         Log.d("111", "弹出提示");
         if (mTvCode.getTextColors() == getResources().getColorStateList(R.color.colorPrimary) ||
@@ -411,9 +413,11 @@ public class RegisterActivity extends Activity {
 
     //注册完成后添加用户信息到数据库
     private void addUserInfoToDB(String hdUrl, String maxUrl, String minUrl, String aut) {
+        //密码md5加密
+        String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
         User u = new User();
         u.setUser_Phone(mPhone);
-        u.setUser_Password("");
+        u.setUser_Password(mD5Pwd);
         u.setUser_image_hd(hdUrl);
         u.setUser_image_max(maxUrl);
         u.setUser_image_min(minUrl);
@@ -437,8 +441,10 @@ public class RegisterActivity extends Activity {
 
     //更新用户密码
     private void updateUserPwdToDb() {
+        //md5加密
+        String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
         User u = new User();
-        u.setUser_Password(mEtPassword.getText().toString());
+        u.setUser_Password(mD5Pwd);
         closeProgressDialog();
         u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
             @Override

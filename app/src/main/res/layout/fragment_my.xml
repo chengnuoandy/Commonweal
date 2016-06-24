@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/colorContext"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorContext"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/color_FMy_Context"
         android:orientation="horizontal"
         android:padding="@dimen/normal_space">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/message" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -18,109 +24,144 @@
             android:layout_centerInParent="true"
             android:text="我的"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
+            android:textSize="@dimen/title_text_size"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/settings" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/color_FMy_Context">
-
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:padding="15dp"
-            android:text="点击登陆"
-            android:textColor="@color/black"
-            android:textSize="20sp"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/civ_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
-            android:src="@drawable/user_default_avatar_v2_3_180"
-            android:tag="1"/>
-
-
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/ll_today"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:background="@color/color_FMy_Context"
+            android:padding="@dimen/normal_space">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/iv_unregister_head"
+                android:tag="1" />
 
             <TextView
-                android:id="@+id/tv_money"
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¥ 500"
-                android:textSize="25sp"/>
+                android:layout_below="@+id/civ_avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/normal_space"
+                android:layout_marginTop="@dimen/normal_space"
+                android:background="@color/red"
+                android:padding="@dimen/little_space"
+                android:text="登陆/注册"
+                android:textColor="@color/white" />
 
-            <TextView
-                android:id="@+id/tv_done"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="今日成交"
-                android:textSize="15sp"/>
-        </LinearLayout>
+        </RelativeLayout>
 
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="50dp"
-            android:background="@color/color_FMy_Context"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:background="@color/white">
 
             <TextView
-                android:id="@+id/tv_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2365"
-                android:textSize="25sp"/>
+                style="@style/fragment_my_style"
+                android:drawableTop="@drawable/my_ic_pay"
+                android:text="待付款" />
 
             <TextView
-                android:id="@+id/tv_glance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="今日浏览"
-                android:textSize="15sp"/>
+                style="@style/fragment_my_style"
+                android:drawableTop="@drawable/my_ic_send"
+                android:text="待发货" />
+
+            <TextView
+                style="@style/fragment_my_style"
+                android:drawableTop="@drawable/my_ic_deliver"
+                android:text="待收货" />
+
+            <TextView
+                style="@style/fragment_my_style"
+                android:drawableTop="@drawable/my_ic_edit"
+                android:text="待评价" />
+
+            <TextView
+                style="@style/fragment_my_style"
+                android:drawableTop="@drawable/my_ic_refund"
+                android:text="退货" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_space"
+            android:background="@color/white"
+            android:padding="@dimen/little_space">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/little_space"
+                android:drawableTop="@drawable/icon_personnal_coupon"
+                android:gravity="center"
+                android:padding="@dimen/little_space"
+                android:text="关注" />
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/main_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/little_space"
+                android:drawableTop="@drawable/icon_personnal_collection"
+                android:gravity="center"
+                android:padding="@dimen/little_space"
+                android:text="收藏" />
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/main_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/little_space"
+                android:drawableTop="@drawable/icon_personnal_comment"
+                android:gravity="center"
+                android:padding="@dimen/little_space"
+                android:text="收藏" />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:horizontalSpacing="0.0dip"
+            android:listSelector="@null"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="0.0dip"
+            android:visibility="gone" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_FMy_Context"/>
-
-    <GridView
-        android:id="@+id/gridview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:horizontalSpacing="0.0dip"
-        android:listSelector="@null"
-        android:numColumns="3"
-        android:scrollbars="none"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="0.0dip"/>
-
 </LinearLayout>

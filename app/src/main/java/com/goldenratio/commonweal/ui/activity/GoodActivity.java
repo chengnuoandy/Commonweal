@@ -119,6 +119,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
 
                     Log.d(TAG, "onActivityResult: price=" + data.getStringExtra("price") + "prop=" + data.getStringExtra("prop"));
                 }
+                break;
         }
         if (requestCode == ImageSelector.IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             // Get Image Path List

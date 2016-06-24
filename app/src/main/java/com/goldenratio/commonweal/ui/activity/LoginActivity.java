@@ -23,6 +23,7 @@ import com.goldenratio.commonweal.api.ErrorInfo;
 import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -118,7 +119,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         switch (v.getId()) {
             case R.id.login_btn:
                 //判断密码是否正确
-                isLogin(mLoginPhone.getText().toString(), mLoginPassword.getText().toString());
+                isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()));
                 break;
             case R.id.ib_sina:
                 mSsoHandler.authorize(new AuthListener());

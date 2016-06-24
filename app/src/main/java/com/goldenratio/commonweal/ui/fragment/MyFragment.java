@@ -3,7 +3,6 @@ package com.goldenratio.commonweal.ui.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,27 +15,33 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGridAdapter;
-import com.goldenratio.commonweal.dao.DBHelper;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyFragment extends Fragment {
-    private GridView gridView;
-    private TextView mAutograph;
+    @BindView(R.id.civ_avatar)
+    CircleImageView mAvatar;
+    @BindView(R.id.tv_name)
+    TextView mTvName;
+    @BindView(R.id.gridview)
+    GridView gridView;
+
     private boolean isLogin = false;
-    private CircleImageView mAvatar;
     private String mUserID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
-        mAvatar = (CircleImageView) view.findViewById(R.id.civ_avatar);
-        mAutograph = (TextView) view.findViewById(R.id.tv_name);
-        gridView = (GridView) view.findViewById(R.id.gridview);
+
+        ButterKnife.bind(this, view);
+
         gridView.setAdapter(new MyGridAdapter(getContext()));
 
         if (isUserTableExist()) {
@@ -44,9 +49,15 @@ public class MyFragment extends Fragment {
             isLogin = true;
         }
 
-        mAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        return view;
+    }
+
+
+    @OnClick({R.id.civ_avatar, R.id.tv_name})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.civ_avatar:
+            case R.id.tv_name:
                 if (!isUserTableExist()) {
                     if (!isLogin) {
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -55,9 +66,11 @@ public class MyFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "用户已经登陆", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-        return view;
+                break;
+            default:
+                break;
+        }
+
     }
 
     @Override
@@ -74,6 +87,11 @@ public class MyFragment extends Fragment {
         }
     }
 
+    /**
+     * 判断本地用户表是否存在
+     *
+     * @return
+     */
     private boolean isUserTableExist() {
         boolean isTableExist = true;
         String sqlCmd = "SELECT count(User_Avatar) FROM User ";
@@ -88,6 +106,11 @@ public class MyFragment extends Fragment {
         return isTableExist;
     }
 
+    /**
+     * 读取本地数据库数据 （用户默认头像和签名）
+     *
+     * @param ID 用户唯一id（objectid）
+     */
     private void getUserData(String ID) {
         String sqlCmd = "SELECT User_Autograph,User_Avatar FROM User ";
         UserDao ud = new UserDao(getActivity());
@@ -100,7 +123,9 @@ public class MyFragment extends Fragment {
             Log.i("ud", avaUrl);
         }
         cursor.close();
-        mAutograph.setText(autograph);
+        mTvName.setText(autograph);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
     }
+
+
 }

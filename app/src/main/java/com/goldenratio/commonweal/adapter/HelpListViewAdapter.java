@@ -76,9 +76,10 @@ public class HelpListViewAdapter extends BaseAdapter {
         //holder.iv_icon.setBackgroundResource(imgs[position]);
         holder.tv_title.setText(help.get(position).getHelp_Title());
         holder.tv_content.setText(help.get(position).getHelp_Content());
-        imgUrl = help.get(position).getHelp_pic().toArray();
-        Log.d("TAGGGGG", "getView: "+imgUrl[0]);
-        Picasso.with(mContext).load(imgUrl[0].toString()).into(holder.iv_icon);
+       // imgUrl = help.get(position).getHelp_pic().toArray();
+        //Log.d("TAGGGGG", "getView: "+imgUrl[0]);
+        String url = help.get(position).getHelp_Top_pic();
+        Picasso.with(mContext).load(url).into(holder.iv_icon);
 //        Picasso.with(mContext).load(url.get(position)).getPicUrl()).into(holder.iv_icon);
 
 

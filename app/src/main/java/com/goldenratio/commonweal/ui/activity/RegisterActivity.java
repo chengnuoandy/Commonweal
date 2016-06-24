@@ -46,13 +46,11 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
 /**
- *
+ * Created by 龙啸天 on 2016/6/20 0020.
+ * <p>
+ *  承担注册与找回密码的功能
  */
-/*
-*  Created by 龙啸天 on 2016/6/20 0020.
-*
-*  承担注册与找回密码的职责
-* */
+
 public class RegisterActivity extends Activity {
 
     @BindView(R.id.et_phone)
@@ -118,6 +116,10 @@ public class RegisterActivity extends Activity {
 
     }
 
+    /**
+     *  由LoginActivity传来的数据判断
+     *  是否点击了注册按钮
+     */
     private void isClickRegister() {
         Intent intent = getIntent();
         int code = intent.getIntExtra("type", 1);

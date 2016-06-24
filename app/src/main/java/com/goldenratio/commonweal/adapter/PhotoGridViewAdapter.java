@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.util.FileUtils;
+import com.goldenratio.commonweal.util.GlideLoader;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kiuber on 2016/6/17.
@@ -19,23 +21,24 @@ import java.util.ArrayList;
 public class PhotoGridViewAdapter extends BaseAdapter {
 
     private Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private ArrayList<String> mAlPhotoPath;
+    private LayoutInflater mInflater;
+    private List<String> mImagePath;
+    private GlideLoader glideLoader;
 
-    public PhotoGridViewAdapter(Context mContext, ArrayList<String> mAlPhotoPath) {
+    public PhotoGridViewAdapter(Context mContext, List<String> imagePath) {
         this.mContext = mContext;
-        this.mAlPhotoPath = mAlPhotoPath;
-        mLayoutInflater = LayoutInflater.from(mContext);
+        this.mInflater = LayoutInflater.from(mContext);
+        this.mImagePath = imagePath;
     }
 
     @Override
     public int getCount() {
-        return mAlPhotoPath.size();
+        return mImagePath.size();
     }
 
     @Override
-    public String getItem(final int position) {
-        return mAlPhotoPath.get(position);
+    public Object getItem(int position) {
+        return mImagePath.get(position).toString();
     }
 
     @Override
@@ -48,20 +51,24 @@ public class PhotoGridViewAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
         if (viewHolder == null) {
             viewHolder = new ViewHolder();
-            convertView = mLayoutInflater.inflate(R.layout.gridview_photo_item, null);
-            viewHolder.mIvDelete = (ImageView) convertView.findViewById(R.id.iv_delete_selected_photo);
-            viewHolder.mIvPhoto = (ImageView) convertView.findViewById(R.id.iv_selected_photo);
+            convertView = mInflater.inflate(R.layout.gridview_photo_item, null);
+            viewHolder.imageView = (ImageView) convertView.findViewById(R.id.iv_selected_photo);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.mIvPhoto.setImageBitmap(FileUtils.getLocalBitmap(getItem(position)));
+
+        Glide.with(mContext)
+                .load(getItem(position).toString())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(viewHolder.imageView);
+
+//        glideLoader.displayImage(mContext, "http://img.ricedonate.com/project/201606/18/14662715274hAg24.jpg", viewHolder.imageView);
+
         return convertView;
     }
 
-    private class ViewHolder {
-        private ImageView mIvDelete;
-        private ImageView mIvPhoto;
+    class ViewHolder {
+        ImageView imageView;
     }
-
 }

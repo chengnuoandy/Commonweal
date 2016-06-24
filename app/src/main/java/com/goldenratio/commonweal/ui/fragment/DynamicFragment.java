@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by 龙啸天 on 2016/6/21 0021.
@@ -76,6 +77,20 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         return view;
     }
 
+    @OnClick({R.id.tv_official, R.id.tv_dynamic, R.id.tv_personal})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_official:
+                mVpDynamic.setCurrentItem(0);
+                break;
+            case R.id.tv_dynamic:
+                mVpDynamic.setCurrentItem(1);
+                break;
+            case R.id.tv_personal:
+                mVpDynamic.setCurrentItem(2);
+                break;
+        }
+    }
 
     /**
      * 页面滑动时调用此方法---注意：当页面滑动时会一直调用（循环）
@@ -186,4 +201,6 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mTvDynamic.setTextColor(getResources().getColor(color2));
         mTvPersonal.setTextColor(getResources().getColor(color3));
     }
+
+
 }

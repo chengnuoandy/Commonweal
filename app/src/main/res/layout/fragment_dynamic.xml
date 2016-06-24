@@ -25,8 +25,8 @@
         android:id="@+id/id_switch_tab_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
         android:background="@color/main_bg"
+        android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal"
         >
@@ -43,8 +43,8 @@
             android:textSize="15sp"/>
 
         <ImageView
-            android:layout_width="2dp"
-            android:layout_height="20dp"
+            android:layout_width="1dp"
+            android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:background="@color/ordinary"/>
 
@@ -60,8 +60,8 @@
             android:textSize="15sp"/>
 
         <ImageView
-            android:layout_width="2dp"
-            android:layout_height="20dp"
+            android:layout_width="1dp"
+            android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:background="@color/ordinary"/>
 

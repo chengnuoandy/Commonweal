@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,8 +48,8 @@ import cn.smssdk.SMSSDK;
 
 /**
  * Created by 龙啸天 on 2016/6/20 0020.
- * <p>
- *  承担注册与找回密码的功能
+ * <p/>
+ * 承担注册与找回密码的功能
  */
 
 public class RegisterActivity extends Activity {
@@ -117,8 +118,8 @@ public class RegisterActivity extends Activity {
     }
 
     /**
-     *  由LoginActivity传来的数据判断
-     *  是否点击了注册按钮
+     * 由LoginActivity传来的数据判断
+     * 是否点击了注册按钮
      */
     private void isClickRegister() {
         Intent intent = getIntent();
@@ -337,7 +338,9 @@ public class RegisterActivity extends Activity {
         mTvPassword.setTextColor(getResources().getColor(color3));
     }
 
-    //检测哪一步（如果进行完第一步，则会给用户弹出提示框）
+    /**
+     * 检测哪一步（如果进行完第一步，则会给用户弹出提示框）
+     */
     private void checkWhichStep() {
         Log.d("111", "弹出提示");
         if (mTvCode.getTextColors() == getResources().getColorStateList(R.color.colorPrimary) ||
@@ -410,9 +413,11 @@ public class RegisterActivity extends Activity {
 
     //注册完成后添加用户信息到数据库
     private void addUserInfoToDB(String hdUrl, String maxUrl, String minUrl, String aut) {
+        //密码md5加密
+        String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
         User u = new User();
         u.setUser_Phone(mPhone);
-        u.setUser_Password(mEtPassword.getText().toString());
+        u.setUser_Password(mD5Pwd);
         u.setUser_image_hd(hdUrl);
         u.setUser_image_max(maxUrl);
         u.setUser_image_min(minUrl);
@@ -436,8 +441,10 @@ public class RegisterActivity extends Activity {
 
     //更新用户密码
     private void updateUserPwdToDb() {
+        //md5加密
+        String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
         User u = new User();
-        u.setUser_Password(mEtPassword.getText().toString());
+        u.setUser_Password(mD5Pwd);
         closeProgressDialog();
         u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
             @Override
@@ -552,13 +559,14 @@ public class RegisterActivity extends Activity {
     }
 
     /**
-     * 检测密码强度（必须为8~16数字与字母组合）
+     * 检测密码强度（必须为数字与字母组合）
      *
      * @param pw 要检测的密码
      * @return 匹配结果
      */
     private boolean checkPassword(String pw) {
-        String regPw = "[\\da-zA-Z]*\\d+[a-zA-Z]+[\\da-zA-Z]*";
+        String regPw = "^[\\da-zA-Z]*((\\d+[\\da-zA-Z]*[a-zA-Z]+)|" +
+                "([a-zA-Z]+[\\da-zA-Z]*\\d+))[\\da-zA-Z]*$";
         Pattern p = Pattern.compile(regPw);
         Matcher m = p.matcher(pw);
         return m.matches();

@@ -16,10 +16,19 @@ public class Help extends BmobObject {
     private String Help_Initiator;    //项目发起人&执行者
     private String Help_Sponsor;     //赞助方
     private String Help_Title;      //项目标题
-    private String Help_Content;    //项目内容
+    private String Help_Content;    //项目内容(显示在首页上的)
     private Integer Help_Progress;      //项目进度
     private Integer Help_CountDown;    //项目的时间倒计时
     private String Help_Result;     //项目结果
+    private String Help_Content_content;//项目的内容简介
+
+    public String getHelp_Content_content() {
+        return Help_Content_content;
+    }
+
+    public void setHelp_Content_content(String help_Content_content) {
+        Help_Content_content = help_Content_content;
+    }
 
     public String getHelp_Initiator() {
         return Help_Initiator;

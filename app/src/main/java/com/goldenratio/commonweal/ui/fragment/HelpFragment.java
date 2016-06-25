@@ -168,6 +168,7 @@ private List<Help> mHelpLlist;
         intent.putExtra("pic",mHelpLlist.get(position-2).getHelp_Top_pic());//图片
         intent.putExtra("sponsor",mHelpLlist.get(position-2).getHelp_Sponsor());//赞助方
         intent.putExtra("initiator",mHelpLlist.get(position-2).getHelp_Initiator());//发起方，执行方
+        intent.putExtra("content",mHelpLlist.get(position-2).getHelp_Content_content());//项目内容简介
 //        Log.d("CN", "onItemClick: "+mList.get(position-2).getHelp_Top_Pic());
         startActivity(intent);
     }

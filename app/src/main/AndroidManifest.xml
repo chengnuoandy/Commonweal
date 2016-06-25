@@ -63,6 +63,8 @@
         </receiver>
 
         <activity android:name=".ui.activity.HelpContentActivity"></activity>
+
+        <activity android:name=".ui.fragment.HelpContentFragment"/>
     </application>
 
 </manifest>

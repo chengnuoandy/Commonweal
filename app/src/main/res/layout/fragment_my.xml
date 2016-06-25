@@ -64,7 +64,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/normal_space"
                 android:layout_marginTop="@dimen/normal_space"
-                android:background="@color/red"
+                android:background="@color/red_deep"
                 android:padding="@dimen/little_space"
                 android:text="登陆/注册"
                 android:textColor="@color/white" />

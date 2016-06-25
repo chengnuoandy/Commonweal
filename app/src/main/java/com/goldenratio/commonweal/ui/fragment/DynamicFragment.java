@@ -117,26 +117,26 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         if (currentIndex == 0 && position == 0)// 0->1
         {
             lp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12)+ 1);
             Log.i("由0---1", lp.leftMargin + "");
 
         } else if (currentIndex == 1 && position == 0) // 1->0
         {
             lp.leftMargin = (int) (-(1 - positionOffset)
                     * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12) + 1);
             Log.i("由1---0", lp.leftMargin + "");
 
         } else if (currentIndex == 1 && position == 1) // 1->2
         {
             lp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12)+ 3);
             Log.i("由1---2", lp.leftMargin + "");
         } else if (currentIndex == 2 && position == 1) // 2->1
         {
             lp.leftMargin = (int) (-(1 - positionOffset)
                     * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12)+ 3);
             Log.i("由2---1", lp.leftMargin + "");
         }
         Log.i("margin", "onPageScrolled: " + lp.leftMargin);
@@ -188,10 +188,12 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         //获取屏幕大小像素值
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;
+        Log.i("width", screenWidth + "");
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv
                 .getLayoutParams();
-        lp.width = screenWidth / 3;
-        Log.i("width", lp.width + "");
+        lp.width = screenWidth / 6;
+        lp.leftMargin = screenWidth / 12;
+        Log.i("进度条width", lp.width + "");
         mTabLineIv.setLayoutParams(lp);
     }
 

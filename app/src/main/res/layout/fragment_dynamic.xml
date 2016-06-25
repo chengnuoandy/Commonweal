@@ -73,7 +73,7 @@
                 android:gravity="center"
                 android:padding="@dimen/little_space"
                 android:text="项目"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/assist"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -93,7 +93,7 @@
                 android:gravity="center"
                 android:padding="@dimen/little_space"
                 android:text="个人"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/assist"
                 android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>

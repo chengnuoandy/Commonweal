@@ -307,8 +307,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 if (resultCode == RESULT_OK) {
                     String registerReturnPhone = data.getStringExtra("regi_phone");
                     String registerReturnPassword = data.getStringExtra("regi_password");
-                    mLoginPhone.setText(registerReturnPhone);
-                    mLoginPassword.setText(registerReturnPassword);
+//                    mLoginPhone.setText(registerReturnPhone);
+//                    mLoginPassword.setText(registerReturnPassword);
+                    isLogin(registerReturnPhone,MD5Util.createMD5(registerReturnPassword));
                 }
                 break;
             default:

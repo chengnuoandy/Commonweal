@@ -1,9 +1,11 @@
 package com.goldenratio.commonweal.bean;
 
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 
 /**
@@ -23,7 +25,25 @@ public class Help extends BmobObject {
     private String Help_Content_content;//项目的内容简介
     private String Help_Type; // 项目类型
     private String Help_Organization; //项目负责组织
+    private BmobDate Help_Open_Data; //项目开始时间
+    private BmobDate Help_End_Data; // 项目结束时间
 
+
+
+    public BmobDate getHelp_Open_Data() {
+        return Help_Open_Data;
+    }
+
+    public void setHelp_Open_Data(BmobDate help_Open_Data) {
+        Help_Open_Data = help_Open_Data;
+    }
+    public BmobDate getHelp_End_Data() {
+        return Help_End_Data;
+    }
+
+    public void setHelp_End_Data(BmobDate help_End_Data) {
+        Help_End_Data = help_End_Data;
+    }
 
     public String getHelp_Organization() {
         return Help_Organization;
@@ -136,4 +156,6 @@ public class Help extends BmobObject {
     public void setHelp_Result(String help_Result) {
         Help_Result = help_Result;
     }
+
+
 }

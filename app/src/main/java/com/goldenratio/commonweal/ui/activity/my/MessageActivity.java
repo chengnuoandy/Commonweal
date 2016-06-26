@@ -111,7 +111,7 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         } else if (currentIndex == 1 && position == 0) // 1->0
         {
             mLp.leftMargin = (int) (-(1 - positionOffset) * (screenWidth * 1.0 / 2) + currentIndex
-                    * (screenWidth / 2) + (screenWidth / 5) + 1);
+                    * (screenWidth / 2) + (screenWidth / 6) + 1);
             Log.i("由1---0", mLp.leftMargin + "");
 
         }
@@ -163,7 +163,7 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         Log.i("width", screenWidth + "");
         LinearLayout.LayoutParams mLp = (LinearLayout.LayoutParams) mIvMessageTab
                 .getLayoutParams();
-        mLp.width = screenWidth / 7;
+        mLp.width = screenWidth / 6;
         Log.i("leftMargin0", mLp.leftMargin + "");
         mIvMessageTab.setLayoutParams(mLp);
     }

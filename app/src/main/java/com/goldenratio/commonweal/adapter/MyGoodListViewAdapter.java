@@ -37,7 +37,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
     @Override
     public String getItem(int position) {
-        return mGoodList.get(position).getUser_Name();
+        return mGoodList.get(position).getGoods_Name();
     }
 
     @Override

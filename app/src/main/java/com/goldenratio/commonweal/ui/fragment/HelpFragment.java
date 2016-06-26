@@ -61,21 +61,6 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
         initData();
         topSliding();
         mListView.setOnItemClickListener(this);
-        for (int i = 0; i < 5; i++) {
-            Good good = new Good();
-            good.setUser_Name("张杰");
-            good.save(getContext(), new SaveListener() {
-                @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onFailure(int i, String s) {
-                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-
-                }
-            });
-        }
         return view;
     }
 

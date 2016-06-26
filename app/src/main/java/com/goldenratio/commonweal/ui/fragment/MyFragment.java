@@ -123,6 +123,7 @@ public class MyFragment extends Fragment {
             Log.i("ud", avaUrl);
         }
         cursor.close();
+        mTvName.setBackgroundResource(R.color.white);
         mTvName.setText(autograph);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
     }

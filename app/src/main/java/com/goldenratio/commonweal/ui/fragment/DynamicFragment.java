@@ -14,9 +14,9 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyDynFragmentPagerAdapter;
-import com.goldenratio.commonweal.ui.fragment.Dynamic.HelpDynamicFragment;
-import com.goldenratio.commonweal.ui.fragment.Dynamic.OfficialDynamicFragment;
-import com.goldenratio.commonweal.ui.fragment.Dynamic.PersonalDynamicFragment;
+import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
+import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
+import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
 
     @BindView(R.id.tv_official)
     TextView mTvOfficial;
-    @BindView(R.id.tv_dynamic)
+    @BindView(R.id.tv_Help)
     TextView mTvDynamic;
     @BindView(R.id.tv_personal)
     TextView mTvPersonal;
@@ -77,13 +77,13 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         return view;
     }
 
-    @OnClick({R.id.tv_official, R.id.tv_dynamic, R.id.tv_personal})
+    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_official:
                 mVpDynamic.setCurrentItem(0);
                 break;
-            case R.id.tv_dynamic:
+            case R.id.tv_Help:
                 mVpDynamic.setCurrentItem(1);
                 break;
             case R.id.tv_personal:

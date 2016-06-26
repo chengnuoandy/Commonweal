@@ -15,6 +15,8 @@ import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
 /**
  * Created by 龙啸天 on 2016/6/20 0020.
+ *
+ * 承担主页viewPager与主页四个fragment的适配（四个界面的滑动切换）
  */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGER_COUNT = 4;

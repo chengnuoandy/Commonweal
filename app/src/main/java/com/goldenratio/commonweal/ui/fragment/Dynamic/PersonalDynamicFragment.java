@@ -1,4 +1,4 @@
-package com.goldenratio.commonweal.ui.fragment.Dynamic;
+package com.goldenratio.commonweal.ui.fragment.dynamic;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

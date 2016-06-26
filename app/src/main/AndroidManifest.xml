@@ -72,7 +72,7 @@
             android:name=".ui.activity.my.MySetActivity"
             android:label="@string/title_activity_my_set"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.activity.MySetActivity"></activity>
+        <activity android:name=".ui.activity.my.MySetActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.goldenratio.commonweal.bean;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
@@ -16,7 +18,7 @@ public class Good extends BmobObject {
     private String Goods_Type; //物品类型
     private String Goods_Name; //物品名称
     private String Goods_Video; //物品介绍视频
-    private String Goods_Photos; //物品介绍照片
+    private List Goods_Photos; //物品介绍照片
     private String Goods_Description; //物品描述
     private int Goods_Donation_Rate; //物品用于捐款的比例
     private int Goods_Price; //物品的起步价
@@ -62,11 +64,11 @@ public class Good extends BmobObject {
         Goods_NO = goods_NO;
     }
 
-    public String getGoods_Photos() {
+    public List getGoods_Photos() {
         return Goods_Photos;
     }
 
-    public void setGoods_Photos(String goods_Photos) {
+    public void setGoods_Photos(List goods_Photos) {
         Goods_Photos = goods_Photos;
     }
 

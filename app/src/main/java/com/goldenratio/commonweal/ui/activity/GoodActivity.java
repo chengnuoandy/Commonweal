@@ -15,13 +15,20 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.PhotoGridViewAdapter;
+import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by Kiuber on 2016/6/11.
@@ -49,7 +56,9 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         setContentView(R.layout.activity_good);
         initView();
         imageSelectConfig();
+        UploadData(1,1);
     }
+
 
     private void initView() {
         mLi = LayoutInflater.from(GoodActivity.this);
@@ -83,6 +92,34 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         mIntent.putExtra("price", price);
         mIntent.putExtra("prop", prop);
         startActivityForResult(mIntent, 1);
+    }
+
+    /**
+     * 把拍卖信息上传至服务器
+     * 包含 拍卖截至时间、
+     * @param day 时长-天
+     * @param hour 时长-小时
+     */
+    private void UploadData(int day,int hour) {
+        Good mGood = new Good();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Long date = System.currentTimeMillis() + day * 24 * 60 * 60 * 1000 + hour * 60 * 60 * 1000;
+        Date curDate = new Date(date);//转换时间
+        String str = formatter.format(curDate);
+        Log.d(TAG, "testDate: now time--->"+str);
+        mGood.setGoods_UpDate(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss",str));
+        mGood.setGoods_UpDateM(date);
+        mGood.save(this, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(GoodActivity.this, "上传数据成功！", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Toast.makeText(GoodActivity.this, "上传数据失败！", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void imageSelectConfig() {

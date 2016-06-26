@@ -61,7 +61,7 @@
             android:drawableLeft="@drawable/user_password_unlock"
             android:drawablePadding="@dimen/normal_space"
             android:hint="请输入密码"
-            android:inputType="numberPassword"
+            android:inputType="textPassword"
             android:padding="@dimen/normal_space"
             android:textSize="@dimen/text_size_default" />
 

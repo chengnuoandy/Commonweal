@@ -24,6 +24,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 import org.w3c.dom.Text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,10 +197,11 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
         Intent intent = new Intent(getContext(), HelpContentActivity.class);
         intent.putExtra("title", mHelpLlist.get(position - 2).getHelp_Title());//标题
         intent.putExtra("pic", mHelpLlist.get(position - 2).getHelp_Top_pic());//图片
-        intent.putExtra("sponsor", mHelpLlist.get(position - 2).getHelp_Sponsor());//赞助方
         intent.putExtra("initiator", mHelpLlist.get(position - 2).getHelp_Initiator());//发起方，执行方
         intent.putExtra("content", mHelpLlist.get(position - 2).getHelp_Content_content());//项目内容简介
+        intent.putExtra("help",mHelpLlist.get(position-2).getHelp_help());//项目用途
 //        Log.d("CN", "onItemClick: "+mList.get(position-2).getHelp_Top_Pic());
+
         startActivity(intent);
     }
 }

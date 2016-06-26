@@ -6,45 +6,65 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="100">
+        android:layout_weight="10">
+
         <include layout="@layout/help_content_activity"/>
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        >
+        android:layout_height="50dp">
 
-        <TextView
-            android:paddingLeft="10dp"
+        <ImageButton
+            android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="评论"
+            android:background="@drawable/help_discuss"
             android:textSize="20sp"
-            />
-        <TextView
-            android:paddingLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="点赞"
-            android:textSize="20sp"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/ib_discuss" />
 
-        <TextView
-            android:paddingLeft="10dp"
+        <ImageButton
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分享"
+            android:background="@drawable/help_share"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/ib_lick"
             android:textSize="20sp"
             android:id="@+id/textView5" />
 
         <TextView
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
             android:layout_gravity="right"
-            android:paddingLeft="20dp"
+
             android:layout_width="wrap_content"
+            android:layout_marginRight="20dp"
             android:layout_height="wrap_content"
             android:text="捐款"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
             android:textSize="20sp"/>
-    </LinearLayout>
+
+        <ImageButton
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/help_like"
+            android:layout_marginLeft="15dp"
+
+            android:id="@+id/ib_lick"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/ib_discuss"
+            android:layout_toEndOf="@+id/ib_discuss"
+            android:layout_marginStart="15dp" />
+    </RelativeLayout>
 </LinearLayout>

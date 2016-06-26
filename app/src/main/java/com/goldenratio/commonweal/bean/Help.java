@@ -60,6 +60,16 @@ public class Help extends BmobObject {
         return Help_Type;
     }
 
+    private String Help_help;//帮助项目
+
+    public String getHelp_help() {
+        return Help_help;
+    }
+
+    public void setHelp_help(String help_help) {
+        Help_help = help_help;
+    }
+
     public String getHelp_Content_content() {
         return Help_Content_content;
     }

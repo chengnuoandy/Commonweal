@@ -53,6 +53,11 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
     private List<Fragment> mFragmentList;
 
+    private final int PAGE_ONE = 0;
+    private final int PAGE_TWO = 1;
+    private final int PAGE_THREE = 2;
+    private final int PAGE_FOUR = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

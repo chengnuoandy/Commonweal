@@ -21,13 +21,21 @@ public class User extends BmobObject {
     private String User_Money;//用户余额
     private String User_WbID; //绑定的微博ID
     private String User_sex; //用户性别
-    /** 用户头像地址，50×50像素 */
+    /**
+     * 用户头像地址，50×50像素
+     */
     public String User_image_min;
-    /** 用户大头像地址 */
+    /**
+     * 用户大头像地址
+     */
     public String User_image_max;
-    /** 用户高清大头像地址 */
+    /**
+     * 用户高清大头像地址
+     */
     public String User_image_hd;
-    /** 认证原因 */
+    /**
+     * 认证原因
+     */
     public String verified_reason;
 
 

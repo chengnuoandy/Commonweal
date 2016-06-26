@@ -56,6 +56,7 @@
     </style>
 
     <style name="fragment_my_style">
+        <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:padding">@dimen/normal_space</item>
         <item name="android:layout_weight">1</item>
         <item name="android:gravity">center</item>

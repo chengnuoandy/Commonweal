@@ -29,8 +29,6 @@ public class MyFragment extends Fragment {
     CircleImageView mAvatar;
     @BindView(R.id.tv_name)
     TextView mTvName;
-    @BindView(R.id.gridview)
-    GridView gridView;
 
     private boolean isLogin = false;
     private String mUserID;
@@ -41,8 +39,6 @@ public class MyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my, null);
 
         ButterKnife.bind(this, view);
-
-        gridView.setAdapter(new MyGridAdapter(getContext()));
 
         if (isUserTableExist()) {
             getUserData(mUserID);

@@ -10,23 +10,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
+import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.activity.HelpContentActivity;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 
-public class HelpFragment extends Fragment implements AdapterView.OnItemClickListener{
+import static java.security.AccessController.getContext;
+
+public class HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
@@ -53,8 +61,24 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
         initData();
         topSliding();
         mListView.setOnItemClickListener(this);
+        for (int i = 0; i < 5; i++) {
+            Good good = new Good();
+            good.setUser_Name("张杰");
+            good.save(getContext(), new SaveListener() {
+                @Override
+                public void onSuccess() {
+                }
+
+                @Override
+                public void onFailure(int i, String s) {
+                    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
         return view;
     }
+
     private View initView() {
         View view = View.inflate(getContext(), R.layout.fragment_help, null);
         mListView = (PullToRefreshListView) view.findViewById(R.id.lv_help);
@@ -63,7 +87,6 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
         indicator = (CirclePageIndicator) mHeaderView.findViewById(R.id.indicator);
         Log.d("CN", "initView: ++++++++++++++++++++++++++++++++++++++");
         //头文件
-
 
 
         mListView.addHeaderView(mHeaderView);
@@ -79,16 +102,18 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
 
             }
         });
-         return view;
+        return view;
     }
-private List<Help> mHelpLlist;
+
+    private List<Help> mHelpLlist;
+
     public void initData() {
         BmobQuery<Help> bmobQuery = new BmobQuery<>();
         bmobQuery.order("-createdAt");
         bmobQuery.findObjects(getContext(), new FindListener<Help>() {
             @Override
             public void onSuccess(List<Help> list) {
-                mHelpLlist=list;
+                mHelpLlist = list;
 //
 //                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
 //                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
@@ -98,7 +123,8 @@ private List<Help> mHelpLlist;
                 mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
                 mListView.onRefreshComplete();
             }
-             @Override
+
+            @Override
             public void onError(int i, String s) {
 
                 Log.i("bmob", "下载失败：" + s);
@@ -113,12 +139,13 @@ private List<Help> mHelpLlist;
 
                 mList = list;
                 mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
-                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
+                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), list));
                 indicator.setViewPager(mViewPager);
                 indicator.setSnap(true);
 
 
             }
+
             @Override
             public void onError(int i, String s) {
 
@@ -128,13 +155,10 @@ private List<Help> mHelpLlist;
         });
 
     }
-        // 获取头部数据
+    // 获取头部数据
 
 
-
-
-
-    public void topSliding(){
+    public void topSliding() {
           /*
            实现图片轮播
          */
@@ -145,7 +169,7 @@ private List<Help> mHelpLlist;
                     int currentItem = mViewPager.getCurrentItem();
                     currentItem++;
 
-                    if (currentItem > mList.size()-1) {
+                    if (currentItem > mList.size() - 1) {
                         currentItem = 0;// 如果已经到了最后一个页面,跳到第一页
                     }
 
@@ -163,12 +187,12 @@ private List<Help> mHelpLlist;
 
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getContext(),HelpContentActivity.class);
-        intent.putExtra("title",mHelpLlist.get(position-2).getHelp_Title());//标题
-        intent.putExtra("pic",mHelpLlist.get(position-2).getHelp_Top_pic());//图片
-        intent.putExtra("sponsor",mHelpLlist.get(position-2).getHelp_Sponsor());//赞助方
-        intent.putExtra("initiator",mHelpLlist.get(position-2).getHelp_Initiator());//发起方，执行方
-        intent.putExtra("content",mHelpLlist.get(position-2).getHelp_Content_content());//项目内容简介
+        Intent intent = new Intent(getContext(), HelpContentActivity.class);
+        intent.putExtra("title", mHelpLlist.get(position - 2).getHelp_Title());//标题
+        intent.putExtra("pic", mHelpLlist.get(position - 2).getHelp_Top_pic());//图片
+        intent.putExtra("sponsor", mHelpLlist.get(position - 2).getHelp_Sponsor());//赞助方
+        intent.putExtra("initiator", mHelpLlist.get(position - 2).getHelp_Initiator());//发起方，执行方
+        intent.putExtra("content", mHelpLlist.get(position - 2).getHelp_Content_content());//项目内容简介
 //        Log.d("CN", "onItemClick: "+mList.get(position-2).getHelp_Top_Pic());
         startActivity(intent);
     }

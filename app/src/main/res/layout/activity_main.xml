@@ -21,6 +21,7 @@
     <RadioGroup
         android:id="@+id/rg_tabs"
         android:layout_width="match_parent"
+        android:background="@color/snow"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -78,7 +79,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/little_space"
             android:layout_weight="1"
-            android:background="@color/white"
             android:button="@null"
             android:drawablePadding="3dp"
             android:drawableTop="@drawable/tab_my_ic_selector"

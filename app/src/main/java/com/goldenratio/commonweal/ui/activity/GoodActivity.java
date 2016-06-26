@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.PhotoGridViewAdapter;
-import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
@@ -26,9 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by Kiuber on 2016/6/11.
@@ -48,7 +44,9 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
 
     private LinearLayout mLlAddPhoto;
     private ImageConfig imageConfig;
-    private PhotoGridViewAdapter mPhotoAdapter;
+    private MyGoodPicAdapter mPicAdapter;
+    private TextView mTvType;
+    private List<String> pathList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,8 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
 
     private void initView() {
         mLi = LayoutInflater.from(GoodActivity.this);
-        findViewById(R.id.tv_type).setOnClickListener(this);
+        mTvType = (TextView) findViewById(R.id.tv_type);
+        mTvType.setOnClickListener(this);
         TVprice = (TextView) findViewById(R.id.tv_price);
         mGvShowPhoto = (GridView) findViewById(R.id.gv_show_photos);
         mLlAddPhoto = (LinearLayout) findViewById(R.id.ll_add_photo);
@@ -74,6 +73,8 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_type:
+                Intent intent = new Intent(this, GoodTypeActivity.class);
+                startActivityForResult(intent, GOOD_TYPE);
                 break;
             case R.id.tv_price:
                 showPriceView();
@@ -157,27 +158,33 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                     Log.d(TAG, "onActivityResult: price=" + data.getStringExtra("price") + "prop=" + data.getStringExtra("prop"));
                 }
                 break;
+            case 2:
+                if (resultCode == Activity.RESULT_OK) {
+                    mTvType.setText("类目：" + data.getStringExtra("type"));
+                }
+                break;
         }
         if (requestCode == ImageSelector.IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             // Get Image Path List
-            List<String> pathList = data.getStringArrayListExtra(ImageSelectorActivity.EXTRA_RESULT);
+            pathList = data.getStringArrayListExtra(ImageSelectorActivity.EXTRA_RESULT);
             mGvShowPhoto.setVisibility(View.VISIBLE);
-            mPhotoAdapter = new PhotoGridViewAdapter(this, pathList);
-            mGvShowPhoto.setAdapter(mPhotoAdapter);
+            mPicAdapter = new MyGoodPicAdapter(this, pathList, mGvShowPhoto);
+            mGvShowPhoto.setAdapter(mPicAdapter);
             mGvShowPhoto.setOnItemClickListener(this);
+
+
+
         }
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        ImageView mDeletePhoto = (ImageView) view.findViewById(R.id.iv_delete_selected_photo);
-        mDeletePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(GoodActivity.this, "delete", Toast.LENGTH_SHORT).show();
-                mGvShowPhoto.removeViewAt(position);
-                mPhotoAdapter.notifyDataSetChanged();
-            }
-        });
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        Toast.makeText(this, "" + parent.getId(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "" + view.getId(), Toast.LENGTH_SHORT).show();
+//        pathList.remove(position);
+//        mPicAdapter.notifyDataSetChanged();
+//        if (pathList.size() == 0) {
+//            mGvShowPhoto.setVisibility(View.GONE);
+//        }
     }
 }

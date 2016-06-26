@@ -22,17 +22,13 @@ import com.squareup.picasso.Picasso;
 public class HelpContentActivity extends Activity{
    private TextView tv_content_title;//标题
    private ImageView iv_content_pic;//图片
-    private TextView tv_content_sponsor;//赞助方
     private TextView tv_content_initiator;//发起方&执行方
     private TextView tv_content_content;//项目简介
-
-
-
     private TextView tv_btn_reading;//阅读全文  点击
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.help_content_activity);
+        setContentView(R.layout.help_content_end);
 
 
         //数据库填充内容
@@ -54,7 +50,7 @@ public class HelpContentActivity extends Activity{
 
         tv_content_title = (TextView) findViewById(R.id.tv_content_title);
         iv_content_pic = (ImageView) findViewById(R.id.iv_content_top);
-        tv_content_sponsor = (TextView) findViewById(R.id.sponsor);
+
         tv_content_initiator = (TextView) findViewById(R.id.initiator);
         tv_content_content = (TextView) findViewById(R.id.tv_content_content);
 
@@ -87,15 +83,11 @@ public class HelpContentActivity extends Activity{
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
         String pic = intent.getStringExtra("pic");
-        String patron = intent.getStringExtra("patron");
-        String sponsor = intent.getStringExtra("sponsor");
         String initiator = intent.getStringExtra("initiator");
         String content = intent.getStringExtra("content");
 //        Log.d("CN", "Activity+++++++++++++onCreate: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+title);
         tv_content_title .setText(title);
-        tv_content_sponsor.setText(patron);
         tv_content_initiator.setText(initiator);
-        tv_content_sponsor.setText(sponsor);
         tv_content_content.setText(content);
         Picasso.with(HelpContentActivity.this).load(pic).resize(screenWidth,(screenHeigh/3)).into(iv_content_pic);//.override(screenWidth,200)
 

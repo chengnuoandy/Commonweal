@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
 
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <include layout="@layout/help_content_item"/>
     <ScrollView
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+
             android:id="@+id/fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <ImageView
+
                 android:id="@+id/iv_content_top"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
@@ -42,26 +47,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="8dp"
                     android:text="发起并执行"
                     android:id="@+id/textView4" />
 
-                <TextView
-                    android:id="@+id/sponsor"
-                    android:paddingLeft="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="****公益基金会"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="赞助" />
             </LinearLayout>
 
             <TextView
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray"
@@ -87,14 +82,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="来自发起者的话"
-                    android:textColor="@color/black"
-                    android:textSize="26sp" />
+
 
                 <TextView
                     android:id="@+id/tv_reading"
@@ -108,12 +96,13 @@
             </LinearLayout>
 
             <TextView
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,126 +124,64 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="20dp"
                         android:orientation="horizontal">
 
 
                         <TextView
+                            android:id="@+id/tv_help_1"
+                            android:paddingLeft="20dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="文具"
-                            android:textSize="20sp" />
-
+                            android:textSize="30sp" />
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tv_help_2"
+                            android:paddingLeft="40dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="文具" />
-
+                            android:text="书籍"
+                            android:textSize="30sp" />
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tv_help_3"
+                            android:paddingLeft="40dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="文具" />
+                            android:text="衣服"
+                            android:textSize="30sp" />
+                        <TextView
+                            android:id="@+id/tv_help_4"
+                            android:paddingLeft="40dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="**"
+                            android:textSize="30sp" />
+                        <TextView
+                            android:id="@+id/tv_help_5"
+                            android:paddingLeft="40dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="**"
+                            android:textSize="30sp" />
+
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_subsidizetitle"
-                    android:layout_centerHorizontal="true"
-                    android:paddingTop="20dp"
-                    android:text="资助方详情 >"
-                    android:textColor="@color/normal_orange_color" />
-
-                <TextView
-                    android:id="@+id/tv_subsidizetitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/tv_content_subsidize"
-                    android:layout_alignStart="@+id/tv_content_subsidize"
-                    android:layout_below="@+id/tv_content_subsidize"
-                    android:paddingTop="15dp"
-                    android:text="山东省星公益基金会" />
-
-                <TextView
-
-                    android:id="@+id/tv_content_subsidize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/subsidize_logo"
-                    android:layout_centerHorizontal="true"
-                    android:text="山东省星公益基金会" />
-
-                <ImageView
-                    android:id="@+id/subsidize_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:paddingTop="15dp"
-                    android:src="@mipmap/good_video" />
-
-            </RelativeLayout>
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_publictitle"
-                    android:layout_centerHorizontal="true"
-                    android:paddingTop="20dp"
-                    android:text="资助方详情 >"
-                    android:textColor="@color/normal_orange_color" />
 
-                <TextView
-                    android:id="@+id/tv_publictitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/tv_content_public"
-                    android:layout_alignStart="@+id/tv_content_public"
-                    android:layout_below="@+id/tv_content_public"
-                    android:paddingTop="15dp"
-                    android:text="山东省星公益基金会" />
 
-                <TextView
-
-                    android:id="@+id/tv_content_public"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/public_logo"
-                    android:layout_centerHorizontal="true"
-                    android:text="山东省星公益基金会" />
-
-                <ImageView
-                    android:id="@+id/public_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:paddingTop="15dp"
-                    android:src="@mipmap/good_video" />
-
-            </RelativeLayout>
 
             <TextView
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray"
@@ -374,17 +301,23 @@
                     android:text="听听他们怎么说"
                     android:textSize="20sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/gray"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp" />
-
                 <ListView
+                    android:id="@+id/lv_help_contnet_official_language"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ListView>
+                    android:layout_height="wrap_content">
+
+                </ListView>
             </LinearLayout>
+
+
+            <TextView
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -396,25 +329,15 @@
                     android:text="讨论" />
 
                 <ListView
+                    android:id="@+id/lv_help_discuss"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ListView>
+                    android:layout_height="wrap_content">
+
+                </ListView>
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textSize="30dp"
-         android:text="评论"/>
-        <TextView
-            android:paddingLeft="60dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30dp"
-            android:text="捐款"/>
-    </LinearLayout>
+
+
 </LinearLayout>

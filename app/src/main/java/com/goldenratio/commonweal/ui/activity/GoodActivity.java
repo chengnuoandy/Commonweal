@@ -57,7 +57,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         setContentView(R.layout.activity_good);
         initView();
         imageSelectConfig();
-        UploadData(1, 1);
+      // UploadData(0, 0,1);
     }
 
 
@@ -105,15 +105,17 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
      * @param day  时长-天
      * @param hour 时长-小时
      */
-    private void UploadData(int day, int hour) {
+    private void UploadData(int day, int hour,int minute) {
         Good mGood = new Good();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Long date = System.currentTimeMillis() + day * 24 * 60 * 60 * 1000 + hour * 60 * 60 * 1000;
+        Long date = System.currentTimeMillis() + day * 24 * 60 * 60 * 1000 + hour * 60 * 60 * 1000 + minute * 60 * 1000;
         Date curDate = new Date(date);//转换时间
         String str = formatter.format(curDate);
         Log.d(TAG, "testDate: now time--->" + str);
         mGood.setGoods_UpDate(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", str));
         mGood.setGoods_UpDateM(date);
+        mGood.setGoods_ID(String.valueOf(5));
+        mGood.setGoods_Name("张杰");
         mGood.save(this, new SaveListener() {
             @Override
             public void onSuccess() {

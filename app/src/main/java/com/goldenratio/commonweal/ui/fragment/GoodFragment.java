@@ -62,4 +62,28 @@ public class GoodFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (null != myGoodListViewAdapter) {
+            myGoodListViewAdapter.startRefreshTime();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (null != myGoodListViewAdapter) {
+            myGoodListViewAdapter.cancelRefreshTime();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (null != myGoodListViewAdapter) {
+            myGoodListViewAdapter.cancelRefreshTime();
+        }
+    }
 }

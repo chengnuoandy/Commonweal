@@ -401,6 +401,10 @@ public class RegisterActivity extends Activity {
         }
     }
 
+    private void showInputDialog(){
+
+    }
+
     /**
      * 数据库相关逻辑
      *
@@ -504,7 +508,6 @@ public class RegisterActivity extends Activity {
     }
 
     // List<String> dataList = new ArrayList<String>();
-
 
     private void getUDefAvatarUrl() {
         int rndNum = (int) (Math.random() * 9);

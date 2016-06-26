@@ -21,6 +21,9 @@ import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.bmob.v3.Bmob;
@@ -48,10 +51,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private long exitTime = 0;
 
-    public static final int PAGE_ONE = 0;
-    public static final int PAGE_TWO = 1;
-    public static final int PAGE_THREE = 2;
-    public static final int PAGE_FOUR = 3;
+    private List<Fragment> mFragmentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,14 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         //初始化Bmob
         Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
 
-        mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
+        mFragmentList = new ArrayList<Fragment>();
+
+        mFragmentList.add(new HelpFragment());
+        mFragmentList.add(new GoodFragment());
+        mFragmentList.add(new DynamicFragment());
+        mFragmentList.add(new MyFragment());
+
+        mMyFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList);
         mRgTabs.setOnCheckedChangeListener(this);
         mRbDefault.setChecked(true);
 

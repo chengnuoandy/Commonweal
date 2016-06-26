@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.adapter.MyGridAdapter;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
@@ -29,6 +31,10 @@ public class MyFragment extends Fragment {
     CircleImageView mAvatar;
     @BindView(R.id.tv_name)
     TextView mTvName;
+    @BindView(R.id.gridview)
+    GridView gridView;
+    @BindView(R.id.iv_my_message)
+    ImageView mIvMessage;
 
     private boolean isLogin = false;
     private String mUserID;
@@ -49,7 +55,7 @@ public class MyFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
@@ -62,6 +68,10 @@ public class MyFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "用户已经登陆", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.id.iv_my_message:
+                Intent intent = new Intent(getActivity(), MessageActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

@@ -12,6 +12,8 @@ import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
+import java.util.List;
+
 
 /**
  * Created by 龙啸天 on 2016/6/20 0020.
@@ -19,25 +21,21 @@ import com.goldenratio.commonweal.ui.fragment.MyFragment;
  * 承担主页viewPager与主页四个fragment的适配（四个界面的滑动切换）
  */
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
-    private final int PAGER_COUNT = 4;
-    private HelpFragment mHelpFragment = null;
-    private GoodFragment mGoodFragment = null;
-    private DynamicFragment mDynamicFragment = null;
-    private MyFragment mMyFragment = null;
+    private List<Fragment> mFragmentList;
 
-
-    public MyFragmentPagerAdapter(FragmentManager fm) {
+    public MyDynFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
-        mHelpFragment = new HelpFragment();
-        mGoodFragment = new GoodFragment();
-        mDynamicFragment = new DynamicFragment();
-        mMyFragment = new MyFragment();
+        this.mFragmentList = fragmentList;
     }
 
+    @Override
+    public Fragment getItem(int position) {
+        return mFragmentList.get(position);
+    }
 
     @Override
     public int getCount() {
-        return PAGER_COUNT;
+        return mFragmentList.size();
     }
 
     @Override
@@ -47,28 +45,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        Log.i("main", "destroyItem: " + position);
+        Log.i("dynamic", "destroyItem: " + position);
         super.destroyItem(container, position, object);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        Fragment fragment = null;
-        switch (position) {
-            case MainActivity.PAGE_ONE:
-                fragment = mHelpFragment;
-                break;
-            case MainActivity.PAGE_TWO:
-                fragment = mGoodFragment;
-                break;
-            case MainActivity.PAGE_THREE:
-                fragment = mDynamicFragment;
-                break;
-            case MainActivity.PAGE_FOUR:
-                fragment = mMyFragment;
-                break;
-        }
-        return fragment;
     }
 
 }

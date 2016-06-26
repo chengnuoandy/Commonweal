@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.adapter.MyDynFragmentPagerAdapter;
+import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
 import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
@@ -67,12 +67,8 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mFragmentList.add(new HelpDynamicFragment());
         mFragmentList.add(new PersonalDynamicFragment());
 
-    /*    mPtsTitle = (PagerTabStrip) view.findViewById(R.id.pts_title);
-        mPtsTitle.setDrawFullUnderline(false);
-        mPtsTitle.setTabIndicatorColor(Color.RED);*/
-
         initTabLineWidth();
-        mVpDynamic.setAdapter(new MyDynFragmentPagerAdapter(getFragmentManager(), mFragmentList));
+        mVpDynamic.setAdapter(new MyFragmentPagerAdapter(getFragmentManager(), mFragmentList));
         mVpDynamic.addOnPageChangeListener(this);
         return view;
     }
@@ -192,7 +188,6 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv
                 .getLayoutParams();
         lp.width = screenWidth / 6;
-        lp.leftMargin = screenWidth / 12;
         Log.i("进度条width", lp.width + "");
         mTabLineIv.setLayoutParams(lp);
     }

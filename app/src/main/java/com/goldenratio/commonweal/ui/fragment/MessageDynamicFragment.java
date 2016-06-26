@@ -13,7 +13,7 @@ import com.goldenratio.commonweal.R;
  * 作者：Created by 龙啸天 on 2016/6/25 0025.
  * 邮箱：jxfengmtx@163.com ---17718
  *
- * 消息--动态后台代码
+ * 消息-->动态 后台代码
  */
 public class MessageDynamicFragment extends Fragment {
 

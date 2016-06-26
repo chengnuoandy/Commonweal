@@ -23,7 +23,7 @@ import java.util.List;
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragmentList;
 
-    public MyDynFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+    public MyFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
         this.mFragmentList = fragmentList;
     }

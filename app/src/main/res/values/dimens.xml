@@ -17,4 +17,5 @@
 
     <!-- 高度 -->
     <dimen name="normal_input_height">45dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

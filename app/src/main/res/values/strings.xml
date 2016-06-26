@@ -16,4 +16,5 @@
     <string name="label_billSK_backspace">删除</string>
     <string name="label_billSK_ok">确定</string>
     <string name="label_billSK_equal">=</string>
+    <string name="title_activity_my_set">MySetActivity</string>
 </resources>

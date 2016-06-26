@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.ui.activity.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
@@ -24,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Protocol;
 
 public class MyFragment extends Fragment {
     @BindView(R.id.civ_avatar)
@@ -31,11 +33,14 @@ public class MyFragment extends Fragment {
     @BindView(R.id.tv_name)
     TextView mTvName;
 
+
     @BindView(R.id.iv_my_message)
     ImageView mIvMessage;
 
     private boolean isLogin = false;
     private String mUserID;
+    private ImageView mIvSetting;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +54,10 @@ public class MyFragment extends Fragment {
             isLogin = true;
         }
 
+        mIvSetting = (ImageView) view.findViewById(R.id.iv_settings);
+
         return view;
+
     }
 
 
@@ -70,6 +78,10 @@ public class MyFragment extends Fragment {
             case R.id.iv_my_message:
                 Intent intent = new Intent(getActivity(), MessageActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.iv_settings:
+                 Intent intent1 =  new Intent(getActivity(), MySetActivity.class);
+                startActivity(intent1);
                 break;
             default:
                 break;

@@ -67,8 +67,6 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mFragmentList.add(new HelpDynamicFragment());
         mFragmentList.add(new PersonalDynamicFragment());
 
-
-
         initTabLineWidth();
         mVpDynamic.setAdapter(new MyFragmentPagerAdapter(getFragmentManager(), mFragmentList));
         mVpDynamic.addOnPageChangeListener(this);
@@ -190,7 +188,6 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv
                 .getLayoutParams();
         lp.width = screenWidth / 6;
-        lp.leftMargin = screenWidth / 12;
         Log.i("进度条width", lp.width + "");
         mTabLineIv.setLayoutParams(lp);
     }

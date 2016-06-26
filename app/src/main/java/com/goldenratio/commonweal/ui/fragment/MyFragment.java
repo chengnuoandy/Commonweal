@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
-import com.goldenratio.commonweal.adapter.MyGridAdapter;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.squareup.picasso.Picasso;
@@ -31,8 +30,7 @@ public class MyFragment extends Fragment {
     CircleImageView mAvatar;
     @BindView(R.id.tv_name)
     TextView mTvName;
-    @BindView(R.id.gridview)
-    GridView gridView;
+
     @BindView(R.id.iv_my_message)
     ImageView mIvMessage;
 

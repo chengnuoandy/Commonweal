@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
-import com.goldenratio.commonweal.adapter.MyMsgFragmentAdapter;
 import com.goldenratio.commonweal.ui.fragment.MessageDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.PrivateLetterFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,6 +40,7 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
 
+        mFragmentList = new ArrayList<>();
         mFragmentList.add(new MessageDynamicFragment());
         mFragmentList.add(new PrivateLetterFragment());
         mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList);

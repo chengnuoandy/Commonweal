@@ -18,10 +18,11 @@
             android:padding="@dimen/normal_space">
 
             <ImageView
+                android:id="@+id/iv_my_message"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_alignParentLeft="true"
-                android:src="@drawable/message" />
+                android:src="@drawable/message"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -30,13 +31,13 @@
                 android:text="我的"
                 android:textColor="@color/black"
                 android:textSize="@dimen/title_text_size"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/settings" />
+                android:src="@drawable/settings"/>
         </RelativeLayout>
 
 
@@ -59,7 +60,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/iv_unregister_head"
-                    android:tag="1" />
+                    android:tag="1"/>
 
                 <TextView
                     android:id="@+id/tv_name"
@@ -72,7 +73,7 @@
                     android:background="@color/red"
                     android:padding="@dimen/little_space"
                     android:text="登陆/注册"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"/>
 
             </RelativeLayout>
 
@@ -99,19 +100,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="100"
-                            android:textSize="36sp" />
+                            android:textSize="36sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="扔价值"
-                            android:textSize="@dimen/text_size_default" />
+                            android:textSize="@dimen/text_size_default"/>
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -124,13 +125,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="100"
-                            android:textSize="36sp" />
+                            android:textSize="36sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="拍价值"
-                            android:textSize="@dimen/text_size_default" />
+                            android:textSize="@dimen/text_size_default"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -144,34 +145,34 @@
                         style="@style/fragment_my_style"
                         android:layout_width="78dp"
                         android:drawableTop="@drawable/my_ic_pay"
-                        android:text="待付款" />
+                        android:text="待付款"/>
 
                     <TextView
                         android:id="@+id/textView4"
                         style="@style/fragment_my_style"
                         android:drawableTop="@drawable/my_ic_send"
-                        android:text="待发货" />
+                        android:text="待发货"/>
 
                     <TextView
                         style="@style/fragment_my_style"
                         android:drawableTop="@drawable/my_ic_deliver"
-                        android:text="待收货" />
+                        android:text="待收货"/>
 
                     <TextView
                         style="@style/fragment_my_style"
                         android:drawableTop="@drawable/my_ic_edit"
-                        android:text="待评价" />
+                        android:text="待评价"/>
 
                     <TextView
                         style="@style/fragment_my_style"
                         android:drawableTop="@drawable/my_ic_refund"
-                        android:text="退货" />
+                        android:text="退货"/>
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/main_bg" />
+                    android:background="@color/main_bg"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -188,12 +189,12 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="关注"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"/>
 
                     <ImageView
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -204,12 +205,12 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="收藏"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"/>
 
                     <ImageView
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -220,13 +221,13 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="晒单"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/main_bg" />
+                    android:background="@color/main_bg"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -241,12 +242,12 @@
                         android:drawableRight="@mipmap/news_cate_arr"
                         android:padding="@dimen/normal_space"
                         android:text="地址"
-                        android:textSize="@dimen/text_size_default" />
+                        android:textSize="@dimen/text_size_default"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -255,12 +256,12 @@
                         android:drawableRight="@mipmap/news_cate_arr"
                         android:padding="@dimen/normal_space"
                         android:text="邀请好友"
-                        android:textSize="@dimen/text_size_default" />
+                        android:textSize="@dimen/text_size_default"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -269,12 +270,12 @@
                         android:drawableRight="@mipmap/news_cate_arr"
                         android:padding="@dimen/normal_space"
                         android:text="邀请好友"
-                        android:textSize="@dimen/text_size_default" />
+                        android:textSize="@dimen/text_size_default"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -283,12 +284,12 @@
                         android:drawableRight="@mipmap/news_cate_arr"
                         android:padding="@dimen/normal_space"
                         android:text="邀请好友"
-                        android:textSize="@dimen/text_size_default" />
+                        android:textSize="@dimen/text_size_default"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -297,12 +298,12 @@
                         android:drawableRight="@mipmap/news_cate_arr"
                         android:padding="@dimen/normal_space"
                         android:text="邀请好友"
-                        android:textSize="@dimen/text_size_default" />
+                        android:textSize="@dimen/text_size_default"/>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/main_bg" />
+                        android:background="@color/main_bg"/>
 
                 </LinearLayout>
             </LinearLayout>

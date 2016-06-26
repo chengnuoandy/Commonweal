@@ -21,6 +21,24 @@ public class Help extends BmobObject {
     private Integer Help_CountDown;    //项目的时间倒计时
     private String Help_Result;     //项目结果
     private String Help_Content_content;//项目的内容简介
+    private String Help_Type; // 项目类型
+    private String Help_Organization; //项目负责组织
+
+
+    public String getHelp_Organization() {
+        return Help_Organization;
+    }
+
+    public void setHelp_Organization(String help_Organization) {
+        Help_Organization = help_Organization;
+    }
+
+    public void setHelp_Type(String help_Type){
+        Help_Type = help_Type;
+    }
+    public String getHelp_Type(){
+        return Help_Type;
+    }
 
     public String getHelp_Content_content() {
         return Help_Content_content;

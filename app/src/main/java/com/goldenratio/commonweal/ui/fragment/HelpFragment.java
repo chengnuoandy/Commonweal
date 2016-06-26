@@ -59,7 +59,7 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
                              Bundle savedInstanceState) {
         View view = initView();
         initData();
-        topSliding();
+        //topSliding();
         mListView.setOnItemClickListener(this);
         return view;
     }
@@ -127,6 +127,9 @@ public class HelpFragment extends Fragment implements AdapterView.OnItemClickLis
                 mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), list));
                 indicator.setViewPager(mViewPager);
                 indicator.setSnap(true);
+
+
+                topSliding();
 
 
             }

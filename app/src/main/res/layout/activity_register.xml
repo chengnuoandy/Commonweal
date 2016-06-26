@@ -153,7 +153,7 @@
         android:layout_marginTop="30dp"
         android:background="@color/white"
         android:drawableLeft="@drawable/user_password"
-        android:hint="请输入密码"
+        android:hint="请输入8-16位数字加字母组合"
         android:inputType="textPassword"
         android:maxLength="16"
         android:paddingBottom="12dp"

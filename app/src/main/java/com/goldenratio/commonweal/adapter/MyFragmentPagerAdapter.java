@@ -16,7 +16,8 @@ import java.util.List;
 
 
 /**
- * Created by 龙啸天 on 2016/6/20 0020.
+ * 作者：Created by 龙啸天 on 2016/6/20 0025.
+ * 邮箱：jxfengmtx@163.com ---17718
  *
  * 承担viewPager与fragment的适配（界面的滑动切换）
  */

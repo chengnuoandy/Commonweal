@@ -32,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,13 +87,15 @@ public class RegisterActivity extends Activity {
     @BindView(R.id.ll_agreement)
     LinearLayout mLlAgreement;
 
+
     private String APPKEY = "139216e4958f6";
     private String APPSECRET = "63512a2fcc9c9e2f5c00bbdce60d920e";
 
     private ProgressDialog mPd;
     private String mPhone;  //暂存手机号
+    private String mUserName;
     private EventHandler mEh;
-
+    EditText mEtUserName;
     private String mObjectId;
     private boolean isClickRegisterBtn = false;
     ListView mListView;
@@ -209,10 +213,10 @@ public class RegisterActivity extends Activity {
                         //  ^[a-zA-Z]\w{5,17}$
                         if (checkPassword(mPassword)) {
                             mBtnRegister.setClickable(false);
-                            showProgressDialog();
-                            if (isClickRegisterBtn)
-                                getUDefAvatarUrl();
-                            else {
+                            if (isClickRegisterBtn) {
+                                showCustomViewDialog();
+                            } else {
+                                showProgressDialog();
                                 updateUserPwdToDb();
                             }
                         } else
@@ -401,9 +405,39 @@ public class RegisterActivity extends Activity {
         }
     }
 
-    private void showInputDialog(){
+    private void showCustomViewDialog() {
+        AlertDialog.Builder builder = null;
 
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+
+        /**
+         * 设置内容区域为自定义View
+         */
+        LinearLayout registerDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_register, null);
+        mEtUserName = (EditText) registerDialog.findViewById(R.id.et_userName);
+        builder.setView(registerDialog);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mUserName = mEtUserName.getText().toString();
+                showProgressDialog();
+                getUDefAvatarUrl();
+            }
+        });
+        builder.setNegativeButton("跳过", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showProgressDialog();
+                getUDefAvatarUrl();
+            }
+        });
+
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
+
 
     /**
      * 数据库相关逻辑
@@ -419,8 +453,12 @@ public class RegisterActivity extends Activity {
     private void addUserInfoToDB(String hdUrl, String maxUrl, String minUrl, String aut) {
         //密码md5加密
         String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
+        if (TextUtils.isEmpty(mUserName)) {
+            mUserName = "Love" + getRndUserName(6);
+        }
         User u = new User();
         u.setUser_Phone(mPhone);
+        u.setUser_Name(mUserName);
         u.setUser_Password(mD5Pwd);
         u.setUser_image_hd(hdUrl);
         u.setUser_image_max(maxUrl);
@@ -573,6 +611,23 @@ public class RegisterActivity extends Activity {
         Pattern p = Pattern.compile(regPw);
         Matcher m = p.matcher(pw);
         return m.matches();
+    }
+
+    /**
+     * @param length 产生随机的字符串长度
+     * @return 随机字符串
+     */
+    public static String getRndUserName(int length) {
+        StringBuffer buffer = new StringBuffer("0123456789" +
+                "abcdefghijklmnopqrstuvwxyz" +
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        StringBuffer sb = new StringBuffer();
+        Random r = new Random();
+        int range = buffer.length();
+        for (int i = 0; i < length; i++) {
+            sb.append(buffer.charAt(r.nextInt(range)));
+        }
+        return sb.toString();
     }
 
     @Override

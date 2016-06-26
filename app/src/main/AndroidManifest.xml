@@ -65,14 +65,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.HelpContentActivity" />
-        <activity android:name=".ui.fragment.HelpContentFragment" />
-        <activity android:name=".ui.activity.my.MessageActivity" />
-        <activity
-            android:name=".ui.activity.my.MySetActivity"
-            android:label="@string/title_activity_my_set"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.activity.my.MySetActivity"></activity>
+        <activity android:name=".ui.activity.my.MySetActivity"/>
     </application>
 
 </manifest>

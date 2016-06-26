@@ -105,13 +105,13 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         if (currentIndex == 0 && position == 0)// 0->1
         {
             mLp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 2) + currentIndex
-                    * (screenWidth / 2) + (screenWidth / 6) + 1);
+                    * (screenWidth / 2) + (screenWidth / 6));
             Log.i("由0---1", mLp.leftMargin + "");
 
         } else if (currentIndex == 1 && position == 0) // 1->0
         {
             mLp.leftMargin = (int) (-(1 - positionOffset) * (screenWidth * 1.0 / 2) + currentIndex
-                    * (screenWidth / 2) + (screenWidth / 6) + 1);
+                    * (screenWidth / 2) + (screenWidth / 6) );
             Log.i("由1---0", mLp.leftMargin + "");
 
         }

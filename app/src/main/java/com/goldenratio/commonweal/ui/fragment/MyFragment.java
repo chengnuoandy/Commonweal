@@ -31,13 +31,13 @@ public class MyFragment extends Fragment {
     @BindView(R.id.tv_name)
     TextView mTvName;
 
-
     @BindView(R.id.iv_my_message)
     ImageView mIvMessage;
+    @BindView(R.id.iv_settings)
+    ImageView mIvSetting;
 
     private boolean isLogin = false;
     private String mUserID;
-    private ImageView mIvSetting;
 
 
     @Override
@@ -52,14 +52,12 @@ public class MyFragment extends Fragment {
             isLogin = true;
         }
 
-        mIvSetting = (ImageView) view.findViewById(R.id.iv_settings);
-
         return view;
 
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:

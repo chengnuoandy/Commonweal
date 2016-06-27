@@ -131,7 +131,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 break;
             case R.id.forgetPWD:
                 Intent intentFp = new Intent(this, RegisterActivity.class);
-                startActivityForResult(intentFp, 1);
+                startActivityForResult(intentFp, 2);
                 break;
             case R.id.iv_return:
                 finish();
@@ -310,6 +310,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 //                    mLoginPhone.setText(registerReturnPhone);
 //                    mLoginPassword.setText(registerReturnPassword);
                     isLogin(registerReturnPhone,MD5Util.createMD5(registerReturnPassword));
+                }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK){
+                    String registerReturnPhone = data.getStringExtra("regi_phone");
+                    mLoginPhone.setText(registerReturnPhone);
                 }
                 break;
             default:

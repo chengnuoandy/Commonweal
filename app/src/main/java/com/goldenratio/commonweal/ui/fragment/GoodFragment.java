@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
@@ -40,8 +42,10 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
 
         initView();
         initData();
+        ifTime();
         return view;
     }
+
 
     /**
      * 初始化数据
@@ -79,6 +83,25 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         mLvGood.setOnItemClickListener(this);
     }
 
+    /**
+     * 判断用户本地时间是否准确
+     */
+    private void ifTime() {
+        Bmob.getServerTime(getContext(), new GetServerTimeListener() {
+            @Override
+            public void onSuccess(long time) {
+                Long t = System.currentTimeMillis();
+                Long w = time * 1000L;
+                if (t > (w+60000) || t < (w - 60000))
+                    Toast.makeText(getContext(), "检测到您的时钟与网络时间不符，可能会影响您的购买！", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int code, String msg) {
+                Log.i("lxc", "获取服务器时间失败:" + msg);
+            }
+        });
+    }
 
     /**
      * 跳转activity逻辑代码
@@ -99,6 +122,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             @Override
             public void onFailure(int code, String msg) {
                 Log.d("lxc", "获取服务器时间失败:" + msg);
+                Toast.makeText(getContext(), "获取服务器时间失败！", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -120,6 +144,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         if (null != myGoodListViewAdapter) {
             myGoodListViewAdapter.startRefreshTime();
         }
+        ifTime();
     }
 
     @Override

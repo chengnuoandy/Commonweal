@@ -40,12 +40,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_good, null);
-        view.findViewById(R.id.iv_add_good).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), GoodActivity.class));
-            }
-        });
 
         initView();
         initData();
@@ -65,6 +59,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             public void onSuccess(List<Good> list) {
                 myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
                 mListView.setAdapter(myGoodListViewAdapter);
+                mListView.onRefreshComplete();
                 mGoodList = list;
             }
 
@@ -80,12 +75,20 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      */
     private void initView() {
 
+        view.findViewById(R.id.iv_add_good).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), GoodActivity.class));
+            }
+        });
         mListView = (PullToRefreshListView) view.findViewById(R.id.lv_good_all);
+        mListView.setOnItemClickListener(this);
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-                getGoodDataFromBmob();
+                //初始化数据
+                mGoodList.clear();
+                initData();
             }
 
             @Override
@@ -94,25 +97,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             }
         });
 
-    }
-    private void getGoodDataFromBmob() {
-        BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
-        goodBmobQuery.order("-createdAt");
-        goodBmobQuery.findObjects(getContext(), new FindListener<Good>() {
-            @Override
-            public void onSuccess(List<Good> list) {
-                myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
-                mListView.setAdapter(myGoodListViewAdapter);
-                mListView.onRefreshComplete();
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                Toast.makeText(getContext(),"获取数据失败",Toast.LENGTH_LONG).show();
-                mListView.onRefreshComplete();
-            }
-
-        });
     }
 
     /**
@@ -165,9 +149,10 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //获取当前条目的截止时间
-        endTime = mGoodList.get(position).getGoods_UpDateM();
+        endTime = mGoodList.get(position - 1).getGoods_UpDateM();
         StartAct();
     }
+
 
     //    以下为生命周期部分
     @Override

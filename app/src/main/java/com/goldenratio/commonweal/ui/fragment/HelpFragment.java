@@ -149,6 +149,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
                 indicator.setSnap(true);
 
 
+
                 topSliding();
 
 

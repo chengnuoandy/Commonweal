@@ -34,7 +34,6 @@ public class MySetActivity extends Activity {
 
         isLogin = getIntent().getExtras().getBoolean("islogin");
 
-
     }
 
 

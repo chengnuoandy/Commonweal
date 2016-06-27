@@ -35,7 +35,8 @@ import cn.bmob.v3.listener.SaveListener;
 
 import static java.security.AccessController.getContext;
 
-public class HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class
+HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;

@@ -53,7 +53,7 @@ public class MySetActivity extends Activity {
      *
      * @param view
      */
-    @OnClick({R.id.tv_exit})
+    @OnClick({R.id.tv_exit, R.id.iv_set_back})
     public void onClick(View view) {
         switch (view.getId()) {
             //退出登陆
@@ -65,6 +65,10 @@ public class MySetActivity extends Activity {
                     setResult(RESULT_OK, null);
                     finish();
                 }
+                break;
+            //返回主界面
+            case R.id.iv_set_back:
+                finish();
                 break;
         }
     }

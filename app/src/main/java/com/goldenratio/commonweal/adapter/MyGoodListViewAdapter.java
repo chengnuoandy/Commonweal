@@ -101,7 +101,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         // 处理倒计时
         if (mGood.getGoods_UpDateM() > 0) {
             synchronized (mCountdownVHList) {
-//                mCountdownVHList.put(Integer.parseInt(mGood.getGoods_ID()), viewHolder);
+                mCountdownVHList.put(Integer.parseInt(mGood.getGoods_ID()), viewHolder);
             }
         }
 
@@ -167,7 +167,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mCountdownView.updateShow(mGood.getGoods_UpDateM() - curTimeMillis);
         }
 
-        public Good getBean(){
+        public Good getBean() {
             return mGood;
         }
     }

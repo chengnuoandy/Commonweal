@@ -24,5 +24,9 @@
     <com.goldenratio.commonweal.ui.view.PullToRefreshListView
         android:id="@+id/lv_help"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.goldenratio.commonweal.ui.view.PullToRefreshListView>
+        android:layout_height="wrap_content"
+        android:divider="#00000000"
+        android:dividerHeight="5dp">
+
+    </com.goldenratio.commonweal.ui.view.PullToRefreshListView>
 </LinearLayout>

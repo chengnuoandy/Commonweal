@@ -24,21 +24,28 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetServerTimeListener;
+import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 
 
 public class GoodFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "lxc";
     private View view;
-    private ListView mLvGood;
     private MyGoodListViewAdapter myGoodListViewAdapter;
     private List<Good> mGoodList;
     private Long endTime;
+    private PullToRefreshListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_good, null);
+        view.findViewById(R.id.iv_add_good).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), GoodActivity.class));
+            }
+        });
 
         initView();
         initData();
@@ -57,7 +64,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             @Override
             public void onSuccess(List<Good> list) {
                 myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
-                mLvGood.setAdapter(myGoodListViewAdapter);
+                mListView.setAdapter(myGoodListViewAdapter);
                 mGoodList = list;
             }
 
@@ -72,15 +79,40 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      * 初始化布局
      */
     private void initView() {
-        mLvGood = (ListView) view.findViewById(R.id.lv_good_all);
 
-        view.findViewById(R.id.iv_add_good).setOnClickListener(new View.OnClickListener() {
+        mListView = (PullToRefreshListView) view.findViewById(R.id.lv_good_all);
+        mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), GoodActivity.class));
+            public void onRefresh() {
+
+                getGoodDataFromBmob();
+            }
+
+            @Override
+            public void onLoadMore() {
+
             }
         });
-        mLvGood.setOnItemClickListener(this);
+
+    }
+    private void getGoodDataFromBmob() {
+        BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
+        goodBmobQuery.order("-createdAt");
+        goodBmobQuery.findObjects(getContext(), new FindListener<Good>() {
+            @Override
+            public void onSuccess(List<Good> list) {
+                myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
+                mListView.setAdapter(myGoodListViewAdapter);
+                mListView.onRefreshComplete();
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                Toast.makeText(getContext(),"获取数据失败",Toast.LENGTH_LONG).show();
+                mListView.onRefreshComplete();
+            }
+
+        });
     }
 
     /**

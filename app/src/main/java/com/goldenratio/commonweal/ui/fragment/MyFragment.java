@@ -1,14 +1,17 @@
 package com.goldenratio.commonweal.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +41,8 @@ public class MyFragment extends Fragment {
 
     private boolean isLogin = false;
     private String mUserID;
-
+    private EditText mEdText;
+    private ImageView mImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +81,8 @@ public class MyFragment extends Fragment {
                 break;
             case R.id.iv_settings:
                 Intent intent1 = new Intent(getActivity(), MySetActivity.class);
-                startActivity(intent1);
+                intent1.putExtra("islogin", isLogin);
+                startActivityForResult(intent1, 2);
                 break;
             default:
                 break;
@@ -88,6 +93,7 @@ public class MyFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
+            //登陆界面返回数据
             case 1:
                 if (resultCode == Activity.RESULT_OK) {
                     mUserID = data.getStringExtra("objectId");
@@ -96,6 +102,16 @@ public class MyFragment extends Fragment {
                     Log.i("lxc", "onActivityResult: " + mUserID);
 
                 }
+                break;
+            //设置界面返回数据
+            case 2:
+                if (resultCode == Activity.RESULT_OK) {
+                    isLogin = false;
+                    Log.i("settings", "设置返回");
+                    getActivity().finish();
+                    getActivity().startActivity(getActivity().getIntent());
+                }
+                break;
         }
     }
 

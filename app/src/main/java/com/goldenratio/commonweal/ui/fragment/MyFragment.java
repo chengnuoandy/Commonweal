@@ -35,6 +35,8 @@ public class MyFragment extends Fragment {
     ImageView mIvMessage;
     @BindView(R.id.iv_settings)
     ImageView mIvSetting;
+    @BindView(R.id.tv_exit)
+    TextView mTvExit;
 
     private boolean isLogin = false;
     private String mUserID;
@@ -77,6 +79,7 @@ public class MyFragment extends Fragment {
                 break;
             case R.id.iv_settings:
                 Intent intent1 = new Intent(getActivity(), MySetActivity.class);
+                intent1.putExtra("islogin",isLogin);
                 startActivity(intent1);
                 break;
             default:

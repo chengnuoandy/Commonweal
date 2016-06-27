@@ -144,12 +144,10 @@
 
                     <TextView
                         style="@style/fragment_my_style"
-                        android:layout_width="78dp"
                         android:drawableTop="@drawable/my_ic_pay"
                         android:text="待付款"/>
 
                     <TextView
-                        android:id="@+id/textView4"
                         style="@style/fragment_my_style"
                         android:drawableTop="@drawable/my_ic_send"
                         android:text="待发货"/>

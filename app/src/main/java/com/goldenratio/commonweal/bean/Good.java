@@ -11,6 +11,7 @@ import cn.bmob.v3.datatype.BmobDate;
  */
 
 public class Good extends BmobObject {
+    private String Goods_User_ID;
     private BmobDate Goods_UpDate; //截至日期
     private Long Goods_UpDateM; //截止日期 毫秒值
     private String Goods_NO; //物品发布顺序
@@ -23,6 +24,14 @@ public class Good extends BmobObject {
     private int Goods_Donation_Rate; //物品用于捐款的比例
     private int Goods_Price; //物品的起步价
 
+
+    public String getGoods_User_ID() {
+        return Goods_User_ID;
+    }
+
+    public void setGoods_User_ID(String goods_User_ID) {
+        Goods_User_ID = goods_User_ID;
+    }
 
     public String getGoods_Description() {
         return Goods_Description;

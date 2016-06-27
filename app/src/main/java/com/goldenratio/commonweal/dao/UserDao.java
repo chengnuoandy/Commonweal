@@ -20,11 +20,27 @@ public class UserDao {
         this.db = dbHelper.getReadableDatabase();
     }
 
-    public void execSQL(String sql) {
+    public void insert(String sql) {
         db.execSQL(sql);
     }
 
-    public void execSQL(String sql, Object[] bindArgs) {
+    public void insert(String sql, Object[] bindArgs) {
+        db.execSQL(sql, bindArgs);
+    }
+
+    public void update(String sql) {
+        db.execSQL(sql);
+    }
+
+    public void update(String sql, Object[] bindArgs) {
+        db.execSQL(sql, bindArgs);
+    }
+
+    public void delete(String sql) {
+        db.execSQL(sql);
+    }
+
+    public void delete(String sql, Object[] bindArgs) {
         db.execSQL(sql, bindArgs);
     }
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/relativelayout"
-    android:padding="@dimen/normal_space">
+    android:paddingTop="5dp">
 
     <TextView
         android:id="@+id/tv_content"
@@ -12,9 +12,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/iv_icon"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:maxLines="2"
+        android:paddingLeft="@dimen/normal_space"
+        android:paddingRight="@dimen/normal_space"
         android:text="锋娟昆仑山大军阀昆仑山大军阀绿卡傻蛋家风口浪尖阿斯顿飞快乐四大可否接口乐山大佛就快啦束带结发"
         android:textColor="#000"
         android:textSize="18sp" />
@@ -28,14 +30,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_content"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_Day"
         android:text="倒计时："
-        android:textSize="26dp"
+        android:textSize="15dp"
+        android:paddingTop="5dp"
         android:layout_below="@+id/pb_progressBar"
         android:textColor="@color/colorPrimary"
         android:layout_alignParentRight="true"
@@ -46,8 +50,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_Person"
         android:text="参与："
+        android:paddingTop="5dp"
         android:textColor="@color/colorPrimary"
-        android:textSize="26dp"
+        android:textSize="15dp"
+        android:paddingLeft="@dimen/normal_space"
         android:layout_below="@+id/pb_progressBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -68,9 +74,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="2"
-        android:text="2222222222222222222"
+        android:text="你就是我最爱的人"
         android:textColor="@color/default_title_indicator_text_color"
         android:textSize="18sp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
         android:layout_above="@+id/tv_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

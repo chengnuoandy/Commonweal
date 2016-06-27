@@ -8,15 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.bean.User;
-import com.goldenratio.commonweal.util.GlideLoader;
 
 import org.w3c.dom.Text;
 
@@ -24,8 +19,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindListener;
 import cn.iwgang.countdownview.CountdownView;
 
 /**
@@ -81,8 +74,8 @@ public class MyGoodListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public Good getItem(int position) {
-        return mGoodList.get(position);
+    public String getItem(int position) {
+        return mGoodList.get(position).getGoods_Name();
     }
 
     @Override
@@ -96,43 +89,12 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         if (viewHolder == null) {
             convertView = mInflater.inflate(R.layout.view_good_all, null);
             viewHolder = new ViewHolder();
-            viewHolder.mTvUserName = (TextView) convertView.findViewById(R.id.tv_user_name);
-            viewHolder.mTvTime = (TextView) convertView.findViewById(R.id.tv_time);
-            viewHolder.mTvName = (TextView) convertView.findViewById(R.id.tv_name);
-            viewHolder.mIvPic = (ImageView) convertView.findViewById(R.id.iv_pic);
-            viewHolder.mTvDescription = (TextView) convertView.findViewById(R.id.tv_description);
             viewHolder.initView(convertView); //初始化
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        BmobQuery<User> userBmobQuery = new BmobQuery<User>();
-        userBmobQuery.addWhereEqualTo("objectId", getItem(position).getGoods_User_ID());
-        final ViewHolder finalViewHolder = viewHolder;
-        userBmobQuery.findObjects(mContext, new FindListener<User>() {
-            @Override
-            public void onSuccess(List<User> list) {
-                for (User user : list) {
-                    finalViewHolder.mTvUserName.setText(user.getUser_Name());
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
-
-        viewHolder.mTvTime.setText(getItem(position).getCreatedAt());
-        viewHolder.mTvName.setText(getItem(position).getGoods_Name());
-
-        Glide.with(mContext)
-                .load(getItem(position).getGoods_Photos().get(0).toString())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(viewHolder.mIvPic);
-
-        viewHolder.mTvDescription.setText(getItem(position).getGoods_Description());
         Good mGood = mGoodList.get(position);
         viewHolder.bindData(mGood);
 
@@ -177,16 +139,12 @@ public class MyGoodListViewAdapter extends BaseAdapter {
     };
 
     class ViewHolder {
-        private TextView mTvUserName;
-        private TextView mTvTime;
-        private TextView mTvName;
-        private ImageView mIvPic;
-        private TextView mTvDescription;
+        private TextView mTvStarName;
         private CountdownView mCountdownView;
         private Good mGood;
 
         public void initView(View convertView) {
-            mTvUserName = (TextView) convertView.findViewById(R.id.tv_user_name);
+            mTvStarName = (TextView) convertView.findViewById(R.id.tv_star_name);
             mCountdownView = (CountdownView) convertView.findViewById(R.id.cv_good);
         }
 
@@ -200,6 +158,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                 mCountdownView.allShowZero();
             }
 
+            mTvStarName.setText(mGood.getGoods_Name());
         }
 
         public void refreshTime(long curTimeMillis) {
@@ -208,7 +167,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mCountdownView.updateShow(mGood.getGoods_UpDateM() - curTimeMillis);
         }
 
-        public Good getBean() {
+        public Good getBean(){
             return mGood;
         }
     }

@@ -1,31 +1,20 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
@@ -37,9 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UploadBatchListener;
 
 /**
  * Created by Kiuber on 2016/6/11.
@@ -63,12 +50,6 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
     private TextView mTvType;
     private List<String> pathList;
     private static final int GOOD_TYPE = 2;
-    private Button mBtnRelease;
-    private EditText mEtName, mEtDescription;
-    private String mStrType = "";
-    private String mStrTime = "";
-    private String mStrObjectId;
-    private Spinner mSrTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +57,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         setContentView(R.layout.activity_good);
         initView();
         imageSelectConfig();
-//        UploadData(1, 1);
+      // UploadData(0, 0,1);
     }
 
 
@@ -89,12 +70,6 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         mLlAddPhoto = (LinearLayout) findViewById(R.id.ll_add_photo);
         mLlAddPhoto.setOnClickListener(this);
         TVprice.setOnClickListener(this);
-        mBtnRelease = (Button) findViewById(R.id.btn_release);
-        mBtnRelease.setOnClickListener(this);
-        mEtName = (EditText) findViewById(R.id.et_name);
-        mEtDescription = (EditText) findViewById(R.id.et_description);
-        mSrTime = (Spinner) findViewById(R.id.sr_time);
-        findViewById(R.id.iv_back).setOnClickListener(this);
     }
 
     @Override
@@ -109,12 +84,6 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                 break;
             case R.id.ll_add_photo:
                 ImageSelector.open(GoodActivity.this, imageConfig);   // 开启图片选择器
-                break;
-            case R.id.btn_release:
-                saveGoodInfo2Bmob();
-                break;
-            case R.id.iv_back:
-                finish();
                 break;
         }
     }
@@ -136,7 +105,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
      * @param day  时长-天
      * @param hour 时长-小时
      */
-    private void UploadData(int day, int hour, int minute) {
+    private void UploadData(int day, int hour,int minute) {
         Good mGood = new Good();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Long date = System.currentTimeMillis() + day * 24 * 60 * 60 * 1000 + hour * 60 * 60 * 1000 + minute * 60 * 1000;
@@ -197,8 +166,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                 break;
             case 2:
                 if (resultCode == Activity.RESULT_OK) {
-                    mStrType = data.getStringExtra("type");
-                    mTvType.setText("类目：" + mStrType);
+                    mTvType.setText("类目：" + data.getStringExtra("type"));
                 }
                 break;
         }
@@ -223,83 +191,5 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
 //        if (pathList.size() == 0) {
 //            mGvShowPhoto.setVisibility(View.GONE);
 //        }
-    }
-
-    private void saveGoodInfo2Bmob() {
-
-        long[] mLgTimes = {21600000, 32400000, 43200000, 64800000, 86400000};
-        final String mStrName = mEtName.getText().toString();
-        final String mStrDescription = mEtName.getText().toString();
-        final long mLgTime = mLgTimes[mSrTime.getSelectedItemPosition()];
-        if (TextUtils.isEmpty(mStrName) || TextUtils.isEmpty(mStrDescription)
-                || TextUtils.isEmpty(pathList.toString())
-                || TextUtils.isEmpty(mStrType) || TextUtils.isEmpty(price)
-                || TextUtils.isEmpty(prop)) {
-            Toast.makeText(this, "请填写所有信息", Toast.LENGTH_SHORT).show();
-        } else {
-            UserDao userDao = new UserDao(GoodActivity.this);
-            Cursor cursor = userDao.query("select * from User");
-            while (cursor.moveToNext()) {
-                int nameColumnIndex = cursor.getColumnIndex("objectId");
-                mStrObjectId = cursor.getString(nameColumnIndex);
-            }
-            cursor.close();
-            final String[] filePaths = new String[pathList.size()];
-            for (int i = 0; i < pathList.size(); i++) {
-                filePaths[i] = pathList.get(i).toString();
-            }
-
-            doInBackground(filePaths, mStrName, mStrDescription, mLgTime);
-            finish();
-        }
-    }
-
-    private void doInBackground(final String[] filePaths, final String mStrName, final String mStrDescription, final long mLgTime) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                BmobFile.uploadBatch(GoodActivity.this, filePaths, new UploadBatchListener() {
-                    @Override
-                    public void onSuccess(List<BmobFile> list, List<String> list1) {
-                        if (filePaths.length == list1.size()) {
-                            Good good = new Good();
-                            Toast.makeText(GoodActivity.this, mStrObjectId, Toast.LENGTH_SHORT).show();
-                            good.setGoods_User_ID(mStrObjectId);
-                            good.setGoods_Name(mStrName);
-                            good.setGoods_Description(mStrDescription);
-                            good.setGoods_Photos(list1);
-                            good.setGoods_ID("2");
-                            good.setGoods_Type(mStrType);
-                            good.setGoods_Price(Integer.parseInt(price));
-                            good.setGoods_Donation_Rate(Integer.parseInt(prop));
-                            good.setGoods_UpDateM(mLgTime);
-                            good.save(GoodActivity.this, new SaveListener() {
-                                @Override
-                                public void onSuccess() {
-                                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                    vibrator.vibrate(500);
-                                    Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFailure(int i, String s) {
-                                    Toast.makeText(GoodActivity.this, s, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onProgress(int i, int i1, int i2, int i3) {
-
-                    }
-
-                    @Override
-                    public void onError(int i, String s) {
-                        Toast.makeText(GoodActivity.this, s, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).start();
     }
 }

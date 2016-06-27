@@ -35,8 +35,6 @@ public class MyFragment extends Fragment {
     ImageView mIvMessage;
     @BindView(R.id.iv_settings)
     ImageView mIvSetting;
-    @BindView(R.id.tv_exit)
-    TextView mTvExit;
 
     private boolean isLogin = false;
     private String mUserID;

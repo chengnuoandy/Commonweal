@@ -41,8 +41,6 @@ public class MyFragment extends Fragment {
 
     private boolean isLogin = false;
     private String mUserID;
-    private EditText mEdText;
-    private ImageView mImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -150,10 +148,10 @@ public class MyFragment extends Fragment {
             UserName = cursor.getString(cursor.getColumnIndex("User_Name"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
-            Log.i("ud", avaUrl);
+         //   Log.i("ud", avaUrl);
         }
         cursor.close();
-        mTvName.setBackgroundResource(R.color.white);
+        mTvName.setBackgroundResource(R.color.color_FMy_Context);
         mTvName.setTextColor(getResources().getColor(R.color.colorPrimary));
         mTvName.setText(UserName);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);

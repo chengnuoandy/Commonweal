@@ -26,20 +26,46 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="编辑个人信息"
+            android:text="个人信息"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size"/>
 
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:text="用户信息"/>
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_space"
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableRight="@mipmap/news_cate_arr"
+            android:gravity="left"
+            android:text="头像"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/user_default_avatar_v2_1_50"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_set_userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -50,10 +76,16 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/news_cate_arr"
             android:gravity="left"
-            android:text="头像"
+            android:text="用户名"
             android:textColor="@color/black"
             android:textSize="16sp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text="只能设置一次"/>
 
     </RelativeLayout>
 
@@ -63,6 +95,7 @@
         android:background="@color/main_bg"/>
 
     <RelativeLayout
+        android:id="@+id/rl_set_userNickName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -77,6 +110,12 @@
             android:textColor="@color/black"
             android:textSize="16sp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text="哈哈"/>
     </RelativeLayout>
 
     <View
@@ -85,6 +124,38 @@
         android:background="@color/main_bg"/>
 
     <RelativeLayout
+        android:id="@+id/rl_set_userSex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/news_cate_arr"
+            android:gravity="left"
+            android:text="性别"
+            android:textColor="@color/black"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text="女"/>
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_set_autograph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -98,6 +169,7 @@
             android:text="个性签名"
             android:textColor="@color/black"
             android:textSize="16sp"/>
+
     </RelativeLayout>
 
     <View
@@ -112,11 +184,12 @@
         android:padding="@dimen/normal_space">
 
         <TextView
+            android:id="@+id/tv_set_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/news_cate_arr"
             android:gravity="left"
-            android:text="地址"
+            android:text="收货地址"
             android:textColor="@color/black"
             android:textSize="16sp"/>
 

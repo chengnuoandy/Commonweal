@@ -48,72 +48,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/news_cate_arr"
-            android:gravity="left"
-            android:text="关于扔吧"
-            android:textColor="@color/black"
-            android:textSize="16sp"/>
-
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_bg"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="@dimen/normal_space">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/news_cate_arr"
-            android:gravity="left"
-            android:text="版本更新"
-            android:textColor="@color/black"
-            android:textSize="16sp"/>
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_bg"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="@dimen/normal_space">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/news_cate_arr"
-            android:gravity="left"
-            android:text="意见反馈"
-            android:textColor="@color/black"
-            android:textSize="16sp"/>
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_bg"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="@dimen/normal_space">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:gravity="left"
             android:text="清除缓存"
             android:textColor="@color/black"
@@ -127,6 +61,59 @@
             android:text="缓存大小"
             android:textSize="16sp"/>
     </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:gravity="left"
+        android:padding="@dimen/normal_space"
+        android:text="版本更新"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:gravity="left"
+        android:padding="@dimen/normal_space"
+        android:text="意见反馈"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:gravity="left"
+        android:padding="@dimen/normal_space"
+        android:text="关于我们"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
 
     <View
         android:layout_width="match_parent"

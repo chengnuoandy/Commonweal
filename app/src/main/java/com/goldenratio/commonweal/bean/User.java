@@ -11,7 +11,8 @@ import cn.bmob.v3.BmobObject;
 public class User extends BmobObject {
     private String User_NO;//用户注册顺序
     private String User_ID;//用户ID随机产生，唯一（User+随机码）
-    private String User_Name;//用户昵称
+    private String User_Name;//用户名
+    private String User_Nickname;//用户昵称
     private String User_Autograph;//用户签名
     private String User_Phone;//用户手机号
     private String User_Password;//用户密码
@@ -148,6 +149,10 @@ public class User extends BmobObject {
         User_Name = user_Name;
     }
 
+    public void setUser_Nickname(String user_Nickname) {
+        User_Nickname = user_Nickname;
+    }
+
     public void setUser_NO(String user_NO) {
         User_NO = user_NO;
     }
@@ -178,6 +183,10 @@ public class User extends BmobObject {
 
     public String getUser_Name() {
         return User_Name;
+    }
+
+    public String getUser_Nickname() {
+        return User_Nickname;
     }
 
     public String getUser_NO() {

@@ -33,7 +33,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,11 +92,12 @@ public class RegisterActivity extends Activity {
 
     private ProgressDialog mPd;
     private String mPhone;  //暂存手机号
-    private String mUserName;
+    private String mUserNickname;
     private EventHandler mEh;
-    EditText mEtUserName;
+    private EditText mEtUserNickname;
     private String mObjectId;
     private boolean isClickRegisterBtn = false;
+
     ListView mListView;
 
     @Override
@@ -409,18 +409,18 @@ public class RegisterActivity extends Activity {
         AlertDialog.Builder builder = null;
 
         builder = new AlertDialog.Builder(this);
-        builder.setTitle("提示");
+        builder.setTitle("昵称");
 
         /**
          * 设置内容区域为自定义View
          */
         LinearLayout registerDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_register, null);
-        mEtUserName = (EditText) registerDialog.findViewById(R.id.et_userName);
+        mEtUserNickname = (EditText) registerDialog.findViewById(R.id.et_userName);
         builder.setView(registerDialog);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mUserName = mEtUserName.getText().toString();
+                mUserNickname = mEtUserNickname.getText().toString();
                 showProgressDialog();
                 getUDefAvatarUrl();
             }
@@ -453,12 +453,12 @@ public class RegisterActivity extends Activity {
     private void addUserInfoToDB(String hdUrl, String maxUrl, String minUrl, String aut) {
         //密码md5加密
         String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
-        if (TextUtils.isEmpty(mUserName)) {
-            mUserName = "Love" + getRndUserName(6);
+        if (TextUtils.isEmpty(mUserNickname)) {
+            mUserNickname = "Love" + getRndUserName(6);
         }
         User u = new User();
         u.setUser_Phone(mPhone);
-        u.setUser_Name(mUserName);
+        u.setUser_Nickname(mUserNickname);
         u.setUser_Password(mD5Pwd);
         u.setUser_image_hd(hdUrl);
         u.setUser_image_max(maxUrl);

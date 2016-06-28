@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Good;
 
 import cn.iwgang.countdownview.CountdownView;
 
@@ -13,6 +14,7 @@ public class GoodDetailActivity extends Activity {
 
     private CountdownView mCountdownView;
     private Long endTime;
+    private Good mGood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,8 @@ public class GoodDetailActivity extends Activity {
     private void initData() {
         Intent intent = getIntent();
         endTime = intent.getLongExtra("EndTime", 0);
-        Log.d("lxc", "initData: ----> " + endTime);
+        mGood = (Good) intent.getSerializableExtra("Good");
+        Log.d("lxc", "initData: ----> " + mGood.getGoods_ID() +"endtime-->"+endTime);
         mCountdownView.start(endTime);
     }
 

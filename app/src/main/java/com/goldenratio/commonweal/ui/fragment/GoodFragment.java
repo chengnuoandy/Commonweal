@@ -106,7 +106,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             public void onSuccess(long time) {
                 Long t = System.currentTimeMillis();
                 Long w = time * 1000L;
-                if (t > (w + 60000) || t < (w - 60000))
+                if (t > (w + 180000) || t < (w - 180000))
                     Toast.makeText(getContext(), "检测到您的时钟与网络时间不符，可能会影响您的购买！", Toast.LENGTH_LONG).show();
             }
 
@@ -122,14 +122,14 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      * 获取现在时间与截止时间的差值 传给activity
      * 由于bmob获取时间方法限制，故提取方法作
      */
-    private void StartAct() {
+    private void StartAct(final Bundle bundle) {
         Bmob.getServerTime(getContext(), new GetServerTimeListener() {
             @Override
             public void onSuccess(long time) {
                 Long TimeLeft = endTime - (time * 1000L);
-                Log.d(TAG, "onSuccess: endtime-->" + endTime + "time---> " + time + "剩余时间---->" + TimeLeft);
                 Intent intent = new Intent(getContext(), GoodDetailActivity.class);
                 intent.putExtra("EndTime", TimeLeft);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
 
@@ -148,7 +148,9 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //获取当前条目的截止时间
         endTime = mGoodList.get(position - 1).getGoods_UpDateM();
-        StartAct();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("Good",mGoodList.get(position - 1));
+        StartAct(bundle);
     }
 
 

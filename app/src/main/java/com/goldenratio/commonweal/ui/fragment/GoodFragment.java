@@ -2,21 +2,20 @@ package com.goldenratio.commonweal.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.ui.activity.GoodActivity;
-import com.goldenratio.commonweal.ui.activity.GoodDetail;
+import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
+import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetServerTimeListener;
-import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 
 
 public class GoodFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -108,7 +106,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             public void onSuccess(long time) {
                 Long t = System.currentTimeMillis();
                 Long w = time * 1000L;
-                if (t > (w+60000) || t < (w - 60000))
+                if (t > (w + 60000) || t < (w - 60000))
                     Toast.makeText(getContext(), "检测到您的时钟与网络时间不符，可能会影响您的购买！", Toast.LENGTH_LONG).show();
             }
 
@@ -130,7 +128,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             public void onSuccess(long time) {
                 Long TimeLeft = endTime - (time * 1000L);
                 Log.d(TAG, "onSuccess: endtime-->" + endTime + "time---> " + time + "剩余时间---->" + TimeLeft);
-                Intent intent = new Intent(getContext(), GoodDetail.class);
+                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
                 intent.putExtra("EndTime", TimeLeft);
                 startActivity(intent);
             }

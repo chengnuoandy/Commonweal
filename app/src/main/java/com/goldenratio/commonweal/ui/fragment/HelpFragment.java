@@ -10,30 +10,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
 import com.goldenratio.commonweal.adapter.HelpViewPagerAdapter;
-import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Top;
-import com.goldenratio.commonweal.ui.activity.HelpContentActivity;
+import com.goldenratio.commonweal.ui.activity.HelpDetailActivity;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import org.w3c.dom.Text;
-
-import java.io.Serializable;
-import java.util.ArrayList;
+import java.text.DateFormat;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
-
-import static java.security.AccessController.getContext;
 
 public class
 HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -62,6 +54,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
         View view = initView();
         initData();
         //topSliding();
+
 
         mListView.setOnItemClickListener(this);
 //        Help help = new Help();
@@ -149,7 +142,6 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
                 indicator.setSnap(true);
 
 
-
                 topSliding();
 
 
@@ -196,14 +188,10 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
 
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getContext(), HelpContentActivity.class);
-        intent.putExtra("title", mHelpLlist.get(position - 2).getHelp_Title());//标题
-        intent.putExtra("pic", mHelpLlist.get(position - 2).getHelp_Top_pic());//图片
-        intent.putExtra("initiator", mHelpLlist.get(position - 2).getHelp_Initiator());//发起方，执行方
-        intent.putExtra("content", mHelpLlist.get(position - 2).getHelp_Content_content());//项目内容简介
-        intent.putExtra("help",mHelpLlist.get(position-2).getHelp_help());//项目用途
-//        Log.d("CN", "onItemClick: "+mList.get(position-2).getHelp_Top_Pic());
-
+        Intent intent = new Intent(getContext(), HelpDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("HelpList", mHelpLlist.get(position - 2));
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 }

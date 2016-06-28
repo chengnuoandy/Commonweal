@@ -12,6 +12,7 @@
     <dimen name="text_size_big">28sp</dimen>
 
     <!-- 间距 -->
+    <dimen name="big_space">18dp</dimen>
     <dimen name="normal_space">10dp</dimen>
     <dimen name="little_space">5dp</dimen>
 

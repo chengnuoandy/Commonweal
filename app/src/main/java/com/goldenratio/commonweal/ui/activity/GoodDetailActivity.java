@@ -9,7 +9,7 @@ import com.goldenratio.commonweal.R;
 
 import cn.iwgang.countdownview.CountdownView;
 
-public class GoodDetail extends Activity {
+public class GoodDetailActivity extends Activity {
 
     private CountdownView mCountdownView;
     private Long endTime;
@@ -29,8 +29,8 @@ public class GoodDetail extends Activity {
      */
     private void initData() {
         Intent intent = getIntent();
-        endTime = intent.getLongExtra("EndTime",0);
-        Log.d("lxc", "initData: ----> "+endTime);
+        endTime = intent.getLongExtra("EndTime", 0);
+        Log.d("lxc", "initData: ----> " + endTime);
         mCountdownView.start(endTime);
     }
 

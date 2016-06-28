@@ -17,7 +17,7 @@
             android:layout_marginTop="@dimen/normal_space"
             android:background="@color/white"
             android:drawablePadding="@dimen/normal_space"
-            android:hint="请输入用户名"
+            android:hint="请输入昵称"
             android:inputType="text"
             android:padding="@dimen/normal_space"
             android:textSize="@dimen/text_size_default"/>

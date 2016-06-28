@@ -30,6 +30,7 @@ import cn.iwgang.countdownview.CountdownView;
 
 /**
  * Created by Kiuber on 2016/6/26.
+ * 物品列表适配器相关
  */
 
 public class MyGoodListViewAdapter extends BaseAdapter {
@@ -50,6 +51,9 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         startRefreshTime();
     }
 
+    /**
+     * 初始化倒计时相关逻辑
+     */
     public void startRefreshTime() {
         if (!isCancel) return; //判断第一次new才执行此方法
 
@@ -67,6 +71,9 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         }, 0, 10);
     }
 
+    /**
+     * 停止倒计时同时清除倒计时所占相关资源
+     */
     public void cancelRefreshTime() {
         isCancel = true;
         if (null != mTimer) {
@@ -96,33 +103,12 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         if (viewHolder == null) {
             convertView = mInflater.inflate(R.layout.view_good_all, null);
             viewHolder = new ViewHolder();
-            viewHolder.mTvUserName = (TextView) convertView.findViewById(R.id.tv_user_name);
-            viewHolder.mTvTime = (TextView) convertView.findViewById(R.id.tv_time);
-            viewHolder.mTvName = (TextView) convertView.findViewById(R.id.tv_name);
-            viewHolder.mIvPic = (ImageView) convertView.findViewById(R.id.iv_pic);
-            viewHolder.mTvDescription = (TextView) convertView.findViewById(R.id.tv_description);
-            viewHolder.initView(convertView); //初始化
+            //初始化布局
+            viewHolder.initView(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
-        BmobQuery<User> userBmobQuery = new BmobQuery<User>();
-        userBmobQuery.addWhereEqualTo("objectId", getItem(position).getGoods_User_ID());
-        final ViewHolder finalViewHolder = viewHolder;
-        userBmobQuery.findObjects(mContext, new FindListener<User>() {
-            @Override
-            public void onSuccess(List<User> list) {
-                for (User user : list) {
-                    finalViewHolder.mTvUserName.setText(user.getUser_Name());
-                }
-            }
-
-            @Override
-            public void onError(int i, String s) {
-
-            }
-        });
 
         viewHolder.mTvTime.setText(getItem(position).getCreatedAt());
         viewHolder.mTvName.setText(getItem(position).getGoods_Name());
@@ -133,13 +119,15 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                 .into(viewHolder.mIvPic);
 
         viewHolder.mTvDescription.setText(getItem(position).getGoods_Description());
+
         Good mGood = mGoodList.get(position);
+        //初始化倒计时相关数据
         viewHolder.bindData(mGood);
 
         // 处理倒计时
         if (mGood.getGoods_UpDateM() > 0) {
             synchronized (mCountdownVHList) {
-//                mCountdownVHList.put(Integer.parseInt(mGood.getGoods_ID()), viewHolder);
+                mCountdownVHList.put(Integer.parseInt(mGood.getGoods_ID()), viewHolder);
             }
         }
 
@@ -176,6 +164,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         }
     };
 
+    //缓存类
     class ViewHolder {
         private TextView mTvUserName;
         private TextView mTvTime;
@@ -188,6 +177,10 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         public void initView(View convertView) {
             mTvUserName = (TextView) convertView.findViewById(R.id.tv_user_name);
             mCountdownView = (CountdownView) convertView.findViewById(R.id.cv_good);
+            mTvTime = (TextView) convertView.findViewById(R.id.tv_time);
+            mTvName = (TextView) convertView.findViewById(R.id.tv_name);
+            mIvPic = (ImageView) convertView.findViewById(R.id.iv_pic);
+            mTvDescription = (TextView) convertView.findViewById(R.id.tv_description);
         }
 
         //初始化数据
@@ -202,6 +195,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
         }
 
+        //刷新时间显示
         public void refreshTime(long curTimeMillis) {
             if (null == mGood || mGood.getGoods_UpDateM() <= 0) return;
             //更新时间

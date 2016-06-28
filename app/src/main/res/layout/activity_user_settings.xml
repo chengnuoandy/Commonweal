@@ -6,7 +6,6 @@
               android:orientation="vertical"
               tools:context=".ui.activity.my.UserSettingsActivity">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,6 +33,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_set_avatar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_space"
@@ -170,6 +170,17 @@
             android:textColor="@color/black"
             android:textSize="16sp"/>
 
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="人一生要去做有意义的事，我认为我找到了，那就是做公益。"/>
     </RelativeLayout>
 
     <View

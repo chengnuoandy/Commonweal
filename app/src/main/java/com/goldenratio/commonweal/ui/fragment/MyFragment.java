@@ -144,14 +144,16 @@ public class MyFragment extends Fragment {
      * @param ID 用户唯一id（objectid）
      */
     private void getUserData(String ID) {
-        String sqlCmd = "SELECT User_Name,User_Autograph,User_Avatar FROM User ";
+        String sqlCmd = "SELECT * FROM User ";
         UserDao ud = new UserDao(getActivity());
         Cursor cursor = ud.query(sqlCmd);
         String UserName = "";
+        String UserNickname = "";
         String avaUrl = "";
         String autograph = "";
         if (cursor.moveToFirst()) {
             UserName = cursor.getString(cursor.getColumnIndex("User_Name"));
+            UserNickname = cursor.getString(cursor.getColumnIndex("User_Nickname"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
             //   Log.i("ud", avaUrl);
@@ -159,7 +161,7 @@ public class MyFragment extends Fragment {
         cursor.close();
         mTvName.setBackgroundResource(R.color.color_FMy_Context);
         mTvName.setTextColor(getResources().getColor(R.color.colorPrimary));
-        mTvName.setText(UserName);
+        mTvName.setText(UserNickname);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
     }
 

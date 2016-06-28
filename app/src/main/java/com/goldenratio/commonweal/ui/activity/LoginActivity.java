@@ -451,8 +451,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      */
     private void saveDB(com.goldenratio.commonweal.bean.User user) {
         UserDao mUserDao = new UserDao(LoginActivity.this);
-        mUserDao.insert("insert into User (objectId,User_Name,User_Autograph,User_Avatar) values(?,?,?,?)",
-                new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd()});
+        mUserDao.insert("insert into User (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname) values(?,?,?,?,?)",
+                new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname()});
         Completed();
         finish();
     }

@@ -66,9 +66,9 @@
         </receiver>
 
         <activity android:name=".ui.activity.my.MySetActivity"/>
-        <activity android:name=".ui.activity.my.MySetActivity"/>
         <activity android:name=".ui.activity.GoodDetail">
         </activity>
+        <activity android:name=".ui.activity.my.UserSettingsActivity"/>
     </application>
 
 </manifest>

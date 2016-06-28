@@ -21,6 +21,7 @@ import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
+import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -63,6 +64,11 @@ public class MyFragment extends Fragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
+                if (isLogin) {
+                    Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
+                    startActivity(intent);
+                    break;
+                }
             case R.id.tv_name:
                 if (!isUserTableExist()) {
                     if (!isLogin) {
@@ -148,7 +154,7 @@ public class MyFragment extends Fragment {
             UserName = cursor.getString(cursor.getColumnIndex("User_Name"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
-         //   Log.i("ud", avaUrl);
+            //   Log.i("ud", avaUrl);
         }
         cursor.close();
         mTvName.setBackgroundResource(R.color.color_FMy_Context);

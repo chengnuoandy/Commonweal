@@ -41,7 +41,8 @@ public class MyFragment extends Fragment {
     ImageView mIvSetting;
 
     private boolean isLogin = false;
-    private String mUserID;
+
+    public static String mUserID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,7 +105,6 @@ public class MyFragment extends Fragment {
                     isLogin = true;
                     getUserData(mUserID);
                     Log.i("lxc", "onActivityResult: " + mUserID);
-
                 }
                 break;
             //设置界面返回数据
@@ -152,6 +152,7 @@ public class MyFragment extends Fragment {
         String avaUrl = "";
         String autograph = "";
         if (cursor.moveToFirst()) {
+            mUserID = cursor.getString(cursor.getColumnIndex("objectId"));
             UserName = cursor.getString(cursor.getColumnIndex("User_Name"));
             UserNickname = cursor.getString(cursor.getColumnIndex("User_Nickname"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));

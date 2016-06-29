@@ -4,19 +4,41 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class UserSettingsActivity extends Activity {
+
+
+    @BindView(R.id.tv_user_name)
+    TextView mTvUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    String userName = data.getStringExtra("user_Name");
+                    mTvUserName.setText(userName);
+                }
+                break;
+            case 3:
+                break;
+        }
     }
 
     @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.tv_set_address})

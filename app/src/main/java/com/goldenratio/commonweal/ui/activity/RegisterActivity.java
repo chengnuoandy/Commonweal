@@ -511,18 +511,19 @@ public class RegisterActivity extends Activity {
         bmobQuery.findObjects(this, new FindListener<User>() {
             @Override
             public void onSuccess(List<User> list) {
-                closeProgressDialog();
                 if (list.isEmpty()) {
                     //判断点击的是否是注册按钮
                     if (isClickRegisterBtn) {
                         mBtnSendCode.setClickable(false);
                         sendVerification();
                     } else {
+                        closeProgressDialog();
                         Toast.makeText(RegisterActivity.this, "您好像并未注册哟", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
                     if (isClickRegisterBtn) {
+                        closeProgressDialog();
                         Log.d("query", "查询成功");
                         Log.d("info", list + "");
                         Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();

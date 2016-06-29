@@ -34,10 +34,12 @@
 
 
     <EditText
+
         android:id="@+id/et_set_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_space"
+        android:layout_margin="@dimen/normal_space"
+        android:lines="1"
         android:padding="@dimen/normal_space"/>
 
     <TextView
@@ -49,7 +51,7 @@
         android:textColor="@color/colorPrimary"/>
 
     <Button
-        android:id="@+id/btn_set_username"
+        android:id="@+id/btn_save_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/normal_space"

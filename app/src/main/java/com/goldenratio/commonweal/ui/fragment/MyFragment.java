@@ -1,17 +1,14 @@
 package com.goldenratio.commonweal.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +39,11 @@ public class MyFragment extends Fragment {
 
     private boolean isLogin = false;
 
-    public static String mUserID;
+    private String userNickname;//用户昵称
+    private String autograph; //个性签名
+    private String userName;  //用户名
+    private String avaUrl;  //用户头像
+    public static String mUserID; //用户objectid
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +53,7 @@ public class MyFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         if (isUserTableExist()) {
-            getUserData(mUserID);
+            getUserData();
             isLogin = true;
         }
 
@@ -67,7 +68,11 @@ public class MyFragment extends Fragment {
             case R.id.civ_avatar:
                 if (isLogin) {
                     Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
-                    startActivity(intent);
+                    intent.putExtra("user_nickname", userNickname);
+                    intent.putExtra("user_name", userName);
+                    intent.putExtra("autograph", autograph);
+                    intent.putExtra("avaUrl", avaUrl);
+                    startActivityForResult(intent, 3);
                     break;
                 }
             case R.id.tv_name:
@@ -103,11 +108,11 @@ public class MyFragment extends Fragment {
                 if (resultCode == Activity.RESULT_OK) {
                     mUserID = data.getStringExtra("objectId");
                     isLogin = true;
-                    getUserData(mUserID);
+                    getUserData();
                     Log.i("lxc", "onActivityResult: " + mUserID);
                 }
                 break;
-            //设置界面返回数据
+            //应用设置界面返回数据
             case 2:
                 if (resultCode == Activity.RESULT_OK) {
                     isLogin = false;
@@ -115,6 +120,9 @@ public class MyFragment extends Fragment {
                     getActivity().finish();
                     getActivity().startActivity(getActivity().getIntent());
                 }
+                break;
+            case 3:
+                getUserData();
                 break;
         }
     }
@@ -143,18 +151,18 @@ public class MyFragment extends Fragment {
      *
      * @param ID 用户唯一id（objectid）
      */
-    private void getUserData(String ID) {
+    private void getUserData() {
         String sqlCmd = "SELECT * FROM User ";
         UserDao ud = new UserDao(getActivity());
         Cursor cursor = ud.query(sqlCmd);
-        String UserName = "";
-        String UserNickname = "";
-        String avaUrl = "";
-        String autograph = "";
+        userName = "";
+        userNickname = "";
+        avaUrl = "";
+        autograph = "";
         if (cursor.moveToFirst()) {
             mUserID = cursor.getString(cursor.getColumnIndex("objectId"));
-            UserName = cursor.getString(cursor.getColumnIndex("User_Name"));
-            UserNickname = cursor.getString(cursor.getColumnIndex("User_Nickname"));
+            userName = cursor.getString(cursor.getColumnIndex("User_Name"));
+            userNickname = cursor.getString(cursor.getColumnIndex("User_Nickname"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
             //   Log.i("ud", avaUrl);
@@ -162,7 +170,7 @@ public class MyFragment extends Fragment {
         cursor.close();
         mTvName.setBackgroundResource(R.color.color_FMy_Context);
         mTvName.setTextColor(getResources().getColor(R.color.colorPrimary));
-        mTvName.setText(UserNickname);
+        mTvName.setText(userNickname);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
     }
 

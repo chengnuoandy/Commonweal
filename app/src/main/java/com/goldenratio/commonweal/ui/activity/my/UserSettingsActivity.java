@@ -17,12 +17,22 @@ public class UserSettingsActivity extends Activity {
 
     @BindView(R.id.tv_user_name)
     TextView mTvUserName;
+    @BindView(R.id.tv_user_nickname)
+    TextView mTvUserNickname;
+
+    private String userName;
+    private String userNickname;
+    private String autograph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
         ButterKnife.bind(this);
+
+        getMyData();
+        mTvUserName.setText(userName);
+        mTvUserNickname.setText(userNickname);
     }
 
     @Override
@@ -67,5 +77,12 @@ public class UserSettingsActivity extends Activity {
                 startActivityForResult(intent, 3);
                 break;
         }
+    }
+
+    private void getMyData() {
+        Intent intent = getIntent();
+        userName = intent.getStringExtra("user_name");
+        userNickname = intent.getStringExtra("user_nickname");
+        autograph = intent.getStringExtra("autograph");
     }
 }

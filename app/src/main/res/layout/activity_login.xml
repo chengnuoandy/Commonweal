@@ -44,8 +44,8 @@
             android:background="@color/white"
             android:drawableLeft="@drawable/tab_my_ic_click"
             android:drawablePadding="@dimen/normal_space"
-            android:hint="请输入手机号"
-            android:inputType="phone"
+            android:hint="手机号/用户名"
+            android:inputType="text"
             android:padding="@dimen/normal_space"
             android:textSize="@dimen/text_size_default" />
 

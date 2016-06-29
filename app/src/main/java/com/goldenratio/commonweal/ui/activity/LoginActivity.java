@@ -32,6 +32,8 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -118,8 +120,23 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_btn:
-                //判断密码是否正确
-                isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()));
+                //判断输入是否为空
+                if (mLoginPhone.getText().toString().isEmpty()){
+                    Toast.makeText(LoginActivity.this, "请输入账号！", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if (mLoginPassword.getText().toString().isEmpty()){
+                    Toast.makeText(LoginActivity.this, "请输入密码！", Toast.LENGTH_SHORT).show();
+                    return;
+                }else if(checkName(mLoginPhone.getText().toString())){
+                    //如果是手机号登陆
+                    //判断密码是否正确
+                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()),true);
+                }else {
+                    //用户名登陆
+                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()),false);
+                }
+
+
                 break;
             case R.id.ib_sina:
                 mSsoHandler.authorize(new AuthListener());
@@ -169,41 +186,81 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     /**
      * 登陆相关逻辑(正常登陆)
+     * @param Phone 手机号/用户名
+     * @param Password 密码
+     * @param flag 那种方式登陆  true-手机号  false-用户名
      */
-    private void isLogin(String Phone, final String Password) {
-        Loing();
-        BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
-        bmobQuery.addWhereEqualTo("User_Phone", Phone);
-        //执行查询方法
-        bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
-            @Override
-            public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
-                //判断查询到的行数
-                if (object.size() == 1) {
-                    com.goldenratio.commonweal.bean.User mUser = object.get(0);
-                    if (Password.equals(mUser.getUser_Password())) {
-                        Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                        //获得数据的objectId信息
-                        userID = mUser.getObjectId();
+    private void isLogin(String Phone, final String Password,Boolean flag) {
+        if (flag){
+            Loing();
+            BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+            bmobQuery.addWhereEqualTo("User_Phone", Phone);
+            //执行查询方法
+            bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+                @Override
+                public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+                    //判断查询到的行数
+                    if (object.size() == 1) {
+                        com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                        if (Password.equals(mUser.getUser_Password())) {
+                            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                            //获得数据的objectId信息
+                            userID = mUser.getObjectId();
 
-                        returnData();
-                        saveDB(mUser);
+                            returnData();
+                            saveDB(mUser);
+                        } else {
+                            Completed();
+                            Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Completed();
-                        Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Completed();
-                    Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onError(int code, String msg) {
-                Completed();
-                Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onError(int code, String msg) {
+                    Completed();
+                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else {
+            Loing();
+            BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+            bmobQuery.addWhereEqualTo("User_Name", Phone);
+            //执行查询方法
+            bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+                @Override
+                public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+                    //判断查询到的行数
+                    if (object.size() == 1) {
+                        com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                        if (Password.equals(mUser.getUser_Password())) {
+                            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                            //获得数据的objectId信息
+                            userID = mUser.getObjectId();
+
+                            returnData();
+                            saveDB(mUser);
+                        } else {
+                            Completed();
+                            Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Completed();
+                        Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onError(int code, String msg) {
+                    Completed();
+                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     /**
@@ -309,7 +366,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     String registerReturnPassword = data.getStringExtra("regi_password");
 //                    mLoginPhone.setText(registerReturnPhone);
 //                    mLoginPassword.setText(registerReturnPassword);
-                    isLogin(registerReturnPhone,MD5Util.createMD5(registerReturnPassword));
+                    isLogin(registerReturnPhone,MD5Util.createMD5(registerReturnPassword),true);
                 }
                 break;
             case 2:
@@ -363,6 +420,17 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         setResult(RESULT_OK, intent);
     }
 
+    /**
+     * 正则匹配 手机号登陆还是用户名登陆
+     * @param name 用户名/手机号
+     * @return true-手机号 false-用户名
+     */
+    private boolean checkName(String name) {
+        String regPw = "^\\d+$";
+        Pattern p = Pattern.compile(regPw);
+        Matcher m = p.matcher(name);
+        return m.matches();
+    }
 
     /**
      * 异步加载 内部类实现
@@ -388,7 +456,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         protected Void doInBackground(String... params) {
             //提交数据
-            user.setUser_Name(wbuser.screen_name);
+            user.setUser_Nickname(wbuser.screen_name);
             user.setUser_Is_Real_Name(wbuser.verified);
             if ("m".equals(wbuser.gender)) {
                 user.setUser_sex("男");

@@ -43,7 +43,7 @@ public class MySetActivity extends Activity {
     private void deleteTable() {
         String sqlCmd = "DELETE FROM User";
         UserDao ud = new UserDao(this);
-        ud.delete(sqlCmd);
+        ud.execSQL(sqlCmd);
     }
 
 

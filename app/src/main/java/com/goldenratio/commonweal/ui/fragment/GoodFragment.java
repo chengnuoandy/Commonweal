@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
@@ -33,6 +34,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     private List<Good> mGoodList;
     private Long endTime;
     private PullToRefreshListView mListView;
+    private LinearLayout mLlNoNet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,10 +61,12 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
                 mListView.setAdapter(myGoodListViewAdapter);
                 mListView.onRefreshComplete();
                 mGoodList = list;
+                hideLinearLayout();
             }
 
             @Override
             public void onError(int i, String s) {
+                mLlNoNet.setVisibility(View.VISIBLE);
             }
         });
 
@@ -72,7 +76,13 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      * 初始化布局
      */
     private void initView() {
-
+        mLlNoNet = (LinearLayout) view.findViewById(R.id.ll_no_net);
+        mLlNoNet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initData();
+            }
+        });
         view.findViewById(R.id.iv_add_good).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +104,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
 
             }
         });
-
     }
 
     /**
@@ -180,4 +189,9 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         }
     }
 
+    private void hideLinearLayout() {
+        if (mLlNoNet.getVisibility() == View.VISIBLE) {
+            mLlNoNet.setVisibility(View.GONE);
+        }
+    }
 }

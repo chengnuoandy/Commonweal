@@ -28,6 +28,8 @@
             android:src="@mipmap/fragment_good_add" />
     </RelativeLayout>
 
+    <include layout="@layout/view_no_net" />
+
     <com.goldenratio.commonweal.ui.view.PullToRefreshListView
         android:id="@+id/lv_good_all"
         android:layout_width="match_parent"

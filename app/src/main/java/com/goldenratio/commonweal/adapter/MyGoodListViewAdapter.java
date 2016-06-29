@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.util.GlideCircleTransform;
 import com.goldenratio.commonweal.util.GlideLoader;
 
 import org.w3c.dom.Text;
@@ -116,6 +117,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         Glide.with(mContext)
                 .load(getItem(position).getGoods_Photos().get(0).toString())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .transform(new GlideCircleTransform(mContext))
                 .into(viewHolder.mIvPic);
 
         viewHolder.mTvDescription.setText(getItem(position).getGoods_Description());

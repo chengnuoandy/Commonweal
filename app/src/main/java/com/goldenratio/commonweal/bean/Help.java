@@ -22,6 +22,7 @@ public class Help extends BmobObject {
     private BmobDate Help_EndDate; // 项目结束时间
     private String Help_Pic;       //相关图片
     private String Help_Title;//项目标题
+    private String Help_OneSentence;
     private String Help_Org;    //项目发起组织
     private String Help_Initiator;    //项目发起人&执行者
     private String Help_Smile;    //项目受助者
@@ -30,6 +31,7 @@ public class Help extends BmobObject {
     private String Help_Content;    //项目内容(显示在首页上的)
     private String Help_Html; //项目全部信息
     private String Help_Result; //项目结果
+    private String Help_DonateSum;
 
     public String getHelp_ID() {
         return Help_ID;
@@ -95,6 +97,14 @@ public class Help extends BmobObject {
         Help_Title = help_Title;
     }
 
+    public String getHelp_OneSentence() {
+        return Help_OneSentence;
+    }
+
+    public void setHelp_OneSentence(String help_OneSentence) {
+        Help_OneSentence = help_OneSentence;
+    }
+
     public String getHelp_Org() {
         return Help_Org;
     }
@@ -157,5 +167,13 @@ public class Help extends BmobObject {
 
     public void setHelp_Result(String help_Result) {
         Help_Result = help_Result;
+    }
+
+    public String getHelp_DonateSum() {
+        return Help_DonateSum;
+    }
+
+    public void setHelp_DonateSum(String help_DonateSum) {
+        Help_DonateSum = help_DonateSum;
     }
 }

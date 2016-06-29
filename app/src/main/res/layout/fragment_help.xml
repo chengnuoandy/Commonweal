@@ -21,6 +21,8 @@
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
+    <include layout="@layout/view_no_net" />
+
     <com.goldenratio.commonweal.ui.view.PullToRefreshListView
         android:id="@+id/lv_help"
         android:layout_width="match_parent"

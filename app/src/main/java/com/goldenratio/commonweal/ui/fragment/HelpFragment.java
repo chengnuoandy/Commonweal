@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpListViewAdapter;
@@ -28,7 +29,7 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.listener.FindListener;
 
 public class
-HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
+HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
@@ -46,6 +47,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
     private LayoutInflater inflater;
     private ViewGroup container;
     private Bundle savedInstanceState;
+    private LinearLayout mLlNoNet;
 
 
     @Override
@@ -53,33 +55,16 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
                              Bundle savedInstanceState) {
         View view = initView();
         initData();
-        //topSliding();
-
-
         mListView.setOnItemClickListener(this);
-//        Help help = new Help();
-//        help.setHelp_Type("教育");
-//        help.setHelp_Organization("商务");
-//        help.setHelp_Open_Data("2016-06-26");
-//        help.setHelp_End_Data("2016-06-27");
-//
-//      help.save(getContext(), new SaveListener() {
-//          @Override
-//          public void onSuccess() {
-//
-//          }
-//
-//          @Override
-//          public void onFailure(int i, String s) {
-//              Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-//          }
-//      });
         return view;
     }
 
     private View initView() {
         View view = View.inflate(getContext(), R.layout.fragment_help, null);
         mListView = (PullToRefreshListView) view.findViewById(R.id.lv_help);
+        mLlNoNet = (LinearLayout) view.findViewById(R.id.ll_no_net);
+        mLlNoNet.setOnClickListener(this);
+
 
         mHeaderView = View.inflate(getContext(), R.layout.view_help_hander, null);
         indicator = (CirclePageIndicator) mHeaderView.findViewById(R.id.indicator);
@@ -120,11 +105,12 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
 
                 mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
                 mListView.onRefreshComplete();
+                hideLinearLayout();
             }
 
             @Override
             public void onError(int i, String s) {
-
+                mLlNoNet.setVisibility(View.VISIBLE);
                 Log.i("bmob", "下载失败：" + s);
                 mListView.onRefreshComplete();
             }
@@ -143,13 +129,13 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
 
 
                 topSliding();
-
+                hideLinearLayout();
 
             }
 
             @Override
             public void onError(int i, String s) {
-
+                mLlNoNet.setVisibility(View.VISIBLE);
                 Log.i("bmob", "下载失败：" + s);
                 mListView.onRefreshComplete();
             }
@@ -193,5 +179,20 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener {
         bundle.putSerializable("HelpList", mHelpLlist.get(position - 2));
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ll_no_net:
+                initData();
+                break;
+        }
+    }
+
+    private void hideLinearLayout() {
+        if (mLlNoNet.getVisibility() == View.VISIBLE) {
+            mLlNoNet.setVisibility(View.GONE);
+        }
     }
 }

@@ -74,6 +74,9 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.iv_rank:
                 break;
             case R.id.iv_share:

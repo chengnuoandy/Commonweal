@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +39,7 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
     protected void onCreate(Bundle savedInstanceState) {
         Window window = this.getWindow();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_good_price);
+        setContentView(R.layout.view_add_good_price);
         //去掉dialog默认的padding
         window.getDecorView().setPadding(0, 0, 0, 0);
         WindowManager.LayoutParams lp = window.getAttributes();

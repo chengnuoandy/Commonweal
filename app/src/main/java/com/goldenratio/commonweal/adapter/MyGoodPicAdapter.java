@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -53,7 +52,7 @@ public class MyGoodPicAdapter extends BaseAdapter {
         ViewHolder viewHolder = null;
         if (viewHolder == null) {
             viewHolder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.view_good_pic_gridview, null);
+            convertView = mInflater.inflate(R.layout.view_add_good_pic_item, null);
             viewHolder.mSelectedPic = (ImageView) convertView.findViewById(R.id.iv_selected_pic);
             viewHolder.mDeletePic = (ImageView) convertView.findViewById(R.id.iv_delete_pic);
             convertView.setTag(viewHolder);

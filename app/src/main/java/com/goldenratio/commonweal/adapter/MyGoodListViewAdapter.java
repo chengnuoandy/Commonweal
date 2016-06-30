@@ -15,18 +15,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.bean.User;
 import com.goldenratio.commonweal.util.GlideCircleTransform;
-import com.goldenratio.commonweal.util.GlideLoader;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindListener;
 import cn.iwgang.countdownview.CountdownView;
 
 /**
@@ -102,7 +96,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (viewHolder == null) {
-            convertView = mInflater.inflate(R.layout.view_good_all, null);
+            convertView = mInflater.inflate(R.layout.view_good_item, null);
             viewHolder = new ViewHolder();
             //初始化布局
             viewHolder.initView(convertView);

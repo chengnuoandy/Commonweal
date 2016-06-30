@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/normal_space">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="50dp"
+            android:layout_weight="1"
+            android:background="@color/split" />
+
+        <com.goldenratio.commonweal.util.CustomFontTextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_marginRight="@dimen/normal_space"
+            android:text="名人名字"
+            android:textSize="@dimen/text_size_default" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginRight="50dp"
+            android:layout_weight="1"
+            android:background="@color/split" />
+    </LinearLayout>
+
+    <com.goldenratio.commonweal.util.CustomFontTextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="物品发布时间"
+        android:textSize="@dimen/text_size_small" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="物品的名称"
+        android:textSize="@dimen/text_size_big" />
+
+    <cn.iwgang.countdownview.CountdownView
+        android:id="@+id/cv_good"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        app:isHideTimeBackground="false"
+        app:isShowDay="false"
+        app:isShowHour="false"
+        app:isShowMillisecond="true"
+        app:isShowMinute="true"
+        app:isShowSecond="true"
+        app:suffixGravity="center"
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="30sp"
+        app:timeBgDivisionLineSize="1dp"
+        app:timeBgRadius="3dp"
+        app:timeBgSize="50dp"
+        app:timeTextColor="#FFFFFF"
+        app:timeTextSize="30sp" />
+
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="物品介绍" />
+
+
+</LinearLayout>

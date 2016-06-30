@@ -9,20 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
-import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.listener.GetServerTimeListener;
 
 
 /**
@@ -61,7 +55,7 @@ public class HelpListViewAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(
-                    R.layout.view_help_list, parent, false);
+                    R.layout.view_help_item, parent, false);
             viewHolder.initView(convertView);
             convertView.setTag(viewHolder);
         } else {

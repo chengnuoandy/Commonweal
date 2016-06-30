@@ -1,14 +1,11 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -230,7 +227,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         long[] mLgTimes = {21600000, 32400000, 43200000, 64800000, 86400000};
         final String mStrName = mEtName.getText().toString();
         final String mStrDescription = mEtName.getText().toString();
-        final long mLgTime = mLgTimes[mSrTime.getSelectedItemPosition()];
+        final long mLgTime = mLgTimes[mSrTime.getSelectedItemPosition()] + System.currentTimeMillis();
         if (TextUtils.isEmpty(mStrName) || TextUtils.isEmpty(mStrDescription)
                 || TextUtils.isEmpty(pathList.toString())
                 || TextUtils.isEmpty(mStrType) || TextUtils.isEmpty(price)

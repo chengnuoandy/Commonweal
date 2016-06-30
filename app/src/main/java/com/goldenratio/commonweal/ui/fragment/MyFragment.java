@@ -39,6 +39,7 @@ public class MyFragment extends Fragment {
 
     private boolean isLogin = false;
 
+    private String userSex;
     private String userNickname;//用户昵称
     private String autograph; //个性签名
     private String userName;  //用户名
@@ -68,6 +69,7 @@ public class MyFragment extends Fragment {
             case R.id.civ_avatar:
                 if (isLogin) {
                     Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
+                    intent.putExtra("user_sex", userSex);
                     intent.putExtra("user_nickname", userNickname);
                     intent.putExtra("user_name", userName);
                     intent.putExtra("autograph", autograph);
@@ -161,6 +163,7 @@ public class MyFragment extends Fragment {
         autograph = "";
         if (cursor.moveToFirst()) {
             mUserID = cursor.getString(cursor.getColumnIndex("objectId"));
+            userSex = cursor.getString(cursor.getColumnIndex("User_sex"));
             userName = cursor.getString(cursor.getColumnIndex("User_Name"));
             userNickname = cursor.getString(cursor.getColumnIndex("User_Nickname"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));

@@ -19,6 +19,9 @@ import com.goldenratio.commonweal.bean.User;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,14 +53,18 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
                 finish();
                 break;
             case R.id.btn_save_username:
-                showProgressDialog();
-                updateDataToSqlite();
-                updateDataToBmob();
-                break;
+                if (checkUserName(mEtSetUsername.getText().toString())) {
+                    showProgressDialog();
+                    updateDataToSqlite();
+                    updateDataToBmob();
+                    break;
+                } else {
+                    Toast.makeText(SetUserNameActivity.this, "请检查您的用户名是否填写规范", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 
-    private void returnDataToMyset() {
+    private void returnDataToUserSet() {
         String userName = mEtSetUsername.getText().toString();
         Intent intent = new Intent();
         intent.putExtra("user_Name", userName);
@@ -82,7 +89,7 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
             @Override
             public void onSuccess() {
                 Toast.makeText(SetUserNameActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                returnDataToMyset();
+                returnDataToUserSet();
             }
 
             @Override
@@ -91,6 +98,14 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
                 Toast.makeText(SetUserNameActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean checkUserName(String uName) {
+        //用户名由3-15个字符组成（不能为中文）
+        String regex = "^[a-zA-Z0-9_]{3,15}$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(uName);
+        return m.matches();
     }
 
     private void closeProgressDialog() {

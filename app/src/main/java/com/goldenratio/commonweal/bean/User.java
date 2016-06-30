@@ -21,7 +21,7 @@ public class User extends BmobObject {
     private String User_Integral;//用户积分
     private String User_Money;//用户余额
     private String User_WbID; //绑定的微博ID
-    private String User_sex; //用户性别
+    private String User_Sex; //用户性别
     /**
      * 用户头像地址，50×50像素
      */
@@ -60,8 +60,8 @@ public class User extends BmobObject {
         User_image_min = user_image_min;
     }
 
-    public void setUser_sex(String user_sex) {
-        User_sex = user_sex;
+    public void setUser_Sex(String User_Sex) {
+        User_Sex = User_Sex;
     }
 
     public void setVerified_reason(String verified_reason) {
@@ -80,8 +80,8 @@ public class User extends BmobObject {
         return User_image_min;
     }
 
-    public String getUser_sex() {
-        return User_sex;
+    public String getUser_Sex() {
+        return User_Sex;
     }
 
     public String getVerified_reason() {

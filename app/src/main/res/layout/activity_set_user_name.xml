@@ -34,7 +34,6 @@
 
 
     <EditText
-
         android:id="@+id/et_set_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="注意：用户名只能设置一次，可以作为登陆账户使用"
+        android:text="注意：用户名由3-15个字符组成，并且只能设置一次，可以用作登陆账户使用，用户名中不包含中文，不能只含数字，"
         android:textColor="@color/colorPrimary"/>
 
     <Button

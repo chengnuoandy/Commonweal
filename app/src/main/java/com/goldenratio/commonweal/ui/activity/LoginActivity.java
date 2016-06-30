@@ -121,19 +121,19 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         switch (v.getId()) {
             case R.id.login_btn:
                 //判断输入是否为空
-                if (mLoginPhone.getText().toString().isEmpty()){
+                if (mLoginPhone.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "请输入账号！", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (mLoginPassword.getText().toString().isEmpty()){
+                } else if (mLoginPassword.getText().toString().isEmpty()) {
                     Toast.makeText(LoginActivity.this, "请输入密码！", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(checkName(mLoginPhone.getText().toString())){
+                } else if (checkName(mLoginPhone.getText().toString())) {
                     //如果是手机号登陆
                     //判断密码是否正确
-                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()),true);
-                }else {
+                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()), true);
+                } else {
                     //用户名登陆
-                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()),false);
+                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()), false);
                 }
 
 
@@ -186,12 +186,13 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     /**
      * 登陆相关逻辑(正常登陆)
-     * @param Phone 手机号/用户名
+     *
+     * @param Phone    手机号/用户名
      * @param Password 密码
-     * @param flag 那种方式登陆  true-手机号  false-用户名
+     * @param flag     那种方式登陆  true-手机号  false-用户名
      */
-    private void isLogin(String Phone, final String Password,Boolean flag) {
-        if (flag){
+    private void isLogin(String Phone, final String Password, Boolean flag) {
+        if (flag) {
             Loing();
             BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Phone", Phone);
@@ -225,7 +226,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
                 }
             });
-        }else {
+        } else {
             Loing();
             BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Name", Phone);
@@ -366,11 +367,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     String registerReturnPassword = data.getStringExtra("regi_password");
 //                    mLoginPhone.setText(registerReturnPhone);
 //                    mLoginPassword.setText(registerReturnPassword);
-                    isLogin(registerReturnPhone,MD5Util.createMD5(registerReturnPassword),true);
+                    isLogin(registerReturnPhone, MD5Util.createMD5(registerReturnPassword), true);
                 }
                 break;
             case 2:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     String registerReturnPhone = data.getStringExtra("regi_phone");
                     mLoginPhone.setText(registerReturnPhone);
                 }
@@ -422,6 +423,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     /**
      * 正则匹配 手机号登陆还是用户名登陆
+     *
      * @param name 用户名/手机号
      * @return true-手机号 false-用户名
      */
@@ -459,11 +461,11 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             user.setUser_Nickname(wbuser.screen_name);
             user.setUser_Is_Real_Name(wbuser.verified);
             if ("m".equals(wbuser.gender)) {
-                user.setUser_sex("男");
+                user.setUser_Sex("男");
             } else if ("f".equals(wbuser.gender)) {
-                user.setUser_sex("女");
+                user.setUser_Sex("女");
             } else {
-                user.setUser_sex("未知");
+                user.setUser_Sex("未知");
             }
             user.setUser_WbID(wbuser.id);
             user.setUser_image_max(wbuser.avatar_large);
@@ -519,10 +521,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      */
     private void saveDB(com.goldenratio.commonweal.bean.User user) {
         UserDao mUserDao = new UserDao(LoginActivity.this);
-        mUserDao.execSQL("insert into User (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname"+
-                ",User_Address,User_sex,User_image_min,User_sex,User_image_min) values(?,?,?,?,?,?,?,?,?)",
+        mUserDao.execSQL("insert into User (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
+                        ",User_Address,User_sex,User_image_min,User_sex,User_image_min) values(?,?,?,?,?,?,?,?,?,?)",
                 new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
-                user.getUser_Address(),user.getUser_sex(),user.getUser_image_min(),user.getUser_image_max()});
+                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max()});
         Completed();
         finish();
     }

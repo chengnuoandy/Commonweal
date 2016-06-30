@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/normal_space"
             android:layout_marginRight="@dimen/normal_space"
-            android:text="名人名字"
+            android:text="黄晓明"
             android:textSize="@dimen/text_size_default" />
 
         <ImageView
@@ -75,6 +75,7 @@
 
     <ImageView
         android:id="@+id/iv_pic"
+        android:paddingTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

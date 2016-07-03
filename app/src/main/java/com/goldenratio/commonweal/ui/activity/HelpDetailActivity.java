@@ -88,7 +88,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
                 mEtSpeak.requestFocus();
                 break;
             case R.id.tv_donate:
-                Intent i = new Intent(HelpDetailActivity.this,HelpDetailActivity.class);
+                Intent i = new Intent(HelpDetailActivity.this,HelpDonateActivity.class);
                 startActivity(i);
                 break;
         }

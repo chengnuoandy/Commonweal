@@ -61,6 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:padding="@dimen/normal_space">
 
 
@@ -137,9 +139,22 @@
                     android:text="查看全部"
                     android:textColor="@color/colorPrimary" />
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_speak"/>
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lv_helpspeak">
+
+                </ListView>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"

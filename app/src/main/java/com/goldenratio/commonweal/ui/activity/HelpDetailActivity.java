@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
     private TextView mTvContent;
     private TextView mTvSmile;
     private TextView mTvAll;
+    private EditText mEtSpeak;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         mTvSmile = (TextView) findViewById(R.id.smile);
         mTvContent = (TextView) findViewById(R.id.tv_content);
         mTvAll = (TextView) findViewById(R.id.tv_all);
+        mEtSpeak= (EditText) findViewById(R.id.et_speak);
         findViewById(R.id.iv_share).setOnClickListener(this);
         findViewById(R.id.iv_comment).setOnClickListener(this);
         findViewById(R.id.tv_donate).setOnClickListener(this);
@@ -82,8 +85,11 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
             case R.id.iv_share:
                 break;
             case R.id.iv_comment:
+                mEtSpeak.requestFocus();
                 break;
             case R.id.tv_donate:
+                Intent i = new Intent(HelpDetailActivity.this,HelpDetailActivity.class);
+                startActivity(i);
                 break;
         }
     }

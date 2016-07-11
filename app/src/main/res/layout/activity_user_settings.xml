@@ -51,8 +51,9 @@
             android:textSize="16sp"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_set_avatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:src="@drawable/user_default_avatar_v2_1_50"/>

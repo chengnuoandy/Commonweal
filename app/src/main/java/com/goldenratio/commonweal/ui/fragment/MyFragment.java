@@ -43,7 +43,8 @@ public class MyFragment extends Fragment {
     private String userNickname;//用户昵称
     private String autograph; //个性签名
     private String userName;  //用户名
-    private String avaUrl;  //用户头像
+    private String avaUrl;  //用户高清头像
+    private String avaMinUrl;//用户小头像
     public static String mUserID; //用户objectid
 
     @Override
@@ -74,6 +75,7 @@ public class MyFragment extends Fragment {
                     intent.putExtra("user_name", userName);
                     intent.putExtra("autograph", autograph);
                     intent.putExtra("avaUrl", avaUrl);
+                    intent.putExtra("avaMinUrl", avaMinUrl);
                     startActivityForResult(intent, 3);
                     break;
                 }
@@ -168,6 +170,7 @@ public class MyFragment extends Fragment {
             userNickname = cursor.getString(cursor.getColumnIndex("User_Nickname"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
+            avaMinUrl = cursor.getString(cursor.getColumnIndex("User_image_min"));
             //   Log.i("ud", avaUrl);
         }
         cursor.close();

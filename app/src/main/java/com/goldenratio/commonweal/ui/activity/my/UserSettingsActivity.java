@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,12 +35,16 @@ public class UserSettingsActivity extends Activity {
     TextView mTvUserAutograph;
     @BindView(R.id.tv_user_sex)
     TextView mTvUserSex;
+    @BindView(R.id.iv_set_avatar)
+    ImageView mMinAvatar;
 
     private String userName;
     private String userNickname;
     private String autograph;
     private String userSex;
+    private String avaMinUrl;
 
+    private int whichSex;
     private ProgressDialog mPd;
 
     @Override
@@ -48,6 +54,7 @@ public class UserSettingsActivity extends Activity {
         ButterKnife.bind(this);
 
         getMyData();
+        Picasso.with(this).load(avaMinUrl).into(mMinAvatar);
         mTvUserSex.setText(userSex);
         mTvUserName.setText(userName);
         mTvUserNickname.setText(userNickname);
@@ -103,14 +110,19 @@ public class UserSettingsActivity extends Activity {
     }
 
     private void showChoiceDialog() {
+        if (mTvUserSex.getText().equals("男"))
+            whichSex = 0;
+        else
+            whichSex = 1;
         new AlertDialog.Builder(this).setTitle("单选框").setIcon(
                 android.R.drawable.ic_dialog_info).setSingleChoiceItems(
-                new String[]{"男", "女"}, 0,
+                new String[]{"男", "女"}, whichSex,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         showProgressDialog();
                         String sex;
+                        whichSex = which;
                         if (which == 0) {
                             sex = "男";
                         } else {
@@ -203,5 +215,6 @@ public class UserSettingsActivity extends Activity {
         userName = intent.getStringExtra("user_name");
         userNickname = intent.getStringExtra("user_nickname");
         autograph = intent.getStringExtra("autograph");
+        avaMinUrl = intent.getStringExtra("avaMinUrl");
     }
 }

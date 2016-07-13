@@ -200,7 +200,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             userBmobQuery.findObjects(mContext, new FindListener<User>() {
                 @Override
                 public void onSuccess(List<User> list) {
-                    mTvUserName.setText(list.get(0).getUser_Name());
                 }
 
                 @Override

@@ -1,27 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.goldenratio.commonweal.ui.activity.GoodDetail">
+    android:orientation="vertical"
+    tools:context="com.goldenratio.commonweal.ui.activity.GoodDetailActivity">
 
-    <cn.iwgang.countdownview.CountdownView
-        android:id="@+id/cv_endtime"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/sel_btn"
-        app:isShowDay="false"
-        app:isShowHour="true"
-        app:isShowMillisecond="false"
-        app:isShowMinute="true"
-        app:isShowSecond="true"
-        app:suffixGravity="center"
-        app:suffixTextColor="#000000"
-        app:suffixTextSize="20sp"
-        app:timeTextColor="#000000"
-        app:timeTextSize="20sp" />
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/snow"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/normal_space"
+            android:src="@mipmap/back_ic" />
+
+        <TextView
+            android:id="@+id/tv_good_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="物品详情"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_text_size" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:src="@drawable/share" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_space"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="黄晓明" />
+
+        <cn.iwgang.countdownview.CountdownView
+            android:id="@+id/cv_endtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="@dimen/little_space"
+            app:isShowHour="true"
+            app:isShowMillisecond="true"
+            app:isShowMinute="true"
+            app:isShowSecond="true"
+            app:isTimeTextBold="true"
+            app:suffixGravity="bottom"
+            app:suffixHour="小时"
+            app:suffixMillisecond="毫秒"
+            app:suffixMinute="分钟"
+            app:suffixSecond="秒"
+            app:suffixTextColor="#000000"
+            app:suffixTextSize="10sp"
+            app:timeTextColor="#000000"
+            app:timeTextSize="22sp" />
+
+        <TextView
+            android:id="@+id/tv_good_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <GridView
+            android:id="@+id/gv_show_detail_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:columnWidth="90dp"
+            android:gravity="center"
+            android:horizontalSpacing="5dp"
+            android:numColumns="4"
+            android:verticalSpacing="5dp"></GridView>
+    </LinearLayout>
+
+</LinearLayout>

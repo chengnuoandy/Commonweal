@@ -61,7 +61,7 @@ public class HelpListViewAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.initData(viewHolder, position);
+        viewHolder.initData(position);
         return convertView;
     }
 
@@ -90,27 +90,27 @@ public class HelpListViewAdapter extends BaseAdapter {
             mPbProgress = (ProgressBar) view.findViewById(R.id.pb_progress);
         }
 
-        private void initData(final ViewHolder viewHolder, final int position) {
-            viewHolder.mTvCity.setText(getItem(position).getHelp_SmilePro() + "" + getItem(position).getHelp_SmileCity());
-            Glide.with(mContext).load(getItem(position).getHelp_Pic()).into(viewHolder.mIvPic);
-            viewHolder.mTvTitle.setText(getItem(position).getHelp_Title());
-            viewHolder.mTvType.setText(getItem(position).getHelp_Type());
-            viewHolder.mTvOneSentence.setText(getItem(position).getHelp_OneSentence());
-            viewHolder.mTvDonateSum.setText(getItem(position).getHelp_DonateSum());
-            viewHolder.mTvMoney.setText(getItem(position).getHelp_Money());
+        private void initData(final int position) {
+            mTvCity.setText(getItem(position).getHelp_SmilePro() + "" + getItem(position).getHelp_SmileCity());
+            Glide.with(mContext).load(getItem(position).getHelp_Pic()).into(mIvPic);
+            mTvTitle.setText(getItem(position).getHelp_Title());
+            mTvType.setText(getItem(position).getHelp_Type());
+            mTvOneSentence.setText(getItem(position).getHelp_OneSentence());
+            mTvDonateSum.setText(getItem(position).getHelp_DonateSum());
+            mTvMoney.setText(getItem(position).getHelp_Money());
 
             long endTime = BmobDate.getTimeStamp(getItem(position).getHelp_EndDate().getDate());
             long startTime = BmobDate.getTimeStamp(getItem(position).getHelp_StartDate().getDate());
             String LeftTime = (endTime - System.currentTimeMillis()) / (86400000) + "";
-            viewHolder.mTvLeftDay.setText(LeftTime);
+            mTvLeftDay.setText(LeftTime);
             String allTime = ((endTime - startTime) / (86400000)) + "";
 
-            int leftDay = Integer.parseInt(viewHolder.mTvLeftDay.getText().toString());
+            int leftDay = Integer.parseInt(mTvLeftDay.getText().toString());
             int allDay = Integer.parseInt(allTime);
             int usedDay = allDay - leftDay;
             Log.d("111111111111111111111", "position-->" + position + "leftDay--> " + leftDay + "allDay-->" + allDay + "usedDay-->" + usedDay);
-            viewHolder.mPbProgress.setMax(allDay);
-            viewHolder.mPbProgress.setProgress(usedDay);
+            mPbProgress.setMax(allDay);
+            mPbProgress.setProgress(usedDay);
         }
     }
 }

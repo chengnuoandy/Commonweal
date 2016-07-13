@@ -21,34 +21,21 @@ import com.goldenratio.commonweal.ui.activity.HelpDetailActivity;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import java.text.DateFormat;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.listener.FindListener;
 
 public class
 HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+
     private ViewPager mViewPager;
     private PullToRefreshListView mListView;
     private CirclePageIndicator indicator;
     private Handler mHandler;
     private List<Help_Top> mList;
-
-
-    private int participant;  //参与人数
-    private int Day;           //剩余日期
-    private int sum;           //项目所需总数
-    private int AtPresent;    //项目现在进程
-
-
     private View mHeaderView;
-    private LayoutInflater inflater;
-    private ViewGroup container;
-    private Bundle savedInstanceState;
     private LinearLayout mLlNoNet;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,18 +58,15 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         Log.d("CN", "initView: ++++++++++++++++++++++++++++++++++++++");
         //头文件
 
-
         mListView.addHeaderView(mHeaderView);
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 initData();
             }
 
             @Override
             public void onLoadMore() {
-
             }
         });
         return view;
@@ -126,7 +110,6 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                 mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), list));
                 indicator.setViewPager(mViewPager);
                 indicator.setSnap(true);
-
 
                 topSliding();
                 hideLinearLayout();

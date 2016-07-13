@@ -205,13 +205,14 @@
             android:id="@+id/tv_donate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
             android:background="@drawable/register_reset"
             android:gravity="center"
             android:padding="@dimen/normal_space"
             android:text="立即捐赠"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_default" />
+            android:textSize="@dimen/text_size_default"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 </LinearLayout>

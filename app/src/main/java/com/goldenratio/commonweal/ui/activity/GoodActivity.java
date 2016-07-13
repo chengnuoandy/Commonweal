@@ -268,7 +268,8 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                             good.setGoods_ID("2");
                             good.setGoods_Type(mStrType);
                             good.setGoods_Price(Integer.parseInt(price));
-                            good.setGoods_Donation_Rate(Integer.parseInt(prop));
+                            good.setGoods_NowPrice(Integer.parseInt(price));
+                            good.setGoods_DonationRate(Integer.parseInt(prop));
                             good.setGoods_UpDateM(mLgTime);
                             good.save(GoodActivity.this, new SaveListener() {
                                 @Override

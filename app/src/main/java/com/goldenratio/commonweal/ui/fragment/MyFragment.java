@@ -14,10 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
-import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
+import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
+import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.squareup.picasso.Picasso;
 
@@ -101,7 +101,6 @@ public class MyFragment extends Fragment {
             default:
                 break;
         }
-
     }
 
     @Override
@@ -179,6 +178,4 @@ public class MyFragment extends Fragment {
         mTvName.setText(userNickname);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
     }
-
-
 }

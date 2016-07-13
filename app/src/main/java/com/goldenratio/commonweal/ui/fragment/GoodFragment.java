@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
@@ -35,6 +36,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     private Long endTime;
     private PullToRefreshListView mListView;
     private LinearLayout mLlNoNet;
+    private TextView mTvNowPrice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,6 +78,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      * 初始化布局
      */
     private void initView() {
+        mTvNowPrice = (TextView) view.findViewById(R.id.tv_now_price);
         mLlNoNet = (LinearLayout) view.findViewById(R.id.ll_no_net);
         mLlNoNet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,7 +161,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         //获取当前条目的截止时间
         endTime = mGoodList.get(position - 1).getGoods_UpDateM();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("Good",mGoodList.get(position - 1));
+        bundle.putSerializable("Good", mGoodList.get(position - 1));
         StartAct(bundle);
     }
 

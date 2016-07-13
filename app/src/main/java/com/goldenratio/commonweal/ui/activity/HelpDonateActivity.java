@@ -7,6 +7,7 @@ import com.goldenratio.commonweal.R;
 
 /**
  * Created by Administrator on 2016/7/3.
+ * 捐赠时弹出的页面
  */
 
 public class HelpDonateActivity extends Activity {

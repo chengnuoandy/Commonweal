@@ -58,6 +58,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/help_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -139,10 +140,7 @@
                     android:text="查看全部"
                     android:textColor="@color/colorPrimary" />
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/et_speak"/>
+
 
                 <ListView
                     android:layout_width="match_parent"
@@ -150,6 +148,25 @@
                     android:id="@+id/lv_helpspeak">
 
                 </ListView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_speak"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/btn_speak"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="发送" />
+                </LinearLayout>
+
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -50,116 +50,43 @@
             android:id="@+id/avail"/>
     </LinearLayout>
 
-    <RelativeLayout
-        android:paddingTop="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/checkBox1"
             android:text="1元"
-            android:textSize="20sp"
+            android:textSize="20sp"/>
 
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/checkBox1"
-            android:layout_toEndOf="@+id/checkBox1"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:paddingTop="15dp"
+
+    <CheckBox
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox2" />
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox2"
+        android:text="5元"
+        android:textSize="20sp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5元"
-            android:textSize="20sp"
-
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/checkBox2"
-            android:layout_toEndOf="@+id/checkBox2"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:paddingTop="15dp"
+    <CheckBox
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox3" />
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox3"
+        android:text="10元"
+        android:textSize="20sp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10元"
-            android:textSize="20sp"
-
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/checkBox3"
-            android:layout_toEndOf="@+id/checkBox3"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:paddingTop="15dp"
+    <CheckBox
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox4" />
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox4"
+        android:text="30元"
+        android:textSize="20sp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="30元"
-            android:textSize="20sp"
-
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/checkBox4"
-            android:layout_toEndOf="@+id/checkBox4"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:paddingTop="15dp"
+    <CheckBox
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox5" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="50元"
-            android:textSize="20sp"
-
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/checkBox5"
-            android:layout_toEndOf="@+id/checkBox5"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox5"
+        android:text="50元"
+        android:textSize="20sp"/>
 
     <RelativeLayout
         android:paddingTop="15dp"
@@ -174,21 +101,17 @@
             android:id="@+id/et_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:textSize="20sp"
-
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/checkBox6"
             android:layout_toEndOf="@+id/checkBox6"
             android:layout_marginLeft="11dp"
             android:layout_marginStart="11dp" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="元"
             android:textSize="20sp"
-
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/et_other"
             android:layout_toEndOf="@+id/et_other"
@@ -201,7 +124,6 @@
 
         <TextView
             android:id="@+id/tv_donate"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/register_reset"

@@ -66,7 +66,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     @BindView(R.id.forgetPWD)
     TextView mForgetPWD;
 
-
     /**
      * 显示认证后的信息，如 AccessToken
      */
@@ -92,7 +91,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private Drawable draw1;
     private Drawable draw2;
     private User upUser = null;
-    private ProgressDialog progd;
+    private ProgressDialog pd;
 
 
     @Override
@@ -102,7 +101,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         ButterKnife.bind(this);
         // 创建微博实例
         //mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
-        // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
+        // 快速授权时，不要传入 SCOPE，否则可能会授权不成功
         mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, null);
         mSsoHandler = new SsoHandler(this, mAuthInfo);
 
@@ -113,7 +112,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         mForgetPWD.setOnClickListener(this);
         mLoginPassword.setOnFocusChangeListener(this);
         mLoginPhone.setOnFocusChangeListener(this);
-
     }
 
     @Override
@@ -128,15 +126,13 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     Toast.makeText(LoginActivity.this, "请输入密码！", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (checkName(mLoginPhone.getText().toString())) {
-                    //如果是手机号登陆
+                    //手机号登陆
                     //判断密码是否正确
                     isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()), true);
                 } else {
                     //用户名登陆
                     isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()), false);
                 }
-
-
                 break;
             case R.id.ib_sina:
                 mSsoHandler.authorize(new AuthListener());
@@ -158,6 +154,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         }
     }
 
+    /**
+     *输入框的焦点事件
+     * 根据不同输入框获得的焦点加载相应的提示图片
+     * @param v 标识控件
+     * @param hasFocus 是否获得焦点
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         switch (v.getId()) {
@@ -266,6 +268,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     /**
      * 登陆相关逻辑(第三方授权)
+     * @param id 微博授权的ID
      */
     private void isLogin(String id) {
         BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
@@ -351,6 +354,12 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         }
     }
 
+    /**
+     * activity 的回调页
+     * @param requestCode 请求码
+     * @param resultCode  结果码
+     * @param data 回传的数据
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -487,7 +496,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
             return null;
         }
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -530,22 +538,25 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     /**
-     * 进度条相关
+     * 进度条相关--取消进度条显示
      */
     private void Completed() {
-        if (progd != null && progd.isShowing()) {
+        if (pd != null && pd.isShowing()) {
             //关闭对话框
-            progd.dismiss();
-            progd = null;
+            pd.dismiss();
+            pd = null;
         }
     }
 
+    /**
+     * 进度条相关--显示进度条
+     */
     private void Loing() {
-        if (progd == null) {
-            progd = new ProgressDialog(this);
-            progd.setTitle("登陆中...");
-            progd.setCancelable(false);
-            progd.show();
+        if (pd == null) {
+            pd = new ProgressDialog(this);
+            pd.setTitle("登陆中...");
+            pd.setCancelable(false);
+            pd.show();
         }
     }
 

@@ -2,24 +2,38 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
+import com.goldenratio.commonweal.bean.Dynamic;
+import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UploadBatchListener;
 
 public class DynamicReleaseActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -27,11 +41,11 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
     private LinearLayout mLlAddPhoto;
     private TextView mTvLocation;
     private Button mBtnRelease;
+    private EditText mEtText;
     private List<String> pathList;
     private GridView mGvShowPhoto;
     private MyGoodPicAdapter mPicAdapter;
     private ImageConfig mImageConfig;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +60,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
         mLlAddPhoto = (LinearLayout) findViewById(R.id.ll_add_photo);
         mTvLocation = (TextView) findViewById(R.id.tv_location);
         mBtnRelease = (Button) findViewById(R.id.btn_release);
+        mEtText = (EditText) findViewById(R.id.et_text);
         mGvShowPhoto = (GridView) findViewById(R.id.gv_show_photos);
 
         mIvBack.setOnClickListener(this);
@@ -59,7 +74,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
@@ -67,12 +82,93 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 ImageSelector.open(this, mImageConfig);   // 开启图片选择器
                 break;
             case R.id.tv_location:
-                Intent intent = new Intent(this,DynamicLocationActivity.class);
-                startActivityForResult(intent,1);
+                Intent intent = new Intent(this, DynamicLocationActivity.class);
+                startActivityForResult(intent, 1);
                 break;
             case R.id.btn_release:
+                UploadData();
                 break;
         }
+    }
+
+    /**
+     * 上传数据
+     */
+    private void UploadData() {
+        if (TextUtils.isEmpty(mEtText.getText().toString())) {
+            Toast.makeText(DynamicReleaseActivity.this, "请填写内容后再提交！", Toast.LENGTH_SHORT).show();
+        } else {
+            Dynamic dy = new Dynamic();
+            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+            Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+            String str = formatter.format(curDate);
+            dy.setDynamics_title(mEtText.getText().toString());
+            dy.setDynamics_time(str);
+            if (!mTvLocation.getText().toString().equals("地点(不添加)")) {
+                dy.setDynamics_location(mTvLocation.getText().toString());
+            }
+            getUserData(dy);
+
+            final String[] filePaths = new String[pathList.size()];
+            for (int i = 0; i < pathList.size(); i++) {
+                filePaths[i] = pathList.get(i).toString();
+            }
+            save2Bmob(filePaths,dy);
+        }
+    }
+
+    private void save2Bmob(final String[] filePaths, final Dynamic dy) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                BmobFile.uploadBatch(DynamicReleaseActivity.this, filePaths, new UploadBatchListener() {
+                    @Override
+                    public void onSuccess(List<BmobFile> list, List<String> list1) {
+                        if (filePaths.length == list1.size()){
+                            dy.setDynamics_pic(list1);
+                            dy.save(DynamicReleaseActivity.this, new SaveListener() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(int i, String s) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onProgress(int i, int i1, int i2, int i3) {
+
+                    }
+
+                    @Override
+                    public void onError(int i, String s) {
+
+                    }
+                });
+            }
+        }).start();
+    }
+
+    /**
+     * 获取用户数据
+     *
+     * @param dy 保存的实体
+     */
+    private void getUserData(Dynamic dy) {
+        String sqlCmd = "SELECT * FROM User ";
+        UserDao ud = new UserDao(this);
+        Cursor cursor = ud.query(sqlCmd);
+        if (cursor.moveToFirst()) {
+            dy.setDynamics_uid(cursor.getString(cursor.getColumnIndex("objectId")));
+            dy.setDynamics_name(cursor.getString(cursor.getColumnIndex("User_Nickname")));
+        }
+        cursor.close();
     }
 
     /**
@@ -107,10 +203,10 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
             mGvShowPhoto.setAdapter(mPicAdapter);
             mGvShowPhoto.setOnItemClickListener(this);
         }
-        switch (requestCode){
+        switch (requestCode) {
             case 1:
-                if (resultCode == RESULT_OK){
-                    mTvLocation.setText(data.getStringExtra(DynamicLocationActivity.KEY_S)+"-"+data.getStringExtra(DynamicLocationActivity.KEY_T));
+                if (resultCode == RESULT_OK) {
+                    mTvLocation.setText(data.getStringExtra(DynamicLocationActivity.KEY_S) + "-" + data.getStringExtra(DynamicLocationActivity.KEY_T));
                 }
                 break;
         }

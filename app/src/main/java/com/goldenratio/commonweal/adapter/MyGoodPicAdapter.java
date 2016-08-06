@@ -49,8 +49,8 @@ public class MyGoodPicAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        if (viewHolder == null) {
+        ViewHolder viewHolder;
+        if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.view_add_good_pic_item, null);
             viewHolder.mSelectedPic = (ImageView) convertView.findViewById(R.id.iv_selected_pic);

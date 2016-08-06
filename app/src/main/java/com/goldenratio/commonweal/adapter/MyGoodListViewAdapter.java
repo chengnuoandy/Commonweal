@@ -97,8 +97,8 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        if (viewHolder == null) {
+        ViewHolder viewHolder;
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.view_good_item, null);
             viewHolder = new ViewHolder();
             //初始化布局

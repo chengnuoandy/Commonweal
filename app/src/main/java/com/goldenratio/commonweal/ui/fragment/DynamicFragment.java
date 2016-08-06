@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
+import com.goldenratio.commonweal.ui.activity.DynamicRelease;
 import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
@@ -42,6 +44,8 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
     ImageView mTabLineIv;
     @BindView(R.id.id_switch_tab_ll)
     LinearLayout mSwitchTabLl;
+    @BindView(R.id.iv_add_dynamic)
+    ImageView mIvAddDynamic;
 
     private List<Fragment> mFragmentList;
 
@@ -73,7 +77,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         return view;
     }
 
-    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal})
+    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal,R.id.iv_add_dynamic})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_official:
@@ -84,6 +88,10 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
                 break;
             case R.id.tv_personal:
                 mVpDynamic.setCurrentItem(2);
+                break;
+            case R.id.iv_add_dynamic:
+                Intent intent = new Intent(getContext(), DynamicRelease.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -113,7 +121,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         if (currentIndex == 0 && position == 0)// 0->1
         {
             lp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3) + (screenWidth / 12)+ 1);
+                    * (screenWidth / 3) + (screenWidth / 12) + 1);
             Log.i("由0---1", lp.leftMargin + "");
 
         } else if (currentIndex == 1 && position == 0) // 1->0
@@ -126,13 +134,13 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         } else if (currentIndex == 1 && position == 1) // 1->2
         {
             lp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3) + (screenWidth / 12)+ 3);
+                    * (screenWidth / 3) + (screenWidth / 12) + 3);
             Log.i("由1---2", lp.leftMargin + "");
         } else if (currentIndex == 2 && position == 1) // 2->1
         {
             lp.leftMargin = (int) (-(1 - positionOffset)
                     * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3) + (screenWidth / 12)+ 3);
+                    * (screenWidth / 3) + (screenWidth / 12) + 3);
             Log.i("由2---1", lp.leftMargin + "");
         }
         Log.i("margin", "onPageScrolled: " + lp.leftMargin);
@@ -200,4 +208,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
     }
 
 
+    @OnClick(R.id.iv_add_dynamic)
+    public void onClick() {
+    }
 }

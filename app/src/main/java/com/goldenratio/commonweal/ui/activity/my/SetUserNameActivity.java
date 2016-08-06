@@ -19,14 +19,21 @@ import com.goldenratio.commonweal.bean.User;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
+/**
+ * 作者：Created by 龙啸天 on 2016/7/02 0025.
+ * 邮箱：jxfengmtx@163.com ---17718
+ */
 public class SetUserNameActivity extends Activity implements TextWatcher {
 
     @BindView(R.id.et_set_username)
@@ -55,13 +62,41 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
             case R.id.btn_save_username:
                 if (checkUserName(mEtSetUsername.getText().toString())) {
                     showProgressDialog();
-                    updateDataToSqlite();
-                    updateDataToBmob();
+                    isHasUserName();
                     break;
                 } else {
                     Toast.makeText(SetUserNameActivity.this, "请检查您的用户名是否填写规范", Toast.LENGTH_SHORT).show();
                 }
         }
+    }
+
+
+    //判断此用户名是否已经存在
+    private void isHasUserName() {
+        BmobQuery<User> bmobQuery = new BmobQuery<User>();
+        bmobQuery.addWhereEqualTo("User_Name", mEtSetUsername.getText().toString());
+        bmobQuery.findObjects(this, new FindListener<User>() {
+            @Override
+            public void onSuccess(List<User> list) {
+                if (list.isEmpty()) {
+                    updateDataToSqlite();
+                    updateDataToBmob();
+                } else {
+                    closeProgressDialog();
+                    Log.d("query", "查询成功");
+                    Log.d("info", list + "");
+                    closeProgressDialog();
+                    Toast.makeText(SetUserNameActivity.this, "此用户名已有人用过", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                closeProgressDialog();
+                Log.d("query", "查询失败");
+                Toast.makeText(SetUserNameActivity.this, "网络不给力", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void returnDataToUserSet() {
@@ -101,8 +136,8 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
     }
 
     private boolean checkUserName(String uName) {
-        //用户名由3-15个字符组成（不能为中文）
-        String regex = "^[a-zA-Z0-9_]{3,15}$";
+        //用户名由3-15个字符组  成（不能为中文）
+        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,15}$";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(uName);
         return m.matches();

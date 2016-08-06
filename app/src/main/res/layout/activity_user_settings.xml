@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".ui.activity.my.UserSettingsActivity">
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -45,18 +43,19 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:drawableRight="@mipmap/news_cate_arr"
-            android:gravity="left"
             android:text="头像"
             android:textColor="@color/black"
             android:textSize="16sp"/>
 
-        <ImageView
-            android:id="@+id/iv_set_avatar"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_set_avatar"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:scaleType="centerCrop"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:src="@drawable/user_default_avatar_v2_1_50"/>
+            android:src="@drawable/iv_unregister_head"
+            android:tag="1" />
 
     </RelativeLayout>
 

@@ -26,6 +26,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * 作者：Created by 龙啸天 on 2016/6/29 0025.
+ * 邮箱：jxfengmtx@163.com ---17718
+ */
 public class MyFragment extends Fragment {
     @BindView(R.id.civ_avatar)
     CircleImageView mAvatar;
@@ -152,7 +156,7 @@ public class MyFragment extends Fragment {
     /**
      * 读取本地数据库数据 （用户默认头像和签名）
      *
-     * @param ID 用户唯一id（objectid）
+     * 用户唯一id（objectid）
      */
     private void getUserData() {
         String sqlCmd = "SELECT * FROM User ";

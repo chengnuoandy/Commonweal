@@ -164,8 +164,7 @@ public class UserSettingsActivity extends Activity {
             whichSex = 0;
         else
             whichSex = 1;
-        new AlertDialog.Builder(this).setTitle("性别").setIcon(
-                android.R.drawable.ic_dialog_info).setSingleChoiceItems(
+        new AlertDialog.Builder(this).setTitle("性别").setSingleChoiceItems(
                 new String[]{"男", "女"}, whichSex,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -286,17 +285,16 @@ public class UserSettingsActivity extends Activity {
         final String USERROW;
         if (TV == mTvUserNickname) {
             ETUSER.setSingleLine(true);
-            ETUSER.setHint("请输入昵称");
+            ETUSER.setText(mTvUserNickname.getText());
             USERROW = "User_Nickname";
             X = 1;
         } else {
             ETUSER.setMaxLines(3);
-            ETUSER.setHint("请输入个性签名");
+            ETUSER.setText(mTvUserAutograph.getText());
             USERROW = "User_Autograph";
             X = 2;
         }
-        new AlertDialog.Builder(this).setTitle("编辑").setIcon(
-                android.R.drawable.ic_dialog_info).setView(
+        new AlertDialog.Builder(this).setTitle("编辑").setView(
                 ETUSER).setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

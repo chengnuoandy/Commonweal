@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@mipmap/news_cate_arr"
                 android:padding="@dimen/normal_space"
-                android:text="添加地点"
+                android:text="添加地点(不添加)"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_default" />
 

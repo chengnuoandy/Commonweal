@@ -21,7 +21,7 @@ import com.yancy.imageselector.ImageSelectorActivity;
 
 import java.util.List;
 
-public class DynamicRelease extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class DynamicReleaseActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private ImageView mIvBack;
     private LinearLayout mLlAddPhoto;
@@ -67,6 +67,8 @@ public class DynamicRelease extends Activity implements View.OnClickListener, Ad
                 ImageSelector.open(this, mImageConfig);   // 开启图片选择器
                 break;
             case R.id.tv_location:
+                Intent intent = new Intent(this,DynamicLocationActivity.class);
+                startActivityForResult(intent,1);
                 break;
             case R.id.btn_release:
                 break;
@@ -104,6 +106,13 @@ public class DynamicRelease extends Activity implements View.OnClickListener, Ad
             mPicAdapter = new MyGoodPicAdapter(this, pathList, mGvShowPhoto);
             mGvShowPhoto.setAdapter(mPicAdapter);
             mGvShowPhoto.setOnItemClickListener(this);
+        }
+        switch (requestCode){
+            case 1:
+                if (resultCode == RESULT_OK){
+                    mTvLocation.setText(data.getStringExtra(DynamicLocationActivity.KEY_S)+"-"+data.getStringExtra(DynamicLocationActivity.KEY_T));
+                }
+                break;
         }
     }
 

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
-import com.goldenratio.commonweal.ui.activity.DynamicRelease;
+import com.goldenratio.commonweal.ui.activity.DynamicReleaseActivity;
 import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
@@ -90,7 +90,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
                 mVpDynamic.setCurrentItem(2);
                 break;
             case R.id.iv_add_dynamic:
-                Intent intent = new Intent(getContext(), DynamicRelease.class);
+                Intent intent = new Intent(getContext(), DynamicReleaseActivity.class);
                 startActivity(intent);
                 break;
         }

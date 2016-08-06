@@ -59,6 +59,7 @@
                     android:id="@+id/civ_avatar"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:scaleType="centerCrop"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/iv_unregister_head"

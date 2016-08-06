@@ -130,8 +130,6 @@
         <activity android:name=".ui.activity.GoodTypeActivity"/>
         <activity android:name=".ui.activity.GoodDetailActivity"/>
         <activity android:name=".ui.activity.my.UserSettingsActivity"/>
-        <activity android:name=".ui.activity.my.SetAvatarActivity">
-        </activity>
         <activity android:name=".ui.activity.my.SetUserNameActivity">
         </activity>
         <activity android:name=".ui.activity.my.SetAddressActivity">

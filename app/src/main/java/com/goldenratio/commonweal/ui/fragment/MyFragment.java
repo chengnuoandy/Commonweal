@@ -1,4 +1,4 @@
-package com.goldenratio.commonweal.ui.fragment;
+ package com.goldenratio.commonweal.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;

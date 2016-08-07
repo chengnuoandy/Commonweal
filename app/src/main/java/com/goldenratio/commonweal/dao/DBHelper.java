@@ -13,17 +13,16 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DBNAME = "account.db";//数据库名
 
     public DBHelper(Context context) {
-        super(context,DBNAME,null,VERSION);
+        super(context, DBNAME, null, VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         //创建数据库sql语句
-        String sql="CREATE TABLE [U_NormalP] ([objectId] VARCHAR(20), [User_Name] VARCHAR(40)," +
+        String sql = "CREATE TABLE [User] ([objectId] VARCHAR(20), [User_Name] VARCHAR(40)," +
                 " [User_Autograph] VARCHAR(50) ,[User_Avatar] VARCHAR(50), [User_Nickname] VARCHAR(20)," +
                 " [User_Address] VARCHAR(50) ,[User_sex] VARCHAR(10), [User_image_min] VARCHAR(50), [User_image_max] VARCHAR(50)," +
-                " CONSTRAINT [] PRIMARY KEY ([objectId]))"
-                ;
+                " CONSTRAINT [] PRIMARY KEY ([objectId]))";
         //执行创建数据库操作
         db.execSQL(sql);
     }

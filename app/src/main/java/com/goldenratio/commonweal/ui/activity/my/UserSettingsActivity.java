@@ -191,7 +191,7 @@ public class UserSettingsActivity extends Activity {
                 .titleSubmitTextColor(getResources().getColor(R.color.white))
                 .titleTextColor(getResources().getColor(R.color.white))
                 // (截图默认配置：关闭    比例 1：1    输出分辨率  500*500)
-                .crop(1, 1, 500, 500)
+                .crop(1, 1, 1000, 1000)
                 // 开启单选   （默认为多选）
                 .singleSelect()
                 // 开启拍照功能 （默认关闭）

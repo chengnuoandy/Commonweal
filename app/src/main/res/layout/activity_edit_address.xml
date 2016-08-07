@@ -50,8 +50,7 @@
             android:layout_alignTop="@+id/tv_edit_consignee"
             android:layout_marginLeft="80dp"
             android:background="@null"
-            android:inputType="number"
-            android:text="人"/>
+            android:text="收件人"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -107,7 +106,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_edit_address"
+        android:id="@+id/rl_place_street"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white">
@@ -140,8 +139,9 @@
         android:layout_height="wrap_content"
         android:background="@null"
         android:hint="详细地址"
+        android:gravity="clip_horizontal"
         android:padding="10dp"
-        android:inputType="number"
+        android:maxLines="4"
         android:lines="4"/>
 
     <Button

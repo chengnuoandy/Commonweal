@@ -9,12 +9,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SetAddressActivity extends Activity {
+public class SetAddressActivity extends Activity implements SetAddressListAdapter.Callback {
 
     @BindView(R.id.iv_address_back)
     ImageView mIvBack;
@@ -39,8 +40,14 @@ public class SetAddressActivity extends Activity {
                 finish();
                 break;
             case R.id.btn_add_address:
-                startActivity(new Intent(SetAddressActivity.this, EditAddressActivity.class));
+                Intent intent = new Intent(SetAddressActivity.this, EditAddressActivity.class);
+                startActivityForResult(intent, 1);
                 break;
         }
+    }
+
+    @Override
+    public void click(View v) {
+
     }
 }

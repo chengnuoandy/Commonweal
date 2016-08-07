@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -40,7 +39,7 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
     protected void onCreate(Bundle savedInstanceState) {
         Window window = this.getWindow();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_good_price);
+        setContentView(R.layout.view_add_good_price);
         //去掉dialog默认的padding
         window.getDecorView().setPadding(0, 0, 0, 0);
         WindowManager.LayoutParams lp = window.getAttributes();
@@ -57,6 +56,8 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
         TVok = (TextView) findViewById(R.id.billSK_ok);
         IVclos = (ImageView) findViewById(R.id.billSK_hide);
         TVshow = (TextView) findViewById(R.id.show_re);
+        //默认隐藏
+        TVshow.setVisibility(View.GONE);
 
         mEditText1.setOnFocusChangeListener(this);
         mEditText2.setOnFocusChangeListener(this);
@@ -78,6 +79,7 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
             BigDecimal b = new BigDecimal(temp1 * temp2);
             float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
             TVshow.setText(Html.fromHtml("您将捐出：<font color='#fe5722'>" + f + "</font>  剩余：<font color='#8cc3f6'>" + (temp1 - (temp1 * temp2)) + "</font>"));
+            TVshow.setVisibility(View.VISIBLE);
         }
 
 
@@ -128,10 +130,11 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     BigDecimal b = new BigDecimal(temp1 * temp2);
                     float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     TVshow.setText(Html.fromHtml("您将捐出：<font color='#fe5722'>" + f + "</font>  剩余：<font color='#8cc3f6'>" + (temp1 - (temp1 * temp2)) + "</font>"));
-                    Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
+                    TVshow.setVisibility(View.VISIBLE);
+                    //Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
                     return;
                 }
-                TVshow.setText("您未设置捐款");
+                TVshow.setVisibility(View.GONE);
             }
         });
         mEditText1.addTextChangedListener(new TextWatcher() {
@@ -158,10 +161,11 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     BigDecimal b = new BigDecimal(temp1 * temp2);
                     float f = b.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
                     TVshow.setText(Html.fromHtml("您将捐出：<font color='#fe5722'>" + f + "</font>  剩余：<font color='#8cc3f6'>" + (temp1 - (temp1 * temp2)) + "</font>"));
-                    Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
+                    TVshow.setVisibility(View.VISIBLE);
+//                    Log.d(TAG, "afterTextChanged: " + temp1 + ":" + s.toString() + ":" + temp2);
                     return;
                 }
-                TVshow.setText("您未设置捐款");
+                TVshow.setVisibility(View.GONE);
             }
         });
     }

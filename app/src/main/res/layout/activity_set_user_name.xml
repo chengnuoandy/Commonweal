@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_set_name_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/normal_space"
+            android:src="@mipmap/ic_back"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="编辑用户名"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_text_size"/>
+
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/et_set_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_space"
+        android:lines="1"
+        android:padding="@dimen/normal_space"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="注意：用户名由3-15个字符组成，并且只能设置一次，可以用作登陆账户使用，用户名中不包含中文，不能只含数字"
+        android:textColor="@color/colorPrimary"/>
+
+    <Button
+        android:id="@+id/btn_save_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_space"
+        android:background="@drawable/setting_btn_selector"
+        android:enabled="false"
+        android:text="保存"
+        android:textSize="@dimen/title_text_size"/>
+
+
+</LinearLayout>

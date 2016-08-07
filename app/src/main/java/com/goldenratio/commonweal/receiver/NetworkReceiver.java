@@ -35,7 +35,7 @@ public class NetworkReceiver extends BroadcastReceiver {
 
     public static List<NetEventHandle> ehList = new ArrayList<NetEventHandle>();
 
-    public static interface NetEventHandle {
+    public interface NetEventHandle {
         /**
          * 网络状态码
          *

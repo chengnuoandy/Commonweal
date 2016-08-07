@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * Created by 龙啸天  on 2016/6/21 0021.
+ *
+ * 承担动态页面三个fragment与ViewPager的适配
  */
 public class MyDynFragmentPagerAdapter extends FragmentPagerAdapter {
 

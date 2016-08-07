@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/snow"
         android:orientation="horizontal">
 
 
@@ -30,10 +30,10 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="bottom"
         android:orientation="vertical">
 
         <EditText
@@ -44,8 +44,8 @@
             android:background="@color/white"
             android:drawableLeft="@drawable/tab_my_ic_click"
             android:drawablePadding="@dimen/normal_space"
-            android:hint="请输入手机号"
-            android:inputType="phone"
+            android:hint="手机号/用户名"
+            android:inputType="text"
             android:padding="@dimen/normal_space"
             android:textSize="@dimen/text_size_default" />
 
@@ -58,7 +58,7 @@
             android:drawableLeft="@drawable/user_password_unlock"
             android:drawablePadding="@dimen/normal_space"
             android:hint="请输入密码"
-            android:inputType="numberPassword"
+            android:inputType="textPassword"
             android:padding="@dimen/normal_space"
             android:textSize="@dimen/text_size_default" />
 
@@ -84,7 +84,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
                 android:orientation="horizontal"
-                android:text="注册 >>>" />
+                android:text="注册 >>" />
         </RelativeLayout>
 
 
@@ -104,8 +104,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/normal_input_height">
 
         <LinearLayout
             android:layout_width="match_parent"

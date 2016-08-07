@@ -3,22 +3,20 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
-
-
+    android:orientation="vertical">
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp" >
+        android:layout_height="180dp">
 
 
         <android.support.v4.view.ViewPager
             android:id="@+id/vp_news_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            > </android.support.v4.view.ViewPager>
+            android:layout_height="wrap_content">
 
+        </android.support.v4.view.ViewPager>
 
 
         <RelativeLayout
@@ -26,10 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@null"
-            android:padding="7dp" >
-
-
-
+            android:padding="7dp">
 
 
             <com.viewpagerindicator.CirclePageIndicator
@@ -39,11 +34,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-               />
+                android:paddingRight="5dp" />
         </RelativeLayout>
     </FrameLayout>
-
 
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,10 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.adapter.MyDynFragmentPagerAdapter;
-import com.goldenratio.commonweal.ui.fragment.Dynamic.HelpDynamicFragment;
-import com.goldenratio.commonweal.ui.fragment.Dynamic.OfficialDynamicFragment;
-import com.goldenratio.commonweal.ui.fragment.Dynamic.PersonalDynamicFragment;
+import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
+import com.goldenratio.commonweal.ui.activity.DynamicReleaseActivity;
+import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
+import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
+import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
 
     @BindView(R.id.tv_official)
     TextView mTvOfficial;
-    @BindView(R.id.tv_dynamic)
+    @BindView(R.id.tv_Help)
     TextView mTvDynamic;
     @BindView(R.id.tv_personal)
     TextView mTvPersonal;
@@ -42,6 +44,8 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
     ImageView mTabLineIv;
     @BindView(R.id.id_switch_tab_ll)
     LinearLayout mSwitchTabLl;
+    @BindView(R.id.iv_add_dynamic)
+    ImageView mIvAddDynamic;
 
     private List<Fragment> mFragmentList;
 
@@ -67,27 +71,27 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mFragmentList.add(new HelpDynamicFragment());
         mFragmentList.add(new PersonalDynamicFragment());
 
-    /*    mPtsTitle = (PagerTabStrip) view.findViewById(R.id.pts_title);
-        mPtsTitle.setDrawFullUnderline(false);
-        mPtsTitle.setTabIndicatorColor(Color.RED);*/
-
         initTabLineWidth();
-        mVpDynamic.setAdapter(new MyDynFragmentPagerAdapter(getFragmentManager(), mFragmentList));
+        mVpDynamic.setAdapter(new MyFragmentPagerAdapter(getFragmentManager(), mFragmentList));
         mVpDynamic.addOnPageChangeListener(this);
         return view;
     }
 
-    @OnClick({R.id.tv_official, R.id.tv_dynamic, R.id.tv_personal})
+    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal,R.id.iv_add_dynamic})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_official:
                 mVpDynamic.setCurrentItem(0);
                 break;
-            case R.id.tv_dynamic:
+            case R.id.tv_Help:
                 mVpDynamic.setCurrentItem(1);
                 break;
             case R.id.tv_personal:
                 mVpDynamic.setCurrentItem(2);
+                break;
+            case R.id.iv_add_dynamic:
+                Intent intent = new Intent(getContext(), DynamicReleaseActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -117,26 +121,26 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         if (currentIndex == 0 && position == 0)// 0->1
         {
             lp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12) + 1);
             Log.i("由0---1", lp.leftMargin + "");
 
         } else if (currentIndex == 1 && position == 0) // 1->0
         {
             lp.leftMargin = (int) (-(1 - positionOffset)
                     * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12) + 1);
             Log.i("由1---0", lp.leftMargin + "");
 
         } else if (currentIndex == 1 && position == 1) // 1->2
         {
             lp.leftMargin = (int) (positionOffset * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12) + 3);
             Log.i("由1---2", lp.leftMargin + "");
         } else if (currentIndex == 2 && position == 1) // 2->1
         {
             lp.leftMargin = (int) (-(1 - positionOffset)
                     * (screenWidth * 1.0 / 3) + currentIndex
-                    * (screenWidth / 3));
+                    * (screenWidth / 3) + (screenWidth / 12) + 3);
             Log.i("由2---1", lp.leftMargin + "");
         }
         Log.i("margin", "onPageScrolled: " + lp.leftMargin);
@@ -188,10 +192,11 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         //获取屏幕大小像素值
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;
+        Log.i("width", screenWidth + "");
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mTabLineIv
                 .getLayoutParams();
-        lp.width = screenWidth / 3;
-        Log.i("width", lp.width + "");
+        lp.width = screenWidth / 6;
+        Log.i("进度条width", lp.width + "");
         mTabLineIv.setLayoutParams(lp);
     }
 
@@ -203,4 +208,7 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
     }
 
 
+    @OnClick(R.id.iv_add_dynamic)
+    public void onClick() {
+    }
 }

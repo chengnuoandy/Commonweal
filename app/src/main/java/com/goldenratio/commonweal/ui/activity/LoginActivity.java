@@ -22,6 +22,7 @@ import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
 import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
+import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -32,6 +33,8 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +67,6 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     @BindView(R.id.forgetPWD)
     TextView mForgetPWD;
 
-
     /**
      * 显示认证后的信息，如 AccessToken
      */
@@ -90,7 +92,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private Drawable draw1;
     private Drawable draw2;
     private User upUser = null;
-    private ProgressDialog progd;
+    private ProgressDialog pd;
 
 
     @Override
@@ -100,7 +102,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         ButterKnife.bind(this);
         // 创建微博实例
         //mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
-        // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
+        // 快速授权时，不要传入 SCOPE，否则可能会授权不成功
         mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, null);
         mSsoHandler = new SsoHandler(this, mAuthInfo);
 
@@ -111,15 +113,27 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         mForgetPWD.setOnClickListener(this);
         mLoginPassword.setOnFocusChangeListener(this);
         mLoginPhone.setOnFocusChangeListener(this);
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_btn:
-                //判断密码是否正确
-                isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()));
+                //判断输入是否为空
+                if (mLoginPhone.getText().toString().isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "请输入账号！", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (mLoginPassword.getText().toString().isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "请输入密码！", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (checkName(mLoginPhone.getText().toString())) {
+                    //手机号登陆
+                    //判断密码是否正确
+                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()), true);
+                } else {
+                    //用户名登陆
+                    isLogin(mLoginPhone.getText().toString(), MD5Util.createMD5(mLoginPassword.getText().toString()), false);
+                }
                 break;
             case R.id.ib_sina:
                 mSsoHandler.authorize(new AuthListener());
@@ -131,7 +145,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 break;
             case R.id.forgetPWD:
                 Intent intentFp = new Intent(this, RegisterActivity.class);
-                startActivityForResult(intentFp, 1);
+                startActivityForResult(intentFp, 2);
                 break;
             case R.id.iv_return:
                 finish();
@@ -141,6 +155,13 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         }
     }
 
+    /**
+     * 输入框的焦点事件
+     * 根据不同输入框获得的焦点加载相应的提示图片
+     *
+     * @param v        标识控件
+     * @param hasFocus 是否获得焦点
+     */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         switch (v.getId()) {
@@ -169,57 +190,100 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     /**
      * 登陆相关逻辑(正常登陆)
+     *
+     * @param Phone    手机号/用户名
+     * @param Password 密码
+     * @param flag     那种方式登陆  true-手机号  false-用户名
      */
-    private void isLogin(String Phone, final String Password) {
-        Loing();
-        BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
-        bmobQuery.addWhereEqualTo("User_Phone", Phone);
-        //执行查询方法
-        bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
-            @Override
-            public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
-                //判断查询到的行数
-                if (object.size() == 1) {
-                    com.goldenratio.commonweal.bean.User mUser = object.get(0);
-                    if (Password.equals(mUser.getUser_Password())) {
-                        Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                        //获得数据的objectId信息
-                        userID = mUser.getObjectId();
+    private void isLogin(String Phone, final String Password, Boolean flag) {
+        if (flag) {
+            Loing();
+            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+            bmobQuery.addWhereEqualTo("User_Phone", Phone);
+            //执行查询方法
+            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+                @Override
+                public void onSuccess(List<U_NormalP> object) {
+                    //判断查询到的行数
+                    if (object.size() == 1) {
+                        U_NormalP mUser = object.get(0);
+                        if (Password.equals(mUser.getUser_Password())) {
+                            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                            //获得数据的objectId信息
+                            userID = mUser.getObjectId();
 
-                        returnData();
-                        saveDB(mUser);
+                            returnData();
+                            saveDB(mUser);
+                        } else {
+                            Completed();
+                            Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Completed();
-                        Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Completed();
-                    Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onError(int code, String msg) {
-                Completed();
-                Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onError(int code, String msg) {
+                    Completed();
+                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Loing();
+            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+            bmobQuery.addWhereEqualTo("User_Name", Phone);
+            //执行查询方法
+            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+                @Override
+                public void onSuccess(List<U_NormalP> object) {
+                    //判断查询到的行数
+                    if (object.size() == 1) {
+                        U_NormalP mUser = object.get(0);
+                        if (Password.equals(mUser.getUser_Password())) {
+                            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                            //获得数据的objectId信息
+                            userID = mUser.getObjectId();
+
+                            returnData();
+                            saveDB(mUser);
+                        } else {
+                            Completed();
+                            Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Completed();
+                        Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onError(int code, String msg) {
+                    Completed();
+                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
     }
 
     /**
      * 登陆相关逻辑(第三方授权)
+     *
+     * @param id 微博授权的ID
      */
     private void isLogin(String id) {
-        BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
         bmobQuery.addWhereEqualTo("User_WbID", id);
         //执行查询方法
-        bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
             @Override
-            public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+            public void onSuccess(List<U_NormalP> object) {
                 //判断查询到的行数
                 if (object.size() == 1) {
                     //如果此用户已存在，获得数据的objectId信息
-                    com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                    com.goldenratio.commonweal.bean.U_NormalP mUser = object.get(0);
                     userID = mUser.getObjectId();
                     returnData();
                     saveDB(mUser);
@@ -293,6 +357,13 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         }
     }
 
+    /**
+     * activity 的回调页
+     *
+     * @param requestCode 请求码
+     * @param resultCode  结果码
+     * @param data        回传的数据
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -307,8 +378,15 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 if (resultCode == RESULT_OK) {
                     String registerReturnPhone = data.getStringExtra("regi_phone");
                     String registerReturnPassword = data.getStringExtra("regi_password");
+//                    mLoginPhone.setText(registerReturnPhone);
+//                    mLoginPassword.setText(registerReturnPassword);
+                    isLogin(registerReturnPhone, MD5Util.createMD5(registerReturnPassword), true);
+                }
+                break;
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    String registerReturnPhone = data.getStringExtra("regi_phone");
                     mLoginPhone.setText(registerReturnPhone);
-                    mLoginPassword.setText(registerReturnPassword);
                 }
                 break;
             default:
@@ -323,7 +401,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         public void onComplete(String response) {
             if (!TextUtils.isEmpty(response)) {
-                // 调用 User#parse 将JSON串解析成User对象
+                // 调用 U_NormalP#parse 将JSON串解析成User对象
                 upUser = User.parse(response);
                 if (upUser != null) {
                     //是否已经注册
@@ -356,6 +434,18 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         setResult(RESULT_OK, intent);
     }
 
+    /**
+     * 正则匹配 手机号登陆还是用户名登陆
+     *
+     * @param name 用户名/手机号
+     * @return true-手机号 false-用户名
+     */
+    private boolean checkName(String name) {
+        String regPw = "^\\d+$";
+        Pattern p = Pattern.compile(regPw);
+        Matcher m = p.matcher(name);
+        return m.matches();
+    }
 
     /**
      * 异步加载 内部类实现
@@ -363,7 +453,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      */
     class myAsyncTask extends AsyncTask<String, Void, Void> {
 
-        private com.goldenratio.commonweal.bean.User user = new com.goldenratio.commonweal.bean.User();
+        private U_NormalP user = new U_NormalP();
         private User wbuser;
 
         public myAsyncTask(User wbuser) {
@@ -381,14 +471,14 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         protected Void doInBackground(String... params) {
             //提交数据
-            user.setUser_Name(wbuser.screen_name);
-            user.setUser_Is_Real_Name(wbuser.verified);
+            user.setUser_Nickname(wbuser.screen_name);
+            user.setUser_IsRealName(wbuser.verified);
             if ("m".equals(wbuser.gender)) {
-                user.setUser_sex("男");
+                user.setUser_Sex("男");
             } else if ("f".equals(wbuser.gender)) {
-                user.setUser_sex("女");
+                user.setUser_Sex("女");
             } else {
-                user.setUser_sex("未知");
+                user.setUser_Sex("未知");
             }
             user.setUser_WbID(wbuser.id);
             user.setUser_image_max(wbuser.avatar_large);
@@ -414,16 +504,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_WbID", wbuser.id);
             //执行查询方法
-            bmobQuery.findObjects(LoginActivity.this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+            bmobQuery.findObjects(LoginActivity.this, new FindListener<U_NormalP>() {
                 @Override
-                public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+                public void onSuccess(List<U_NormalP> object) {
                     //判断查询到的行数
                     if (object.size() == 1) {
                         //如果此用户已存在，获得数据的objectId信息
-                        com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                        U_NormalP mUser = object.get(0);
                         userID = mUser.getObjectId();
                         returnData();
                         saveDB(mUser);
@@ -442,31 +532,36 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     /**
      * 保存数据到本地
      */
-    private void saveDB(com.goldenratio.commonweal.bean.User user) {
+    private void saveDB(U_NormalP user) {
         UserDao mUserDao = new UserDao(LoginActivity.this);
-        mUserDao.insert("insert into User (objectId,User_Name,User_Autograph,User_Avatar) values(?,?,?,?)",
-                new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd()});
+        mUserDao.execSQL("insert into U_NormalP (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
+                        ",User_Address,User_sex,User_image_min,User_sex,User_image_min) values(?,?,?,?,?,?,?,?,?,?)",
+                new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
+                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max()});
         Completed();
         finish();
     }
 
     /**
-     * 进度条相关
+     * 进度条相关--取消进度条显示
      */
     private void Completed() {
-        if (progd != null && progd.isShowing()) {
+        if (pd != null && pd.isShowing()) {
             //关闭对话框
-            progd.dismiss();
-            progd = null;
+            pd.dismiss();
+            pd = null;
         }
     }
 
+    /**
+     * 进度条相关--显示进度条
+     */
     private void Loing() {
-        if (progd == null) {
-            progd = new ProgressDialog(this);
-            progd.setTitle("登陆中...");
-            progd.setCancelable(false);
-            progd.show();
+        if (pd == null) {
+            pd = new ProgressDialog(this);
+            pd.setTitle("登陆中...");
+            pd.setCancelable(false);
+            pd.show();
         }
     }
 

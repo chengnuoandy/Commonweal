@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/snow"
         android:orientation="horizontal"
         android:padding="@dimen/normal_space">
 
@@ -21,10 +21,17 @@
             android:textSize="@dimen/title_text_size" />
 
         <ImageView
-            android:id="@+id/add_good"
+            android:id="@+id/iv_add_good"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:src="@mipmap/fragment_good_add" />
     </RelativeLayout>
+
+    <include layout="@layout/view_no_net" />
+
+    <com.goldenratio.commonweal.ui.view.PullToRefreshListView
+        android:id="@+id/lv_good_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.goldenratio.commonweal.ui.view.PullToRefreshListView>
 </LinearLayout>

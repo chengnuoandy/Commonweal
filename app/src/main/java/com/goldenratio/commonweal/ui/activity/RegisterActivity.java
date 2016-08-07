@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -85,15 +86,18 @@ public class RegisterActivity extends Activity {
     @BindView(R.id.ll_agreement)
     LinearLayout mLlAgreement;
 
+
     private String APPKEY = "139216e4958f6";
     private String APPSECRET = "63512a2fcc9c9e2f5c00bbdce60d920e";
 
     private ProgressDialog mPd;
     private String mPhone;  //暂存手机号
+    private String mUserNickname;
     private EventHandler mEh;
-
+    private EditText mEtUserNickname;
     private String mObjectId;
     private boolean isClickRegisterBtn = false;
+
     ListView mListView;
 
     @Override
@@ -209,10 +213,10 @@ public class RegisterActivity extends Activity {
                         //  ^[a-zA-Z]\w{5,17}$
                         if (checkPassword(mPassword)) {
                             mBtnRegister.setClickable(false);
-                            showProgressDialog();
-                            if (isClickRegisterBtn)
-                                getUDefAvatarUrl();
-                            else {
+                            if (isClickRegisterBtn) {
+                                showCustomViewDialog();
+                            } else {
+                                showProgressDialog();
                                 updateUserPwdToDb();
                             }
                         } else
@@ -401,6 +405,40 @@ public class RegisterActivity extends Activity {
         }
     }
 
+    private void showCustomViewDialog() {
+        AlertDialog.Builder builder = null;
+
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("昵称");
+
+        /**
+         * 设置内容区域为自定义View
+         */
+        LinearLayout registerDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_register, null);
+        mEtUserNickname = (EditText) registerDialog.findViewById(R.id.et_userName);
+        builder.setView(registerDialog);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mUserNickname = mEtUserNickname.getText().toString();
+                showProgressDialog();
+                getUDefAvatarUrl();
+            }
+        });
+        builder.setNegativeButton("跳过", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showProgressDialog();
+                getUDefAvatarUrl();
+            }
+        });
+
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     /**
      * 数据库相关逻辑
      *
@@ -415,8 +453,12 @@ public class RegisterActivity extends Activity {
     private void addUserInfoToDB(String hdUrl, String maxUrl, String minUrl, String aut) {
         //密码md5加密
         String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
-        User u = new User();
+        if (TextUtils.isEmpty(mUserNickname)) {
+            mUserNickname = "Love" + getRndUserName(6);
+        }
+        U_NormalP u = new U_NormalP();
         u.setUser_Phone(mPhone);
+        u.setUser_Nickname(mUserNickname);
         u.setUser_Password(mD5Pwd);
         u.setUser_image_hd(hdUrl);
         u.setUser_image_max(maxUrl);
@@ -443,7 +485,7 @@ public class RegisterActivity extends Activity {
     private void updateUserPwdToDb() {
         //md5加密
         String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
-        User u = new User();
+        U_NormalP u = new U_NormalP();
         u.setUser_Password(mD5Pwd);
         closeProgressDialog();
         u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
@@ -463,24 +505,25 @@ public class RegisterActivity extends Activity {
 
     //判断此用户是否已经注册
     private void isRegister() {
-        BmobQuery<User> bmobQuery = new BmobQuery<User>();
+        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<U_NormalP>();
         bmobQuery.addWhereEqualTo("User_Phone", mPhone);
         Log.d("queryPhone", mPhone);
-        bmobQuery.findObjects(this, new FindListener<User>() {
+        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
             @Override
-            public void onSuccess(List<User> list) {
-                closeProgressDialog();
+            public void onSuccess(List<U_NormalP> list) {
                 if (list.isEmpty()) {
                     //判断点击的是否是注册按钮
                     if (isClickRegisterBtn) {
                         mBtnSendCode.setClickable(false);
                         sendVerification();
                     } else {
+                        closeProgressDialog();
                         Toast.makeText(RegisterActivity.this, "您好像并未注册哟", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
                     if (isClickRegisterBtn) {
+                        closeProgressDialog();
                         Log.d("query", "查询成功");
                         Log.d("info", list + "");
                         Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
@@ -504,7 +547,6 @@ public class RegisterActivity extends Activity {
     }
 
     // List<String> dataList = new ArrayList<String>();
-
 
     private void getUDefAvatarUrl() {
         int rndNum = (int) (Math.random() * 9);
@@ -570,6 +612,23 @@ public class RegisterActivity extends Activity {
         Pattern p = Pattern.compile(regPw);
         Matcher m = p.matcher(pw);
         return m.matches();
+    }
+
+    /**
+     * @param length 产生随机的字符串长度
+     * @return 随机字符串
+     */
+    public static String getRndUserName(int length) {
+        StringBuffer buffer = new StringBuffer("0123456789" +
+                "abcdefghijklmnopqrstuvwxyz" +
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        StringBuffer sb = new StringBuffer();
+        Random r = new Random();
+        int range = buffer.length();
+        for (int i = 0; i < length; i++) {
+            sb.append(buffer.charAt(r.nextInt(range)));
+        }
+        return sb.toString();
     }
 
     @Override

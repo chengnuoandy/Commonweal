@@ -1,33 +1,104 @@
 package com.goldenratio.commonweal.bean;
 
-import java.util.List;
-
 import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobDate;
 
 /**
  * Created by CharmNight on 2016/6/10.
  */
 
 public class Help extends BmobObject {
-    private List Help_pic;       //相关图片
-    private Integer Help_Id;            //项目ID（Help+用户ID/公益组织ID+随机码）
-    private String Help_Initiator;    //项目发起人&执行者
-    private String Help_Sponsor;     //赞助方
-    private String Help_Title;      //项目标题
-    private String Help_Content;    //项目内容(显示在首页上的)
-    private Integer Help_Progress;      //项目进度
-    private Integer Help_CountDown;    //项目的时间倒计时
-    private String Help_Result;     //项目结果
-    private String Help_Content_content;//项目的内容简介
 
-    public String getHelp_Content_content() {
-        return Help_Content_content;
+    private String Help_Type; // 项目类型
+    private String Help_Coin;//项目申请金额
+    private String Help_MoneyUse;//项目申请金额用途
+    private BmobDate Help_StartDate; //项目开始时间
+    private BmobDate Help_EndDate; // 项目结束时间
+    private String Help_Pic;       //相关图片
+    private String Help_Title;//项目标题
+    private String Help_OneSentence;
+    private String Help_Initiator;    //项目发起组织
+    private String Help_Execute;
+
+    private String Help_Smile;    //项目受助者
+    private String Help_SmilePro;    //项目受助者省份
+    private String Help_SmileCity;    //项目受助者城市
+    private String Help_Content;    //项目内容(显示在首页上的)
+    private String Help_Url; //项目全部信息
+    private String Help_Result; //项目结果
+
+    public String getHelp_Execute() {
+        return Help_Execute;
     }
 
-    public void setHelp_Content_content(String help_Content_content) {
-        Help_Content_content = help_Content_content;
+    public void setHelp_Execute(String help_Execute) {
+        Help_Execute = help_Execute;
+    }
+
+
+
+    public String getHelp_Type() {
+        return Help_Type;
+    }
+
+    public void setHelp_Type(String help_Type) {
+        Help_Type = help_Type;
+    }
+
+    public String getHelp_Coin() {
+        return Help_Coin;
+    }
+
+    public void setHelp_Coin(String help_Coin) {
+        Help_Coin = help_Coin;
+    }
+
+    public String getHelp_MoneyUse() {
+        return Help_MoneyUse;
+    }
+
+    public void setHelp_MoneyUse(String help_MoneyUse) {
+        Help_MoneyUse = help_MoneyUse;
+    }
+
+    public BmobDate getHelp_StartDate() {
+        return Help_StartDate;
+    }
+
+    public void setHelp_StartDate(BmobDate help_StartDate) {
+        Help_StartDate = help_StartDate;
+    }
+
+    public BmobDate getHelp_EndDate() {
+        return Help_EndDate;
+    }
+
+    public void setHelp_EndDate(BmobDate help_EndDate) {
+        Help_EndDate = help_EndDate;
+    }
+
+    public String getHelp_Pic() {
+        return Help_Pic;
+    }
+
+    public void setHelp_Pic(String help_Pic) {
+        Help_Pic = help_Pic;
+    }
+
+    public String getHelp_Title() {
+        return Help_Title;
+    }
+
+    public void setHelp_Title(String help_Title) {
+        Help_Title = help_Title;
+    }
+
+    public String getHelp_OneSentence() {
+        return Help_OneSentence;
+    }
+
+    public void setHelp_OneSentence(String help_OneSentence) {
+        Help_OneSentence = help_OneSentence;
     }
 
     public String getHelp_Initiator() {
@@ -38,53 +109,30 @@ public class Help extends BmobObject {
         Help_Initiator = help_Initiator;
     }
 
-    public void setHelp_Progress(Integer help_Progress) {
-        Help_Progress = help_Progress;
+
+
+    public String getHelp_Smile() {
+        return Help_Smile;
     }
 
-    public String getHelp_Sponsor() {
-        return Help_Sponsor;
+    public void setHelp_Smile(String help_Smile) {
+        Help_Smile = help_Smile;
     }
 
-    public void setHelp_Sponsor(String help_Sponsor) {
-        Help_Sponsor = help_Sponsor;
+    public String getHelp_SmilePro() {
+        return Help_SmilePro;
     }
 
-
-
-
-
-    private String Help_Top_pic;
-
-    public String getHelp_Top_pic(){return Help_Top_pic;}
-    public void setHelp_Top_pic(String help_top_pic){
-        Help_Top_pic = help_top_pic;
+    public void setHelp_SmilePro(String help_SmilePro) {
+        Help_SmilePro = help_SmilePro;
     }
 
-    public List getHelp_pic() {
-        return Help_pic;
+    public String getHelp_SmileCity() {
+        return Help_SmileCity;
     }
 
-    public void setHelp_pic(List help_pic) {
-        Help_pic = help_pic;
-    }
-
-    public Integer getHelp_Id() {
-        return Help_Id;
-    }
-
-    public void setHelp_Id(int help_Id) {
-        Help_Id = help_Id;
-    }
-
-
-
-    public String getHelp_Title() {
-        return Help_Title;
-    }
-
-    public void setHelp_Title(String help_Title) {
-        Help_Title = help_Title;
+    public void setHelp_SmileCity(String help_SmileCity) {
+        Help_SmileCity = help_SmileCity;
     }
 
     public String getHelp_Content() {
@@ -95,20 +143,12 @@ public class Help extends BmobObject {
         Help_Content = help_Content;
     }
 
-    public Integer getHelp_Progress() {
-        return Help_Progress;
+    public String getHelp_Url() {
+        return Help_Url;
     }
 
-    public void setHelp_Progress(int help_Progress) {
-        Help_Progress = help_Progress;
-    }
-
-    public Integer getHelp_CountDown() {
-        return Help_CountDown;
-    }
-
-    public void setHelp_CountDown(int help_CountDown) {
-        Help_CountDown = help_CountDown;
+    public void setHelp_Url(String help_Url) {
+        Help_Url = help_Url;
     }
 
     public String getHelp_Result() {
@@ -118,4 +158,5 @@ public class Help extends BmobObject {
     public void setHelp_Result(String help_Result) {
         Help_Result = help_Result;
     }
+
 }

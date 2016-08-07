@@ -9,14 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.adapter.MyGridAdapter;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
+import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
+import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
+import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -24,16 +26,30 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * 作者：Created by 龙啸天 on 2016/6/29 0025.
+ * 邮箱：jxfengmtx@163.com ---17718
+ */
 public class MyFragment extends Fragment {
     @BindView(R.id.civ_avatar)
     CircleImageView mAvatar;
     @BindView(R.id.tv_name)
     TextView mTvName;
-    @BindView(R.id.gridview)
-    GridView gridView;
+
+    @BindView(R.id.iv_my_message)
+    ImageView mIvMessage;
+    @BindView(R.id.iv_settings)
+    ImageView mIvSetting;
 
     private boolean isLogin = false;
-    private String mUserID;
+
+    private String userSex;
+    private String userNickname;//用户昵称
+    private String autograph; //个性签名
+    private String userName;  //用户名
+    private String avaUrl;  //用户高清头像
+    private String avaMinUrl;//用户小头像
+    public static String mUserID; //用户objectid
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,21 +58,31 @@ public class MyFragment extends Fragment {
 
         ButterKnife.bind(this, view);
 
-        gridView.setAdapter(new MyGridAdapter(getContext()));
-
         if (isUserTableExist()) {
-            getUserData(mUserID);
+            getUserData();
             isLogin = true;
         }
 
         return view;
+
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
+                if (isLogin) {
+                    Intent intent = new Intent(getActivity(), UserSettingsActivity.class);
+                    intent.putExtra("user_sex", userSex);
+                    intent.putExtra("user_nickname", userNickname);
+                    intent.putExtra("user_name", userName);
+                    intent.putExtra("autograph", autograph);
+                    intent.putExtra("avaUrl", avaUrl);
+                    intent.putExtra("avaMinUrl", avaMinUrl);
+                    startActivityForResult(intent, 3);
+                    break;
+                }
             case R.id.tv_name:
                 if (!isUserTableExist()) {
                     if (!isLogin) {
@@ -67,23 +93,44 @@ public class MyFragment extends Fragment {
                     Toast.makeText(getActivity(), "用户已经登陆", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.iv_my_message:
+                Intent intent = new Intent(getActivity(), MessageActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.iv_settings:
+                Intent intent1 = new Intent(getActivity(), MySetActivity.class);
+                intent1.putExtra("islogin", isLogin);
+                startActivityForResult(intent1, 2);
+                break;
             default:
                 break;
         }
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
+            //登陆界面返回数据
             case 1:
                 if (resultCode == Activity.RESULT_OK) {
                     mUserID = data.getStringExtra("objectId");
                     isLogin = true;
-                    getUserData(mUserID);
+                    getUserData();
                     Log.i("lxc", "onActivityResult: " + mUserID);
-
                 }
+                break;
+            //应用设置界面返回数据
+            case 2:
+                if (resultCode == Activity.RESULT_OK) {
+                    isLogin = false;
+                    Log.i("settings", "设置返回");
+                    getActivity().finish();
+                    getActivity().startActivity(getActivity().getIntent());
+                }
+                break;
+            case 3:
+                getUserData();
+                break;
         }
     }
 
@@ -94,7 +141,7 @@ public class MyFragment extends Fragment {
      */
     private boolean isUserTableExist() {
         boolean isTableExist = true;
-        String sqlCmd = "SELECT count(User_Avatar) FROM User ";
+        String sqlCmd = "SELECT count(User_Avatar) FROM U_NormalP ";
         UserDao ud = new UserDao(getActivity());
         Cursor c = ud.query(sqlCmd);
         if (c.moveToNext()) {
@@ -109,23 +156,30 @@ public class MyFragment extends Fragment {
     /**
      * 读取本地数据库数据 （用户默认头像和签名）
      *
-     * @param ID 用户唯一id（objectid）
+     * 用户唯一id（objectid）
      */
-    private void getUserData(String ID) {
-        String sqlCmd = "SELECT User_Autograph,User_Avatar FROM User ";
+    private void getUserData() {
+        String sqlCmd = "SELECT * FROM U_NormalP ";
         UserDao ud = new UserDao(getActivity());
         Cursor cursor = ud.query(sqlCmd);
-        String avaUrl = "";
-        String autograph = "";
+        userName = "";
+        userNickname = "";
+        avaUrl = "";
+        autograph = "";
         if (cursor.moveToFirst()) {
+            mUserID = cursor.getString(cursor.getColumnIndex("objectId"));
+            userSex = cursor.getString(cursor.getColumnIndex("User_sex"));
+            userName = cursor.getString(cursor.getColumnIndex("User_Name"));
+            userNickname = cursor.getString(cursor.getColumnIndex("User_Nickname"));
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
-            Log.i("ud", avaUrl);
+            avaMinUrl = cursor.getString(cursor.getColumnIndex("User_image_min"));
+            //   Log.i("ud", avaUrl);
         }
         cursor.close();
-        mTvName.setText(autograph);
+        mTvName.setBackgroundResource(R.color.color_FMy_Context);
+        mTvName.setTextColor(getResources().getColor(R.color.colorPrimary));
+        mTvName.setText(userNickname);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
     }
-
-
 }

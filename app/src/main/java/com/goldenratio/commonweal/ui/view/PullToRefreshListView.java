@@ -143,7 +143,7 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
                         refreshState();
                     }
 
-                    return true;
+                   // return true;
                 }
 
                 break;

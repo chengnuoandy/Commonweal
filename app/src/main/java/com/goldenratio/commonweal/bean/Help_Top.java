@@ -1,7 +1,5 @@
 package com.goldenratio.commonweal.bean;
 
-import java.util.List;
-
 import cn.bmob.v3.BmobObject;
 
 /**
@@ -9,16 +7,8 @@ import cn.bmob.v3.BmobObject;
  */
 public class Help_Top extends BmobObject {
 
-    private String Title;
     private String Help_Top_Pic;
-
-    public String getTitle() {
-        return Title;
-    }
-
-    public void setTitle(String title) {
-        Title = title;
-    }
+    private String Help_Top_Url;
 
     public String getHelp_Top_Pic() {
         return Help_Top_Pic;
@@ -26,5 +16,13 @@ public class Help_Top extends BmobObject {
 
     public void setHelp_Top_Pic(String help_Top_Pic) {
         Help_Top_Pic = help_Top_Pic;
+    }
+
+    public String getHelp_Top_Url() {
+        return Help_Top_Url;
+    }
+
+    public void setHelp_Top_Url(String help_Top_Url) {
+        Help_Top_Url = help_Top_Url;
     }
 }

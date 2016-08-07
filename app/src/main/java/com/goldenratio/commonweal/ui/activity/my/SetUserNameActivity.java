@@ -11,11 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
@@ -73,11 +72,11 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
 
     //判断此用户名是否已经存在
     private void isHasUserName() {
-        BmobQuery<User> bmobQuery = new BmobQuery<User>();
+        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<U_NormalP>();
         bmobQuery.addWhereEqualTo("User_Name", mEtSetUsername.getText().toString());
-        bmobQuery.findObjects(this, new FindListener<User>() {
+        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
             @Override
-            public void onSuccess(List<User> list) {
+            public void onSuccess(List<U_NormalP> list) {
                 if (list.isEmpty()) {
                     updateDataToSqlite();
                     updateDataToBmob();
@@ -110,7 +109,7 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
 
     private void updateDataToSqlite() {
         String userName = mEtSetUsername.getText().toString();
-        String sqlCmd = "UPDATE User SET User_Name='" + userName + "'";
+        String sqlCmd = "UPDATE U_NormalP SET User_Name='" + userName + "'";
         UserDao ud = new UserDao(this);
         ud.execSQL(sqlCmd);
     }
@@ -118,7 +117,7 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
     private void updateDataToBmob() {
         String userID = MyFragment.mUserID;
         String userName = mEtSetUsername.getText().toString();
-        User u = new User();
+        U_NormalP u = new U_NormalP();
         u.setUser_Name(userName);
         u.update(SetUserNameActivity.this, userID, new UpdateListener() {
             @Override

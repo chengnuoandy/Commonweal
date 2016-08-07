@@ -9,7 +9,7 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 
 
-public class User_Default extends BmobObject {
+public class U_Default extends BmobObject {
 
     int User_Default_Res_ID;
     BmobFile User_Def_Av_Hd;

@@ -46,11 +46,11 @@ public class GoodDetailActivity extends Activity {
         Intent intent = getIntent();
         endTime = intent.getLongExtra("EndTime", 0);
         mGood = (Good) intent.getSerializableExtra("Good");
-        Log.d("lxc", "initData: ----> " + mGood.getGoods_ID() + "endtime-->" + endTime);
+        Log.d("lxc", "initData: ----> " + mGood.getGood_ID() + "endtime-->" + endTime);
         mCountdownView.start(endTime);
 
-        mTvGoodName.setText(mGood.getGoods_Name());
-        mTvGoodDescription.setText(mGood.getGoods_Description());
+        mTvGoodName.setText(mGood.getGood_Name());
+        mTvGoodDescription.setText(mGood.getGood_Description());
     //    mGvPic.setAdapter(new mAdapter(GoodDetailActivity.this));
     }
 
@@ -77,7 +77,7 @@ public class GoodDetailActivity extends Activity {
 
         @Override
         public int getCount() {
-            return mGood.getGoods_Photos().size();
+            return mGood.getGood_Photos().size();
         }
 
         @Override
@@ -100,7 +100,7 @@ public class GoodDetailActivity extends Activity {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            Glide.with(getBaseContext()).load(mGood.getGoods_Photos().get(position)).into(viewHolder.imageView);
+            Glide.with(getBaseContext()).load(mGood.getGood_Photos().get(position)).into(viewHolder.imageView);
             return convertView;
         }
 

@@ -140,10 +140,10 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         Date curDate = new Date(date);//转换时间
         String str = formatter.format(curDate);
         Log.d(TAG, "testDate: now time--->" + str);
-        mGood.setGoods_UpDate(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", str));
-        mGood.setGoods_UpDateM(date);
-        mGood.setGoods_ID(String.valueOf(5));
-        mGood.setGoods_Name("张杰");
+        mGood.setGood_UpDate(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", str));
+        mGood.setGood_UpDateM(date);
+        mGood.setGood_ID(String.valueOf(5));
+        mGood.setGood_Name("张杰");
         mGood.save(this, new SaveListener() {
             @Override
             public void onSuccess() {
@@ -235,7 +235,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
             Toast.makeText(this, "请填写所有信息", Toast.LENGTH_SHORT).show();
         } else {
             UserDao userDao = new UserDao(GoodActivity.this);
-            Cursor cursor = userDao.query("select * from User");
+            Cursor cursor = userDao.query("select * from U_NormalP");
             while (cursor.moveToNext()) {
                 int nameColumnIndex = cursor.getColumnIndex("objectId");
                 mStrObjectId = cursor.getString(nameColumnIndex);
@@ -261,16 +261,16 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                         if (filePaths.length == list1.size()) {
                             Good good = new Good();
                             Toast.makeText(GoodActivity.this, mStrObjectId, Toast.LENGTH_SHORT).show();
-                            good.setGoods_User_ID(mStrObjectId);
-                            good.setGoods_Name(mStrName);
-                            good.setGoods_Description(mStrDescription);
-                            good.setGoods_Photos(list1);
-                            good.setGoods_ID("2");
-                            good.setGoods_Type(mStrType);
-                            good.setGoods_Price(Integer.parseInt(price));
-                            good.setGoods_NowPrice(Integer.parseInt(price));
-                            good.setGoods_DonationRate(Integer.parseInt(prop));
-                            good.setGoods_UpDateM(mLgTime);
+                            good.setGood_User_ID(mStrObjectId);
+                            good.setGood_Name(mStrName);
+                            good.setGood_Description(mStrDescription);
+                            good.setGood_Photos(list1);
+                            good.setGood_ID("2");
+                            good.setGood_Type(mStrType);
+                            good.setGood_Price(Integer.parseInt(price));
+                            good.setGood_NowPrice(Integer.parseInt(price));
+                            good.setGood_DonationRate(Integer.parseInt(prop));
+                            good.setGood_UpDateM(mLgTime);
                             good.save(GoodActivity.this, new SaveListener() {
                                 @Override
                                 public void onSuccess() {

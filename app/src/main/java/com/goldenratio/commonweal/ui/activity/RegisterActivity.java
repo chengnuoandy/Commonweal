@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
@@ -456,7 +456,7 @@ public class RegisterActivity extends Activity {
         if (TextUtils.isEmpty(mUserNickname)) {
             mUserNickname = "Love" + getRndUserName(6);
         }
-        User u = new User();
+        U_NormalP u = new U_NormalP();
         u.setUser_Phone(mPhone);
         u.setUser_Nickname(mUserNickname);
         u.setUser_Password(mD5Pwd);
@@ -485,7 +485,7 @@ public class RegisterActivity extends Activity {
     private void updateUserPwdToDb() {
         //md5加密
         String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
-        User u = new User();
+        U_NormalP u = new U_NormalP();
         u.setUser_Password(mD5Pwd);
         closeProgressDialog();
         u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
@@ -505,12 +505,12 @@ public class RegisterActivity extends Activity {
 
     //判断此用户是否已经注册
     private void isRegister() {
-        BmobQuery<User> bmobQuery = new BmobQuery<User>();
+        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<U_NormalP>();
         bmobQuery.addWhereEqualTo("User_Phone", mPhone);
         Log.d("queryPhone", mPhone);
-        bmobQuery.findObjects(this, new FindListener<User>() {
+        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
             @Override
-            public void onSuccess(List<User> list) {
+            public void onSuccess(List<U_NormalP> list) {
                 if (list.isEmpty()) {
                     //判断点击的是否是注册按钮
                     if (isClickRegisterBtn) {

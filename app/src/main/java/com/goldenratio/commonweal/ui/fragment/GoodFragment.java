@@ -159,7 +159,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //获取当前条目的截止时间
-        endTime = mGoodList.get(position - 1).getGoods_UpDateM();
+        endTime = mGoodList.get(position - 1).getGood_UpDateM();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Good", mGoodList.get(position - 1));
         StartAct(bundle);

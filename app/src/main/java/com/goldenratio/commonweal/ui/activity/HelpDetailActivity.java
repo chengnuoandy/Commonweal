@@ -1,12 +1,9 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -19,15 +16,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
-import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.onekeyshare.OnekeyShare;
-import com.goldenratio.commonweal.ui.fragment.HelpContentFragment;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.bmob.v3.listener.SaveListener;
 import cn.sharesdk.framework.ShareSDK;
 
 /**
@@ -40,13 +30,14 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
     private Help mHelp;
     private ImageView mIvTop;
     private TextView mTvTitle;
-    private TextView mTvOrg;
+    private TextView mTvInitiator;
     private TextView mTvContent;
     private TextView mTvSmile;
     private TextView mTvAll;
     private EditText mEtSpeak;
     private LinearLayout mLayout;
     private ListView mlistView;
+    private TextView mTvExecute;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +54,8 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 //        Picasso.with(HelpDetailActivity.this).load(mHelp.getHelp_Top_pic()).into(mIvTop);//.override(screenWidth,200)
         Glide.with(this).load(mHelp.getHelp_Pic()).into(mIvTop);
         mTvTitle.setText(mHelp.getHelp_Title());
-        mTvOrg.setText(mHelp.getHelp_Org());
+        mTvInitiator.setText(mHelp.getHelp_Initiator());
+        mTvExecute.setText(mHelp.getHelp_Execute());
         mTvSmile.setText(mHelp.getHelp_Smile());
         mTvContent.setText(mHelp.getHelp_Content());
 
@@ -86,11 +78,12 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         findViewById(R.id.iv_rank).setOnClickListener(this);
         mIvTop = (ImageView) findViewById(R.id.iv_top);
         mTvTitle = (TextView) findViewById(R.id.tv_title);
-        mTvOrg = (TextView) findViewById(R.id.tv_org);
+        mTvInitiator = (TextView) findViewById(R.id.tv_initiator);
+        mTvExecute = (TextView) findViewById(R.id.tv_execute);
         mTvSmile = (TextView) findViewById(R.id.smile);
         mTvContent = (TextView) findViewById(R.id.tv_content);
         mTvAll = (TextView) findViewById(R.id.tv_all);
-        mEtSpeak= (EditText) findViewById(R.id.et_speak);
+        mEtSpeak = (EditText) findViewById(R.id.et_speak);
         mLayout = (LinearLayout) findViewById(R.id.help_layout);
 //        mBten = (Button) findViewById(R.id.btn_speak);
         mlistView = (ListView) findViewById(R.id.lv_helpspeak);
@@ -127,14 +120,14 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
             //捐赠
             case R.id.tv_donate:
-                Intent i = new Intent(HelpDetailActivity.this,HelpDonateActivity.class);
+                Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
                 startActivity(i);
                 break;
 
             //发送按钮
             case R.id.btn_speak:
                 String speak = mEtSpeak.getText().toString();
-                Toast.makeText(HelpDetailActivity.this, ""+speak, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HelpDetailActivity.this, "" + speak, Toast.LENGTH_SHORT).show();
                 //获取发送信息，和发送人信息
 
                 break;

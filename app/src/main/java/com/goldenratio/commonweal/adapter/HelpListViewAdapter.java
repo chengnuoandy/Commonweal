@@ -71,41 +71,52 @@ public class HelpListViewAdapter extends BaseAdapter {
         private TextView mTvCity;
         private ImageView mIvPic;
         private TextView mTvTitle;
-        private TextView mTvType;
         private TextView mTvOneSentence;
-        private TextView mTvDonateSum;
-        private TextView mTvMoney;
+        private TextView mTvCoin;
         private TextView mTvLeftDay;
+        private TextView mTvLeftDayBottom;
         private ProgressBar mPbProgress;
+        private int leftDay;
 
         public void initView(View view) {
             mTvCity = (TextView) view.findViewById(R.id.tv_city);
             mIvPic = (ImageView) view.findViewById(R.id.iv_pic);
             mTvTitle = (TextView) view.findViewById(R.id.tv_title);
-            mTvType = (TextView) view.findViewById(R.id.tv_type);
             mTvOneSentence = (TextView) view.findViewById(R.id.tv_one_sentence);
-            mTvDonateSum = (TextView) view.findViewById(R.id.tv_donate_sum);
-            mTvMoney = (TextView) view.findViewById(R.id.tv_money);
+            mTvCoin = (TextView) view.findViewById(R.id.tv_coin);
             mTvLeftDay = (TextView) view.findViewById(R.id.tv_left_day);
             mPbProgress = (ProgressBar) view.findViewById(R.id.pb_progress);
+            mTvLeftDayBottom = (TextView) view.findViewById(R.id.tv_left_day_bottom);
         }
 
         private void initData(final int position) {
             mTvCity.setText(getItem(position).getHelp_SmilePro() + "" + getItem(position).getHelp_SmileCity());
             Glide.with(mContext).load(getItem(position).getHelp_Pic()).into(mIvPic);
             mTvTitle.setText(getItem(position).getHelp_Title());
-            mTvType.setText(getItem(position).getHelp_Type());
             mTvOneSentence.setText(getItem(position).getHelp_OneSentence());
-            mTvDonateSum.setText(getItem(position).getHelp_DonateSum());
-            mTvMoney.setText(getItem(position).getHelp_Money());
+            mTvCoin.setText(getItem(position).getHelp_Coin());
 
             long endTime = BmobDate.getTimeStamp(getItem(position).getHelp_EndDate().getDate());
             long startTime = BmobDate.getTimeStamp(getItem(position).getHelp_StartDate().getDate());
-            String LeftTime = (endTime - System.currentTimeMillis()) / (86400000) + "";
-            mTvLeftDay.setText(LeftTime);
+            long leftTime = (endTime - System.currentTimeMillis()) / (86400000);
+            if (leftTime > 0) {
+                mTvLeftDay.setText(leftTime + "");
+            } else {
+                mTvLeftDay.setText("已结束");
+                mTvLeftDay.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+                mTvLeftDayBottom.setVisibility(View.GONE);
+            }
+
             String allTime = ((endTime - startTime) / (86400000)) + "";
 
-            int leftDay = Integer.parseInt(mTvLeftDay.getText().toString());
+            String leftResult = mTvLeftDay.getText().toString();
+
+            if (leftResult == "已结束") {
+                mPbProgress.setProgress(100);
+            } else {
+                leftDay = Integer.parseInt(leftResult);
+            }
+
             int allDay = Integer.parseInt(allTime);
             int usedDay = allDay - leftDay;
             Log.d("111111111111111111111", "position-->" + position + "leftDay--> " + leftDay + "allDay-->" + allDay + "usedDay-->" + usedDay);

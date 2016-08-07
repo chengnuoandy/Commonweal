@@ -22,6 +22,7 @@ import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
 import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
+import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -155,9 +156,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     /**
-     *输入框的焦点事件
+     * 输入框的焦点事件
      * 根据不同输入框获得的焦点加载相应的提示图片
-     * @param v 标识控件
+     *
+     * @param v        标识控件
      * @param hasFocus 是否获得焦点
      */
     @Override
@@ -196,15 +198,15 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private void isLogin(String Phone, final String Password, Boolean flag) {
         if (flag) {
             Loing();
-            BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Phone", Phone);
             //执行查询方法
-            bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
                 @Override
-                public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+                public void onSuccess(List<U_NormalP> object) {
                     //判断查询到的行数
                     if (object.size() == 1) {
-                        com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                        U_NormalP mUser = object.get(0);
                         if (Password.equals(mUser.getUser_Password())) {
                             Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                             //获得数据的objectId信息
@@ -230,15 +232,15 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             });
         } else {
             Loing();
-            BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Name", Phone);
             //执行查询方法
-            bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
                 @Override
-                public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+                public void onSuccess(List<U_NormalP> object) {
                     //判断查询到的行数
                     if (object.size() == 1) {
-                        com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                        U_NormalP mUser = object.get(0);
                         if (Password.equals(mUser.getUser_Password())) {
                             Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                             //获得数据的objectId信息
@@ -268,19 +270,20 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     /**
      * 登陆相关逻辑(第三方授权)
+     *
      * @param id 微博授权的ID
      */
     private void isLogin(String id) {
-        BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
         bmobQuery.addWhereEqualTo("User_WbID", id);
         //执行查询方法
-        bmobQuery.findObjects(this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
             @Override
-            public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+            public void onSuccess(List<U_NormalP> object) {
                 //判断查询到的行数
                 if (object.size() == 1) {
                     //如果此用户已存在，获得数据的objectId信息
-                    com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                    com.goldenratio.commonweal.bean.U_NormalP mUser = object.get(0);
                     userID = mUser.getObjectId();
                     returnData();
                     saveDB(mUser);
@@ -356,9 +359,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
     /**
      * activity 的回调页
+     *
      * @param requestCode 请求码
      * @param resultCode  结果码
-     * @param data 回传的数据
+     * @param data        回传的数据
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -397,7 +401,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         public void onComplete(String response) {
             if (!TextUtils.isEmpty(response)) {
-                // 调用 User#parse 将JSON串解析成User对象
+                // 调用 U_NormalP#parse 将JSON串解析成User对象
                 upUser = User.parse(response);
                 if (upUser != null) {
                     //是否已经注册
@@ -449,7 +453,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      */
     class myAsyncTask extends AsyncTask<String, Void, Void> {
 
-        private com.goldenratio.commonweal.bean.User user = new com.goldenratio.commonweal.bean.User();
+        private U_NormalP user = new U_NormalP();
         private User wbuser;
 
         public myAsyncTask(User wbuser) {
@@ -468,7 +472,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         protected Void doInBackground(String... params) {
             //提交数据
             user.setUser_Nickname(wbuser.screen_name);
-            user.setUser_Is_Real_Name(wbuser.verified);
+            user.setUser_IsRealName(wbuser.verified);
             if ("m".equals(wbuser.gender)) {
                 user.setUser_Sex("男");
             } else if ("f".equals(wbuser.gender)) {
@@ -496,19 +500,20 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
 
             return null;
         }
+
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            BmobQuery<com.goldenratio.commonweal.bean.User> bmobQuery = new BmobQuery<>();
+            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_WbID", wbuser.id);
             //执行查询方法
-            bmobQuery.findObjects(LoginActivity.this, new FindListener<com.goldenratio.commonweal.bean.User>() {
+            bmobQuery.findObjects(LoginActivity.this, new FindListener<U_NormalP>() {
                 @Override
-                public void onSuccess(List<com.goldenratio.commonweal.bean.User> object) {
+                public void onSuccess(List<U_NormalP> object) {
                     //判断查询到的行数
                     if (object.size() == 1) {
                         //如果此用户已存在，获得数据的objectId信息
-                        com.goldenratio.commonweal.bean.User mUser = object.get(0);
+                        U_NormalP mUser = object.get(0);
                         userID = mUser.getObjectId();
                         returnData();
                         saveDB(mUser);
@@ -527,10 +532,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     /**
      * 保存数据到本地
      */
-    private void saveDB(com.goldenratio.commonweal.bean.User user) {
+    private void saveDB(U_NormalP user) {
         UserDao mUserDao = new UserDao(LoginActivity.this);
-        mUserDao.execSQL("insert into User (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
-                        ",User_Address,User_sex,User_image_min,User_image_max) values(?,?,?,?,?,?,?,?,?)",
+        mUserDao.execSQL("insert into U_NormalP (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
+                        ",User_Address,User_sex,User_image_min,User_sex,User_image_min) values(?,?,?,?,?,?,?,?,?,?)",
                 new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
                         user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max()});
         Completed();

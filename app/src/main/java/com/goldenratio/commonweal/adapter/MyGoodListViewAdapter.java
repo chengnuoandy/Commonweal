@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.bean.User;
+import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.util.GlideCircleTransform;
 
 import java.util.List;
@@ -113,9 +113,9 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         viewHolder.bindData(mGood);
 
         // 处理倒计时
-        if (mGood.getGoods_UpDateM() > 0) {
+        if (mGood.getGood_UpDateM() > 0) {
             synchronized (mCountdownVHList) {
-                mCountdownVHList.put(Integer.parseInt(mGood.getGoods_ID()), viewHolder);
+                mCountdownVHList.put(position, viewHolder);
             }
         }
 
@@ -136,9 +136,9 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                 for (int i = 0; i < mCountdownVHList.size(); i++) {
                     key = mCountdownVHList.keyAt(i);
                     ViewHolder curMyViewHolder = mCountdownVHList.get(key);
-                    if (currentTime >= curMyViewHolder.getBean().getGoods_UpDateM()) {
+                    if (currentTime >= curMyViewHolder.getBean().getGood_UpDateM()) {
                         // 倒计时结束
-                        curMyViewHolder.getBean().setGoods_UpDateM((long) 0);
+                        curMyViewHolder.getBean().setGood_UpDateM((long) 0);
                         mCountdownVHList.remove(key);
                         //更新显示
                         notifyDataSetChanged();
@@ -161,6 +161,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         private CountdownView mCountdownView;
         private Good mGood;
         private TextView mTvNowPrice;
+        private ImageView mIvUserAvatar;
 
         public void initView(View convertView) {
             mTvUserName = (TextView) convertView.findViewById(R.id.tv_user_name);
@@ -169,13 +170,14 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvName = (TextView) convertView.findViewById(R.id.tv_name);
             mIvPic = (ImageView) convertView.findViewById(R.id.iv_pic);
             mTvNowPrice = (TextView) convertView.findViewById(R.id.tv_now_price);
+            mIvUserAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
         }
 
         //初始化数据
         public void bindData(Good Good) {
             this.mGood = Good;
 
-            if (mGood.getGoods_UpDateM() > 0) {
+            if (mGood.getGood_UpDateM() > 0) {
                 refreshTime(System.currentTimeMillis()); //暂时用本地时间
             } else {
                 mCountdownView.allShowZero();
@@ -184,9 +186,9 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
         //刷新时间显示
         public void refreshTime(long curTimeMillis) {
-            if (null == mGood || mGood.getGoods_UpDateM() <= 0) return;
+            if (null == mGood || mGood.getGood_UpDateM() <= 0) return;
             //更新时间
-            mCountdownView.updateShow(mGood.getGoods_UpDateM() - curTimeMillis);
+            mCountdownView.updateShow(mGood.getGood_UpDateM() - curTimeMillis);
         }
 
         public Good getBean() {
@@ -195,11 +197,11 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
         private void initData(int position) {
 
-            BmobQuery<User> userBmobQuery = new BmobQuery<>();
-            userBmobQuery.addWhereEqualTo("objectId", getItem(position).getGoods_User_ID());
-            userBmobQuery.findObjects(mContext, new FindListener<User>() {
+            BmobQuery<U_NormalP> userBmobQuery = new BmobQuery<>();
+            userBmobQuery.addWhereEqualTo("objectId", getItem(position).getGood_User_ID());
+            userBmobQuery.findObjects(mContext, new FindListener<U_NormalP>() {
                 @Override
-                public void onSuccess(List<User> list) {
+                public void onSuccess(List<U_NormalP> list) {
                 }
 
                 @Override
@@ -209,14 +211,14 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             });
 
             mTvTime.setText(getItem(position).getCreatedAt());
-            mTvName.setText(getItem(position).getGoods_Name());
+            mTvName.setText(getItem(position).getGood_Name());
 
             Glide.with(mContext)
-                    .load(getItem(position).getGoods_Photos().get(0).toString())
+                    .load(getItem(position).getGood_Photos().get(0).toString())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideCircleTransform(mContext))
                     .into(mIvPic);
-            mTvNowPrice.setText(getItem(position).getGoods_NowPrice() + "");
+            mTvNowPrice.setText(getItem(position).getGood_NowPrice() + "");
         }
     }
 }

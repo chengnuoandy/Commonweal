@@ -61,9 +61,9 @@
                 android:id="@+id/help_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:orientation="vertical"
                 android:padding="@dimen/normal_space">
 
 
@@ -89,7 +89,7 @@
                     android:background="#a0a4ac" />
 
                 <TextView
-                    android:id="@+id/tv_org"
+                    android:id="@+id/tv_initiator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/big_space"
@@ -97,6 +97,16 @@
                     android:drawablePadding="@dimen/normal_space"
                     android:gravity="center"
                     android:text="发起方" />
+
+                <TextView
+                    android:id="@+id/tv_execute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/big_space"
+                    android:drawableLeft="@drawable/org"
+                    android:drawablePadding="@dimen/normal_space"
+                    android:gravity="center"
+                    android:text="执行方" />
 
                 <TextView
                     android:id="@+id/smile"
@@ -141,11 +151,10 @@
                     android:textColor="@color/colorPrimary" />
 
 
-
                 <ListView
+                    android:id="@+id/lv_helpspeak"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/lv_helpspeak">
+                    android:layout_height="wrap_content">
 
                 </ListView>
 
@@ -170,7 +179,6 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 
 
     <RelativeLayout
@@ -205,14 +213,14 @@
             android:id="@+id/tv_donate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/register_reset"
             android:gravity="center"
             android:padding="@dimen/normal_space"
             android:text="立即捐赠"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_default"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:textSize="@dimen/text_size_default" />
     </RelativeLayout>
 </LinearLayout>

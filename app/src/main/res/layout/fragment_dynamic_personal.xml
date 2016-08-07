@@ -5,10 +5,8 @@
               android:background="@color/colorContext"
               android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="个人"
-        android:textSize="@dimen/code_text_size"/>
+    <com.goldenratio.commonweal.ui.view.PullToRefreshListView
+        android:id="@+id/lv_dynamic_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

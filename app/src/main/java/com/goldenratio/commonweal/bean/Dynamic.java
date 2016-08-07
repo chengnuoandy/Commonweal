@@ -15,7 +15,15 @@ public class Dynamic extends BmobObject{
     private String Dynamics_time;
     private String Dynamics_name;
     private String Dynamics_uid;
+    private String Dynamics_u_pic;
 
+    public String getDynamics_u_pic() {
+        return Dynamics_u_pic;
+    }
+
+    public void setDynamics_u_pic(String dynamics_u_pic) {
+        Dynamics_u_pic = dynamics_u_pic;
+    }
 
     public String getDynamics_name() {
         return Dynamics_name;

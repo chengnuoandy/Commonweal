@@ -167,6 +167,8 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
         if (cursor.moveToFirst()) {
             dy.setDynamics_uid(cursor.getString(cursor.getColumnIndex("objectId")));
             dy.setDynamics_name(cursor.getString(cursor.getColumnIndex("User_Nickname")));
+            dy.setDynamics_u_pic(cursor.getString(cursor.getColumnIndex("User_Avatar")));
+            Log.d("lxc", "getUserData: "+cursor.getString(cursor.getColumnIndex("User_Avatar")));
         }
         cursor.close();
     }

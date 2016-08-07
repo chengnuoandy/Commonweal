@@ -35,7 +35,7 @@ public class SetAddressActivity extends Activity {
     @OnClick({R.id.iv_address_back, R.id.btn_add_address})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_back:
+            case R.id.iv_address_back:
                 finish();
                 break;
             case R.id.btn_add_address:

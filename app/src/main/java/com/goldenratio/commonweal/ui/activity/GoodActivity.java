@@ -235,7 +235,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
             Toast.makeText(this, "请填写所有信息", Toast.LENGTH_SHORT).show();
         } else {
             UserDao userDao = new UserDao(GoodActivity.this);
-            Cursor cursor = userDao.query("select * from U_NormalP");
+            Cursor cursor = userDao.query("select * from User");
             while (cursor.moveToNext()) {
                 int nameColumnIndex = cursor.getColumnIndex("objectId");
                 mStrObjectId = cursor.getString(nameColumnIndex);

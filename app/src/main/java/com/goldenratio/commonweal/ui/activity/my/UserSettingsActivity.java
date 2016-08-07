@@ -208,7 +208,7 @@ public class UserSettingsActivity extends Activity {
      * @param userRow
      */
     private void updateDataToSqlite(String userData, String userRow) {
-        String sqlCmd = "UPDATE U_NormalP SET " + userRow + "='" + userData + "'";
+        String sqlCmd = "UPDATE User SET " + userRow + "='" + userData + "'";
         UserDao ud = new UserDao(this);
         ud.execSQL(sqlCmd);
     }

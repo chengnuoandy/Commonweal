@@ -109,7 +109,7 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
 
     private void updateDataToSqlite() {
         String userName = mEtSetUsername.getText().toString();
-        String sqlCmd = "UPDATE U_NormalP SET User_Name='" + userName + "'";
+        String sqlCmd = "UPDATE User SET User_Name='" + userName + "'";
         UserDao ud = new UserDao(this);
         ud.execSQL(sqlCmd);
     }

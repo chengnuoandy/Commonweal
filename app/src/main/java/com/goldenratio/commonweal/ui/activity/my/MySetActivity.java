@@ -41,7 +41,7 @@ public class MySetActivity extends Activity {
      * 删除本地user表
      */
     private void deleteTable() {
-        String sqlCmd = "DELETE FROM U_NormalP";
+        String sqlCmd = "DELETE FROM User";
         UserDao ud = new UserDao(this);
         ud.execSQL(sqlCmd);
     }

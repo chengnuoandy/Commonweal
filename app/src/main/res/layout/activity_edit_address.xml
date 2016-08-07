@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorContext"
+    android:orientation="vertical"
+    tools:context="com.goldenratio.commonweal.ui.activity.my.EditAddressActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_edit_address_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/normal_space"
+            android:src="@mipmap/ic_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="编辑地址"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_text_size"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_edit_consignee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="收件人"/>
+
+        <EditText
+            android:id="@+id/et_edit_consignee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_edit_consignee"
+            android:layout_alignTop="@+id/tv_edit_consignee"
+            android:layout_marginLeft="80dp"
+            android:background="@null"
+            android:inputType="number"
+            android:text="人"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_edit_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="联系电话"/>
+
+        <EditText
+            android:id="@+id/et_edit_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_edit_phone"
+            android:layout_alignTop="@+id/tv_edit_phone"
+            android:layout_marginLeft="80dp"
+            android:background="@null"
+            android:inputType="number"
+            android:text="联系电话"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_edit_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_place_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/news_cate_arr"
+            android:gravity="left"
+            android:padding="10dp"
+            android:text="所在地区"/>
+
+        <TextView
+            android:id="@+id/tv_edit_address"
+            android:gravity="center"
+            android:layout_alignBottom="@+id/tv_place_address"
+            android:layout_alignTop="@+id/tv_place_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:text="请选择"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_edit_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_place_street"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/news_cate_arr"
+            android:gravity="left"
+            android:padding="10dp"
+            android:text="街道"/>
+
+        <TextView
+            android:id="@+id/tv_edit_street"
+            android:gravity="center"
+            android:layout_alignBottom="@+id/tv_place_street"
+            android:layout_alignTop="@+id/tv_place_street"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:text="请选择"/>
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_detail_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:hint="详细地址"
+        android:padding="10dp"
+        android:inputType="number"
+        android:lines="4"/>
+
+    <Button
+        android:id="@+id/btn_save_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/register_reset"
+        android:text="保存地址"/>
+
+</LinearLayout>

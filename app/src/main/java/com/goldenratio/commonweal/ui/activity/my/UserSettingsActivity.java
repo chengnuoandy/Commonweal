@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +27,6 @@ import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
@@ -246,7 +244,6 @@ public class UserSettingsActivity extends Activity {
             }
         });
     }
-
 
     /**
      * 上传头像文件到Bmob

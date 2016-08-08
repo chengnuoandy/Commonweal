@@ -8,7 +8,8 @@
     <RelativeLayout
         android:id="@+id/rl_address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/tv_consignees"
@@ -27,14 +28,16 @@
             android:text="手机号"
             android:textSize="16sp"/>
 
+        <TextView
+            android:id="@+id/tv_consignees_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_consignees"
+            android:layout_below="@+id/tv_consignees"
+            android:text="收货地址"
+            android:textSize="16sp"/>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_consignees_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="收货地址"/>
 
     <View
         android:layout_width="match_parent"

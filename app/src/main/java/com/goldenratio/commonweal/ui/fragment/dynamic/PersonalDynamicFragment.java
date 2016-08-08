@@ -46,7 +46,7 @@ public class PersonalDynamicFragment extends Fragment {
     private void initData() {
         BmobQuery<Dynamic> data = new BmobQuery<>();
         data.order("-createdAt");
-        data.include("Dynamics_uid");
+        data.include("Dynamics_user");
         data.findObjects(getContext(), new FindListener<Dynamic>() {
             @Override
             public void onSuccess(List<Dynamic> list) {

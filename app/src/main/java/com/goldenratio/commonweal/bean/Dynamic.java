@@ -13,33 +13,15 @@ public class Dynamic extends BmobObject{
     private List Dynamics_pic;
     private String Dynamics_location;
     private String Dynamics_time;
-    private U_FamousP Dynamics_u_f_id;
-    private U_NormalP Dynamics_uid;
-    private boolean Dynamics_isv;
+    private User_Profile Dynamics_user;
 
 
-    public boolean getDynamics_isv() {
-        return Dynamics_isv;
+    public User_Profile getDynamics_user() {
+        return Dynamics_user;
     }
 
-    public void setDynamics_isv(boolean dynamics_isv) {
-        Dynamics_isv = dynamics_isv;
-    }
-
-    public U_FamousP getDynamics_u_f_id() {
-        return Dynamics_u_f_id;
-    }
-
-    public void setDynamics_u_f_id(U_FamousP dynamics_u_f_id) {
-        Dynamics_u_f_id = dynamics_u_f_id;
-    }
-
-    public U_NormalP getDynamics_uid() {
-        return Dynamics_uid;
-    }
-
-    public void setDynamics_uid(U_NormalP dynamics_uid) {
-        Dynamics_uid = dynamics_uid;
+    public void setDynamics_user(User_Profile dynamics_user) {
+        Dynamics_user = dynamics_user;
     }
 
     public String getDynamics_time() {

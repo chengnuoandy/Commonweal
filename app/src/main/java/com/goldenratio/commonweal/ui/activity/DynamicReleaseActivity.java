@@ -24,6 +24,7 @@ import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.U_FamousP;
 import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
@@ -113,13 +114,13 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 dy.setDynamics_location(mTvLocation.getText().toString());
             }
             getUserData(dy);
-            if (pathList != null){
+            if (pathList != null) {
                 final String[] filePaths = new String[pathList.size()];
                 for (int i = 0; i < pathList.size(); i++) {
                     filePaths[i] = pathList.get(i);
                 }
-                save2Bmob(filePaths,dy);
-            }else {
+                save2Bmob(filePaths, dy);
+            } else {
                 SaveData(dy);
             }
 
@@ -133,9 +134,9 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 BmobFile.uploadBatch(DynamicReleaseActivity.this, filePaths, new UploadBatchListener() {
                     @Override
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
-                        if (filePaths.length == list1.size()){
+                        if (filePaths.length == list1.size()) {
                             dy.setDynamics_pic(list1);
-                            Log.d("lxc", "onSuccess: "+list1);
+                            Log.d("lxc", "onSuccess: " + list1);
                             SaveData(dy);
                         }
                     }
@@ -156,6 +157,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
 
     /**
      * 上传文本数据
+     *
      * @param dy 数据实体
      */
     private void SaveData(Dynamic dy) {
@@ -184,18 +186,9 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
         UserDao ud = new UserDao(this);
         Cursor cursor = ud.query(sqlCmd);
         if (cursor.moveToFirst()) {
-//            判断用户的身份，进行关联
-            if (false){
-                U_FamousP user = new U_FamousP();
-                user.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
-                dy.setDynamics_u_f_id(user);
-                dy.setDynamics_isv(true);
-            }else {
-                U_NormalP user = new U_NormalP();
-                user.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
-                dy.setDynamics_uid(user);
-                dy.setDynamics_isv(false);
-            }
+            User_Profile user = new User_Profile();
+            user.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            dy.setDynamics_user(user);
         }
         cursor.close();
     }
@@ -250,11 +243,12 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
      * 进度条相关--显示进度条
      */
     private void SendM() {
-            pd = new ProgressDialog(this);
-            pd.setTitle("发送中...");
-            pd.setCancelable(false);
-            pd.show();
+        pd = new ProgressDialog(this);
+        pd.setTitle("发送中...");
+        pd.setCancelable(false);
+        pd.show();
     }
+
     /**
      * 进度条相关--取消进度条显示
      */

@@ -14,6 +14,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.U_FamousP;
 import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
@@ -97,24 +98,16 @@ public class MyDynamicAdapter extends BaseAdapter {
         }
 
         public void initData(int position) {
-            if (mList.get(position).getDynamics_isv()) {
-                U_FamousP userF = mList.get(position).getDynamics_u_f_id();
-                mTvName.setText(userF.getUser_Nickname());
-                Glide.with(mContext)
-                        .load(userF.getUser_image_hd())
-                        .into(mUserPic);
-            } else {
-                U_NormalP userN = mList.get(position).getDynamics_uid();
-                mTvName.setText(userN.getUser_Nickname());
-                Glide.with(mContext)
-                        .load(userN.getUser_image_hd())
-                        .into(mUserPic);
-            }
+            User_Profile user = mList.get(position).getDynamics_user();
+            mTvName.setText(user.getUser_Nickname());
             mTvTime.setText(mList.get(position).getDynamics_time());
             mText.setText(mList.get(position).getDynamics_title());
             mLocation.setText(mList.get(position).getDynamics_location());
             mNineGridImageView.setImagesData(mList.get(position).getDynamics_pic());
 
+            Glide.with(mContext)
+                    .load(user.getUser_image_hd())
+                    .into(mUserPic);
 //            Log.d("lxc", "initData: "+mList.get(position).getDynamics_u_pic());
         }
 

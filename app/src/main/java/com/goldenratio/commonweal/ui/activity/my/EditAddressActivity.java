@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,7 @@ import butterknife.OnClick;
 public class EditAddressActivity extends Activity {
 
     @BindView(R.id.et_edit_consignee)
-    EditText mEtEditConsignee;
+    EditText mEtConsignee;
     @BindView(R.id.et_edit_phone)
     EditText mEtEditPhone;
     @BindView(R.id.tv_place_address)
@@ -44,7 +45,7 @@ public class EditAddressActivity extends Activity {
 
     }
 
-    @OnClick({R.id.iv_edit_address_back,  R.id.rl_edit_address, R.id.tv_edit_street, R.id.rl_place_street, R.id.et_detail_address, R.id.btn_save_address})
+    @OnClick({R.id.iv_edit_address_back, R.id.rl_edit_address, R.id.tv_edit_street, R.id.rl_place_street, R.id.et_detail_address, R.id.btn_save_address})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_edit_address_back:
@@ -61,5 +62,13 @@ public class EditAddressActivity extends Activity {
             case R.id.btn_save_address:
                 break;
         }
+    }
+
+    private void collectConsigneeInfo() {
+        String consignee = mEtConsignee.getText().toString();
+        String consigneePhone = mEtEditPhone.getText().toString();
+        String consigneeAddress = mTvEditAddress.getText() + " "
+                + mTvEditStreet.getText() + " " + mEtDetailAddress.getText();
+        Intent intent = new Intent();
     }
 }

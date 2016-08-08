@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
         android:id="@+id/rl_top"
         android:layout_width="match_parent"
@@ -50,80 +51,76 @@
             android:id="@+id/avail"/>
     </LinearLayout>
 
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox1"
-            android:text="1元"
-            android:textSize="20sp"/>
-
-
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox2"
-        android:text="5元"
-        android:textSize="20sp"/>
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox3"
-        android:text="10元"
-        android:textSize="20sp"/>
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox4"
-        android:text="30元"
-        android:textSize="20sp"/>
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox5"
-        android:text="50元"
-        android:textSize="20sp"/>
-
-    <RelativeLayout
-        android:paddingTop="15dp"
+    <RadioGroup
+        android:id="@+id/rg_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox6" />
 
-        <EditText
-            android:id="@+id/et_other"
+
+        <RadioButton
+            android:id="@+id/checkBox1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/checkBox6"
-            android:layout_toEndOf="@+id/checkBox6"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-        <TextView
+            android:layout_marginTop="10dp"
+            android:text="1元"
+            android:textSize="20sp" />
+
+
+        <RadioButton
+            android:id="@+id/checkBox2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="元"
-            android:textSize="20sp"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/et_other"
-            android:layout_toEndOf="@+id/et_other"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp" />
-    </RelativeLayout>
+            android:layout_marginTop="10dp"
+            android:text="5元"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/checkBox3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="10元"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/checkBox4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="30元"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/checkBox5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="50元"
+            android:textSize="20sp" />
+
+
+        <RadioButton
+            android:id="@+id/checkBox6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="其他"
+            android:textSize="20sp" />
+
+    </RadioGroup>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_other"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_donate"
+            android:id="@+id/tv_donate_mo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/register_reset"

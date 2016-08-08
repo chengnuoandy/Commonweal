@@ -87,13 +87,15 @@ public class MyDynamicAdapter extends BaseAdapter {
             mText.setText(mList.get(position).getDynamics_title());
             mLocation.setText(mList.get(position).getDynamics_location());
 
-            Glide.with(mContext)
-                    .load(mList.get(position).getDynamics_pic().get(0).toString())
-                    .into(mIvPic);
+            if (mList.get(position).getDynamics_pic() != null) {
+                Glide.with(mContext)
+                        .load(mList.get(position).getDynamics_pic().get(0).toString())
+                        .into(mIvPic);
+            }
             Glide.with(mContext)
                     .load(mList.get(position).getDynamics_u_pic())
                     .into(mUserPic);
-            Log.d("lxc", "initData: "+mList.get(position).getDynamics_u_pic());
+//            Log.d("lxc", "initData: "+mList.get(position).getDynamics_u_pic());
         }
     }
 }

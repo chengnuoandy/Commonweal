@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.SystemClock;
@@ -87,6 +88,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 break;
             case R.id.btn_release:
                 UploadData();
+                SendM();
                 break;
         }
     }
@@ -108,12 +110,16 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 dy.setDynamics_location(mTvLocation.getText().toString());
             }
             getUserData(dy);
-
-            final String[] filePaths = new String[pathList.size()];
-            for (int i = 0; i < pathList.size(); i++) {
-                filePaths[i] = pathList.get(i).toString();
+            if (pathList != null){
+                final String[] filePaths = new String[pathList.size()];
+                for (int i = 0; i < pathList.size(); i++) {
+                    filePaths[i] = pathList.get(i);
+                }
+                save2Bmob(filePaths,dy);
+            }else {
+                SaveData(dy);
             }
-            save2Bmob(filePaths,dy);
+
         }
     }
 
@@ -126,18 +132,8 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
                         if (filePaths.length == list1.size()){
                             dy.setDynamics_pic(list1);
-                            dy.save(DynamicReleaseActivity.this, new SaveListener() {
-                                @Override
-                                public void onSuccess() {
-                                    Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-
-                                @Override
-                                public void onFailure(int i, String s) {
-
-                                }
-                            });
+                            Log.d("lxc", "onSuccess: "+list1);
+                            SaveData(dy);
                         }
                     }
 
@@ -156,6 +152,25 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
     }
 
     /**
+     * 上传文本数据
+     * @param dy 数据实体
+     */
+    private void SaveData(Dynamic dy) {
+        dy.save(DynamicReleaseActivity.this, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
+    }
+
+    /**
      * 获取用户数据
      *
      * @param dy 保存的实体
@@ -168,7 +183,6 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
             dy.setDynamics_uid(cursor.getString(cursor.getColumnIndex("objectId")));
             dy.setDynamics_name(cursor.getString(cursor.getColumnIndex("User_Nickname")));
             dy.setDynamics_u_pic(cursor.getString(cursor.getColumnIndex("User_Avatar")));
-            Log.d("lxc", "getUserData: "+cursor.getString(cursor.getColumnIndex("User_Avatar")));
         }
         cursor.close();
     }
@@ -217,5 +231,15 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    /**
+     * 进度条相关--显示进度条
+     */
+    private void SendM() {
+            ProgressDialog pd = new ProgressDialog(this);
+            pd.setTitle("发送中...");
+            pd.setCancelable(false);
+            pd.show();
     }
 }

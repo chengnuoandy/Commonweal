@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.ui.fragment.dynamic;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ public class PersonalDynamicFragment extends Fragment {
         mView = view;
 
         initView();
-        initData();
         return view;
     }
 
@@ -44,7 +44,7 @@ public class PersonalDynamicFragment extends Fragment {
      */
     private void initData() {
         BmobQuery<Dynamic> data = new BmobQuery<>();
-        data.order("createdAt");
+        data.order("-createdAt");
         data.findObjects(getContext(), new FindListener<Dynamic>() {
             @Override
             public void onSuccess(List<Dynamic> list) {
@@ -79,5 +79,11 @@ public class PersonalDynamicFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
     }
 }

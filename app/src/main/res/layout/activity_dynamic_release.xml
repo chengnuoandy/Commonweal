@@ -121,7 +121,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="@dimen/little_space"
                     android:layout_marginLeft="@dimen/little_space"
-                    android:text="默认首页显示第一张图片" />
+                    android:text="最多添加九张图片" />
             </LinearLayout>
 
             <ImageView

@@ -10,10 +10,20 @@ import org.xutils.x;
 
 public class MyApplication extends Application {
 
+    private boolean DynamicRefresh;
+
     @Override
     public void onCreate() {
         super.onCreate();
         //初始化xUtils
         x.Ext.init(this);
+    }
+
+    public boolean isDynamicRefresh() {
+        return DynamicRefresh;
+    }
+
+    public void setDynamicRefresh(boolean dynamicRefresh) {
+        DynamicRefresh = dynamicRefresh;
     }
 }

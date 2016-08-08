@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyDynamicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
@@ -37,6 +38,7 @@ public class PersonalDynamicFragment extends Fragment {
         mView = view;
 
         initView();
+        initData();
         return view;
     }
 
@@ -89,6 +91,10 @@ public class PersonalDynamicFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        initData();
+        MyApplication myApplication = (MyApplication) getActivity().getApplication();
+        if (myApplication.isDynamicRefresh()){
+            initData();
+            myApplication.setDynamicRefresh(false);
+        }
     }
 }

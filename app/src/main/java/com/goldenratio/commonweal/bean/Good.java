@@ -14,23 +14,23 @@ public class Good extends BmobObject {
     private BmobDate Good_UpDate; //截至日期
     private Long Good_UpDateM; //截止日期 毫秒值
     private String Good_NO; //物品发布顺序
-    private int Good_ID; //物品ID（Good+用户ID+随机码）
+    private Integer Good_ID; //物品ID（Good+用户ID+随机码）
     private String Good_Type; //物品类型
     private String Good_Name; //物品名称
     private String Good_Video; //物品介绍视频
     private List Good_Photos; //物品介绍照片
     private String Good_Description; //物品描述
-    private int Good_DonationRate; //物品用于捐款的比例
-    private int Good_Price; //物品的起步价
-    private int Good_NowPrice; //物品的起步价
+    private Integer Good_DonationRate; //物品用于捐款的比例
+    private Integer Good_Price; //物品的起步价
+    private Integer Good_NowPrice; //物品的起步价
+    private Integer Good_Praise;
 
-
-    public int getGood_ID() {
-        return Good_ID;
+    public Integer getGood_Praise() {
+        return Good_Praise;
     }
 
-    public void setGood_ID(int good_ID) {
-        Good_ID = good_ID;
+    public void setGood_Praise(Integer good_Praise) {
+        Good_Praise = good_Praise;
     }
 
     public U_FamousP getGood_User_ID() {
@@ -65,6 +65,13 @@ public class Good extends BmobObject {
         Good_NO = good_NO;
     }
 
+    public Integer getGood_ID() {
+        return Good_ID;
+    }
+
+    public void setGood_ID(Integer good_ID) {
+        Good_ID = good_ID;
+    }
 
     public String getGood_Type() {
         return Good_Type;
@@ -106,27 +113,27 @@ public class Good extends BmobObject {
         Good_Description = good_Description;
     }
 
-    public int getGood_DonationRate() {
+    public Integer getGood_DonationRate() {
         return Good_DonationRate;
     }
 
-    public void setGood_DonationRate(int good_DonationRate) {
+    public void setGood_DonationRate(Integer good_DonationRate) {
         Good_DonationRate = good_DonationRate;
     }
 
-    public int getGood_Price() {
+    public Integer getGood_Price() {
         return Good_Price;
     }
 
-    public void setGood_Price(int good_Price) {
+    public void setGood_Price(Integer good_Price) {
         Good_Price = good_Price;
     }
 
-    public int getGood_NowPrice() {
+    public Integer getGood_NowPrice() {
         return Good_NowPrice;
     }
 
-    public void setGood_NowPrice(int good_NowPrice) {
+    public void setGood_NowPrice(Integer good_NowPrice) {
         Good_NowPrice = good_NowPrice;
     }
 }

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.GlideLoader;
@@ -208,7 +208,7 @@ public class UserSettingsActivity extends Activity {
      * @param userRow
      */
     private void updateDataToSqlite(String userData, String userRow) {
-        String sqlCmd = "UPDATE User SET " + userRow + "='" + userData + "'";
+        String sqlCmd = "UPDATE User_Profile SET " + userRow + "='" + userData + "'";
         UserDao ud = new UserDao(this);
         ud.execSQL(sqlCmd);
     }
@@ -221,7 +221,7 @@ public class UserSettingsActivity extends Activity {
      */
     private void updateDataToBmob(String userData, int i) {
         String userID = MyFragment.mUserID;
-        U_NormalP u = new U_NormalP();
+        User_Profile u = new User_Profile();
         if (i == 0) {
             u.setUser_Sex(userData);
         } else if (i == 1)

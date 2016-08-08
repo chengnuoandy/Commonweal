@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
 
 /**
@@ -149,7 +151,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
     };
 
     //缓存类
-    class ViewHolder {
+    class ViewHolder implements View.OnClickListener {
         private TextView mTvUserName;
         private TextView mTvTime;
         private TextView mTvName;
@@ -159,8 +161,12 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         private Good mGood;
         private TextView mTvNowPrice;
         private ImageView mIvUserAvatar;
+        private TextView mTvThumbUp;
+        private Integer position;
+        private View conView;
 
         public void initView(View convertView) {
+            conView = convertView;
             mTvUserName = (TextView) convertView.findViewById(R.id.tv_user_name);
             mCountdownView = (CountdownView) convertView.findViewById(R.id.cv_good);
             mTvTime = (TextView) convertView.findViewById(R.id.tv_time);
@@ -168,7 +174,10 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mIvPic = (ImageView) convertView.findViewById(R.id.iv_pic);
             mTvNowPrice = (TextView) convertView.findViewById(R.id.tv_now_price);
             mIvUserAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
+            mTvThumbUp = (TextView) convertView.findViewById(R.id.tv_thumb_up);
+            mTvThumbUp.setOnClickListener(this);
         }
+
 
         //初始化数据
         public void bindData(Good Good) {
@@ -193,6 +202,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         }
 
         private void initData(final int position) {
+            this.position = position;
             mTvTime.setText(getItem(position).getCreatedAt());
             mTvName.setText(getItem(position).getGood_Name());
             mTvUserName.setText(getItem(position).getGood_User_ID().getUser_Nickname());
@@ -204,6 +214,27 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                     .into(mIvPic);
             mTvNowPrice.setText(getItem(position).getGood_NowPrice() + "");
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_thumb_up:
+                    Good good = new Good();
+                    good.increment("Good_Praise");
+                    good.update(mContext, getItem(position).getObjectId(), new UpdateListener() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            Toast.makeText(mContext, "点赞失败" + s, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    break;
+            }
         }
     }
 }

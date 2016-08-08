@@ -141,7 +141,7 @@ public class MyFragment extends Fragment {
      */
     private boolean isUserTableExist() {
         boolean isTableExist = true;
-        String sqlCmd = "SELECT count(User_Avatar) FROM User ";
+        String sqlCmd = "SELECT count(User_Avatar) FROM User_Profile ";
         UserDao ud = new UserDao(getActivity());
         Cursor c = ud.query(sqlCmd);
         if (c.moveToNext()) {
@@ -159,7 +159,7 @@ public class MyFragment extends Fragment {
      * 用户唯一id（objectid）
      */
     private void getUserData() {
-        String sqlCmd = "SELECT * FROM User ";
+        String sqlCmd = "SELECT * FROM User_Profile ";
         UserDao ud = new UserDao(getActivity());
         Cursor cursor = ud.query(sqlCmd);
         userName = "";

@@ -164,6 +164,9 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         Bundle bundle = new Bundle();
         bundle.putSerializable("Good", mGoodList.get(position - 1));
         StartAct(bundle);
+
+        Object itemAtPosition = parent.getItemAtPosition(position);
+        Log.d(TAG, "onItemClick: " + itemAtPosition);
     }
 
 

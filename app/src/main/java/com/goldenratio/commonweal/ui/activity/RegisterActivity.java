@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
@@ -456,7 +456,7 @@ public class RegisterActivity extends Activity {
         if (TextUtils.isEmpty(mUserNickname)) {
             mUserNickname = "Love" + getRndUserName(6);
         }
-        U_NormalP u = new U_NormalP();
+        User_Profile u = new User_Profile();
         u.setUser_Phone(mPhone);
         u.setUser_Nickname(mUserNickname);
         u.setUser_Password(mD5Pwd);
@@ -485,7 +485,7 @@ public class RegisterActivity extends Activity {
     private void updateUserPwdToDb() {
         //md5加密
         String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
-        U_NormalP u = new U_NormalP();
+        User_Profile u = new User_Profile();
         u.setUser_Password(mD5Pwd);
         closeProgressDialog();
         u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
@@ -505,12 +505,12 @@ public class RegisterActivity extends Activity {
 
     //判断此用户是否已经注册
     private void isRegister() {
-        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<U_NormalP>();
+        BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
         bmobQuery.addWhereEqualTo("User_Phone", mPhone);
         Log.d("queryPhone", mPhone);
-        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+        bmobQuery.findObjects(this, new FindListener<User_Profile>() {
             @Override
-            public void onSuccess(List<U_NormalP> list) {
+            public void onSuccess(List<User_Profile> list) {
                 if (list.isEmpty()) {
                     //判断点击的是否是注册按钮
                     if (isClickRegisterBtn) {
@@ -542,6 +542,7 @@ public class RegisterActivity extends Activity {
                 closeProgressDialog();
                 Log.d("query", "查询失败");
                 Toast.makeText(RegisterActivity.this, "网络不给力", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, s, Toast.LENGTH_SHORT).show();
             }
         });
     }

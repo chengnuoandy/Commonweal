@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="afterDescendants"
     android:orientation="vertical"
     android:padding="@dimen/normal_space">
 
@@ -44,6 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
@@ -54,6 +56,11 @@
             android:text="物品的名称"
             android:textSize="@dimen/text_size_big" />
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
 
         <TextView
             android:id="@+id/tv_now_price"
@@ -62,6 +69,7 @@
             android:layout_gravity=""
             android:drawableLeft="@drawable/ic_insert_chart_black_24dp"
             android:drawablePadding="@dimen/little_space"
+            android:gravity="center"
             android:text="当前价格" />
 
 

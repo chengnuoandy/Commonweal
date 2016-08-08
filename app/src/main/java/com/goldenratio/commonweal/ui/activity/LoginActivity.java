@@ -22,7 +22,7 @@ import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
 import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
-import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -198,15 +198,15 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private void isLogin(String Phone, final String Password, Boolean flag) {
         if (flag) {
             Loing();
-            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+            BmobQuery<User_Profile> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Phone", Phone);
             //执行查询方法
-            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+            bmobQuery.findObjects(this, new FindListener<User_Profile>() {
                 @Override
-                public void onSuccess(List<U_NormalP> object) {
+                public void onSuccess(List<User_Profile> object) {
                     //判断查询到的行数
                     if (object.size() == 1) {
-                        U_NormalP mUser = object.get(0);
+                        User_Profile mUser = object.get(0);
                         if (Password.equals(mUser.getUser_Password())) {
                             Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                             //获得数据的objectId信息
@@ -232,15 +232,15 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             });
         } else {
             Loing();
-            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+            BmobQuery<User_Profile> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Name", Phone);
             //执行查询方法
-            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+            bmobQuery.findObjects(this, new FindListener<User_Profile>() {
                 @Override
-                public void onSuccess(List<U_NormalP> object) {
+                public void onSuccess(List<User_Profile> object) {
                     //判断查询到的行数
                     if (object.size() == 1) {
-                        U_NormalP mUser = object.get(0);
+                        User_Profile mUser = object.get(0);
                         if (Password.equals(mUser.getUser_Password())) {
                             Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                             //获得数据的objectId信息
@@ -274,16 +274,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      * @param id 微博授权的ID
      */
     private void isLogin(String id) {
-        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+        BmobQuery<User_Profile> bmobQuery = new BmobQuery<>();
         bmobQuery.addWhereEqualTo("User_WbID", id);
         //执行查询方法
-        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+        bmobQuery.findObjects(this, new FindListener<User_Profile>() {
             @Override
-            public void onSuccess(List<U_NormalP> object) {
+            public void onSuccess(List<User_Profile> object) {
                 //判断查询到的行数
                 if (object.size() == 1) {
                     //如果此用户已存在，获得数据的objectId信息
-                    com.goldenratio.commonweal.bean.U_NormalP mUser = object.get(0);
+                    User_Profile mUser = object.get(0);
                     userID = mUser.getObjectId();
                     returnData();
                     saveDB(mUser);
@@ -401,7 +401,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         public void onComplete(String response) {
             if (!TextUtils.isEmpty(response)) {
-                // 调用 U_NormalP#parse 将JSON串解析成User对象
+                // 调用 User_Profile#parse 将JSON串解析成User对象
                 upUser = User.parse(response);
                 if (upUser != null) {
                     //是否已经注册
@@ -453,7 +453,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      */
     class myAsyncTask extends AsyncTask<String, Void, Void> {
 
-        private U_NormalP user = new U_NormalP();
+        private User_Profile user = new User_Profile();
         private User wbuser;
 
         public myAsyncTask(User wbuser) {
@@ -472,7 +472,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         protected Void doInBackground(String... params) {
             //提交数据
             user.setUser_Nickname(wbuser.screen_name);
-            user.setUser_IsRealName(wbuser.verified);
+            user.setUser_IsV(wbuser.verified);
             if ("m".equals(wbuser.gender)) {
                 user.setUser_Sex("男");
             } else if ("f".equals(wbuser.gender)) {
@@ -484,7 +484,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             user.setUser_image_max(wbuser.avatar_large);
             user.setUser_image_min(wbuser.profile_image_url);
             user.setUser_image_hd(wbuser.avatar_hd);
-            user.setVerified_reason(wbuser.verified_reason); //认证原因
+            user.setUser_VerifiedReason(wbuser.verified_reason); //认证原因
             user.setUser_Autograph(wbuser.description);
             user.save(LoginActivity.this, new SaveListener() {
                 @Override
@@ -504,16 +504,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+            BmobQuery<User_Profile> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_WbID", wbuser.id);
             //执行查询方法
-            bmobQuery.findObjects(LoginActivity.this, new FindListener<U_NormalP>() {
+            bmobQuery.findObjects(LoginActivity.this, new FindListener<User_Profile>() {
                 @Override
-                public void onSuccess(List<U_NormalP> object) {
+                public void onSuccess(List<User_Profile> object) {
                     //判断查询到的行数
                     if (object.size() == 1) {
                         //如果此用户已存在，获得数据的objectId信息
-                        U_NormalP mUser = object.get(0);
+                        User_Profile mUser = object.get(0);
                         userID = mUser.getObjectId();
                         returnData();
                         saveDB(mUser);
@@ -532,9 +532,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     /**
      * 保存数据到本地
      */
-    private void saveDB(U_NormalP user) {
+    private void saveDB(User_Profile user) {
         UserDao mUserDao = new UserDao(LoginActivity.this);
-        mUserDao.execSQL("insert into User (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
+        mUserDao.execSQL("insert into User_Profile (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
                         ",User_Address,User_sex,User_image_min,User_image_max) values(?,?,?,?,?,?,?,?,?)",
                 new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
                         user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max()});

@@ -180,7 +180,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
      * @param dy 保存的实体
      */
     private void getUserData(Dynamic dy) {
-        String sqlCmd = "SELECT * FROM User ";
+        String sqlCmd = "SELECT * FROM User_Profile ";
         UserDao ud = new UserDao(this);
         Cursor cursor = ud.query(sqlCmd);
         if (cursor.moveToFirst()) {

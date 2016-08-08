@@ -55,7 +55,7 @@ public class HelpListViewAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(
-                    R.layout.view_help_item, parent, false);
+                    R.layout.item_help_listview, parent, false);
             viewHolder.initView(convertView);
             convertView.setTag(viewHolder);
         } else {

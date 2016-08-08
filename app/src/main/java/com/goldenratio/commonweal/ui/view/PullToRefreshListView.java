@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.goldenratio.commonweal.R;
 
 import java.text.SimpleDateFormat;
@@ -49,7 +50,7 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
     public PullToRefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initHeaderView();
-       // initFooterView();
+        // initFooterView();
     }
 
     public PullToRefreshListView(Context context) {
@@ -143,7 +144,7 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
                         refreshState();
                     }
 
-                   // return true;
+                    // return true;
                 }
 
                 break;
@@ -227,7 +228,7 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
      * 刷新结束,收起控件
      */
     public void onRefreshComplete() {
-        if(!isLoadMore) {
+        if (!isLoadMore) {
             mHeaderView.setPadding(0, -mHeaderViewHeight, 0, 0);
 
             mCurrentState = STATE_PULL_TO_REFRESH;
@@ -290,7 +291,7 @@ public class PullToRefreshListView extends ListView implements AbsListView.OnScr
                 // 从而加载更多会直接展示出来, 无需手动滑动
 
                 //通知主界面加载下一页数据
-                if(mListener!=null) {
+                if (mListener != null) {
                     mListener.onLoadMore();
                 }
             }

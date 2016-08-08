@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.bean.U_FamousP;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
@@ -142,7 +143,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         Log.d(TAG, "testDate: now time--->" + str);
         mGood.setGood_UpDate(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", str));
         mGood.setGood_UpDateM(date);
-        mGood.setGood_ID(String.valueOf(5));
+        mGood.setGood_ID(5);
         mGood.setGood_Name("张杰");
         mGood.save(this, new SaveListener() {
             @Override
@@ -259,13 +260,14 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                     @Override
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
                         if (filePaths.length == list1.size()) {
+                            U_FamousP u_famousP = new U_FamousP();
+                            u_famousP.setObjectId(mStrObjectId);
                             Good good = new Good();
                             Toast.makeText(GoodActivity.this, mStrObjectId, Toast.LENGTH_SHORT).show();
-                            good.setGood_User_ID(mStrObjectId);
+                            good.setGood_User_ID(u_famousP);
                             good.setGood_Name(mStrName);
                             good.setGood_Description(mStrDescription);
                             good.setGood_Photos(list1);
-                            good.setGood_ID("2");
                             good.setGood_Type(mStrType);
                             good.setGood_Price(Integer.parseInt(price));
                             good.setGood_NowPrice(Integer.parseInt(price));

@@ -6,16 +6,15 @@ import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
 /**
- *
  * Created by Kiuber on 2016/6/10.
  */
 
 public class Good extends BmobObject {
-    private String Good_User_ID;
+    private U_FamousP Good_User_ID;
     private BmobDate Good_UpDate; //截至日期
     private Long Good_UpDateM; //截止日期 毫秒值
     private String Good_NO; //物品发布顺序
-    private String Good_ID; //物品ID（Good+用户ID+随机码）
+    private int Good_ID; //物品ID（Good+用户ID+随机码）
     private String Good_Type; //物品类型
     private String Good_Name; //物品名称
     private String Good_Video; //物品介绍视频
@@ -25,11 +24,20 @@ public class Good extends BmobObject {
     private int Good_Price; //物品的起步价
     private int Good_NowPrice; //物品的起步价
 
-    public String getGood_User_ID() {
+
+    public int getGood_ID() {
+        return Good_ID;
+    }
+
+    public void setGood_ID(int good_ID) {
+        Good_ID = good_ID;
+    }
+
+    public U_FamousP getGood_User_ID() {
         return Good_User_ID;
     }
 
-    public void setGood_User_ID(String good_User_ID) {
+    public void setGood_User_ID(U_FamousP good_User_ID) {
         Good_User_ID = good_User_ID;
     }
 
@@ -57,13 +65,6 @@ public class Good extends BmobObject {
         Good_NO = good_NO;
     }
 
-    public String getGood_ID() {
-        return Good_ID;
-    }
-
-    public void setGood_ID(String good_ID) {
-        Good_ID = good_ID;
-    }
 
     public String getGood_Type() {
         return Good_Type;

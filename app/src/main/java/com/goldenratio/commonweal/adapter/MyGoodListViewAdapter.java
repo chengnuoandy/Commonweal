@@ -15,15 +15,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.util.GlideCircleTransform;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindListener;
 import cn.iwgang.countdownview.CountdownView;
 
 /**
@@ -99,7 +96,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (viewHolder == null) {
-            convertView = mInflater.inflate(R.layout.view_good_item, null);
+            convertView = mInflater.inflate(R.layout.item_good_listview, null);
             viewHolder = new ViewHolder();
             //初始化布局
             viewHolder.initView(convertView);
@@ -115,7 +112,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         // 处理倒计时
         if (mGood.getGood_UpDateM() > 0) {
             synchronized (mCountdownVHList) {
-                mCountdownVHList.put(position, viewHolder);
+                mCountdownVHList.put(getItem(position).getGood_ID(), viewHolder);
             }
         }
 
@@ -195,23 +192,10 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             return mGood;
         }
 
-        private void initData(int position) {
-
-            BmobQuery<U_NormalP> userBmobQuery = new BmobQuery<>();
-            userBmobQuery.addWhereEqualTo("objectId", getItem(position).getGood_User_ID());
-            userBmobQuery.findObjects(mContext, new FindListener<U_NormalP>() {
-                @Override
-                public void onSuccess(List<U_NormalP> list) {
-                }
-
-                @Override
-                public void onError(int i, String s) {
-
-                }
-            });
-
+        private void initData(final int position) {
             mTvTime.setText(getItem(position).getCreatedAt());
             mTvName.setText(getItem(position).getGood_Name());
+            mTvUserName.setText(getItem(position).getGood_User_ID().getUser_Nickname());
 
             Glide.with(mContext)
                     .load(getItem(position).getGood_Photos().get(0).toString())
@@ -219,6 +203,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                     .transform(new GlideCircleTransform(mContext))
                     .into(mIvPic);
             mTvNowPrice.setText(getItem(position).getGood_NowPrice() + "");
+
         }
     }
 }

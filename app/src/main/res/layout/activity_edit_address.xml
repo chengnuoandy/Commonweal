@@ -10,7 +10,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/iv_edit_address_back"
@@ -33,6 +34,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@color/white">
 
         <TextView
@@ -52,6 +54,11 @@
             android:background="@null"
             android:text="收件人"/>
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -77,6 +84,11 @@
             android:text="联系电话"/>
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
     <RelativeLayout
         android:id="@+id/rl_edit_address"
         android:layout_width="match_parent"
@@ -94,16 +106,21 @@
 
         <TextView
             android:id="@+id/tv_edit_address"
-            android:gravity="center"
-            android:layout_alignBottom="@+id/tv_place_address"
-            android:layout_alignTop="@+id/tv_place_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_place_address"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_place_address"
             android:layout_marginRight="25dp"
+            android:gravity="center"
             android:text="请选择"/>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
 
     <RelativeLayout
         android:id="@+id/rl_place_street"
@@ -122,27 +139,32 @@
 
         <TextView
             android:id="@+id/tv_edit_street"
-            android:gravity="center"
-            android:layout_alignBottom="@+id/tv_place_street"
-            android:layout_alignTop="@+id/tv_place_street"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_place_street"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_place_street"
             android:layout_marginRight="25dp"
+            android:gravity="center"
             android:text="请选择"/>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
 
     <EditText
         android:id="@+id/et_detail_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:hint="详细地址"
         android:gravity="clip_horizontal"
-        android:padding="10dp"
+        android:hint="详细地址"
+        android:lines="4"
         android:maxLines="4"
-        android:lines="4"/>
+        android:padding="10dp"/>
 
     <Button
         android:id="@+id/btn_save_address"

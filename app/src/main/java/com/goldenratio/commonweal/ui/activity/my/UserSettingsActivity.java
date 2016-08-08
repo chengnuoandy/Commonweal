@@ -228,7 +228,7 @@ public class UserSettingsActivity extends Activity {
             u.setUser_Nickname(userData);
         else if (i == 2) {
             u.setUser_Autograph(userData);
-        } else u.setUser_image_max(userData);
+        } else u.setUser_image_hd(userData);
         u.update(this, userID, new UpdateListener() {
             @Override
             public void onSuccess() {

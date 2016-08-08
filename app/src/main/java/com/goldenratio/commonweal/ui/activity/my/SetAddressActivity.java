@@ -50,4 +50,17 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
     public void click(View v) {
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+
+                }
+                break;
+        }
+    }
+
+
 }

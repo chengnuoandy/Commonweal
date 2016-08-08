@@ -14,6 +14,8 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.U_FamousP;
 import com.goldenratio.commonweal.bean.U_NormalP;
+import com.jaeger.ninegridimageview.NineGridImageView;
+import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
 import java.util.List;
 
@@ -71,16 +73,27 @@ public class MyDynamicAdapter extends BaseAdapter {
         private TextView mTvName;
         private TextView mText;
         private TextView mLocation;
-        private ImageView mIvPic;
         private ImageView mUserPic;
+        private NineGridImageView mNineGridImageView;
 
         private void initView(View view) {
             mTvTime = (TextView) view.findViewById(R.id.tv_time);
             mTvName = (TextView) view.findViewById(R.id.tv_name);
             mText = (TextView) view.findViewById(R.id.tv_text);
-            mIvPic = (ImageView) view.findViewById(R.id.iv_pic);
+            mNineGridImageView = (NineGridImageView) view.findViewById(R.id.iv_pic);
             mLocation = (TextView) view.findViewById(R.id.tv_location);
             mUserPic = (ImageView) view.findViewById(R.id.iv_user_avatar);
+
+            mNineGridImageView.setAdapter(new NineGridImageViewAdapter<String>() {
+                @Override
+                protected void onDisplayImage(Context context, ImageView imageView, String str) {
+                    if (str != null) {
+                        Glide.with(mContext)
+                                .load(str)
+                                .into(imageView);
+                    }
+                }
+            });
         }
 
         public void initData(int position) {
@@ -100,14 +113,10 @@ public class MyDynamicAdapter extends BaseAdapter {
             mTvTime.setText(mList.get(position).getDynamics_time());
             mText.setText(mList.get(position).getDynamics_title());
             mLocation.setText(mList.get(position).getDynamics_location());
-
-            if (mList.get(position).getDynamics_pic() != null) {
-                Glide.with(mContext)
-                        .load(mList.get(position).getDynamics_pic().get(0).toString())
-                        .into(mIvPic);
-            }
+            mNineGridImageView.setImagesData(mList.get(position).getDynamics_pic());
 
 //            Log.d("lxc", "initData: "+mList.get(position).getDynamics_u_pic());
         }
+
     }
 }

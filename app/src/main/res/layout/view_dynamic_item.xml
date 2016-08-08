@@ -22,14 +22,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_marginStart="@dimen/little_space"
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="昵称"
-                android:textSize="@dimen/text_size_big"/>
+                android:textSize="@dimen/text_size_big"
+                android:layout_marginLeft="@dimen/little_space"/>
 
             <TextView
+                android:layout_marginLeft="@dimen/little_space"
+                android:layout_marginStart="@dimen/little_space"
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,11 +52,16 @@
         android:textSize="17sp"
         android:text="内容"/>
 
-    <ImageView
+    <com.jaeger.ninegridimageview.NineGridImageView
         android:id="@+id/iv_pic"
-        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/little_space"/>
+        android:layout_margin="6dp"
+        android:layout_width="match_parent"
+        app:imgGap="4dp"
+        app:maxSize="9"
+        app:showStyle="fill"
+        app:singleImgSize="200dp"/>
 
     <TextView
         android:id="@+id/tv_location"

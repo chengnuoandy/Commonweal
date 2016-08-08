@@ -49,4 +49,5 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.jaeger.ninegridimageview:library:1.0.1'
 }

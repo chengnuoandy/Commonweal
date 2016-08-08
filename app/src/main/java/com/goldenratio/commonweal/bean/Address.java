@@ -1,10 +1,12 @@
 package com.goldenratio.commonweal.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Lxt- Jxfen on 2016/8/6.
  * Email:jxfengmtx@163.com
  */
-public class Address {
+public class Address implements Serializable {
 
     private int iconResID;
     private String consignee;

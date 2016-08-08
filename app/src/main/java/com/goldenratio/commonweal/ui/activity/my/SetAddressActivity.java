@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.ui.activity.my;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,6 +11,10 @@ import android.widget.ListView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
+import com.goldenratio.commonweal.bean.Address;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,7 +61,12 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
-
+                    Address address = (Address) data.getSerializableExtra("address");
+                    Log.i("address", address.getConsignee());
+                    List<Address> mAddressList = new ArrayList<Address>();
+                    mAddressList.add(address);
+                    mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
+                            mAddressList, SetAddressActivity.this));
                 }
                 break;
         }

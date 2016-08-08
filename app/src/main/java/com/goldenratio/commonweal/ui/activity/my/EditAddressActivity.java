@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Address;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,15 +61,23 @@ public class EditAddressActivity extends Activity {
             case R.id.et_detail_address:
                 break;
             case R.id.btn_save_address:
+                rtnDataToSetAddressAct();
+                finish();
                 break;
         }
     }
 
-    private void collectConsigneeInfo() {
+    private void rtnDataToSetAddressAct() {
         String consignee = mEtConsignee.getText().toString();
         String consigneePhone = mEtEditPhone.getText().toString();
         String consigneeAddress = mTvEditAddress.getText() + " "
                 + mTvEditStreet.getText() + " " + mEtDetailAddress.getText();
+        Address address = new Address();
+        address.setConsignee(consignee);
+        address.setConsigneePhone(consigneePhone);
+        address.setConsigneeAddress(consigneeAddress);
         Intent intent = new Intent();
+        intent.putExtra("address", address);
+        setResult(RESULT_OK, intent);
     }
 }

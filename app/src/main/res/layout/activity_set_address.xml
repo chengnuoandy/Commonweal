@@ -27,11 +27,11 @@
     </RelativeLayout>
 
     <ListView
-        android:layout_marginTop="50dp"
         android:id="@+id/lv_address_details"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_add_address"/>
+        android:layout_marginTop="50dp"
+        android:background="@color/white"/>
 
     <Button
         android:id="@+id/btn_add_address"
@@ -39,8 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
-        android:text="添加地址"
         android:gravity="center"
+        android:text="添加地址"
         android:textSize="18sp"/>
 
 

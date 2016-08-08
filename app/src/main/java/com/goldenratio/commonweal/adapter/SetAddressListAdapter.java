@@ -1,20 +1,17 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Address;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by Lxt- Jxfen on 2016/8/6.
@@ -30,6 +27,7 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         mAddressList = addressList;
         mCallback = callback;
         mInflater = LayoutInflater.from(context);
+        Log.i("adapter", "SetAddressListAdapter: " + addressList.size());
     }
 
     @Override
@@ -63,13 +61,19 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
+            holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.view_address_item, null);
-            holder = new ViewHolder(convertView);
+            holder.mTvConsignees = (TextView) convertView.findViewById(R.id.tv_consignees);
+            holder.mTvConsigneesPhone = (TextView) convertView.findViewById(R.id.tv_tv_consignees_phone);
+            holder.mTvConsigneesAddress = (TextView) convertView.findViewById(R.id.tv_consignees_address);
+            holder.mTvDeleteAddress = (TextView) convertView.findViewById(R.id.tv_delete_address);
+            holder.mTvDiv =  convertView.findViewById(R.id.v_div);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         Address address = mAddressList.get(position);
+        Log.i("TAG", address.getConsigneeAddress());
         holder.mTvConsignees.setText(address.getConsignee());
         holder.mTvConsigneesPhone.setText(address.getConsigneePhone());
         holder.mTvConsigneesAddress.setText(address.getConsigneeAddress());
@@ -77,20 +81,11 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
 
     }
 
-    static class ViewHolder {
-        @BindView(R.id.tv_consignees)
-        TextView mTvConsignees;
-        @BindView(R.id.tv_tv_consignees_phone)
-        TextView mTvConsigneesPhone;
-        @BindView(R.id.rl_address)
-        RelativeLayout mRlAddress;
-        @BindView(R.id.tv_consignees_address)
-        TextView mTvConsigneesAddress;
-        @BindView(R.id.tv_delete_address)
-        TextView mTvDeleteAddress;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
+    class ViewHolder {
+        public TextView mTvConsignees;
+        public TextView mTvConsigneesPhone;
+        public TextView mTvConsigneesAddress;
+        public TextView mTvDeleteAddress;
+        public View mTvDiv;
     }
 }

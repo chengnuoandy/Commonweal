@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyDynamicAdapter;
@@ -45,6 +46,7 @@ public class PersonalDynamicFragment extends Fragment {
     private void initData() {
         BmobQuery<Dynamic> data = new BmobQuery<>();
         data.order("-createdAt");
+        data.include("Dynamics_uid");
         data.findObjects(getContext(), new FindListener<Dynamic>() {
             @Override
             public void onSuccess(List<Dynamic> list) {
@@ -55,7 +57,8 @@ public class PersonalDynamicFragment extends Fragment {
 
             @Override
             public void onError(int i, String s) {
-
+                mListView.onRefreshComplete();
+                Toast.makeText(getContext(), "未知错误" + s, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -70,8 +73,10 @@ public class PersonalDynamicFragment extends Fragment {
             @Override
             public void onRefresh() {
                 //重新装填数据
-                mDynamicList.clear();
-                initData();
+                if (mDynamicList != null){
+                    mDynamicList.clear();
+                    initData();
+                }
             }
 
             @Override

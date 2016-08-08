@@ -13,24 +13,33 @@ public class Dynamic extends BmobObject{
     private List Dynamics_pic;
     private String Dynamics_location;
     private String Dynamics_time;
-    private String Dynamics_name;
-    private String Dynamics_uid;
-    private String Dynamics_u_pic;
+    private U_FamousP Dynamics_u_f_id;
+    private U_NormalP Dynamics_uid;
+    private boolean Dynamics_isv;
 
-    public String getDynamics_u_pic() {
-        return Dynamics_u_pic;
+
+    public boolean getDynamics_isv() {
+        return Dynamics_isv;
     }
 
-    public void setDynamics_u_pic(String dynamics_u_pic) {
-        Dynamics_u_pic = dynamics_u_pic;
+    public void setDynamics_isv(boolean dynamics_isv) {
+        Dynamics_isv = dynamics_isv;
     }
 
-    public String getDynamics_name() {
-        return Dynamics_name;
+    public U_FamousP getDynamics_u_f_id() {
+        return Dynamics_u_f_id;
     }
 
-    public void setDynamics_name(String dynamics_name) {
-        Dynamics_name = dynamics_name;
+    public void setDynamics_u_f_id(U_FamousP dynamics_u_f_id) {
+        Dynamics_u_f_id = dynamics_u_f_id;
+    }
+
+    public U_NormalP getDynamics_uid() {
+        return Dynamics_uid;
+    }
+
+    public void setDynamics_uid(U_NormalP dynamics_uid) {
+        Dynamics_uid = dynamics_uid;
     }
 
     public String getDynamics_time() {
@@ -39,14 +48,6 @@ public class Dynamic extends BmobObject{
 
     public void setDynamics_time(String dynamics_time) {
         Dynamics_time = dynamics_time;
-    }
-
-    public String getDynamics_uid() {
-        return Dynamics_uid;
-    }
-
-    public void setDynamics_uid(String dynamics_uid) {
-        Dynamics_uid = dynamics_uid;
     }
 
     public String getDynamics_location() {

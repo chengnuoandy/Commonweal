@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
+import com.goldenratio.commonweal.bean.U_FamousP;
+import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
@@ -47,6 +49,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
     private GridView mGvShowPhoto;
     private MyGoodPicAdapter mPicAdapter;
     private ImageConfig mImageConfig;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +163,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
             @Override
             public void onSuccess() {
                 Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
+                Completed();
                 finish();
             }
 
@@ -180,9 +184,18 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
         UserDao ud = new UserDao(this);
         Cursor cursor = ud.query(sqlCmd);
         if (cursor.moveToFirst()) {
-            dy.setDynamics_uid(cursor.getString(cursor.getColumnIndex("objectId")));
-            dy.setDynamics_name(cursor.getString(cursor.getColumnIndex("User_Nickname")));
-            dy.setDynamics_u_pic(cursor.getString(cursor.getColumnIndex("User_Avatar")));
+//            判断用户的身份，进行关联
+            if (false){
+                U_FamousP user = new U_FamousP();
+                user.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+                dy.setDynamics_u_f_id(user);
+                dy.setDynamics_isv(true);
+            }else {
+                U_NormalP user = new U_NormalP();
+                user.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+                dy.setDynamics_uid(user);
+                dy.setDynamics_isv(false);
+            }
         }
         cursor.close();
     }
@@ -237,9 +250,19 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
      * 进度条相关--显示进度条
      */
     private void SendM() {
-            ProgressDialog pd = new ProgressDialog(this);
+            pd = new ProgressDialog(this);
             pd.setTitle("发送中...");
             pd.setCancelable(false);
             pd.show();
+    }
+    /**
+     * 进度条相关--取消进度条显示
+     */
+    private void Completed() {
+        if (pd != null && pd.isShowing()) {
+            //关闭对话框
+            pd.dismiss();
+            pd = null;
+        }
     }
 }

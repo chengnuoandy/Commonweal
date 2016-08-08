@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic;
+import com.goldenratio.commonweal.bean.U_FamousP;
+import com.goldenratio.commonweal.bean.U_NormalP;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class MyDynamicAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context mContext;
 
-    public MyDynamicAdapter(Context context,List<Dynamic> list){
+    public MyDynamicAdapter(Context context, List<Dynamic> list) {
         mList = list;
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -49,13 +51,13 @@ public class MyDynamicAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
-        if (convertView == null){
+        if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.view_dynamic_item,null);
+            convertView = mInflater.inflate(R.layout.view_dynamic_item, null);
 
             viewHolder.initView(convertView);
             convertView.setTag(viewHolder);
-        }else {
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
@@ -64,7 +66,7 @@ public class MyDynamicAdapter extends BaseAdapter {
     }
 
 
-    class ViewHolder{
+    class ViewHolder {
         private TextView mTvTime;
         private TextView mTvName;
         private TextView mText;
@@ -72,7 +74,7 @@ public class MyDynamicAdapter extends BaseAdapter {
         private ImageView mIvPic;
         private ImageView mUserPic;
 
-        private void initView(View view){
+        private void initView(View view) {
             mTvTime = (TextView) view.findViewById(R.id.tv_time);
             mTvName = (TextView) view.findViewById(R.id.tv_name);
             mText = (TextView) view.findViewById(R.id.tv_text);
@@ -82,7 +84,19 @@ public class MyDynamicAdapter extends BaseAdapter {
         }
 
         public void initData(int position) {
-            mTvName.setText(mList.get(position).getDynamics_name());
+            if (mList.get(position).getDynamics_isv()) {
+                U_FamousP userF = mList.get(position).getDynamics_u_f_id();
+                mTvName.setText(userF.getUser_Nickname());
+                Glide.with(mContext)
+                        .load(userF.getUser_image_hd())
+                        .into(mUserPic);
+            } else {
+                U_NormalP userN = mList.get(position).getDynamics_uid();
+                mTvName.setText(userN.getUser_Nickname());
+                Glide.with(mContext)
+                        .load(userN.getUser_image_hd())
+                        .into(mUserPic);
+            }
             mTvTime.setText(mList.get(position).getDynamics_time());
             mText.setText(mList.get(position).getDynamics_title());
             mLocation.setText(mList.get(position).getDynamics_location());
@@ -92,9 +106,7 @@ public class MyDynamicAdapter extends BaseAdapter {
                         .load(mList.get(position).getDynamics_pic().get(0).toString())
                         .into(mIvPic);
             }
-            Glide.with(mContext)
-                    .load(mList.get(position).getDynamics_u_pic())
-                    .into(mUserPic);
+
 //            Log.d("lxc", "initData: "+mList.get(position).getDynamics_u_pic());
         }
     }

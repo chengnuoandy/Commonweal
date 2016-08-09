@@ -1,22 +1,29 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.Address;
+import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.lljjcoder.citypickerview.widget.CityPickerView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class EditAddressActivity extends Activity {
 
@@ -35,12 +42,17 @@ public class EditAddressActivity extends Activity {
     @BindView(R.id.btn_save_address)
     Button mBtnSaveAddress;
 
+
+    private ArrayList<String> address;
+    private ProgressDialog mPd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_address);
         ButterKnife.bind(this);
 
+        address = getIntent().getStringArrayListExtra("address");
 
     }
 
@@ -56,24 +68,18 @@ public class EditAddressActivity extends Activity {
             case R.id.et_detail_address:
                 break;
             case R.id.btn_save_address:
-                rtnDataToSetAddressAct();
-                finish();
+                showProgressDialog();
+                updateDataToBmob();
                 break;
         }
     }
 
     private void rtnDataToSetAddressAct() {
-        String consignee = mEtConsignee.getText().toString();
-        String consigneePhone = mEtEditPhone.getText().toString();
-        String consigneeAddress = mTvEditAddress.getText() + " "
-                + mEtDetailAddress.getText();
-        Address address = new Address();
-        address.setConsignee(consignee);
-        address.setConsigneePhone(consigneePhone);
-        address.setConsigneeAddress(consigneeAddress);
         Intent intent = new Intent();
-        intent.putExtra("address", address);
+        intent.putStringArrayListExtra("address", address);
         setResult(RESULT_OK, intent);
+        closeProgressDialog();
+        finish();
     }
 
     private void configCityPickerView() {
@@ -95,9 +101,53 @@ public class EditAddressActivity extends Activity {
                 //邮编
                 String code = citySelected[3];
 
-                String addre = province + " " + city + " " + district + " ";
-                mTvEditAddress.setText(addre);
+                String addreDetail = province + " " + city + " " + district + " ";
+                mTvEditAddress.setText(addreDetail);
             }
         });
+    }
+
+    private void updateDataToBmob() {
+        String consignee = mEtConsignee.getText().toString();
+        String consigneePhone = mEtEditPhone.getText().toString();
+        String consigneeAddress = mTvEditAddress.getText() + " "
+                + mEtDetailAddress.getText();
+        address.add(consignee);
+        address.add(consigneePhone);
+        address.add(consigneeAddress);
+
+        String userID = MyFragment.mUserID;
+        User_Profile u = new User_Profile();
+        Log.i("list", "updateDataToBmob: " + address);
+        u.setUser_Receive_Address(address);
+        u.update(EditAddressActivity.this, userID, new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                rtnDataToSetAddressAct();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                closeProgressDialog();
+                Log.i("why", s);
+                Toast.makeText(EditAddressActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showProgressDialog() {
+        if (mPd == null) {
+            mPd = new ProgressDialog(this);
+            mPd.setMessage("保存中");
+            mPd.setCancelable(true);
+            mPd.show();
+        }
+    }
+
+    private void closeProgressDialog() {
+        if (mPd != null && mPd.isShowing()) {
+            mPd.dismiss();
+            mPd = null;
+        }
     }
 }

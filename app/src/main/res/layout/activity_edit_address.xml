@@ -98,7 +98,7 @@
         android:id="@+id/rl_edit_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:background="@drawable/item_tv_selector">
 
         <TextView
             android:id="@+id/tv_place_address"
@@ -140,11 +140,12 @@
         android:textSize="15sp"/>
 
     <Button
+
         android:id="@+id/btn_save_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:background="@drawable/register_reset"
+        android:background="@drawable/register_btn_selector"
         android:text="保存地址"/>
 
 </LinearLayout>

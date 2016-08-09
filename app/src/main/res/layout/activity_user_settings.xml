@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_space"
-        android:background="@color/white"
+        android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:src="@drawable/iv_unregister_head"
-            android:tag="1" />
+            android:tag="1"/>
 
     </RelativeLayout>
 
@@ -67,7 +67,7 @@
         android:id="@+id/rl_set_userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
         <TextView
@@ -98,7 +98,7 @@
         android:id="@+id/rl_set_userNickName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
         <TextView
@@ -128,7 +128,7 @@
         android:id="@+id/rl_set_userSex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
         <TextView
@@ -160,7 +160,7 @@
         android:id="@+id/rl_set_autograph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
         <TextView
@@ -192,13 +192,13 @@
         android:background="@color/main_bg"/>
 
     <RelativeLayout
+        android:id="@+id/rl_set_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
         <TextView
-            android:id="@+id/tv_set_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/news_cate_arr"

@@ -9,6 +9,7 @@
         android:id="@+id/rl_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/item_tv_selector"
         android:padding="8dp">
 
         <TextView
@@ -46,7 +47,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="4dp">
 
         <TextView
             android:id="@+id/tv_delete_address"
@@ -54,7 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:text="删除"/>
+            android:text="删除"
+            android:textSize="15sp"/>
 
     </RelativeLayout>
 

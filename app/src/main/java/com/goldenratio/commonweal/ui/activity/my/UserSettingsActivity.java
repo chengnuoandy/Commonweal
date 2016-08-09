@@ -122,7 +122,7 @@ public class UserSettingsActivity extends Activity {
         }
     }
 
-    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.tv_set_address})
+    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.rl_set_address})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -150,7 +150,7 @@ public class UserSettingsActivity extends Activity {
             case R.id.rl_set_autograph:
                 showInputDialog(mTvUserAutograph);
                 break;
-            case R.id.tv_set_address:
+            case R.id.rl_set_address:
                 intent = new Intent(this, SetAddressActivity.class);
                 startActivityForResult(intent, 3);
                 break;

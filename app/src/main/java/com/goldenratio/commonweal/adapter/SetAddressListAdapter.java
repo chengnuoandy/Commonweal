@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.Address;
 
 import java.util.List;
 
@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class SetAddressListAdapter extends BaseAdapter implements View.OnClickListener {
 
-    private List<Address> mAddressList;
+    private List<List<String>> mAddressList;
     private LayoutInflater mInflater;
     private Callback mCallback;
 
-    public SetAddressListAdapter(Context context, List<Address> addressList, Callback callback) {
+    public SetAddressListAdapter(Context context, List<List<String>> addressList, Callback callback) {
         mAddressList = addressList;
         mCallback = callback;
         mInflater = LayoutInflater.from(context);
@@ -39,7 +39,7 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
      * 自定义接口，回掉按钮点击事件到SetAddressActivity
      */
     public interface Callback {
-        public void click(View v);
+        void click(View v);
     }
 
     @Override
@@ -66,17 +66,19 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
             holder.mTvConsignees = (TextView) convertView.findViewById(R.id.tv_consignees);
             holder.mTvConsigneesPhone = (TextView) convertView.findViewById(R.id.tv_tv_consignees_phone);
             holder.mTvConsigneesAddress = (TextView) convertView.findViewById(R.id.tv_consignees_address);
-            holder.mTvDeleteAddress = (TextView) convertView.findViewById(R.id.tv_delete_address);
-            holder.mTvDiv =  convertView.findViewById(R.id.v_div);
+            holder.mRlAddress = (RelativeLayout) convertView.findViewById(R.id.rl_address);
+            //   holder.mTvDeleteAddress = (TextView) convertView.findViewById(R.id.tv_delete_address);
+            //  holder.mTvDiv = convertView.findViewById(R.id.v_div);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Address address = mAddressList.get(position);
-        Log.i("TAG", address.getConsigneeAddress());
-        holder.mTvConsignees.setText(address.getConsignee());
-        holder.mTvConsigneesPhone.setText(address.getConsigneePhone());
-        holder.mTvConsigneesAddress.setText(address.getConsigneeAddress());
+        List<String> address = mAddressList.get(position);
+        Log.i("TAG", address.get(0));
+        holder.mTvConsignees.setText(address.get(0));
+        holder.mTvConsigneesPhone.setText(address.get(1));
+        holder.mTvConsigneesAddress.setText(address.get(2));
+        holder.mRlAddress.setOnClickListener(this);
         return convertView;
 
     }
@@ -85,7 +87,8 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         public TextView mTvConsignees;
         public TextView mTvConsigneesPhone;
         public TextView mTvConsigneesAddress;
-        public TextView mTvDeleteAddress;
-        public View mTvDiv;
+        public RelativeLayout mRlAddress;
+        //     public TextView mTvDeleteAddress;
+        //   public View mTvDiv;
     }
 }

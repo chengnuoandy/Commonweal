@@ -39,7 +39,7 @@ public class User_Profile extends BmobObject {
      */
     public String User_VerifiedReason;
     private boolean User_IsV;
-    private List User_Receive_Address;//用户收货地址
+    private List<String> User_Receive_Address;//用户收货地址
 
     public String getUser_Name() {
         return User_Name;

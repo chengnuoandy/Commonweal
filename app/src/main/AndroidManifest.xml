@@ -148,6 +148,8 @@
 
         <activity android:name=".ui.activity.my.EditAddressActivity">
         </activity>
+        <activity android:name=".ui.activity.DynamicPhotoShow">
+        </activity>
     </application>
 
 </manifest>

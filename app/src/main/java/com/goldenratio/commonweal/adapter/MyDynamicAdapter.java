@@ -1,7 +1,7 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +12,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic;
-import com.goldenratio.commonweal.bean.U_FamousP;
-import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,7 +85,17 @@ public class MyDynamicAdapter extends BaseAdapter {
             mLocation = (TextView) view.findViewById(R.id.tv_location);
             mUserPic = (ImageView) view.findViewById(R.id.iv_user_avatar);
 
+            //九宫格加载图片
             mNineGridImageView.setAdapter(new NineGridImageViewAdapter<String>() {
+//                    图片点击事件,启动浏览模式
+                @Override
+                protected void onItemImageClick(Context context, int index, List<String> list) {
+                    Intent intent = new Intent(mContext, DynamicPhotoShow.class);
+                    intent.putExtra("index",index);
+                    intent.putStringArrayListExtra("list", (ArrayList<String>) list);
+                    mContext.startActivity(intent);
+                }
+
                 @Override
                 protected void onDisplayImage(Context context, ImageView imageView, String str) {
                     if (str != null) {
@@ -93,6 +103,7 @@ public class MyDynamicAdapter extends BaseAdapter {
                                 .load(str)
                                 .into(imageView);
                     }
+
                 }
             });
         }

@@ -111,6 +111,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
      */
     private void UploadData() {
         if (TextUtils.isEmpty(mEtText.getText().toString())) {
+            Completed();
             Toast.makeText(DynamicReleaseActivity.this, "请填写内容后再提交！", Toast.LENGTH_SHORT).show();
         } else {
             Dynamic dy = new Dynamic();

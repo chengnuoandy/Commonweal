@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -464,6 +465,7 @@ public class RegisterActivity extends Activity {
         u.setUser_image_max(maxUrl);
         u.setUser_image_min(minUrl);
         u.setUser_Autograph(aut);
+        u.setUser_Receive_Address(Arrays.asList("0"));
         u.save(this, new SaveListener() {
             @Override
             public void onSuccess() {

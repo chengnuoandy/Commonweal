@@ -1,4 +1,4 @@
- package com.goldenratio.commonweal.ui.fragment;
+package com.goldenratio.commonweal.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
@@ -61,6 +62,7 @@ public class MyFragment extends Fragment {
         if (isUserTableExist()) {
             getUserData();
             isLogin = true;
+            ((MyApplication) getActivity().getApplication()).setObjectID(mUserID);
         }
 
         return view;
@@ -155,7 +157,7 @@ public class MyFragment extends Fragment {
 
     /**
      * 读取本地数据库数据 （用户默认头像和签名）
-     * <p>
+     * <p/>
      * 用户唯一id（objectid）
      */
     private void getUserData() {

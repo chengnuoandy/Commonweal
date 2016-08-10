@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
 import com.goldenratio.commonweal.bean.User_Profile;
@@ -25,6 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.GetListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class SetAddressActivity extends Activity implements SetAddressListAdapter.Callback, AdapterView.OnItemClickListener {
 
@@ -46,8 +50,10 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         ButterKnife.bind(this);
 
         showProgressDialog();
+
         address = new ArrayList<String>();
         mAddressList = new ArrayList<List<String>>();
+        mLvAddressDetails.setOnItemClickListener(this);
         getAddressFromBmob();
     }
 
@@ -76,12 +82,32 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                 intent.putStringArrayListExtra("address", address);
                 startActivityForResult(intent, 1);
                 break;
+
             case R.id.tv_delete_address:
                 Log.i("deleteAddress", "click: address点击");
                 break;
         }
 
     }
+
+    @Override
+    public int onCheckedChanged(CompoundButton buttonView, boolean isChecked, int temp) {
+        if (isChecked) {        //如果是选中状态
+            if (temp != -1) {   //temp不为-1，说明已经进行过点击事件
+                CheckBox tempButton = (CheckBox) findViewById(temp);
+                if (tempButton != null) {
+                    tempButton.setChecked(false);   //取到上一次点击的RadioButton，并设置为未选中状态
+                }
+            }
+            temp = buttonView.getId();  //将temp重新赋值，记录下本次点击的RadioButton
+            showProgressDialog();
+            updateAddressToBmob();
+            Log.i("check1", "onCheckedChanged: " + temp);
+        }
+        Log.i("check2", "onCheckedChanged: " + temp);
+        return temp;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -101,34 +127,57 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
 
     private void getAddressFromBmob() {
         BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
+        // bmobQuery.addQueryKeys("User_Receive_Address");
+        String objectID = ((MyApplication) getApplication()).getObjectID();
         bmobQuery.getObject(this, MyFragment.mUserID, new GetListener<User_Profile>() {
             @Override
             public void onSuccess(User_Profile user_profile) {
-                if (user_profile.getUser_Receive_Address() != null) {
-                    List user_receive_address = user_profile.getUser_Receive_Address();
-                    address = (ArrayList<String>) user_profile.getUser_Receive_Address();
+                address = (ArrayList<String>) user_profile.getUser_Receive_Address();
+                if (user_profile.getUser_Receive_Address().size() == 1) {
+                    //  address.clear();
                     splitAddress();
                     mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
                             mAddressList, SetAddressActivity.this));
+                    closeProgressDialog();
                 }
-                closeProgressDialog();
+                Toast.makeText(SetAddressActivity.this, "收货地址无数据", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int i, String s) {
                 closeProgressDialog();
-                Toast.makeText(SetAddressActivity.this, "获取地址失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SetAddressActivity.this, "获取地址失败" + i + s, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    private void updateAddressToBmob() {
+        String objectID = ((MyApplication) getApplication()).getObjectID();
+        User_Profile u = new User_Profile();
+        Log.i("list", "updateDataToBmob: " + address);
+        u.setValue("User_Receive_Address.0", "1");
+        u.update(SetAddressActivity.this, objectID, new UpdateListener() {
+            @Override
+            public void onSuccess() {
+                closeProgressDialog();
+                Toast.makeText(SetAddressActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                closeProgressDialog();
+                Log.i("why", s);
+                Toast.makeText(SetAddressActivity.this, s + i, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void splitAddress() {
         ArrayList<String> splitAddress = new ArrayList<String>();
         for (int i = 0; i < address.size(); i++) {
             splitAddress.add(address.get(i));
             Log.i("address1", "splitAddress: " + address.get(i) + "----" + address.size());
-            if ((i + 1) % 3 == 0) {
+            if (i % 3 == 0) {
                 Log.i("address2", "splitAddress: " + address.get(i));
                 mAddressList.add(splitAddress);
                 splitAddress = new ArrayList<String>();
@@ -154,6 +203,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.i("itemposition", "onItemClick: " + position + "----" + id);
 
     }
 }

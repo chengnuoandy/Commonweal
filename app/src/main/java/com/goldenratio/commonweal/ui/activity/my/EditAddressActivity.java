@@ -78,16 +78,17 @@ public class EditAddressActivity extends Activity {
         Intent intent = new Intent();
         intent.putStringArrayListExtra("address", address);
         setResult(RESULT_OK, intent);
+        //address.clear();
         closeProgressDialog();
         finish();
     }
 
     private void configCityPickerView() {
         CityPickerView cityPickerView = new CityPickerView(EditAddressActivity.this);
-        cityPickerView.setTextColor(Color.BLUE);
+        cityPickerView.setTextColor(Color.BLACK);
         cityPickerView.setTextSize(20);
-        cityPickerView.setVisibleItems(8);  //新增滚轮内容可见数量
-        cityPickerView.setIsCyclic(true);   //滚轮是否循环滚动
+        cityPickerView.setVisibleItems(5);  //新增滚轮内容可见数量
+        cityPickerView.setIsCyclic(false);   //滚轮是否循环滚动
         cityPickerView.show();
         cityPickerView.setOnCityItemClickListener(new CityPickerView.OnCityItemClickListener() {
             @Override
@@ -112,6 +113,7 @@ public class EditAddressActivity extends Activity {
         String consigneePhone = mEtEditPhone.getText().toString();
         String consigneeAddress = mTvEditAddress.getText() + " "
                 + mEtDetailAddress.getText();
+
         address.add(consignee);
         address.add(consigneePhone);
         address.add(consigneeAddress);

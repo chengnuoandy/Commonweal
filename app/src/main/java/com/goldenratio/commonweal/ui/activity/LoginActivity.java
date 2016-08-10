@@ -32,13 +32,13 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -486,6 +486,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             user.setUser_image_hd(wbuser.avatar_hd);
             user.setUser_VerifiedReason(wbuser.verified_reason); //认证原因
             user.setUser_Autograph(wbuser.description);
+            user.setUser_Receive_Address(Arrays.asList("0"));
             user.save(LoginActivity.this, new SaveListener() {
                 @Override
                 public void onSuccess() {

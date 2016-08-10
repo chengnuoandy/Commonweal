@@ -59,6 +59,15 @@ public class DynamicPhotoShow extends Activity {
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(view);
                 container.addView(view);
+                //点击图片关闭
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                        //设置切换动画
+                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    }
+                });
                 return view;
             }
 

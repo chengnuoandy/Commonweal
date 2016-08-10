@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -94,6 +95,8 @@ public class MyDynamicAdapter extends BaseAdapter {
                     intent.putExtra("index",index);
                     intent.putStringArrayListExtra("list", (ArrayList<String>) list);
                     mContext.startActivity(intent);
+                    //设置切换动画
+                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 }
 
                 @Override

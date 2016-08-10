@@ -1,14 +1,14 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -26,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.bmob.v3.Bmob;
 
 /**
@@ -47,6 +48,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     RadioButton mRbMy;
     @BindView(R.id.rg_tabs)
     RadioGroup mRgTabs;
+    @BindView(R.id.fl_post)
+    ImageView mSend;
 
     private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private long exitTime = 0;
@@ -201,5 +204,10 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     }
 
 
+    @OnClick(R.id.fl_post)
+    public void onClick() {
+        Intent intent = new Intent(this,PostActivity.class);
+        startActivity(intent);
+    }
 }
 

@@ -150,6 +150,8 @@
         </activity>
         <activity android:name=".ui.activity.DynamicPhotoShow">
         </activity>
+        <activity android:name=".ui.activity.PostActivity"
+            android:theme="@style/MyDialogStyle"/>
     </application>
 
 </manifest>

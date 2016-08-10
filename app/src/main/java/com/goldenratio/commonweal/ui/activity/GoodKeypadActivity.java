@@ -192,8 +192,8 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     Toast.makeText(GoodKeypadActivity.this, "请设置底价金额", Toast.LENGTH_SHORT).show();
                     return;
                 }else if (mEditText2.getText().toString().equals("")){
-                    Toast.makeText(GoodKeypadActivity.this, "请设置捐款比例", Toast.LENGTH_SHORT).show();
-                    return;
+                    mEditText2.setText("0");
+                    Toast.makeText(GoodKeypadActivity.this, "捐款比例已设为默认值:0", Toast.LENGTH_SHORT).show();
                 }
                 returnData();
                 finish();

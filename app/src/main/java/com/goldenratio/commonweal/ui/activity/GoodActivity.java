@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.bean.U_FamousP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
@@ -260,17 +260,17 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                     @Override
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
                         if (filePaths.length == list1.size()) {
-                            U_FamousP u_famousP = new U_FamousP();
-                            u_famousP.setObjectId(mStrObjectId);
+                            User_Profile user_profile = new User_Profile();
+                            user_profile.setObjectId(mStrObjectId);
                             Good good = new Good();
                             Toast.makeText(GoodActivity.this, mStrObjectId, Toast.LENGTH_SHORT).show();
-                            good.setGood_User_ID(u_famousP);
+                            good.setGood_User(user_profile);
                             good.setGood_Name(mStrName);
                             good.setGood_Description(mStrDescription);
                             good.setGood_Photos(list1);
                             good.setGood_Type(mStrType);
-                            good.setGood_Price(Integer.parseInt(price));
-                            good.setGood_NowPrice(Integer.parseInt(price));
+                            good.setGood_StartCoin(Integer.parseInt(price));
+                            good.setGood_NowCoin(Integer.parseInt(price));
                             good.setGood_DonationRate(Integer.parseInt(prop));
                             good.setGood_UpDateM(mLgTime);
                             good.save(GoodActivity.this, new SaveListener() {

@@ -10,7 +10,7 @@ import cn.bmob.v3.datatype.BmobDate;
  */
 
 public class Good extends BmobObject {
-    private U_FamousP Good_User_ID;
+    private User_Profile Good_User;
     private BmobDate Good_UpDate; //截至日期
     private Long Good_UpDateM; //截止日期 毫秒值
     private String Good_NO; //物品发布顺序
@@ -21,24 +21,18 @@ public class Good extends BmobObject {
     private List Good_Photos; //物品介绍照片
     private String Good_Description; //物品描述
     private Integer Good_DonationRate; //物品用于捐款的比例
-    private Integer Good_Price; //物品的起步价
-    private Integer Good_NowPrice; //物品的起步价
+    private Integer Good_NowCoin; //物品的现在价
+    private Integer Good_StartCoin; //物品的起步价
     private Integer Good_Praise;
+    private User_Profile Good_LatestAucUser;
+    private Long Good_Five;//五分钟之内不可出价
 
-    public Integer getGood_Praise() {
-        return Good_Praise;
+    public User_Profile getGood_User() {
+        return Good_User;
     }
 
-    public void setGood_Praise(Integer good_Praise) {
-        Good_Praise = good_Praise;
-    }
-
-    public U_FamousP getGood_User_ID() {
-        return Good_User_ID;
-    }
-
-    public void setGood_User_ID(U_FamousP good_User_ID) {
-        Good_User_ID = good_User_ID;
+    public void setGood_User(User_Profile good_User) {
+        Good_User = good_User;
     }
 
     public BmobDate getGood_UpDate() {
@@ -121,19 +115,43 @@ public class Good extends BmobObject {
         Good_DonationRate = good_DonationRate;
     }
 
-    public Integer getGood_Price() {
-        return Good_Price;
+    public Integer getGood_NowCoin() {
+        return Good_NowCoin;
     }
 
-    public void setGood_Price(Integer good_Price) {
-        Good_Price = good_Price;
+    public void setGood_NowCoin(Integer good_NowCoin) {
+        Good_NowCoin = good_NowCoin;
     }
 
-    public Integer getGood_NowPrice() {
-        return Good_NowPrice;
+    public Integer getGood_StartCoin() {
+        return Good_StartCoin;
     }
 
-    public void setGood_NowPrice(Integer good_NowPrice) {
-        Good_NowPrice = good_NowPrice;
+    public void setGood_StartCoin(Integer good_StartCoin) {
+        Good_StartCoin = good_StartCoin;
+    }
+
+    public Integer getGood_Praise() {
+        return Good_Praise;
+    }
+
+    public void setGood_Praise(Integer good_Praise) {
+        Good_Praise = good_Praise;
+    }
+
+    public User_Profile getGood_LatestAucUser() {
+        return Good_LatestAucUser;
+    }
+
+    public void setGood_LatestAucUser(User_Profile good_LatestAucUser) {
+        Good_LatestAucUser = good_LatestAucUser;
+    }
+
+    public Long getGood_Five() {
+        return Good_Five;
+    }
+
+    public void setGood_Five(Long good_Five) {
+        Good_Five = good_Five;
     }
 }

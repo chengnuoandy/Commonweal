@@ -184,11 +184,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toEndOf="@+id/rl_top"
-        android:layout_toRightOf="@+id/rl_top"
         android:background="@color/snow"
         android:padding="@dimen/little_space">
 

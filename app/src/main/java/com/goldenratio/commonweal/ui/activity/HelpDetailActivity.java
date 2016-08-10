@@ -124,6 +124,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
                 startActivity(i);
                 break;
 
+
             //发送按钮
             case R.id.btn_speak:
                 String speak = mEtSpeak.getText().toString();

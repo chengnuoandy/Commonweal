@@ -205,14 +205,14 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             this.position = position;
             mTvTime.setText(getItem(position).getCreatedAt());
             mTvName.setText(getItem(position).getGood_Name());
-            mTvUserName.setText(getItem(position).getGood_User_ID().getUser_Nickname());
+            mTvUserName.setText(getItem(position).getGood_User().getUser_Nickname());
 
             Glide.with(mContext)
                     .load(getItem(position).getGood_Photos().get(0).toString())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .transform(new GlideCircleTransform(mContext))
                     .into(mIvPic);
-            mTvNowPrice.setText(getItem(position).getGood_NowPrice() + "");
+            mTvNowPrice.setText(getItem(position).getGood_NowCoin() + "");
 
         }
 

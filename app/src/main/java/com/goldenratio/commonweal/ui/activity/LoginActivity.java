@@ -358,7 +358,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     /**
-     * activity 的回调页
+     * activity_good_auction 的回调页
      *
      * @param requestCode 请求码
      * @param resultCode  结果码

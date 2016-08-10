@@ -56,7 +56,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     private void initData() {
         BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
         goodBmobQuery.order("-createdAt");
-        goodBmobQuery.include("Good_User_ID");
+        goodBmobQuery.include("Good_User");
         goodBmobQuery.findObjects(getContext(), new FindListener<Good>() {
             @Override
             public void onSuccess(List<Good> list) {

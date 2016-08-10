@@ -78,6 +78,8 @@ public class HelpListViewAdapter extends BaseAdapter {
         private ProgressBar mPbProgress;
         private int leftDay;
 
+
+
         public void initView(View view) {
             mTvCity = (TextView) view.findViewById(R.id.tv_city);
             mIvPic = (ImageView) view.findViewById(R.id.iv_pic);

@@ -151,13 +151,11 @@
                     android:textColor="@color/colorPrimary" />
 
 
-                <ListView
-                    android:id="@+id/lv_helpspeak"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </ListView>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="评论"
+                    android:textSize="10sp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -174,6 +172,25 @@
                         android:layout_height="wrap_content"
                         android:text="发送" />
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_comment"
+                    android:textSize="@dimen/big_space"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="亲~还没有人评论呦~快来坐沙发吧~"/>
+                <ListView
+                    android:id="@+id/lv_helpspeak"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:cacheColorHint="#FFF4F4F4"
+                    android:dividerHeight="0.0dip"
+                    android:fadingEdge="none">
+
+                </ListView>
+
+
 
 
             </LinearLayout>

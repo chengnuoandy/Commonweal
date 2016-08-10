@@ -46,21 +46,19 @@ import cn.bmob.v3.listener.UploadBatchListener;
 public class GoodActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "lxc";
+    private static final int REQUEST_IMAGE = 2;
+    private static final int GOOD_TYPE = 2;
     private LayoutInflater mLi;
     private ArrayList<String> mSelectPath;
-    private static final int REQUEST_IMAGE = 2;
     private GridView mGvShowPhoto;
     private TextView TVprice;
-
     private String price;
     private String prop;
-
     private LinearLayout mLlAddPhoto;
     private ImageConfig imageConfig;
     private MyGoodPicAdapter mPicAdapter;
     private TextView mTvType;
     private List<String> pathList;
-    private static final int GOOD_TYPE = 2;
     private Button mBtnRelease;
     private EditText mEtName, mEtDescription;
     private String mStrType = "";
@@ -273,6 +271,8 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                             good.setGood_NowCoin(Integer.parseInt(price));
                             good.setGood_DonationRate(Integer.parseInt(prop));
                             good.setGood_UpDateM(mLgTime);
+                            good.setGood_Status(true);
+                            good.setGood_IsFirstBid(true);
                             good.save(GoodActivity.this, new SaveListener() {
                                 @Override
                                 public void onSuccess() {

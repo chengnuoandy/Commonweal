@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
@@ -13,10 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.util.GlideCircleTransform;
 
 import java.util.List;
 import java.util.Timer;
@@ -32,13 +31,41 @@ import cn.iwgang.countdownview.CountdownView;
 
 public class MyGoodListViewAdapter extends BaseAdapter {
     private static final String TAG = "lxc";
+    private final SparseArray<ViewHolder> mCountdownVHList;
     private Context mContext;
     private List<Good> mGoodList;
     private LayoutInflater mInflater;
-    private final SparseArray<ViewHolder> mCountdownVHList;
     private Handler mHandler = new Handler();
     private Timer mTimer;
     private boolean isCancel = true;
+    /**
+     * 多线程更新倒计时
+     */
+    private Runnable mRefreshTimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mCountdownVHList.size() == 0) return;
+
+            synchronized (mCountdownVHList) {
+                long currentTime = System.currentTimeMillis(); //先用本地时间
+                int key;
+                for (int i = 0; i < mCountdownVHList.size(); i++) {
+                    key = mCountdownVHList.keyAt(i);
+                    ViewHolder curMyViewHolder = mCountdownVHList.get(key);
+                    if (currentTime >= curMyViewHolder.getBean().getGood_UpDateM()) {
+                        // 倒计时结束
+                        curMyViewHolder.getBean().setGood_UpDateM((long) 0);
+                        mCountdownVHList.remove(key);
+                        //更新显示
+                        notifyDataSetChanged();
+                        Log.d(TAG, "run: 已经结束！");
+                    } else {
+                        curMyViewHolder.refreshTime(currentTime);
+                    }
+                }
+            }
+        }
+    };
 
     public MyGoodListViewAdapter(Context mContext, List<Good> mGoodList) {
         this.mContext = mContext;
@@ -121,35 +148,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         return convertView;
     }
 
-    /**
-     * 多线程更新倒计时
-     */
-    private Runnable mRefreshTimeRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (mCountdownVHList.size() == 0) return;
-
-            synchronized (mCountdownVHList) {
-                long currentTime = System.currentTimeMillis(); //先用本地时间
-                int key;
-                for (int i = 0; i < mCountdownVHList.size(); i++) {
-                    key = mCountdownVHList.keyAt(i);
-                    ViewHolder curMyViewHolder = mCountdownVHList.get(key);
-                    if (currentTime >= curMyViewHolder.getBean().getGood_UpDateM()) {
-                        // 倒计时结束
-                        curMyViewHolder.getBean().setGood_UpDateM((long) 0);
-                        mCountdownVHList.remove(key);
-                        //更新显示
-                        notifyDataSetChanged();
-                        Log.d(TAG, "run: 已经结束！");
-                    } else {
-                        curMyViewHolder.refreshTime(currentTime);
-                    }
-                }
-            }
-        }
-    };
-
     //缓存类
     class ViewHolder implements View.OnClickListener {
         private TextView mTvUserName;
@@ -164,6 +162,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         private TextView mTvThumbUp;
         private Integer position;
         private View conView;
+        private TextView mTvGoodStatus;
 
         public void initView(View convertView) {
             conView = convertView;
@@ -175,6 +174,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvNowPrice = (TextView) convertView.findViewById(R.id.tv_now_price);
             mIvUserAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
             mTvThumbUp = (TextView) convertView.findViewById(R.id.tv_thumb_up);
+            mTvGoodStatus = (TextView) convertView.findViewById(R.id.tv_good_status);
             mTvThumbUp.setOnClickListener(this);
         }
 
@@ -203,17 +203,30 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
         private void initData(final int position) {
             this.position = position;
+
+            boolean mBoolGoodStatus = getItem(position).getGood_Status();
+            if (mBoolGoodStatus) {
+                mTvGoodStatus.setText("正在进行");
+            } else if (!mBoolGoodStatus) {
+                mTvGoodStatus.setText("已经结束");
+                mTvGoodStatus.setTextColor(Color.RED);
+            } else {
+                mTvGoodStatus.setText("未知的错误");
+                mTvGoodStatus.setTextColor(Color.RED);
+            }
             mTvTime.setText(getItem(position).getCreatedAt());
             mTvName.setText(getItem(position).getGood_Name());
             mTvUserName.setText(getItem(position).getGood_User().getUser_Nickname());
 
-            Glide.with(mContext)
-                    .load(getItem(position).getGood_Photos().get(0).toString())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .transform(new GlideCircleTransform(mContext))
-                    .into(mIvPic);
-            mTvNowPrice.setText(getItem(position).getGood_NowCoin() + "");
+//            Glide.with(mContext)
+//                    .load(getItem(position).getGood_Photos().get(0).toString())
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .transform(new GlideCircleTransform(mContext))
+//                    .into(mIvPic);
 
+            Glide.with(mContext).load(getItem(position).getGood_Photos().get(0).toString()).into(mIvPic);
+
+            mTvNowPrice.setText(getItem(position).getGood_NowCoin() + "");
         }
 
         @Override

@@ -103,13 +103,14 @@
         android:gravity="center">
 
         <TextView
-            android:id="@+id/tv_auction"
+            android:id="@+id/tv_bid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+            android:clickable="false"
             android:gravity="center"
             android:padding="@dimen/normal_space"
-            android:text="立即出价"
+            android:text="不可出价"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_big" />
 
@@ -118,8 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_gravity="left"
-            android:layout_marginTop="@dimen/little_space"
+            android:layout_centerInParent="true"
             app:isShowMillisecond="true"
             app:isShowMinute="true"
             app:isShowSecond="true"

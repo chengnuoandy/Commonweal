@@ -1,23 +1,20 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +25,21 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.GetServerTimeListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
 
-public class GoodDetailActivity extends Activity {
+import static android.content.ContentValues.TAG;
+
+public class GoodDetailActivity extends Activity implements View.OnClickListener {
 
     private CountdownView mCountdownView;
     private CountdownView mCountdownFive;
@@ -42,7 +49,7 @@ public class GoodDetailActivity extends Activity {
     private TextView mTvGoodDescription;
     private TextView mTvUserName;
     private GridView mGvPic;
-    private TextView mTvBuy;
+    private TextView mTvBid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,11 @@ public class GoodDetailActivity extends Activity {
         setContentView(R.layout.activity_good_detail);
         initView();
         initData();
+        if (mGood.getGood_IsFirstBid()) {
+            Toast.makeText(GoodDetailActivity.this, "还未出价，争做沙发吧！", Toast.LENGTH_SHORT).show();
+        } else {
+            getBidUpdateTime();
+        }
     }
 
     /**
@@ -63,7 +75,6 @@ public class GoodDetailActivity extends Activity {
         mGood = (Good) intent.getSerializableExtra("Good");
         Log.d("lxc", "initData: ----> " + mGood.getGood_ID() + "endtime-->" + endTime);
         mCountdownView.start(endTime);
-        mCountdownFive.start(endTime);
 
         mTvGoodName.setText(mGood.getGood_Name());
         mTvGoodDescription.setText(mGood.getGood_Description());
@@ -80,89 +91,158 @@ public class GoodDetailActivity extends Activity {
         mCountdownFive = (CountdownView) findViewById(R.id.cv_five);
         mTvGoodDescription = (TextView) findViewById(R.id.tv_good_description);
 //        mGvPic = (GridView) findViewById(R.id.gv_show_detail_pic);
-        mTvBuy = (TextView) findViewById(R.id.tv_auction);
-        mTvBuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog mCameraDialog = new Dialog(GoodDetailActivity.this, R.style.my_dialog);
-                LinearLayout root = (LinearLayout) LayoutInflater.from(GoodDetailActivity.this).inflate(
-                        R.layout.dialog_good_auction, null);
-                mCameraDialog.setContentView(root);
+        mTvBid = (TextView) findViewById(R.id.tv_bid);
+        mTvBid.setOnClickListener(this);
+        mTvBid.setClickable(false);
+    }
 
-                Window dialogWindow = mCameraDialog.getWindow();
-                dialogWindow.setGravity(Gravity.BOTTOM);
-                dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
-
-                WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-                lp.x = 0; // 新位置X坐标
-                lp.y = -20; // 新位置Y坐标
-                lp.width = (int) getResources().getDisplayMetrics().widthPixels; // 宽度
-                root.measure(0, 0);
-                lp.height = root.getMeasuredHeight();
-                lp.alpha = 9f; // 透明度
-                dialogWindow.setAttributes(lp);
-                mCameraDialog.show();
-
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
-                        WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-                final EditText mEtCoin = (EditText) root.findViewById(R.id.et_coin);
-                root.findViewById(R.id.tv_auction).setOnClickListener(new View.OnClickListener() {
-
-                    private String mStrObjectId;
-
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_bid:
+                mTvBid.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        UserDao userDao = new UserDao(GoodDetailActivity.this);
-                        Cursor cursor = userDao.query("select * from User_Profile");
-                        while (cursor.moveToNext()) {
-                            int nameColumnIndex = cursor.getColumnIndex("objectId");
-                            mStrObjectId = cursor.getString(nameColumnIndex);
-                        }
-                        cursor.close();
-
-                        User_Profile user_profile = new User_Profile();
-                        user_profile.setObjectId(mStrObjectId);
-
-                        Good good = new Good();
-                        good.setGood_NowCoin(Integer.parseInt(mEtCoin.getText().toString()));
-                        good.setGood_LatestAucUser(user_profile);
-                        good.update(GoodDetailActivity.this, mGood.getObjectId(), new UpdateListener() {
+                        final View root = View.inflate(GoodDetailActivity.this, R.layout.dialog_good_bid, null);
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(GoodDetailActivity.this);
+                        dialog.setView(root);
+                        final Dialog dialog1 = dialog.create();
+                        dialog1.show();
+                        mTvBid = (TextView) root.findViewById(R.id.tv_bid);
+                        mTvBid.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onSuccess() {
-                                User_Profile user_profile1 = new User_Profile();
-                                user_profile1.setObjectId(mStrObjectId);
-                                Good good1 = new Good();
-                                good1.setObjectId(mGood.getObjectId());
-
-                                Bid bid = new Bid();
-                                bid.setBid_Coin(mEtCoin.getText().toString());
-                                bid.setBid_User(user_profile1);
-                                bid.setBid_Good(good1);
-                                bid.save(GoodDetailActivity.this, new SaveListener() {
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(GoodDetailActivity.this, "出价成功", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onFailure(int i, String s) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onFailure(int i, String s) {
-
+                            public void onClick(View v) {
+                                mTvBid.setClickable(false);
+                                EditText mEtCoin = (EditText) root.findViewById(R.id.et_coin);
+                                String mStrCoin = mEtCoin.getText().toString();
+                                if (mStrCoin.equals("")) {
+                                    Toast.makeText(GoodDetailActivity.this, "请输入出价公益币", Toast.LENGTH_SHORT).show();
+                                } else if (Integer.parseInt(mStrCoin) <= mGood.getGood_NowCoin()) {
+                                    Toast.makeText(GoodDetailActivity.this, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    saveBidToBmob(mEtCoin, dialog1);
+                                }
                             }
                         });
                     }
                 });
+                break;
+        }
+    }
 
+    private void getBidUpdateTime() {
+        BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
+        goodBmobQuery.addWhereEqualTo("objectId", mGood.getObjectId());
+        goodBmobQuery.addQueryKeys("updatedAt");
+        goodBmobQuery.findObjects(GoodDetailActivity.this, new FindListener<Good>() {
+            @Override
+            public void onSuccess(List<Good> list) {
+                Log.d(TAG, "onSuccess: " + list.get(0).getGood_IsFirstBid());
+                getBmobServerTime(list.get(0).getUpdatedAt());
+            }
+
+
+            @Override
+            public void onError(int i, String s) {
+                Toast.makeText(GoodDetailActivity.this, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
+    }
+
+    private void getBmobServerTime(final String updatedAt) {
+        Bmob.getServerTime(GoodDetailActivity.this, new GetServerTimeListener() {
+            @Override
+            public void onSuccess(long l) {
+                Log.d(TAG, "onSuccess: " + l);
+                long updateTime = StringToLong(updatedAt);
+                long nowTime = l * 1000L;
+                Log.d(TAG, "onSuccess: " + updateTime + "-->" + nowTime);
+                long leftTime = 30000 - (nowTime - updateTime);
+                mCountdownFive.start(leftTime);
+                if (leftTime < 0) {
+                    mTvBid.setText("立即出价");
+                    mTvBid.setClickable(true);
+                }
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Toast.makeText(GoodDetailActivity.this, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
+    private void saveBidToBmob(final EditText mEtCoin, final Dialog dialog) {
+        String mStrObjectId = null;
+        UserDao userDao = new UserDao(GoodDetailActivity.this);
+        Cursor cursor = userDao.query("select * from User_Profile");
+        while (cursor.moveToNext()) {
+            int nameColumnIndex = cursor.getColumnIndex("objectId");
+            mStrObjectId = cursor.getString(nameColumnIndex);
+        }
+        cursor.close();
+
+        if (mStrObjectId == null) {
+            Toast.makeText(this, "用户信息获取错误,请稍后再试", Toast.LENGTH_SHORT).show();
+        } else {
+            User_Profile user_profile = new User_Profile();
+            user_profile.setObjectId(mStrObjectId);
+
+            Good good = new Good();
+            good.setGood_NowCoin(Integer.parseInt(mEtCoin.getText().toString()));
+            good.setGood_LatestAucUser(user_profile);
+            final String finalMStrObjectId = mStrObjectId;
+            good.update(GoodDetailActivity.this, mGood.getObjectId(), new UpdateListener() {
+                @Override
+                public void onSuccess() {
+                    User_Profile user_profile1 = new User_Profile();
+                    user_profile1.setObjectId(finalMStrObjectId);
+                    Good good1 = new Good();
+                    good1.setObjectId(mGood.getObjectId());
+
+                    Bid bid = new Bid();
+                    bid.setBid_Coin(mEtCoin.getText().toString());
+                    bid.setBid_User(user_profile1);
+                    bid.setBid_Good(good1);
+                    bid.save(GoodDetailActivity.this, new SaveListener() {
+                        @Override
+                        public void onSuccess() {
+                            mTvBid.setClickable(false);
+                            Toast.makeText(GoodDetailActivity.this, "出价成功", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            getBidUpdateTime();
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            dialog.dismiss();
+                            Toast.makeText(GoodDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onFailure(int i, String s) {
+                    dialog.dismiss();
+                    Toast.makeText(GoodDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public long StringToLong(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long updateTime = 0;
+        try {
+            updateTime = sdf.parse(time).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(updateTime);
+        return updateTime;
     }
 
     class mAdapter extends BaseAdapter {

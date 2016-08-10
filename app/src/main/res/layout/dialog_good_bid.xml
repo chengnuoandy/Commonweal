@@ -7,14 +7,14 @@
 
     <EditText
         android:id="@+id/et_coin"
-        android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="请输入出价公益币"
+        android:inputType="number"
         android:padding="@dimen/normal_space" />
 
     <TextView
-        android:id="@+id/tv_auction"
+        android:id="@+id/tv_bid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"

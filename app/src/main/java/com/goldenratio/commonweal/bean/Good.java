@@ -26,6 +26,8 @@ public class Good extends BmobObject {
     private Integer Good_Praise;
     private User_Profile Good_LatestAucUser;
     private Long Good_Five;//五分钟之内不可出价
+    private boolean Good_Status;
+    private boolean Good_IsFirstBid;
 
     public User_Profile getGood_User() {
         return Good_User;
@@ -153,5 +155,21 @@ public class Good extends BmobObject {
 
     public void setGood_Five(Long good_Five) {
         Good_Five = good_Five;
+    }
+
+    public boolean getGood_Status() {
+        return Good_Status;
+    }
+
+    public void setGood_Status(boolean good_Status) {
+        Good_Status = good_Status;
+    }
+
+    public boolean getGood_IsFirstBid() {
+        return Good_IsFirstBid;
+    }
+
+    public void setGood_IsFirstBid(boolean good_IsFirstBid) {
+        Good_IsFirstBid = good_IsFirstBid;
     }
 }

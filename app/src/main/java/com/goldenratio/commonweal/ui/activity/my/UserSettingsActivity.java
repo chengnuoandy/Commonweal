@@ -33,6 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -228,18 +229,17 @@ public class UserSettingsActivity extends Activity {
         else if (i == 2) {
             u.setUser_Autograph(userData);
         } else u.setUser_image_hd(userData);
-        u.update(this, userID, new UpdateListener() {
+        u.update(userID, new UpdateListener() {
             @Override
-            public void onSuccess() {
-                closeProgressDialog();
-                Toast.makeText(UserSettingsActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                Log.i("why", s);
-                closeProgressDialog();
-                Toast.makeText(getApplication(), "修改失败", Toast.LENGTH_SHORT).show();
+            public void done(BmobException e) {
+                if (e == null) {
+                    closeProgressDialog();
+                    Toast.makeText(UserSettingsActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.i("why", e.getMessage());
+                    closeProgressDialog();
+                    Toast.makeText(getApplication(), "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -249,24 +249,19 @@ public class UserSettingsActivity extends Activity {
      */
     private void uploadAvatarFile(String avaPath) {
         final BmobFile bmobFile = new BmobFile(new File(avaPath));
-        bmobFile.uploadblock(UserSettingsActivity.this, new UploadFileListener() {
-
+        bmobFile.uploadblock(new UploadFileListener() {
             @Override
-            public void onSuccess() {
-                String avatarURL = bmobFile.getFileUrl(UserSettingsActivity.this);    //返回的上传文件的完整地址
-                updateDataToSqlite(avatarURL, "User_Avatar");
-                updateDataToBmob(avatarURL, 3);
+            public void done(BmobException e) {
+                if (e == null) {
+                    String avatarURL = bmobFile.getFileUrl();    //返回的上传文件的完整地址
+                    updateDataToSqlite(avatarURL, "User_Avatar");
+                    updateDataToBmob(avatarURL, 3);
+                } else {
+                    Toast.makeText(UserSettingsActivity.this, "上传头像失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+
+                }
             }
 
-            @Override
-            public void onProgress(Integer value) {
-                // 返回的上传进度（百分比）
-            }
-
-            @Override
-            public void onFailure(int code, String msg) {
-                Toast.makeText(UserSettingsActivity.this, "上传头像失败", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 

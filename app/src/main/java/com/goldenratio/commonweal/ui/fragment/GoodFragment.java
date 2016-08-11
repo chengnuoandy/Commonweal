@@ -23,7 +23,9 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 
 public class GoodFragment extends Fragment implements AdapterView.OnItemClickListener {
@@ -56,20 +58,21 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
         goodBmobQuery.order("-createdAt");
         goodBmobQuery.include("Good_User");
-        goodBmobQuery.findObjects(getContext(), new FindListener<Good>() {
+        goodBmobQuery.findObjects(new FindListener<Good>() {
             @Override
-            public void onSuccess(List<Good> list) {
-                myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
-                mListView.setAdapter(myGoodListViewAdapter);
-                mListView.onRefreshComplete();
-                mGoodList = list;
-                hideLinearLayout();
+            public void done(List<Good> list, BmobException e) {
+                if (e == null) {
+                    myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
+                    mListView.setAdapter(myGoodListViewAdapter);
+                    mListView.onRefreshComplete();
+                    mGoodList = list;
+                    hideLinearLayout();
+                } else {
+                    mLlNoNet.setVisibility(View.VISIBLE);
+
+                }
             }
 
-            @Override
-            public void onError(int i, String s) {
-                mLlNoNet.setVisibility(View.VISIBLE);
-            }
         });
 
     }
@@ -113,18 +116,18 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      * 判断用户本地时间是否准确
      */
     private void ifTime() {
-        Bmob.getServerTime(getContext(), new GetServerTimeListener() {
-            @Override
-            public void onSuccess(long time) {
-                Long t = System.currentTimeMillis();
-                Long w = time * 1000L;
-                if (t > (w + 180000) || t < (w - 180000))
-                    Toast.makeText(getContext(), "检测到您的时钟与网络时间不符，可能会影响您的购买！", Toast.LENGTH_LONG).show();
-            }
+        Bmob.getServerTime(new QueryListener<Long>() {
 
             @Override
-            public void onFailure(int code, String msg) {
-                Log.i("lxc", "获取服务器时间失败:" + msg);
+            public void done(Long aLong, BmobException e) {
+                if (e == null) {
+                    Long t = System.currentTimeMillis();
+                    Long w = aLong * 1000L;
+                    if (t > (w + 180000) || t < (w - 180000))
+                        Toast.makeText(getContext(), "检测到您的时钟与网络时间不符，可能会影响您的购买！", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.i("lxc", "获取服务器时间失败:" + e.getMessage() + e.getErrorCode());
+                }
             }
         });
     }
@@ -135,21 +138,21 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      * 由于bmob获取时间方法限制，故提取方法作
      */
     private void StartAct(final Bundle bundle) {
-        Bmob.getServerTime(getContext(), new GetServerTimeListener() {
+        Bmob.getServerTime(new QueryListener<Long>() {
             @Override
-            public void onSuccess(long time) {
-                Long TimeLeft = endTime - (time * 1000L);
-                Intent intent = new Intent(getContext(), GoodDetailActivity.class);
-                intent.putExtra("EndTime", TimeLeft);
-                intent.putExtras(bundle);
-                startActivity(intent);
+            public void done(Long aLong, BmobException e) {
+                if (e == null) {
+                    Long TimeLeft = endTime - (aLong * 1000L);
+                    Intent intent = new Intent(getContext(), GoodDetailActivity.class);
+                    intent.putExtra("EndTime", TimeLeft);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                } else {
+                    Log.d("lxc", "获取服务器时间失败:" + e.getMessage());
+                    Toast.makeText(getContext(), "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                }
             }
 
-            @Override
-            public void onFailure(int code, String msg) {
-                Log.d("lxc", "获取服务器时间失败:" + msg);
-                Toast.makeText(getContext(), "获取服务器时间失败！", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 

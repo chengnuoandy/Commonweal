@@ -24,6 +24,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class
@@ -77,51 +78,48 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     public void initData() {
         BmobQuery<Help> bmobQuery = new BmobQuery<>();
         bmobQuery.order("-createdAt");
-        bmobQuery.findObjects(getContext(), new FindListener<Help>() {
+        bmobQuery.findObjects(new FindListener<Help>() {
             @Override
-            public void onSuccess(List<Help> list) {
-                mHelpLlist = list;
+            public void done(List<Help> list, BmobException e) {
+                if (e == null) {
+                    mHelpLlist = list;
 //
 //                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
 //                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
 //                indicator.setViewPager(mViewPager);
 //                indicator.setSnap(true);
 
-                mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
-                mListView.onRefreshComplete();
-                hideLinearLayout();
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                mLlNoNet.setVisibility(View.VISIBLE);
-                Log.i("bmob", "下载失败：" + s);
-                mListView.onRefreshComplete();
+                    mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
+                    mListView.onRefreshComplete();
+                    hideLinearLayout();
+                } else {
+                    mLlNoNet.setVisibility(View.VISIBLE);
+                    Log.i("bmob", "下载失败：" + e.getMessage());
+                    mListView.onRefreshComplete();
+                }
             }
         });
         BmobQuery<Help_Top> bmobQueryTop = new BmobQuery<>();
         bmobQueryTop.order("-createdAt");
-        bmobQueryTop.findObjects(getContext(), new FindListener<Help_Top>() {
+        bmobQueryTop.findObjects(new FindListener<Help_Top>() {
             @Override
-            public void onSuccess(List<Help_Top> list) {
+            public void done(List<Help_Top> list, BmobException e) {
+                if (e == null) {
+                    mList = list;
+                    mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
+                    mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), list));
+                    indicator.setViewPager(mViewPager);
+                    indicator.setSnap(true);
 
-                mList = list;
-                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
-                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), list));
-                indicator.setViewPager(mViewPager);
-                indicator.setSnap(true);
-
-                topSliding();
-                hideLinearLayout();
-
+                    topSliding();
+                    hideLinearLayout();
+                } else {
+                    mLlNoNet.setVisibility(View.VISIBLE);
+                    Log.i("bmob", "下载失败：" + e.getMessage());
+                    mListView.onRefreshComplete();
+                }
             }
 
-            @Override
-            public void onError(int i, String s) {
-                mLlNoNet.setVisibility(View.VISIBLE);
-                Log.i("bmob", "下载失败：" + s);
-                mListView.onRefreshComplete();
-            }
         });
 
     }

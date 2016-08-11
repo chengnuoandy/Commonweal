@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -55,6 +56,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
     private ListView mLvSpeak;
 
     private String mStrObjectId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +81,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         Close();
 
     }
+
     //失去焦点
     private void Close() {
         mLayout.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +96,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
             }
         });
     }
+
     private void initView() {
         findViewById(R.id.iv_back).setOnClickListener(this);
         findViewById(R.id.iv_rank).setOnClickListener(this);
@@ -106,7 +110,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         mEtSpeak = (EditText) findViewById(R.id.et_speak);
         mLayout = (LinearLayout) findViewById(R.id.help_layout);
 //        mBten = (Button) findViewById(R.id.btn_speak);
-        mLvSpeak= (ListView) findViewById(R.id.lv_helpspeak);
+        mLvSpeak = (ListView) findViewById(R.id.lv_helpspeak);
 
 
         findViewById(R.id.iv_share).setOnClickListener(this);
@@ -149,7 +153,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
             //发送按钮
             case R.id.btn_speak:
-            //    Toast.makeText(HelpDetailActivity.this, "" +  mEtSpeak.getText().toString(), Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(HelpDetailActivity.this, "" +  mEtSpeak.getText().toString(), Toast.LENGTH_SHORT).show();
                 //获取发送信息，和发送人信息
                 comment();
                 //发送结束后EditText中的内容删除
@@ -164,13 +168,11 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
     }
 
 
-
-
     /**
      * 评论功能
      * CharmNight
      */
-    private void comment(){
+    private void comment() {
 
         //获取本地数据库
         UserDao userDao = new UserDao(HelpDetailActivity.this);
@@ -181,89 +183,85 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         }
         cursor.close();
 
-        if(mStrObjectId!=null)
-        {
+        if (mStrObjectId != null) {
             User_Profile u_famousP = new User_Profile();
-        Help_Comment help_comment = new Help_Comment();
-        //获得内容
-        help_comment.setComment(mEtSpeak.getText().toString());
-        help_comment.setObjcetid(mHelp.getHelp_Title().toString());
+            Help_Comment help_comment = new Help_Comment();
+            //获得内容
+            help_comment.setComment(mEtSpeak.getText().toString());
+            help_comment.setObjcetid(mHelp.getHelp_Title().toString());
 
-        u_famousP.setObjectId(mStrObjectId);
-        help_comment.setComment_user(u_famousP);
-     //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();
-        help_comment.save(getApplicationContext(), new SaveListener() {
-            @Override
-            public void onSuccess() {
-              //  Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                shouComment();
-            }
+            u_famousP.setObjectId(mStrObjectId);
+            help_comment.setComment_user(u_famousP);
+            //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();
+            help_comment.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        //  Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                        shouComment();
+                    } else {
+                        //  Toast.makeText(getApplicationContext(), "failure", Toast.LENGTH_SHORT).show();
+                        Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+                    }
+                }
 
-            @Override
-            public void onFailure(int i, String s) {
-              //  Toast.makeText(getApplicationContext(), "failure", Toast.LENGTH_SHORT).show();
-                Log.d("CN", "onFailure: " + s);
-            }
 
-        });
-        }else {
-            Toast.makeText(getApplicationContext(),"先登陆后评论，评论更美味",Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "先登陆后评论，评论更美味", Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * 评论显示功能
      */
-    private void shouComment(){
+    private void shouComment() {
 
         final ArrayList arrayList = new ArrayList();
         //从服务器端获取评论内容
 
 
         String title = mHelp.getHelp_Title().toString();
-        Toast.makeText(getApplicationContext(),"title"+title,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "title" + title, Toast.LENGTH_SHORT).show();
         BmobQuery<Help_Comment> bmobQuery = new BmobQuery<>();
-        bmobQuery.addWhereEqualTo("objcetid",title);
+        bmobQuery.addWhereEqualTo("objcetid", title);
         bmobQuery.include("comment_user");
-        bmobQuery.findObjects(getApplicationContext(), new FindListener<Help_Comment>() {
+        bmobQuery.findObjects(new FindListener<Help_Comment>() {
             @Override
-            public void onSuccess(List<Help_Comment> list) {
-                for (Help_Comment comment : list){
-                    Toast.makeText(HelpDetailActivity.this, comment.getComment_user().getUser_Nickname(), Toast.LENGTH_SHORT).show();
+            public void done(List<Help_Comment> list, BmobException e) {
+                if (e == null) {
+                    for (Help_Comment comment : list) {
+                        Toast.makeText(HelpDetailActivity.this, comment.getComment_user().getUser_Nickname(), Toast.LENGTH_SHORT).show();
 
-                    /**
-                     * 找到数据后封装为ArrayList
-                     */
-                    CommentUtils utils = new CommentUtils();
-//                    评论内容
-                    utils.comment = comment.getComment();
-                    //评论用户
-                    utils.UserName= comment.getComment_user().getUser_Name();
-                    //评论时间
-                    utils.times = comment.getCreatedAt();
-                    //评论用户头像地址
-                    utils.icom = comment.getComment_user().getUser_image_min();
-                    arrayList.add(utils);
-                    Log.d("TAG",arrayList.size()+ "onSuccess: "+utils.UserName+"在"+comment.getCreatedAt()+"点，说"+comment.getComment());
-                    HelpCommentAdapter helpCommentAdapter = new HelpCommentAdapter(getApplicationContext(),arrayList);
-                    mLvSpeak.setAdapter(helpCommentAdapter);
-                    setListViewHeightBasedOnChildren(mLvSpeak);
+                        /**
+                         * 找到数据后封装为ArrayList
+                         */
+                        CommentUtils utils = new CommentUtils();
+                //                    评论内容
+                        utils.comment = comment.getComment();
+                        //评论用户
+                        utils.UserName = comment.getComment_user().getUser_Name();
+                        //评论时间
+                        utils.times = comment.getCreatedAt();
+                        //评论用户头像地址
+                        utils.icom = comment.getComment_user().getUser_image_min();
+                        arrayList.add(utils);
+                        Log.d("TAG", arrayList.size() + "onSuccess: " + utils.UserName + "在" + comment.getCreatedAt() + "点，说" + comment.getComment());
+                        HelpCommentAdapter helpCommentAdapter = new HelpCommentAdapter(getApplicationContext(), arrayList);
+                        mLvSpeak.setAdapter(helpCommentAdapter);
+                        setListViewHeightBasedOnChildren(mLvSpeak);
+                    }
+                    if (arrayList.size() < 1) {
+                        TextView tv_comment = (TextView) findViewById(R.id.tv_comment);
+                        tv_comment.setVisibility(View.VISIBLE);
+                    } else {
+                        TextView tv_comment = (TextView) findViewById(R.id.tv_comment);
+                        tv_comment.setVisibility(View.GONE);
+                    }
+                } else {
+                    Log.d("Cn", "onError: " + e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Error" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                 }
-
-                if(arrayList.size()<1){
-                   TextView tv_comment = (TextView) findViewById(R.id.tv_comment);
-                    tv_comment.setVisibility(View.VISIBLE);
-                }else{
-                    TextView tv_comment = (TextView) findViewById(R.id.tv_comment);
-                    tv_comment.setVisibility(View.GONE);
-                }
-
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                Log.d("Cn", "onError: "+s);
-                Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -272,6 +270,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
     /**
      * 解决ListView和ScrollView滑动冲突
+     *
      * @param listView
      */
     public void setListViewHeightBasedOnChildren(ListView listView) {
@@ -289,7 +288,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        ((ViewGroup.MarginLayoutParams)params).setMargins(10, 10, 10, 10);
+        ((ViewGroup.MarginLayoutParams) params).setMargins(10, 10, 10, 10);
         listView.setLayoutParams(params);
     }
 

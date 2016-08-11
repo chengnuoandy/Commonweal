@@ -24,7 +24,6 @@ import java.util.List;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.GetServerTimeListener;
 
 
 public class GoodFragment extends Fragment implements AdapterView.OnItemClickListener {

@@ -26,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -74,27 +75,27 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
     private void isHasUserName() {
         BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
         bmobQuery.addWhereEqualTo("User_Name", mEtSetUsername.getText().toString());
-        bmobQuery.findObjects(this, new FindListener<User_Profile>() {
+        bmobQuery.findObjects(new FindListener<User_Profile>() {
             @Override
-            public void onSuccess(List<User_Profile> list) {
-                if (list.isEmpty()) {
-                    updateDataToSqlite();
-                    updateDataToBmob();
+            public void done(List<User_Profile> list, BmobException e) {
+                if (e == null) {
+                    if (list.isEmpty()) {
+                        updateDataToSqlite();
+                        updateDataToBmob();
+                    } else {
+                        closeProgressDialog();
+                        Log.d("query", "查询成功");
+                        Log.d("info", list + "");
+                        closeProgressDialog();
+                        Toast.makeText(SetUserNameActivity.this, "此用户名已有人用过", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     closeProgressDialog();
-                    Log.d("query", "查询成功");
-                    Log.d("info", list + "");
-                    closeProgressDialog();
-                    Toast.makeText(SetUserNameActivity.this, "此用户名已有人用过", Toast.LENGTH_SHORT).show();
+                    Log.d("query", "查询失败");
+                    Toast.makeText(SetUserNameActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                 }
             }
 
-            @Override
-            public void onError(int i, String s) {
-                closeProgressDialog();
-                Log.d("query", "查询失败");
-                Toast.makeText(SetUserNameActivity.this, "网络不给力", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 
@@ -119,18 +120,18 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
         String userName = mEtSetUsername.getText().toString();
         User_Profile u = new User_Profile();
         u.setUser_Name(userName);
-        u.update(SetUserNameActivity.this, userID, new UpdateListener() {
+        u.update(userID, new UpdateListener() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(SetUserNameActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                returnDataToUserSet();
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(SetUserNameActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    returnDataToUserSet();
+                } else {
+                    Log.i("why", e.getMessage());
+                    Toast.makeText(SetUserNameActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                }
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Log.i("why", s);
-                Toast.makeText(SetUserNameActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 

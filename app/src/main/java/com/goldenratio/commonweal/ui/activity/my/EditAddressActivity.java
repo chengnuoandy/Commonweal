@@ -23,7 +23,14 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
+
+/**
+ * Created by 龙啸天 on 2016/7/20 0020.
+ * <p/>
+ * 编辑收货地址
+ */
 
 public class EditAddressActivity extends Activity {
 
@@ -122,18 +129,18 @@ public class EditAddressActivity extends Activity {
         User_Profile u = new User_Profile();
         Log.i("list", "updateDataToBmob: " + address);
         u.setUser_Receive_Address(address);
-        u.update(EditAddressActivity.this, userID, new UpdateListener() {
+        u.update(userID, new UpdateListener() {
             @Override
-            public void onSuccess() {
-                rtnDataToSetAddressAct();
+            public void done(BmobException e) {
+                if (e == null) {
+                    rtnDataToSetAddressAct();
+                } else {
+                    closeProgressDialog();
+                    Log.i("why", e.getMessage());
+                    Toast.makeText(EditAddressActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                }
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                closeProgressDialog();
-                Log.i("why", s);
-                Toast.makeText(EditAddressActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 

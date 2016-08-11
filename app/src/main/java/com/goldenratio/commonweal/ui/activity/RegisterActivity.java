@@ -41,8 +41,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindCallback;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
@@ -466,20 +467,20 @@ public class RegisterActivity extends Activity {
         u.setUser_image_min(minUrl);
         u.setUser_Autograph(aut);
         u.setUser_Receive_Address(Arrays.asList("0"));
-        u.save(this, new SaveListener() {
+        u.save(new SaveListener<String>() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
-                returnUInfoToMyFra();
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                    closeProgressDialog();
+                    returnUInfoToMyFra();
+                } else {
+                    mBtnRegister.setClickable(true);
+                    closeProgressDialog();
+                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                }
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
-                mBtnRegister.setClickable(true);
-            }
         });
     }
 
@@ -490,16 +491,16 @@ public class RegisterActivity extends Activity {
         User_Profile u = new User_Profile();
         u.setUser_Password(mD5Pwd);
         closeProgressDialog();
-        u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
+        u.update(mObjectId, new UpdateListener() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(RegisterActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
-                returnUInfoToMyFra();
-            }
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(RegisterActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
+                    returnUInfoToMyFra();
+                } else {
+                    Toast.makeText(RegisterActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
 
-            @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(RegisterActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -510,42 +511,41 @@ public class RegisterActivity extends Activity {
         BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
         bmobQuery.addWhereEqualTo("User_Phone", mPhone);
         Log.d("queryPhone", mPhone);
-        bmobQuery.findObjects(this, new FindListener<User_Profile>() {
+        bmobQuery.findObjects(new FindListener<User_Profile>() {
             @Override
-            public void onSuccess(List<User_Profile> list) {
-                if (list.isEmpty()) {
-                    //判断点击的是否是注册按钮
-                    if (isClickRegisterBtn) {
-                        mBtnSendCode.setClickable(false);
-                        sendVerification();
-                    } else {
-                        closeProgressDialog();
-                        Toast.makeText(RegisterActivity.this, "您好像并未注册哟", Toast.LENGTH_SHORT).show();
-                    }
+            public void done(List<User_Profile> list, BmobException e) {
+                if (e == null) {
+                    if (list.isEmpty()) {
+                        //判断点击的是否是注册按钮
+                        if (isClickRegisterBtn) {
+                            mBtnSendCode.setClickable(false);
+                            sendVerification();
+                        } else {
+                            closeProgressDialog();
+                            Toast.makeText(RegisterActivity.this, "您好像并未注册哟", Toast.LENGTH_SHORT).show();
+                        }
 
-                } else {
-                    if (isClickRegisterBtn) {
-                        closeProgressDialog();
-                        Log.d("query", "查询成功");
-                        Log.d("info", list + "");
-                        Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
                     } else {
-                        String id = list.get(0).getObjectId();
-                        Log.i("id", "onSuccess: " + list.get(0).getObjectId());
-                        mObjectId = id;
-                        mBtnSendCode.setClickable(false);
-                        sendVerification();
+                        if (isClickRegisterBtn) {
+                            closeProgressDialog();
+                            Log.d("query", "查询成功");
+                            Log.d("info", list + "");
+                            Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String id = list.get(0).getObjectId();
+                            Log.i("id", "onSuccess: " + list.get(0).getObjectId());
+                            mObjectId = id;
+                            mBtnSendCode.setClickable(false);
+                            sendVerification();
+                        }
                     }
+                } else {
+                    closeProgressDialog();
+                    Log.d("query", "查询失败");
+                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                 }
             }
 
-            @Override
-            public void onError(int i, String s) {
-                closeProgressDialog();
-                Log.d("query", "查询失败");
-                Toast.makeText(RegisterActivity.this, "网络不给力", Toast.LENGTH_SHORT).show();
-                Toast.makeText(RegisterActivity.this, s, Toast.LENGTH_SHORT).show();
-            }
         });
     }
 
@@ -556,31 +556,30 @@ public class RegisterActivity extends Activity {
         BmobQuery bmobQuery = new BmobQuery("User_Default");
         bmobQuery.addWhereEqualTo("User_Default_Res_ID", rndNum);
         bmobQuery.addQueryKeys("User_Def_Av_Hd_Url,User_Def_Av_Max_Url,User_Def_Av_Min_Url,User_Def_Aut");
-        bmobQuery.findObjects(this, new FindCallback() {
+        bmobQuery.findObjectsByTable(new QueryListener<JSONArray>() {
+
             @Override
-            public void onSuccess(JSONArray jsonArray) {
-                String data = jsonArray.toString();
-                try {
+            public void done(JSONArray jsonArray, BmobException e) {
+                if (e == null) {
+                    String data = jsonArray.toString();
+                    try {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String UDefAvHdUrl = jsonObject.getString("User_Def_Av_Hd_Url");
-                    String UDefAvMaxUrl = jsonObject.getString("User_Def_Av_Max_Url");
-                    String UDefAvMinUrl = jsonObject.getString("User_Def_Av_Min_Url");
-                    String UDefAut = jsonObject.getString("User_Def_Aut");
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String UDefAvHdUrl = jsonObject.getString("User_Def_Av_Hd_Url");
+                        String UDefAvMaxUrl = jsonObject.getString("User_Def_Av_Max_Url");
+                        String UDefAvMinUrl = jsonObject.getString("User_Def_Av_Min_Url");
+                        String UDefAut = jsonObject.getString("User_Def_Aut");
 
-                    Log.d("url", UDefAvHdUrl);
-                    Log.d("aut", UDefAut);
-                    addUserInfoToDB(UDefAvHdUrl, UDefAvMaxUrl, UDefAvMinUrl, UDefAut);
-                } catch (JSONException e) {
-                    Log.d("jsexc", e + "，出现异常");
+                        Log.d("url", UDefAvHdUrl);
+                        Log.d("aut", UDefAut);
+                        addUserInfoToDB(UDefAvHdUrl, UDefAvMaxUrl, UDefAvMinUrl, UDefAut);
+                    } catch (JSONException je) {
+                        Log.d("jsexc", je.getMessage() + "出现异常");
+                    }
+                    Log.d("data", data);
+                } else {
+                    Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                 }
-                Log.d("data", data);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                Log.d("data1", i + "");
-                Log.d("data2", s);
             }
         });
 

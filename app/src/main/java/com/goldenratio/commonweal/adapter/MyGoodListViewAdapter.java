@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
 
@@ -235,16 +236,17 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                 case R.id.tv_thumb_up:
                     Good good = new Good();
                     good.increment("Good_Praise");
-                    good.update(mContext, getItem(position).getObjectId(), new UpdateListener() {
+                    good.update(getItem(position).getObjectId(), new UpdateListener() {
                         @Override
-                        public void onSuccess() {
-                            Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(mContext, "点赞失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
-                        @Override
-                        public void onFailure(int i, String s) {
-                            Toast.makeText(mContext, "点赞失败" + s, Toast.LENGTH_SHORT).show();
-                        }
                     });
                     break;
             }

@@ -18,7 +18,6 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
 import com.goldenratio.commonweal.bean.User_Profile;
-import com.goldenratio.commonweal.ui.fragment.MyFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.GetListener;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class SetAddressActivity extends Activity implements SetAddressListAdapter.Callback, AdapterView.OnItemClickListener {
@@ -74,7 +74,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
     }
 
     @Override
-    public void click(View v) {
+    public int click(View v, int temp) {
         Log.i("callback", "click: 执行");
         switch (v.getId()) {
             case R.id.rl_address:
@@ -82,12 +82,27 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                 intent.putStringArrayListExtra("address", address);
                 startActivityForResult(intent, 1);
                 break;
-
+            case R.id.cb_default_address:
+                if (((CheckBox) v).isChecked()) {        //如果是选中状态
+                    if (temp != -1) {           //temp不为-1，说明已经进行过点击事件
+                        CheckBox tempButton = (CheckBox) findViewById(temp);
+                        if (tempButton != null) {
+                            tempButton.setChecked(false);   //取到上一次点击的RadioButton，并设置为未选中状态
+                            tempButton.setClickable(true);
+                        }
+                    }
+                    temp = v.getId();  //将temp重新赋值，记录下本次点击的RadioButton
+                    showProgressDialog();
+                    updateAddressToBmob();
+                    Log.i("check1", "onCheckedChanged: " + temp);
+                }
+                Log.i("check2", "onCheckedChanged: " + temp);
+                return temp;
             case R.id.tv_delete_address:
                 Log.i("deleteAddress", "click: address点击");
                 break;
         }
-
+        return -1;
     }
 
     @Override
@@ -97,6 +112,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                 CheckBox tempButton = (CheckBox) findViewById(temp);
                 if (tempButton != null) {
                     tempButton.setChecked(false);   //取到上一次点击的RadioButton，并设置为未选中状态
+                    tempButton.setClickable(true);
                 }
             }
             temp = buttonView.getId();  //将temp重新赋值，记录下本次点击的RadioButton
@@ -129,25 +145,26 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
         // bmobQuery.addQueryKeys("User_Receive_Address");
         String objectID = ((MyApplication) getApplication()).getObjectID();
-        bmobQuery.getObject(this, MyFragment.mUserID, new GetListener<User_Profile>() {
+        bmobQuery.getObject(objectID, new QueryListener<User_Profile>() {
             @Override
-            public void onSuccess(User_Profile user_profile) {
-                address = (ArrayList<String>) user_profile.getUser_Receive_Address();
-                if (user_profile.getUser_Receive_Address().size() == 1) {
-                    //  address.clear();
-                    splitAddress();
-                    mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
-                            mAddressList, SetAddressActivity.this));
+            public void done(User_Profile user_profile, BmobException e) {
+                if (e == null) {
+                    address = (ArrayList<String>) user_profile.getUser_Receive_Address();
+                    if (user_profile.getUser_Receive_Address().size() >= 1) {
+                        //  address.clear();
+                        splitAddress();
+                        mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
+                                mAddressList, SetAddressActivity.this));
+                        closeProgressDialog();
+                    } else
+                        Toast.makeText(SetAddressActivity.this, "收货地址无数据", Toast.LENGTH_SHORT).show();
+                } else {
                     closeProgressDialog();
+                    Toast.makeText(SetAddressActivity.this, "获取地址失败" + e.getErrorCode() + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(SetAddressActivity.this, "收货地址无数据", Toast.LENGTH_SHORT).show();
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                closeProgressDialog();
-                Toast.makeText(SetAddressActivity.this, "获取地址失败" + i + s, Toast.LENGTH_SHORT).show();
-            }
+
         });
     }
 
@@ -156,19 +173,19 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         User_Profile u = new User_Profile();
         Log.i("list", "updateDataToBmob: " + address);
         u.setValue("User_Receive_Address.0", "1");
-        u.update(SetAddressActivity.this, objectID, new UpdateListener() {
+        u.update(objectID, new UpdateListener() {
             @Override
-            public void onSuccess() {
-                closeProgressDialog();
-                Toast.makeText(SetAddressActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
+            public void done(BmobException e) {
+                if (e == null) {
+                    closeProgressDialog();
+                    Toast.makeText(SetAddressActivity.this, "设置成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    closeProgressDialog();
+                    Log.i("why", e.getMessage());
+                    Toast.makeText(SetAddressActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                }
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                closeProgressDialog();
-                Log.i("why", s);
-                Toast.makeText(SetAddressActivity.this, s + i, Toast.LENGTH_SHORT).show();
-            }
         });
     }
 

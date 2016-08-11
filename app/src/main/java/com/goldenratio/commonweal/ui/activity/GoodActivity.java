@@ -36,6 +36,7 @@ import java.util.List;
 
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
@@ -143,16 +144,18 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         mGood.setGood_UpDateM(date);
         mGood.setGood_ID(5);
         mGood.setGood_Name("张杰");
-        mGood.save(this, new SaveListener() {
+        mGood.save(new SaveListener<String>() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(GoodActivity.this, "上传数据成功！", Toast.LENGTH_SHORT).show();
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(GoodActivity.this, "上传数据成功！", Toast.LENGTH_SHORT).show();
+
+                } else
+                    Toast.makeText(GoodActivity.this, "上传数据失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(GoodActivity.this, "上传数据失败！", Toast.LENGTH_SHORT).show();
-            }
+
         });
     }
 
@@ -254,7 +257,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         new Thread(new Runnable() {
             @Override
             public void run() {
-                BmobFile.uploadBatch(GoodActivity.this, filePaths, new UploadBatchListener() {
+                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
                     @Override
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
                         if (filePaths.length == list1.size()) {
@@ -273,18 +276,17 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                             good.setGood_UpDateM(mLgTime);
                             good.setGood_Status(true);
                             good.setGood_IsFirstBid(true);
-                            good.save(GoodActivity.this, new SaveListener() {
+                            good.save(new SaveListener<String>() {
                                 @Override
-                                public void onSuccess() {
-                                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                    vibrator.vibrate(500);
-                                    Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                public void done(String s, BmobException e) {
+                                    if (e == null) {
+                                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                        vibrator.vibrate(500);
+                                        Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                    } else
+                                        Toast.makeText(GoodActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                                 }
 
-                                @Override
-                                public void onFailure(int i, String s) {
-                                    Toast.makeText(GoodActivity.this, s, Toast.LENGTH_SHORT).show();
-                                }
                             });
                         }
                     }

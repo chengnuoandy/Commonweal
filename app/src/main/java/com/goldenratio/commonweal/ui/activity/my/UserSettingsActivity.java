@@ -186,10 +186,9 @@ public class UserSettingsActivity extends Activity {
     private void imageSecectorConfig() {
         mImageConfig
                 = new ImageConfig.Builder(new GlideLoader())
-                .steepToolBarColor(getResources().getColor(R.color.blue))
-                .titleBgColor(getResources().getColor(R.color.blue))
-                .titleSubmitTextColor(getResources().getColor(R.color.white))
-                .titleTextColor(getResources().getColor(R.color.white))
+                .steepToolBarColor(R.color.red)
+                .titleBgColor(getResources().getColor(R.color.white))
+                .titleTextColor(getResources().getColor(R.color.black))
                 // (截图默认配置：关闭    比例 1：1    输出分辨率  500*500)
                 .crop(1, 1, 1000, 1000)
                 // 开启单选   （默认为多选）

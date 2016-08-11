@@ -75,7 +75,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         System.loadLibrary(libName);
 
         //初始化Bmob
-        Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
+        Bmob.initialize(MainActivity.this, "727a409235aab18ae7b1e1f3933c9a64");
 
         mFragmentList = new ArrayList<Fragment>();
 
@@ -207,7 +207,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
     @OnClick(R.id.fl_post)
     public void onClick() {
-        Intent intent = new Intent(this,PostActivity.class);
+        Intent intent = new Intent(this, PostActivity.class);
         startActivity(intent);
     }
 }

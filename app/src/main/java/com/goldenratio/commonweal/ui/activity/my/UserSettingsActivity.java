@@ -177,8 +177,7 @@ public class UserSettingsActivity extends Activity {
                             sex = "女";
                         }
                         mTvUserSex.setText(sex);
-                        updateDataToSqlite(sex, "User_sex");
-                        updateDataToBmob(sex, 0);
+                        updateDataToBmob(sex, 0, "User_sex");
                     }
                 }).setNegativeButton("取消", null).show();
     }
@@ -219,7 +218,7 @@ public class UserSettingsActivity extends Activity {
      * @param userData
      * @param i        用来判断更新的字段  0:Sex,1:昵称,2:个签,3:头像;
      */
-    private void updateDataToBmob(String userData, int i) {
+    private void updateDataToBmob(final String userData, int i, final String userRow) {
         String userID = MyFragment.mUserID;
         User_Profile u = new User_Profile();
         if (i == 0) {
@@ -234,6 +233,7 @@ public class UserSettingsActivity extends Activity {
             public void done(BmobException e) {
                 if (e == null) {
                     closeProgressDialog();
+                    updateDataToSqlite(userData, userRow);
                     Toast.makeText(UserSettingsActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i("why", e.getMessage());
@@ -254,8 +254,7 @@ public class UserSettingsActivity extends Activity {
             public void done(BmobException e) {
                 if (e == null) {
                     String avatarURL = bmobFile.getFileUrl();    //返回的上传文件的完整地址
-                    updateDataToSqlite(avatarURL, "User_Avatar");
-                    updateDataToBmob(avatarURL, 3);
+                    updateDataToBmob(avatarURL, 3,"User_Avatar");
                 } else {
                     Toast.makeText(UserSettingsActivity.this, "上传头像失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
 
@@ -292,8 +291,7 @@ public class UserSettingsActivity extends Activity {
                 showProgressDialog();
                 String userData = ETUSER.getText().toString();
                 TV.setText(userData);
-                updateDataToSqlite(userData, USERROW);
-                updateDataToBmob(userData, X);
+                updateDataToBmob(userData, X,USERROW);
             }
         }).setNegativeButton("取消", null).show();
     }

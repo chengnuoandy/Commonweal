@@ -31,8 +31,9 @@ import java.util.List;
 
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.GetServerTimeListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
@@ -59,6 +60,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         initData();
         if (mGood.getGood_IsFirstBid()) {
             Toast.makeText(GoodDetailActivity.this, "还未出价，争做沙发吧！", Toast.LENGTH_SHORT).show();
+            mTvBid.setText("立即出价");
+            mTvBid.setClickable(true);
         } else {
             getBidUpdateTime();
         }
@@ -131,45 +134,45 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     }
 
     private void getBidUpdateTime() {
+
         BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
         goodBmobQuery.addWhereEqualTo("objectId", mGood.getObjectId());
-        goodBmobQuery.addQueryKeys("updatedAt");
-        goodBmobQuery.findObjects(GoodDetailActivity.this, new FindListener<Good>() {
+        goodBmobQuery.include("Good_Bid");
+        goodBmobQuery.findObjects(new FindListener<Good>() {
             @Override
-            public void onSuccess(List<Good> list) {
-                Log.d(TAG, "onSuccess: " + list.get(0).getGood_IsFirstBid());
-                getBmobServerTime(list.get(0).getUpdatedAt());
-            }
-
-
-            @Override
-            public void onError(int i, String s) {
-                Toast.makeText(GoodDetailActivity.this, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
-                finish();
+            public void done(List<Good> list, BmobException e) {
+                if (e == null) {
+                    Log.d(TAG, "onSuccess: " + list.get(0).getGood_Bid().getCreatedAt());
+                    getBmobServerTime(list.get(0).getGood_Bid().getCreatedAt());
+                } else {
+                    Log.d(TAG, "done: " + e.getMessage());
+                    Toast.makeText(GoodDetailActivity.this, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
     }
 
-    private void getBmobServerTime(final String updatedAt) {
-        Bmob.getServerTime(GoodDetailActivity.this, new GetServerTimeListener() {
-            @Override
-            public void onSuccess(long l) {
-                Log.d(TAG, "onSuccess: " + l);
-                long updateTime = StringToLong(updatedAt);
-                long nowTime = l * 1000L;
-                Log.d(TAG, "onSuccess: " + updateTime + "-->" + nowTime);
-                long leftTime = 30000 - (nowTime - updateTime);
-                mCountdownFive.start(leftTime);
-                if (leftTime < 0) {
-                    mTvBid.setText("立即出价");
-                    mTvBid.setClickable(true);
-                }
-            }
+    private void getBmobServerTime(final String createdAt) {
 
+        Bmob.getServerTime(new QueryListener<Long>() {
             @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(GoodDetailActivity.this, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
-                finish();
+            public void done(Long aLong, BmobException e) {
+                if (e == null) {
+                    long createdTime = StringToLong(createdAt);
+                    long nowTime = aLong * 1000L;
+                    long leftTime = 30000 - (nowTime - createdTime);
+                    Log.d(TAG, "onSuccess: " + createdTime + "-->" + nowTime);
+                    Log.d(TAG, "onSuccess: " + leftTime);
+                    mCountdownFive.start(leftTime);
+                    if (leftTime < 0) {
+                        mTvBid.setText("立即出价");
+                        mTvBid.setClickable(true);
+                    }
+                } else {
+                    Toast.makeText(GoodDetailActivity.this, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         });
     }
@@ -193,41 +196,37 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             Good good = new Good();
             good.setGood_NowCoin(Integer.parseInt(mEtCoin.getText().toString()));
             good.setGood_LatestAucUser(user_profile);
+            good.setGood_IsFirstBid(false);
             final String finalMStrObjectId = mStrObjectId;
-            good.update(GoodDetailActivity.this, mGood.getObjectId(), new UpdateListener() {
+            good.update(new UpdateListener() {
                 @Override
-                public void onSuccess() {
-                    User_Profile user_profile1 = new User_Profile();
-                    user_profile1.setObjectId(finalMStrObjectId);
-                    Good good1 = new Good();
-                    good1.setObjectId(mGood.getObjectId());
+                public void done(BmobException e) {
+                    if (e == null) {
+                        User_Profile user_profile1 = new User_Profile();
+                        user_profile1.setObjectId(finalMStrObjectId);
+                        Good good1 = new Good();
+                        good1.setObjectId(mGood.getObjectId());
 
-                    Bid bid = new Bid();
-                    bid.setBid_Coin(mEtCoin.getText().toString());
-                    bid.setBid_User(user_profile1);
-                    bid.setBid_Good(good1);
-                    bid.save(GoodDetailActivity.this, new SaveListener() {
-                        @Override
-                        public void onSuccess() {
-                            mTvBid.setClickable(false);
-                            Toast.makeText(GoodDetailActivity.this, "出价成功", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                            getBidUpdateTime();
-                        }
-
-                        @Override
-                        public void onFailure(int i, String s) {
-                            dialog.dismiss();
-                            Toast.makeText(GoodDetailActivity.this, s, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    dialog.dismiss();
-                }
-
-                @Override
-                public void onFailure(int i, String s) {
-                    dialog.dismiss();
-                    Toast.makeText(GoodDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+                        Bid bid = new Bid();
+                        bid.setBid_Coin(mEtCoin.getText().toString());
+                        bid.setBid_User(user_profile1);
+                        bid.setBid_Good(good1);
+                        bid.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String s, BmobException e) {
+                                if (e == null) {
+                                    mTvBid.setClickable(false);
+                                    Toast.makeText(GoodDetailActivity.this, "出价成功", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                    getBidUpdateTime();
+                                } else {
+                                    dialog.dismiss();
+                                    Toast.makeText(GoodDetailActivity.this, s, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        dialog.dismiss();
+                    }
                 }
             });
         }

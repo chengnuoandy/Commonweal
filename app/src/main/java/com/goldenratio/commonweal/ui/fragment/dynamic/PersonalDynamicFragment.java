@@ -3,7 +3,6 @@ package com.goldenratio.commonweal.ui.fragment.dynamic;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 /**
@@ -49,18 +49,17 @@ public class PersonalDynamicFragment extends Fragment {
         BmobQuery<Dynamic> data = new BmobQuery<>();
         data.order("-createdAt");
         data.include("Dynamics_user");
-        data.findObjects(getContext(), new FindListener<Dynamic>() {
+        data.findObjects(new FindListener<Dynamic>() {
             @Override
-            public void onSuccess(List<Dynamic> list) {
-                mDynamicList = list;
-                mListView.setAdapter(new MyDynamicAdapter(getActivity(),list));
-                mListView.onRefreshComplete();
-            }
-
-            @Override
-            public void onError(int i, String s) {
-                mListView.onRefreshComplete();
-                Toast.makeText(getContext(), "未知错误" + s, Toast.LENGTH_SHORT).show();
+            public void done(List<Dynamic> list, BmobException e) {
+                if (e == null){
+                    mDynamicList = list;
+                    mListView.setAdapter(new MyDynamicAdapter(getActivity(),list));
+                    mListView.onRefreshComplete();
+                }else {
+                    mListView.onRefreshComplete();
+                    Toast.makeText(getContext(), "未知错误" + e, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

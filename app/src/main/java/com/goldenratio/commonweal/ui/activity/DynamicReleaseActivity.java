@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,8 +21,6 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
-import com.goldenratio.commonweal.bean.U_FamousP;
-import com.goldenratio.commonweal.bean.U_NormalP;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.GlideLoader;
@@ -37,10 +33,13 @@ import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
 public class DynamicReleaseActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+
+    private static final String TAG = "lxc";
 
     private ImageView mIvBack;
     private LinearLayout mLlAddPhoto;
@@ -141,7 +140,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
         new Thread(new Runnable() {
             @Override
             public void run() {
-                BmobFile.uploadBatch(DynamicReleaseActivity.this, filePaths, new UploadBatchListener() {
+                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
                     @Override
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
                         if (filePaths.length == list1.size()) {
@@ -171,17 +170,17 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
      * @param dy 数据实体
      */
     private void SaveData(Dynamic dy) {
-        dy.save(DynamicReleaseActivity.this, new SaveListener() {
+        dy.save(new SaveListener<String>() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
-                Completed();
-                finish();
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-
+            public void done(String s, BmobException e) {
+                if (e == null){
+                    Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
+                    Completed();
+                    finish();
+                }else {
+                    //保存失败
+                    Log.d(TAG, "done: ex==" + s);
+                }
             }
         });
     }

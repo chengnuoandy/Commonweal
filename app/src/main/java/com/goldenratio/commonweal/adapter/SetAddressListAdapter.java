@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,13 +18,12 @@ import java.util.List;
  * Created by Lxt- Jxfen on 2016/8/6.
  * Email:jxfengmtx@163.com
  */
-public class SetAddressListAdapter extends BaseAdapter implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+public class SetAddressListAdapter extends BaseAdapter implements View.OnClickListener {
 
     private List<List<String>> mAddressList;
     private LayoutInflater mInflater;
     private Callback mCallback;
-    private String defutPosition;
-    private int temp = -1;
+    private int defutPosition = -1;
 
     public SetAddressListAdapter(Context context, List<List<String>> addressList, Callback callback) {
         mAddressList = addressList;
@@ -36,22 +34,14 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        temp = mCallback.click(v, temp);
-
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        temp = mCallback.onCheckedChanged(buttonView, isChecked, temp);
+        defutPosition = mCallback.click(v);
     }
 
     /**
      * 自定义接口，回掉按钮点击事件到SetAddressActivity
      */
     public interface Callback {
-        int click(View v, int temp);
-
-        int onCheckedChanged(CompoundButton buttonView, boolean isChecked, int temp);
+        int click(View v);
     }
 
     @Override
@@ -88,20 +78,21 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
             holder = (ViewHolder) convertView.getTag();
         }
         List<String> address = mAddressList.get(position);
-        Log.i("默认地址", position + "--positions--" + address.get(0));
-
         int i = 0;
-        if (position == 0) {
+        if (defutPosition == -1) {
+            defutPosition = Integer.parseInt(address.get(0));
+        } else if (position == 0) {
             i = 1;
-            defutPosition = address.get(0);
         } else i = 0;
-        boolean isDefutAddre = Integer.parseInt(defutPosition) == position;
-        Log.i("是否是默认地址", defutPosition + "----" + position + "getView: " + isDefutAddre);
+        boolean isDefutAddre = defutPosition == position;
         holder.mCbSelectDefaultAddress.setChecked(isDefutAddre);
+        Log.i("是否是默认地址", defutPosition + "----" + position + "getView: " + isDefutAddre);
+        Log.i("address数据", position + "--positions--" + address);
         holder.mTvConsignees.setText(address.get(i));
         holder.mTvConsigneesPhone.setText(address.get(i + 1));
         holder.mTvConsigneesAddress.setText(address.get(i + 2));
 
+        holder.mTvDeleteAddress.setTag(position);
         holder.mCbSelectDefaultAddress.setId(position);
         holder.mRlAddress.setOnClickListener(this);
         // holder.mRbSelectDefaultAddress.setOnCheckedChangeListener(this);
@@ -110,15 +101,7 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         //  holder.mTvDefalutAddress.setOnClickListener(this);
 
         holder.mTvDeleteAddress.setOnClickListener(this);
-
-        if (position == temp) {
-            holder.mCbSelectDefaultAddress.setChecked(true);//将本次点击的RadioButton设置为选中状态
-            holder.mCbSelectDefaultAddress.setClickable(false);
-        } else {
-            holder.mCbSelectDefaultAddress.setChecked(false);
-        }
         return convertView;
-
     }
 
     class ViewHolder {

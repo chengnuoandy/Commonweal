@@ -186,7 +186,7 @@ public class UserSettingsActivity extends Activity {
     private void imageSecectorConfig() {
         mImageConfig
                 = new ImageConfig.Builder(new GlideLoader())
-                .steepToolBarColor(R.color.red)
+                .steepToolBarColor(getResources().getColor(R.color.black))
                 .titleBgColor(getResources().getColor(R.color.white))
                 .titleTextColor(getResources().getColor(R.color.black))
                 // (截图默认配置：关闭    比例 1：1    输出分辨率  500*500)
@@ -254,7 +254,7 @@ public class UserSettingsActivity extends Activity {
             public void done(BmobException e) {
                 if (e == null) {
                     String avatarURL = bmobFile.getFileUrl();    //返回的上传文件的完整地址
-                    updateDataToBmob(avatarURL, 3,"User_Avatar");
+                    updateDataToBmob(avatarURL, 3, "User_Avatar");
                 } else {
                     Toast.makeText(UserSettingsActivity.this, "上传头像失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
 
@@ -291,7 +291,7 @@ public class UserSettingsActivity extends Activity {
                 showProgressDialog();
                 String userData = ETUSER.getText().toString();
                 TV.setText(userData);
-                updateDataToBmob(userData, X,USERROW);
+                updateDataToBmob(userData, X, USERROW);
             }
         }).setNegativeButton("取消", null).show();
     }

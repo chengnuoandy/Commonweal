@@ -107,7 +107,7 @@ public class EditAddressActivity extends Activity {
                 //区县
                 String district = citySelected[2];
                 //邮编
-                String code = citySelected[3];
+                String Setcode = citySelected[3];
 
                 String addreDetail = province + " " + city + " " + district + " ";
                 mTvEditAddress.setText(addreDetail);

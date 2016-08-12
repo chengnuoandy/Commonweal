@@ -29,7 +29,7 @@ import cn.bmob.v3.listener.UpdateListener;
 /**
  * Created by 龙啸天 on 2016/7/20 0020.
  * <p/>
- * 编辑收货地址
+ * 编辑收货地址,重点---默认地址可变，加入双保险，本地---网络都可以
  */
 
 public class EditAddressActivity extends Activity {

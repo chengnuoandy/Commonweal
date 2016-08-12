@@ -41,7 +41,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
     private ProgressDialog mPd;
     private ArrayList<String> address;
     private List<List<String>> mAddressList;
-    private int temp = -1;
+    private int clickPosition = -1;    //用来存储点击的位置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +49,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         setContentView(R.layout.activity_set_address);
         ButterKnife.bind(this);
 
-        showProgressDialog();
-
         address = new ArrayList<String>();
         mAddressList = new ArrayList<List<String>>();
+        showProgressDialog();
         getAddressFromBmob();
     }
 
@@ -93,22 +92,22 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
             default:
                 CheckBox mCbSelectDefaultAddress = ((CheckBox) v);
                 if (((CheckBox) v).isChecked()) {        //如果是选中状态
-                    if (temp != -1) {            //temp不为-1，说明已经进行过点击事件
-                        CheckBox tempButton = (CheckBox) findViewById(temp);
+                    if (clickPosition != -1) {            //temp不为-1，说明已经进行过点击事件(已经设置过默认地址)
+                        CheckBox tempButton = (CheckBox) findViewById(clickPosition);
                         if (tempButton != null) {
-                            tempButton.setChecked(false);   //取到上一次点击的RadioButton，并设置为未选中状态
-                            tempButton.setClickable(true);
+                            tempButton.setChecked(false);   //将上一次的checkbox设置为未选中状态
+                            tempButton.setClickable(true);  //上次的checkbox为可以点击
                         }
                     }
                     updateAddressToBmob(v.getId() + "");
-                    temp = v.getId();           //将temp重新赋值，记录下本次点击的RadioButton
+                    clickPosition = v.getId();           //将temp重新赋值，记录下本次点击的RadioButton
                     showProgressDialog();
-                    Log.i("check1", "onCheckedChanged: " + temp);
+                    Log.i("check1", "onCheckedChanged: " + clickPosition);
                 }
-                Log.i("check2", "onCheckedChanged: " + temp);
-                if (v.getId() == temp) {
-                    mCbSelectDefaultAddress.setChecked(true);        //将本次点击的RadioButton设置为选中状态
-                    mCbSelectDefaultAddress.setClickable(false);
+                Log.i("check2", "onCheckedChanged: " + clickPosition);
+                if (v.getId() == clickPosition) {
+                    mCbSelectDefaultAddress.setChecked(true);        //将本次点击的checkbox设置为选中状态
+                    mCbSelectDefaultAddress.setClickable(false);     //本次checkbox不能点击
                 } else {
                     mCbSelectDefaultAddress.setChecked(false);
                 }
@@ -123,7 +122,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
             case 1:
                 if (resultCode == RESULT_OK) {
                     address = data.getStringArrayListExtra("address");
-                    temp = Integer.parseInt(address.get(0));
+                    clickPosition = Integer.parseInt(address.get(0));
                     mAddressList.clear();
                     splitAddress();
                     if (address.size() != 1 && (address.size() - 1) % 3 == 0) {
@@ -149,7 +148,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                 if (e == null) {
                     address = (ArrayList<String>) user_profile.getUser_Receive_Address();
                     if (address.size() != 1 && (address.size() - 1) % 3 == 0) {
-                        temp = Integer.parseInt(address.get(0));
+                        clickPosition = Integer.parseInt(address.get(0));
                         splitAddress();
                         mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
                                 mAddressList, SetAddressActivity.this));
@@ -211,7 +210,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         int defutAddress = Integer.parseInt(address.get(0));
         if (defutAddress >= position && defutAddress != 0) {
             address.set(0, defutAddress - 1 + "");
-            Integer.parseInt(defutAddress - 1 + "");
+            clickPosition = Integer.parseInt(defutAddress - 1 + "");
         }
         address.remove(t);
         address.remove(t);

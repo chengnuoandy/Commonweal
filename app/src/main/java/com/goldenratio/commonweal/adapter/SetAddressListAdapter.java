@@ -88,7 +88,7 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         holder.mCbSelectDefaultAddress.setClickable(!isDefutAddre);
         Log.i("是否是默认地址", defutPosition + "----" + position + "getView: " + isDefutAddre);
         Log.i("address数据", position + "--positions--" + address);
-        holder.mTvConsignees.setText(address.get(6));
+        holder.mTvConsignees.setText(address.get(8));
         holder.mTvConsigneesPhone.setText(address.get(i + 1));
         holder.mTvConsigneesAddress.setText(address.get(i + 2));
 
@@ -96,10 +96,7 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         holder.mTvDeleteAddress.setTag(position);
         holder.mCbSelectDefaultAddress.setId(position);
         holder.mRlAddress.setOnClickListener(this);
-        // holder.mRbSelectDefaultAddress.setOnCheckedChangeListener(this);
-        // holder.mCbSelectDefaultAddress.setOnCheckedChangeListener(this);
         holder.mCbSelectDefaultAddress.setOnClickListener(this);
-        //  holder.mTvDefalutAddress.setOnClickListener(this);
 
         holder.mTvDeleteAddress.setOnClickListener(this);
         return convertView;
@@ -112,7 +109,6 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         public RelativeLayout mRlAddress;
         // public RadioButton mRbSelectDefaultAddress;
         public CheckBox mCbSelectDefaultAddress;
-        //   public TextView mTvDefalutAddress;
         public TextView mTvDeleteAddress;
         //   public View mTvDiv;
     }

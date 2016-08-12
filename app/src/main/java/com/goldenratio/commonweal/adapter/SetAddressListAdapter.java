@@ -79,19 +79,20 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         }
         List<String> address = mAddressList.get(position);
         int i = 0;
-        if (defutPosition == -1) {
-            defutPosition = Integer.parseInt(address.get(0));
-        } else if (position == 0) {
+        if (position == 0) {
             i = 1;
+            defutPosition = Integer.parseInt(address.get(0));
         } else i = 0;
         boolean isDefutAddre = defutPosition == position;
         holder.mCbSelectDefaultAddress.setChecked(isDefutAddre);
+        holder.mCbSelectDefaultAddress.setClickable(!isDefutAddre);
         Log.i("是否是默认地址", defutPosition + "----" + position + "getView: " + isDefutAddre);
         Log.i("address数据", position + "--positions--" + address);
-        holder.mTvConsignees.setText(address.get(i));
+        holder.mTvConsignees.setText(address.get(6));
         holder.mTvConsigneesPhone.setText(address.get(i + 1));
         holder.mTvConsigneesAddress.setText(address.get(i + 2));
 
+        holder.mRlAddress.setTag(position);
         holder.mTvDeleteAddress.setTag(position);
         holder.mCbSelectDefaultAddress.setId(position);
         holder.mRlAddress.setOnClickListener(this);

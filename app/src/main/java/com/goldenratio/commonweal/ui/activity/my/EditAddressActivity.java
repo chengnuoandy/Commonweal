@@ -48,10 +48,13 @@ public class EditAddressActivity extends Activity {
     EditText mEtDetailAddress;
     @BindView(R.id.btn_save_address)
     Button mBtnSaveAddress;
+    @BindView(R.id.tv_address_title)
+    TextView mTvAddressTitle;
 
 
     private ArrayList<String> address;
     private ProgressDialog mPd;
+    private int position = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +63,21 @@ public class EditAddressActivity extends Activity {
         ButterKnife.bind(this);
 
         address = getIntent().getStringArrayListExtra("address");
-
+        position = getIntent().getIntExtra("position", -1);
+        //编辑地址
+        if (position != -1) {
+            mTvAddressTitle.setText("编辑地址");
+            position = (position * 3) + 1;
+            mEtConsignee.setText(address.get(position));
+            mEtEditPhone.setText(address.get(position + 1));
+            String[] editAddress = address.get(position + 2).split(" ");
+            Log.i("截取长度", editAddress.length + "");
+            mTvEditAddress.setText(editAddress[0] + " " + editAddress[1] + " " + editAddress[2]);
+            mEtDetailAddress.setText(editAddress[3]);
+        }
     }
 
-    @OnClick({R.id.iv_edit_address_back, R.id.rl_edit_address, R.id.et_detail_address, R.id.btn_save_address})
+    @OnClick({R.id.iv_edit_address_back, R.id.rl_edit_address, R.id.btn_save_address})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_edit_address_back:
@@ -72,11 +86,11 @@ public class EditAddressActivity extends Activity {
             case R.id.rl_edit_address:
                 configCityPickerView();
                 break;
-            case R.id.et_detail_address:
-                break;
             case R.id.btn_save_address:
-                showProgressDialog();
-                updateDataToBmob();
+                if (checkAddress()) {
+                    showProgressDialog();
+                    updateDataToBmob();
+                }
                 break;
         }
     }
@@ -109,22 +123,14 @@ public class EditAddressActivity extends Activity {
                 //邮编
                 String Setcode = citySelected[3];
 
-                String addreDetail = province + " " + city + " " + district + " ";
+                String addreDetail = province + " " + city + " " + district;
                 mTvEditAddress.setText(addreDetail);
             }
         });
     }
 
     private void updateDataToBmob() {
-        String consignee = mEtConsignee.getText().toString();
-        String consigneePhone = mEtEditPhone.getText().toString();
-        String consigneeAddress = mTvEditAddress.getText() + " "
-                + mEtDetailAddress.getText();
-
-        address.add(consignee);
-        address.add(consigneePhone);
-        address.add(consigneeAddress);
-
+        final ArrayList<String> tempAddress = address;
         String userID = MyFragment.mUserID;
         User_Profile u = new User_Profile();
         Log.i("list", "updateDataToBmob: " + address);
@@ -137,11 +143,36 @@ public class EditAddressActivity extends Activity {
                 } else {
                     closeProgressDialog();
                     Log.i("why", e.getMessage());
+                    address = tempAddress;
                     Toast.makeText(EditAddressActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                 }
             }
 
         });
+    }
+
+    private boolean checkAddress() {
+        String consignee = mEtConsignee.getText().toString();
+        String consigneePhone = mEtEditPhone.getText().toString();
+        String consigneeAddress = mTvEditAddress.getText() +
+                " " + mEtDetailAddress.getText();
+        if (position == -1) {
+            address.add(consignee);
+            address.add(consigneePhone);
+            address.add(consigneeAddress);
+        } else {
+            address.set(position, consignee);
+            address.set(position + 1, consigneePhone);
+            address.set(position + 2, consigneeAddress);
+        }
+        boolean isTrue = false;
+        if (consignee.length() != 0 && consigneePhone.length() > 6
+                && mTvEditAddress.getText().length() != 3 && mEtDetailAddress.length() >= 5) {
+            isTrue = true;
+        } else {
+            Toast.makeText(EditAddressActivity.this, "请确认信息是否填写规范", Toast.LENGTH_SHORT).show();
+        }
+        return isTrue;
     }
 
     private void showProgressDialog() {

@@ -23,7 +23,7 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
     private List<List<String>> mAddressList;
     private LayoutInflater mInflater;
     private Callback mCallback;
-    private int defutPosition = -1;
+    private int defutPosition = -1;  //默认地址的位置
 
     public SetAddressListAdapter(Context context, List<List<String>> addressList, Callback callback) {
         mAddressList = addressList;
@@ -38,7 +38,7 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
     }
 
     /**
-     * 自定义接口，回掉按钮点击事件到SetAddressActivity
+     * 自定义接口，回掉点击事件到SetAddressActivity
      */
     public interface Callback {
         int click(View v);
@@ -88,12 +88,15 @@ public class SetAddressListAdapter extends BaseAdapter implements View.OnClickLi
         holder.mCbSelectDefaultAddress.setClickable(!isDefutAddre);
         Log.i("是否是默认地址", defutPosition + "----" + position + "getView: " + isDefutAddre);
         Log.i("address数据", position + "--positions--" + address);
-        holder.mTvConsignees.setText(address.get(8));
+        holder.mTvConsignees.setText(address.get(i));
         holder.mTvConsigneesPhone.setText(address.get(i + 1));
         holder.mTvConsigneesAddress.setText(address.get(i + 2));
 
+        //将点击的位置传到setAddressActivity
         holder.mRlAddress.setTag(position);
         holder.mTvDeleteAddress.setTag(position);
+
+        //将点击的位置传到setAddressActivity,给checkbox设定唯一标志，用来找到并暂存点击的CB
         holder.mCbSelectDefaultAddress.setId(position);
         holder.mRlAddress.setOnClickListener(this);
         holder.mCbSelectDefaultAddress.setOnClickListener(this);

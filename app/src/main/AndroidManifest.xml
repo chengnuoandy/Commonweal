@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.goldenratio.commonweal">
+    package="com.goldenratio.commonweal" >
 
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- 蓝牙分享所需的权限 -->
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <!-- 允许联网 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 获取wifi网络状态的信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 获取sd卡写的权限，用于文件上传和下载 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 允许读取手机状态 用于创建BmobInstallation   用于调用 JNI -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- 从sdcard中读取数据的权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 往sdcard中写入数据的权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 震动权限 -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- 用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- 用于访问网络，网络定位需要上网 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApplication"
@@ -67,27 +67,27 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
-                <data android:scheme="tencent100371282"/>
+                <data android:scheme="tencent100371282" />
 
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
-                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY"/>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <!-- 微信分享回调 -->
@@ -96,62 +96,63 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <activity android:name=".ui.activity.MainActivity">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ui.activity.MainActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity"/>
+        <activity android:name=".ui.activity.LoginActivity" />
         <!-- 必须注册在微博授权，分享微博时候用到 -->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.activity.RegisterActivity"/>
-        <activity android:name=".ui.activity.GoodActivity"/>
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.activity.RegisterActivity" />
+        <activity android:name=".ui.activity.GoodActivity" />
         <activity
             android:name=".ui.activity.GoodKeypadActivity"
-            android:theme="@style/MyDialogStyle"/>
-        <activity android:name=".ui.activity.HelpDetailActivity"/>
-        <activity android:name=".ui.fragment.HelpContentFragment"/>
-        <activity android:name=".ui.activity.my.MessageActivity"/>
+            android:theme="@style/MyDialogStyle" />
+        <activity android:name=".ui.activity.HelpDetailActivity" />
+        <activity android:name=".ui.fragment.HelpContentFragment" />
+        <activity android:name=".ui.activity.my.MessageActivity" />
 
-        <receiver android:name=".receiver.NetworkReceiver">
+        <receiver android:name=".receiver.NetworkReceiver" >
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.activity.my.MySetActivity"/>
-        <activity android:name=".ui.activity.GoodTypeActivity"/>
-        <activity android:name=".ui.activity.GoodDetailActivity"/>
-        <activity android:name=".ui.activity.my.UserSettingsActivity"/>
-        <activity android:name=".ui.activity.my.SetUserNameActivity">
+        <activity android:name=".ui.activity.my.MySetActivity" />
+        <activity android:name=".ui.activity.GoodTypeActivity" />
+        <activity android:name=".ui.activity.GoodDetailActivity" />
+        <activity android:name=".ui.activity.my.UserSettingsActivity" />
+        <activity android:name=".ui.activity.my.SetUserNameActivity" >
         </activity>
-        <activity android:name=".ui.activity.my.SetAddressActivity">
+        <activity android:name=".ui.activity.my.SetAddressActivity" >
         </activity>
-        <activity android:name=".ui.activity.HelpDonateActivity"/>
-        <activity android:name=".ui.activity.DynamicReleaseActivity">
+        <activity android:name=".ui.activity.HelpDonateActivity" />
+        <activity android:name=".ui.activity.DynamicReleaseActivity" >
         </activity>
-        <activity android:name=".ui.activity.DynamicLocationActivity">
+        <activity android:name=".ui.activity.DynamicLocationActivity" >
         </activity>
 
-        <service android:name="com.amap.api.location.APSService"/>
+        <service android:name="com.amap.api.location.APSService" />
         <!-- 高德地图key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="7db686110d3c108a684a52eca7f5acda"/>
+            android:value="7db686110d3c108a684a52eca7f5acda" />
 
-        <activity android:name=".ui.activity.my.EditAddressActivity">
+        <activity android:name=".ui.activity.my.EditAddressActivity" >
         </activity>
-        <activity android:name=".ui.activity.DynamicPhotoShow">
+        <activity android:name=".ui.activity.DynamicPhotoShow" >
         </activity>
-        <activity android:name=".ui.activity.PostActivity"
-            android:theme="@style/MyDialogStyle"/>
+        <activity
+            android:name=".ui.activity.PostActivity"
+            android:theme="@style/MyDialogStyle" />
     </application>
 
 </manifest>

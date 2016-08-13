@@ -39,9 +39,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
     Button mTvAddAddress;
 
     private ProgressDialog mPd;
-    private ArrayList<String> address;
-    private List<List<String>> mAddressList;
-    private int clickPosition = -1;    //用来存储点击的位置
+    private ArrayList<String> address;  //存储收货地址
+    private List<List<String>> mAddressList;  //ListView适配源
+    private int clickPosition = -1;    //用来存储点击的位置----默认地址的位置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +100,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                         }
                     }
                     updateAddressToBmob(v.getId() + "");
-                    clickPosition = v.getId();           //将temp重新赋值，记录下本次点击的RadioButton
+                    clickPosition = v.getId();               //将temp重新赋值，记录下本次点击的RadioButton
                     showProgressDialog();
                     Log.i("check1", "onCheckedChanged: " + clickPosition);
                 }
@@ -188,6 +188,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                     closeProgressDialog();
                 } else {
                     Toast.makeText(SetAddressActivity.this, "设置失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    clickPosition=Integer.parseInt(address.get(0));
                     closeProgressDialog();
                     Log.i("更新地址", e.getMessage());
                 }
@@ -199,20 +200,21 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
     }
 
     /**
-     * 删除收货地址
+     * 删除收货地址，注意：删除后默认地址的位置会随之变化
      *
      * @param position 收货地址的位置
      */
     private void removeAddressToBmob(final int position) {
         final ArrayList<String> tempAddress = address;
-        int t = (3 * position) + 1;
+        int t = (3 * position) + 1;     //此为address要删除数据的位置，确保不会删除address[0]
         Log.i("address删除前", position + "---" + t + "---" + "removeAddressToBmob: " + address);
         int defutAddress = Integer.parseInt(address.get(0));
+        //如果删除的位置在默认地址之前，则默认地址位置减1
         if (defutAddress >= position && defutAddress != 0) {
             address.set(0, defutAddress - 1 + "");
             clickPosition = Integer.parseInt(defutAddress - 1 + "");
         }
-        address.remove(t);
+        address.remove(t);  //移除此位置的数据-----后面的会往前移，移除三次
         address.remove(t);
         address.remove(t);
         String objectID = ((MyApplication) getApplication()).getObjectID();
@@ -259,6 +261,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         }
     }
 
+    private void refreshListViewAdapter(){
+
+    }
     private void showProgressDialog() {
         if (mPd == null) {
             mPd = new ProgressDialog(this);

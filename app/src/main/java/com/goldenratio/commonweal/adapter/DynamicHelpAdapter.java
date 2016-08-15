@@ -21,8 +21,6 @@ import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-
 /**
  * Created by 龙啸天 - Jxfen on 2016/8/15.
  * Email:jxfengmtx@163.com
@@ -62,6 +60,30 @@ public class DynamicHelpAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.view_dyc_help_item, null);
             holder = new ViewHolder(convertView);
+            holder.mIvDycHelpPic.setAdapter(new NineGridImageViewAdapter<String>() {
+
+                // 图片点击事件,启动浏览模式
+                @Override
+                protected void onItemImageClick(Context context, int index, List<String> list) {
+                    Intent intent = new Intent(mContext, DynamicPhotoShow.class);
+                    intent.putExtra("index", index);
+                    intent.putStringArrayListExtra("list", (ArrayList<String>) list);
+                    mContext.startActivity(intent);
+                    //设置切换动画
+                    ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+
+                @Override
+                protected void onDisplayImage(Context context, ImageView imageView, String str) {
+                    if (str != null) {
+                        Glide.with(mContext)
+                                .load(str)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(imageView);
+                    }
+
+                }
+            });
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -70,34 +92,11 @@ public class DynamicHelpAdapter extends BaseAdapter {
         holder.mTvOrganizationName.setText(help.getInitiator_Name());
         holder.mTvReleaseTime.setText(help.getUpdatedAt());
         holder.mTvDycHelpContent.setText(help.getHelp_Content());
+        holder.mIvDycHelpPic.setImagesData(help.getHelp_Pic());
         Glide.with(mContext)
                 .load(help.getInitiator_Image())
                 .into(holder.mIvOrganizationAvatar);
-        holder.mIvDycHelpPic.setImagesData(help.getHelp_Pic());
-        holder.mIvDycHelpPic.setAdapter(new NineGridImageViewAdapter<String>() {
 
-            // 图片点击事件,启动浏览模式
-            @Override
-            protected void onItemImageClick(Context context, int index, List<String> list) {
-                Intent intent = new Intent(mContext, DynamicPhotoShow.class);
-                intent.putExtra("index", index);
-                intent.putStringArrayListExtra("list", (ArrayList<String>) list);
-                mContext.startActivity(intent);
-                //设置切换动画
-                ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-
-            @Override
-            protected void onDisplayImage(Context context, ImageView imageView, String str) {
-                if (str != null) {
-                    Glide.with(mContext)
-                            .load(str)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(imageView);
-                }
-
-            }
-        });
         return convertView;
     }
 

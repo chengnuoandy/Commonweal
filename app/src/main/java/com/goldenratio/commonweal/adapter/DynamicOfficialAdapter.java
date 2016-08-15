@@ -60,6 +60,30 @@ public class DynamicOfficialAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.view_dyc_official_item, null);
             holder = new ViewHolder(convertView);
+            holder.mIvDycHelpPic.setAdapter(new NineGridImageViewAdapter<String>() {
+
+                // 图片点击事件,启动浏览模式
+                @Override
+                protected void onItemImageClick(Context context, int index, List<String> list) {
+                    Intent intent = new Intent(mContext, DynamicPhotoShow.class);
+                    intent.putExtra("index", index);
+                    intent.putStringArrayListExtra("list", (ArrayList<String>) list);
+                    mContext.startActivity(intent);
+                    //设置切换动画
+                    ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }
+
+                @Override
+                protected void onDisplayImage(Context context, ImageView imageView, String str) {
+                    if (str != null) {
+                        Glide.with(mContext)
+                                .load(str)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(imageView);
+                    }
+
+                }
+            });
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -69,34 +93,11 @@ public class DynamicOfficialAdapter extends BaseAdapter {
         holder.mTvOrganizationName.setText(help.getDyc_Title());
         holder.mTvReleaseTime.setText(help.getUpdatedAt());
         holder.mTvDycHelpContent.setText(help.getDyc_Content());
+        holder.mIvDycHelpPic.setImagesData(help.getDyc_Pic());
         Glide.with(mContext)
                 .load(help.getDyc_Image())
                 .into(holder.mIvOrganizationAvatar);
-        holder.mIvDycHelpPic.setImagesData(help.getDyc_Pic());
-        holder.mIvDycHelpPic.setAdapter(new NineGridImageViewAdapter<String>() {
 
-            // 图片点击事件,启动浏览模式
-            @Override
-            protected void onItemImageClick(Context context, int index, List<String> list) {
-                Intent intent = new Intent(mContext, DynamicPhotoShow.class);
-                intent.putExtra("index", index);
-                intent.putStringArrayListExtra("list", (ArrayList<String>) list);
-                mContext.startActivity(intent);
-                //设置切换动画
-                ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-
-            @Override
-            protected void onDisplayImage(Context context, ImageView imageView, String str) {
-                if (str != null) {
-                    Glide.with(mContext)
-                            .load(str)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(imageView);
-                }
-
-            }
-        });
         return convertView;
     }
 

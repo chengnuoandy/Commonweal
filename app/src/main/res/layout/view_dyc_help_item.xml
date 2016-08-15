@@ -29,6 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/little_space"
+                android:gravity="center"
                 android:text="昵称"
                 android:textColor="@color/colorPrimary"
                 android:textSize="13sp"/>
@@ -48,9 +49,9 @@
         android:id="@+id/tv_dyc_help_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:lineSpacingExtra="2dp"
-        android:textColor="@color/dark_gray"
         android:text="内容"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/commo_text_color"
         android:textSize="14sp"/>
 
     <com.jaeger.ninegridimageview.NineGridImageView

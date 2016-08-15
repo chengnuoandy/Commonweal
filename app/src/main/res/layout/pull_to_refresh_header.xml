@@ -1,46 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp" >
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/iv_arrow"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/common_listview_headview_red_arrow" />
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/common_listview_headview_red_arrow"/>
 
         <ProgressBar
             android:id="@+id/pb_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:indeterminateDrawable="@drawable/custom_progress"
-            android:visibility="invisible" />
-    </FrameLayout>
+            android:visibility="invisible"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="下拉刷新"
-            android:textColor="#f00"
-            android:textSize="18sp" />
+            android:textColor="@color/colorAccent"
+            android:textSize="15sp"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -49,7 +46,7 @@
             android:layout_marginTop="3dp"
             android:text="2015-10-21 09:00"
             android:textColor="#a000"
-            android:textSize="16sp" />
+            android:textSize="12sp"/>
     </LinearLayout>
 
 </LinearLayout>

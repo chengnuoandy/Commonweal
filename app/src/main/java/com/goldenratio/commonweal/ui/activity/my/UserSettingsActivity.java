@@ -16,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
@@ -263,10 +261,6 @@ public class UserSettingsActivity extends Activity {
             public void done(BmobException e) {
                 if (e == null) {
                     String avatarURL = bmobFile.getFileUrl();    //返回的上传文件的完整地址
-                    Glide.with(UserSettingsActivity.this)
-                            .load(avatarURL)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(mMinAvatar);
                     updateDataToBmob(avatarURL, 3, "User_Avatar");
                 } else {
                     Toast.makeText(UserSettingsActivity.this, "上传头像失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();

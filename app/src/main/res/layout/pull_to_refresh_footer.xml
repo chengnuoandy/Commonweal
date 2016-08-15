@@ -19,6 +19,6 @@
         android:layout_marginLeft="5dp"
         android:text="加载中..."
         android:textColor="#f00"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

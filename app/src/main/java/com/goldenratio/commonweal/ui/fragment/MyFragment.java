@@ -17,6 +17,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
+import com.goldenratio.commonweal.ui.activity.my.LogisticsInformation;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
@@ -52,8 +53,10 @@ public class MyFragment extends Fragment {
     private String avaMinUrl;//用户小头像
     public static String mUserID; //用户objectid
 
+    private TextView mTextView;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
 
@@ -64,6 +67,15 @@ public class MyFragment extends Fragment {
             isLogin = true;
             ((MyApplication) getActivity().getApplication()).setObjectID(mUserID);
         }
+
+        mTextView = (TextView) view.findViewById(R.id.ceshi);
+        mTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LogisticsInformation.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
 

@@ -145,6 +145,7 @@
                     android:background="@color/white">
 
                     <TextView
+                        android:id="@+id/ceshi"
                         style="@style/fragment_my_style"
                         android:drawableTop="@drawable/my_ic_pay"
                         android:text="待付款" />

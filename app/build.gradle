@@ -29,6 +29,7 @@ repositories {
     flatDir {
         dirs 'libs'
     }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -62,4 +63,5 @@ dependencies {
     compile files('libs/okio-1.7.0.jar')
     compile files('libs/rxandroid-1.2.0.jar')
     compile files('libs/rxjava-1.1.6.jar')
+    compile 'com.github.baoyachi:StepView:1.8.1'
 }

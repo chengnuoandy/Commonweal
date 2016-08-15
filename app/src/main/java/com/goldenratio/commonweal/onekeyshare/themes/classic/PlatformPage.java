@@ -104,7 +104,7 @@ public abstract class PlatformPage extends OnekeySharePage {
 
 
 
-	///////////////增加取消按钮layout
+	///////////////增加更多
 	lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,120);
 	lp.setMargins(0,0,0,0);
 	LinearLayout buttonLayout2 = new LinearLayout(activity);

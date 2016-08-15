@@ -5,8 +5,18 @@
               android:background="@color/colorContext"
               android:orientation="vertical">
 
-    <com.goldenratio.commonweal.ui.view.PullToRefreshListView
-        android:id="@+id/lv_dynamic_all"
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_BGA_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv_dynamic_all"
+            android:layout_width="match_parent"
+            android:divider="@color/ordinary"
+            android:dividerHeight="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 </LinearLayout>

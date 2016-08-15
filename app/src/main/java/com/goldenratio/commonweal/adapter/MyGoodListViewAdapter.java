@@ -1,7 +1,9 @@
 package com.goldenratio.commonweal.adapter;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.util.SparseArray;
@@ -16,8 +18,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.bean.MySqlGood;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +37,7 @@ import cn.iwgang.countdownview.CountdownView;
 public class MyGoodListViewAdapter extends BaseAdapter {
     private static final String TAG = "lxc";
     private final SparseArray<ViewHolder> mCountdownVHList;
+    private final List<MySqlGood> mySqlGoods;
     private Context mContext;
     private List<Good> mGoodList;
     private LayoutInflater mInflater;
@@ -68,10 +73,11 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         }
     };
 
-    public MyGoodListViewAdapter(Context mContext, List<Good> mGoodList) {
+    public MyGoodListViewAdapter(Context mContext, List<MySqlGood> mySqlGoods, List<Good> mGoodList) {
         this.mContext = mContext;
         this.mGoodList = mGoodList;
         this.mInflater = LayoutInflater.from(mContext);
+        this.mySqlGoods = mySqlGoods;
         mCountdownVHList = new SparseArray<>();
         startRefreshTime();
     }
@@ -142,7 +148,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         // 处理倒计时
         if (mGood.getGood_UpDateM() > 0) {
             synchronized (mCountdownVHList) {
-                mCountdownVHList.put(getItem(position).getGood_ID(), viewHolder);
+                mCountdownVHList.put(position, viewHolder);
             }
         }
 
@@ -202,18 +208,21 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             return mGood;
         }
 
+        @TargetApi(Build.VERSION_CODES.KITKAT)
         private void initData(final int position) {
             this.position = position;
-
-            boolean mBoolGoodStatus = getItem(position).getGood_Status();
-            if (mBoolGoodStatus) {
-                mTvGoodStatus.setText("正在进行");
-            } else if (!mBoolGoodStatus) {
-                mTvGoodStatus.setText("已经结束");
-                mTvGoodStatus.setTextColor(Color.RED);
-            } else {
-                mTvGoodStatus.setText("未知的错误");
-                mTvGoodStatus.setTextColor(Color.RED);
+            if (mySqlGoods.size() != 0) {
+                String mStr = mySqlGoods.get(position).getGood_Status();
+//                Toast.makeText(mContext, position + mStr, Toast.LENGTH_SHORT).show();
+                if (Objects.equals(mStr, "1")) {
+                    mTvGoodStatus.setText("正在进行");
+                } else if (Objects.equals(mStr, "0")) {
+                    mTvGoodStatus.setText("已经结束");
+                    mTvGoodStatus.setTextColor(Color.RED);
+                } else {
+                    mTvGoodStatus.setText("未知的错误");
+                    mTvGoodStatus.setTextColor(Color.RED);
+                }
             }
             mTvTime.setText(getItem(position).getCreatedAt());
             mTvName.setText(getItem(position).getGood_Name());

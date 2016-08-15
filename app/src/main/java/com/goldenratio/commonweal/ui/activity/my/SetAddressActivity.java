@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,7 +29,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class SetAddressActivity extends Activity implements SetAddressListAdapter.Callback, AdapterView.OnItemClickListener {
+public class SetAddressActivity extends Activity implements SetAddressListAdapter.Callback {
 
     @BindView(R.id.iv_address_back)
     ImageView mIvBack;
@@ -40,9 +39,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
     Button mTvAddAddress;
 
     private ProgressDialog mPd;
-    private ArrayList<String> address;
-    private List<List<String>> mAddressList;
-    private int temp = -1;
+    private ArrayList<String> address;  //存储收货地址
+    private List<List<String>> mAddressList;  //ListView适配源
+    private int clickPosition = -1;    //用来存储点击的位置----默认地址的位置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +49,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         setContentView(R.layout.activity_set_address);
         ButterKnife.bind(this);
 
-        showProgressDialog();
-
         address = new ArrayList<String>();
         mAddressList = new ArrayList<List<String>>();
-        mLvAddressDetails.setOnItemClickListener(this);
+        showProgressDialog();
         getAddressFromBmob();
     }
 
@@ -66,9 +63,12 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                 finish();
                 break;
             case R.id.btn_add_address:
-                Intent intent = new Intent(SetAddressActivity.this, EditAddressActivity.class);
-                intent.putStringArrayListExtra("address", address);
-                startActivityForResult(intent, 1);
+                if ((address.size() - 1) % 3 == 0) {
+                    Intent intent = new Intent(SetAddressActivity.this, EditAddressActivity.class);
+                    intent.putStringArrayListExtra("address", address);
+                    startActivityForResult(intent, 1);
+                } else
+                    Toast.makeText(SetAddressActivity.this, "未知错误，请重新设置地址", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -80,39 +80,40 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
             case R.id.rl_address:
                 Intent intent = new Intent(SetAddressActivity.this, EditAddressActivity.class);
                 intent.putStringArrayListExtra("address", address);
+                intent.putExtra("position", (int) v.getTag());
                 startActivityForResult(intent, 1);
                 break;
             case R.id.tv_delete_address:
                 int position = (int) v.getTag();
                 showProgressDialog();
-                removeAddressToBmob(position, mAddressList.get(position));
+                removeAddressToBmob(position);
                 Log.i("deleteAddress", "click: address点击");
                 break;
             default:
                 CheckBox mCbSelectDefaultAddress = ((CheckBox) v);
                 if (((CheckBox) v).isChecked()) {        //如果是选中状态
-                    if (temp != -1) {           //temp不为-1，说明已经进行过点击事件
-                        CheckBox tempButton = (CheckBox) findViewById(temp);
+                    if (clickPosition != -1) {            //temp不为-1，说明已经进行过点击事件(已经设置过默认地址)
+                        CheckBox tempButton = (CheckBox) findViewById(clickPosition);
                         if (tempButton != null) {
-                            tempButton.setChecked(false);   //取到上一次点击的RadioButton，并设置为未选中状态
-                            tempButton.setClickable(true);
+                            tempButton.setChecked(false);   //将上一次的checkbox设置为未选中状态
+                            tempButton.setClickable(true);  //上次的checkbox为可以点击
                         }
                     }
-                    temp = v.getId();           //将temp重新赋值，记录下本次点击的RadioButton
+                    updateAddressToBmob(v.getId() + "");
+                    clickPosition = v.getId();               //将temp重新赋值，记录下本次点击的RadioButton
                     showProgressDialog();
-                    updateAddressToBmob(0, temp + "");
-                    Log.i("check1", "onCheckedChanged: " + temp);
+                    Log.i("check1", "onCheckedChanged: " + clickPosition);
                 }
-                Log.i("check2", "onCheckedChanged: " + temp);
-                if (v.getId() == temp) {
-                    mCbSelectDefaultAddress.setChecked(true);        //将本次点击的RadioButton设置为选中状态
-                    mCbSelectDefaultAddress.setClickable(false);
+                Log.i("check2", "onCheckedChanged: " + clickPosition);
+                if (v.getId() == clickPosition) {
+                    mCbSelectDefaultAddress.setChecked(true);        //将本次点击的checkbox设置为选中状态
+                    mCbSelectDefaultAddress.setClickable(false);     //本次checkbox不能点击
                 } else {
                     mCbSelectDefaultAddress.setChecked(false);
                 }
                 return v.getId();
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -121,14 +122,17 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
             case 1:
                 if (resultCode == RESULT_OK) {
                     address = data.getStringArrayListExtra("address");
+                    clickPosition = Integer.parseInt(address.get(0));
                     mAddressList.clear();
                     splitAddress();
-                    Toast.makeText(SetAddressActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
-                    if (mLvAddressDetails.getAdapter().isEmpty())
-                        mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
-                                mAddressList, SetAddressActivity.this));
-                    else ((BaseAdapter) mLvAddressDetails.getAdapter()).notifyDataSetChanged();
-
+                    if (address.size() != 1 && (address.size() - 1) % 3 == 0) {
+                        Toast.makeText(SetAddressActivity.this, "添加成功", Toast.LENGTH_SHORT).show();
+                        if (mLvAddressDetails.getAdapter() == null)
+                            mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
+                                    mAddressList, SetAddressActivity.this));
+                        else ((BaseAdapter) mLvAddressDetails.getAdapter()).notifyDataSetChanged();
+                    } else
+                        Toast.makeText(SetAddressActivity.this, "未知错误，请重新设置地址", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -137,25 +141,24 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
 
     private void getAddressFromBmob() {
         BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
-        // bmobQuery.addQueryKeys("User_Receive_Address");
         String objectID = ((MyApplication) getApplication()).getObjectID();
         bmobQuery.getObject(objectID, new QueryListener<User_Profile>() {
             @Override
             public void done(User_Profile user_profile, BmobException e) {
                 if (e == null) {
                     address = (ArrayList<String>) user_profile.getUser_Receive_Address();
-                    if (address.size() >= 4) {
-                        temp = Integer.parseInt(address.get(0));
+                    if (address.size() != 1 && (address.size() - 1) % 3 == 0) {
+                        clickPosition = Integer.parseInt(address.get(0));
                         splitAddress();
                         mLvAddressDetails.setAdapter(new SetAddressListAdapter(SetAddressActivity.this,
                                 mAddressList, SetAddressActivity.this));
                     } else {
-                        address.set(0, "0");
+                        address.clear();
+                        address.add("0");
                         Toast.makeText(SetAddressActivity.this, "您尚未设置过收货地址", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.i("获取地址失败", e.getMessage());
-                    address.add("0");
                     Toast.makeText(SetAddressActivity.this, "获取地址失败" + e.getErrorCode() + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 closeProgressDialog();
@@ -164,47 +167,75 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         });
     }
 
-    private void updateAddressToBmob(int position, String data) {
+    /**
+     * 更新默认地址
+     *
+     * @param position 默认地址的位置
+     */
+    private void updateAddressToBmob(final String position) {
         String objectID = ((MyApplication) getApplication()).getObjectID();
-        address.set(0, data);
         User_Profile u = new User_Profile();
         Log.i("list", "updateDataToBmob: " + address);
-        u.setValue("User_Receive_Address.0", data);
+        u.setValue("User_Receive_Address.0", position);
         u.update(objectID, new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
+                    address.set(0, position);
+                    mAddressList.clear();
+                    splitAddress();
                     Toast.makeText(SetAddressActivity.this, "设置默认地址成功", Toast.LENGTH_SHORT).show();
                     closeProgressDialog();
                 } else {
                     Toast.makeText(SetAddressActivity.this, "设置失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    clickPosition=Integer.parseInt(address.get(0));
                     closeProgressDialog();
                     Log.i("更新地址", e.getMessage());
                 }
+                ((BaseAdapter) mLvAddressDetails.getAdapter()).notifyDataSetChanged();
                 closeProgressDialog();
             }
 
         });
     }
 
-    private void removeAddressToBmob(final int position, List<String> data) {
+    /**
+     * 删除收货地址，注意：删除后默认地址的位置会随之变化
+     *
+     * @param position 收货地址的位置
+     */
+    private void removeAddressToBmob(final int position) {
+        final ArrayList<String> tempAddress = address;
+        int t = (3 * position) + 1;     //此为address要删除数据的位置，确保不会删除address[0]
+        Log.i("address删除前", position + "---" + t + "---" + "removeAddressToBmob: " + address);
+        int defutAddress = Integer.parseInt(address.get(0));
+        //如果删除的位置在默认地址之前，则默认地址位置减1
+        if (defutAddress >= position && defutAddress != 0) {
+            address.set(0, defutAddress - 1 + "");
+            clickPosition = Integer.parseInt(defutAddress - 1 + "");
+        }
+        address.remove(t);  //移除此位置的数据-----后面的会往前移，移除三次
+        address.remove(t);
+        address.remove(t);
         String objectID = ((MyApplication) getApplication()).getObjectID();
-        List<String> firstAddress;
-        if (data.size() == 4)
-            data.remove(0);
-        address.removeAll(data);
+        Log.i("address删除剩余", position + "---s" + t + "removeAddressToBmob: " + address);
         User_Profile u = new User_Profile();
-        u.removeAll("User_Receive_Address", data);
+        u.setUser_Receive_Address(address);
         u.update(objectID, new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
                     Toast.makeText(SetAddressActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-                    mAddressList.remove(position);
+                    mAddressList.clear();
+                    if (address.size() != 1) {
+                        splitAddress();
+                    } else
+                        Toast.makeText(SetAddressActivity.this, "请设置收货地址", Toast.LENGTH_SHORT).show();
                     ((BaseAdapter) mLvAddressDetails.getAdapter()).notifyDataSetChanged();
                     Log.i("mAddressList", "done: " + mAddressList.size());
                     closeProgressDialog();
                 } else {
+                    address = tempAddress;
                     Toast.makeText(SetAddressActivity.this, "删除失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                     closeProgressDialog();
                     Log.i("删除失败", e.getMessage());
@@ -214,6 +245,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         });
     }
 
+    /**
+     * 拆分地址
+     */
     private void splitAddress() {
         ArrayList<String> splitAddress = new ArrayList<String>();
         for (int i = 0; i < address.size(); i++) {
@@ -227,6 +261,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         }
     }
 
+    private void refreshListViewAdapter(){
+
+    }
     private void showProgressDialog() {
         if (mPd == null) {
             mPd = new ProgressDialog(this);
@@ -243,9 +280,4 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("itemposition", "onItemClick: " + position + "----" + id);
-
-    }
 }

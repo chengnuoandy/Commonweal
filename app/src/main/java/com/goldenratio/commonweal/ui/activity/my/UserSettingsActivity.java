@@ -16,9 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.squareup.picasso.Picasso;
@@ -27,6 +30,7 @@ import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,7 +67,6 @@ public class UserSettingsActivity extends Activity {
 
     private int whichSex;
     private ProgressDialog mPd;
-
     private ImageConfig mImageConfig;
 
 
@@ -107,7 +110,6 @@ public class UserSettingsActivity extends Activity {
             // Get Image Path List
             List<String> pathList = data.getStringArrayListExtra(ImageSelectorActivity.EXTRA_RESULT);
             String pathString = pathList.get(0);
-
             Bitmap bitmap = null;
             try {
                 File file = new File(pathString);
@@ -123,7 +125,7 @@ public class UserSettingsActivity extends Activity {
         }
     }
 
-    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.rl_set_address})
+    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.civ_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.rl_set_address})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -133,6 +135,13 @@ public class UserSettingsActivity extends Activity {
             case R.id.rl_set_avatar:
                 imageSecectorConfig();
                 ImageSelector.open(UserSettingsActivity.this, mImageConfig);   // 开启图片选择器
+                break;
+            case R.id.civ_set_avatar:
+                Intent intent0 = new Intent(UserSettingsActivity.this, DynamicPhotoShow.class);
+                ArrayList<String> list = new ArrayList<String>();
+                list.add(avaUrl);
+                intent0.putStringArrayListExtra("list", list);
+                startActivity(intent0);
                 break;
             case R.id.rl_set_userName:
                 if (TextUtils.isEmpty(mTvUserName.getText())) {
@@ -254,6 +263,10 @@ public class UserSettingsActivity extends Activity {
             public void done(BmobException e) {
                 if (e == null) {
                     String avatarURL = bmobFile.getFileUrl();    //返回的上传文件的完整地址
+                    Glide.with(UserSettingsActivity.this)
+                            .load(avatarURL)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(mMinAvatar);
                     updateDataToBmob(avatarURL, 3, "User_Avatar");
                 } else {
                     Toast.makeText(UserSettingsActivity.this, "上传头像失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();

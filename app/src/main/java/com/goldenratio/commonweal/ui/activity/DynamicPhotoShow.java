@@ -21,8 +21,8 @@ public class DynamicPhotoShow extends Activity {
 
     private ViewPager mPager;
     private TextView mText;
+    private int index=0;
     private List<String> mList;
-    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class DynamicPhotoShow extends Activity {
         setContentView(R.layout.activity_dynamic_photo_show);
 
         Intent intent = getIntent();
-        index = intent.getIntExtra("index",0);
+        index = intent.getIntExtra("index", 0);
         mList = intent.getStringArrayListExtra("list");
 
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -65,7 +65,7 @@ public class DynamicPhotoShow extends Activity {
                     public void onClick(View v) {
                         finish();
                         //设置切换动画
-                        overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                 });
                 return view;

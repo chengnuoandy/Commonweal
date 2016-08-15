@@ -153,11 +153,11 @@ public class User_Profile extends BmobObject {
         User_IsV = user_IsV;
     }
 
-    public List getUser_Receive_Address() {
+    public List<String> getUser_Receive_Address() {
         return User_Receive_Address;
     }
 
-    public void setUser_Receive_Address(List user_Receive_Address) {
+    public void setUser_Receive_Address(List<String> user_Receive_Address) {
         User_Receive_Address = user_Receive_Address;
     }
 }

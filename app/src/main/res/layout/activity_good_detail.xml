@@ -107,8 +107,10 @@
         android:id="@+id/ll_good_detail_cv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/normal_space">
 
         <cn.iwgang.countdownview.CountdownView
             android:id="@+id/cv_five"

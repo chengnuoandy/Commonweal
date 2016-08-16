@@ -3,6 +3,7 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/white"
               android:orientation="vertical"
               android:padding="@dimen/normal_space">
 
@@ -13,8 +14,8 @@
 
         <ImageView
             android:id="@+id/iv_user_avatar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -22,21 +23,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_marginStart="@dimen/little_space"
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/little_space"
                 android:gravity="center"
                 android:text="昵称"
-                android:textSize="@dimen/text_size_big"
-                android:layout_marginLeft="@dimen/little_space"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="13sp"/>
 
             <TextView
-                android:layout_marginLeft="@dimen/little_space"
-                android:layout_marginStart="@dimen/little_space"
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/little_space"
+                android:layout_marginStart="@dimen/little_space"
                 android:text="发布时间"
                 android:textSize="@dimen/text_size_small"/>
         </LinearLayout>
@@ -49,15 +50,15 @@
         android:layout_height="wrap_content"
         android:drawablePadding="@dimen/little_space"
         android:gravity="center"
-        android:textSize="17sp"
-        android:text="内容"/>
+        android:text="内容"
+        android:textSize="15sp"/>
 
     <com.jaeger.ninegridimageview.NineGridImageView
-        android:id="@+id/iv_pic"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/iv_pic"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
-        android:layout_width="match_parent"
         app:imgGap="4dp"
         app:maxSize="9"
         app:showStyle="fill"
@@ -69,8 +70,9 @@
         android:layout_height="wrap_content"
         android:drawablePadding="@dimen/little_space"
         android:gravity="center"
-        android:textSize="12sp"
-        android:text="位置"/>
+        android:text="位置"
+        android:textSize="12sp"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -89,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:drawableLeft="@drawable/ic_thumb_up_black_24dp"
-            android:padding="5dp" />
+            android:padding="5dp"/>
 
 
         <TextView
@@ -97,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
-            android:padding="5dp" />
+            android:padding="5dp"/>
 
 
         <TextView
@@ -105,7 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_share_black_24dp"
-            android:padding="5dp" />
+            android:padding="5dp"/>
 
     </LinearLayout>
 </LinearLayout>

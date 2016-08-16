@@ -115,7 +115,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                     hideLinearLayout();
                 } else {
                     mLlNoNet.setVisibility(View.VISIBLE);
-                    Log.i("bmob", "下载失败：" + e.getMessage());
+                    Log.i("top", "查询失败：" + e.getMessage());
                     mListView.onRefreshComplete();
                 }
             }

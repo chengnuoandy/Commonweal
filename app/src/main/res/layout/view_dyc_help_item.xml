@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical"
+              android:padding="@dimen/normal_space">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_organization_avatar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:scaleType="fitXY"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_organization_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/little_space"
+                android:gravity="center"
+                android:text="昵称"
+                android:textColor="@color/colorPrimary"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/tv_release_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/little_space"
+                android:layout_marginTop="3dp"
+                android:text="发布时间"
+                android:textSize="11sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_dyc_help_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="内容"
+        android:lineSpacingExtra="2dp"
+        android:textColor="@color/commo_text_color"
+        android:textSize="14sp"/>
+
+    <com.jaeger.ninegridimageview.NineGridImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/iv_dyc_help_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        app:imgGap="4dp"
+        app:maxSize="9"
+        app:showStyle="fill"
+        app:singleImgSize="200dp"/>
+
+</LinearLayout>

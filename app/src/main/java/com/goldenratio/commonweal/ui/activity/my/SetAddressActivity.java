@@ -132,7 +132,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                                     mAddressList, SetAddressActivity.this));
                         else ((BaseAdapter) mLvAddressDetails.getAdapter()).notifyDataSetChanged();
                     } else
-                        Toast.makeText(SetAddressActivity.this, "未知错误，请重新设置地址", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SetAddressActivity.this, "请刷新地址界面", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

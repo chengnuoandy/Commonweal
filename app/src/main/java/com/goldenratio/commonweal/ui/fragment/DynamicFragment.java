@@ -74,10 +74,11 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         initTabLineWidth();
         mVpDynamic.setAdapter(new MyFragmentPagerAdapter(getFragmentManager(), mFragmentList));
         mVpDynamic.addOnPageChangeListener(this);
+        mVpDynamic.setOffscreenPageLimit(3);
         return view;
     }
 
-    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal,R.id.iv_add_dynamic})
+    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal, R.id.iv_add_dynamic})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_official:

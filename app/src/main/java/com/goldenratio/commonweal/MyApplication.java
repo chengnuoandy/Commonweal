@@ -1,6 +1,9 @@
 package com.goldenratio.commonweal;
 
 import android.app.Application;
+import android.database.Cursor;
+
+import com.goldenratio.commonweal.dao.UserDao;
 
 import org.xutils.x;
 
@@ -35,5 +38,24 @@ public class MyApplication extends Application {
 
     public void setDynamicRefresh(boolean dynamicRefresh) {
         DynamicRefresh = dynamicRefresh;
+    }
+
+    /**
+     * 判断本地用户表是否存在
+     *
+     * @return
+     */
+    private boolean isUserTableExist() {
+        boolean isTableExist = true;
+        String sqlCmd = "SELECT count(User_Avatar) FROM User_Profile ";
+        UserDao ud = new UserDao(this);
+        Cursor c = ud.query(sqlCmd);
+        if (c.moveToNext()) {
+            if (c.getInt(0) == 0) {
+                isTableExist = false;
+            }
+        }
+        c.close();
+        return isTableExist;
     }
 }

@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
-
-import com.goldenratio.commonweal.ui.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +25,7 @@ public class NetworkReceiver extends BroadcastReceiver {
      * NET_WIFI：wifi
      * NET_UNKNOWN：未知网络
      */
-    public static enum NetState {
+    public enum NetState {
         NET_NO, NET_2G, NET_3G, NET_4G, NET_WIFI, NET_UNKNOWN
     }
 

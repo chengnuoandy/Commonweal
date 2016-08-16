@@ -80,7 +80,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         //初始化Bmob
         Bmob.initialize(MainActivity.this, "727a409235aab18ae7b1e1f3933c9a64");
         // 使用推送服务时的初始化操作
-        BmobInstallation.getCurrentInstallation().save();
+        BmobInstallation.getCurrentInstallation().save1();
         // 启动推送服务
         BmobPush.startWork(this);
         BP.init(MainActivity.this,"727a409235aab18ae7b1e1f3933c9a64");

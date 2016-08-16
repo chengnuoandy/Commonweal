@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -48,6 +49,12 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by 龙啸天 on 2016/6/20 0020.
@@ -471,9 +478,7 @@ public class RegisterActivity extends Activity {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-                    Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
-                    closeProgressDialog();
-                    returnUInfoToMyFra();
+                    saveUser2Mysql(s);
                 } else {
                     mBtnRegister.setClickable(true);
                     closeProgressDialog();
@@ -639,4 +644,46 @@ public class RegisterActivity extends Activity {
     }
 
 
+    private void saveUser2Mysql(String objectId) {
+        String url = "http://123.206.89.67/WebService1.asmx/AddNewUser";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("Object_Id", objectId)
+                .build();
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, final IOException e) {
+                final String e1 = e.getMessage();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(RegisterActivity.this, e1, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.contains("success")) {
+                            Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                            closeProgressDialog();
+                            returnUInfoToMyFra();
+                        } else {
+                            Log.d("Kiuber_LOG", "fail: " + result);
+                        }
+                    }
+                });
+            }
+        });
+    }
 }

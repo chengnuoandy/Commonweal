@@ -1,5 +1,7 @@
 package com.goldenratio.commonweal.ui.fragment;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,10 +17,18 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.ui.activity.GoodActivity;
+import com.goldenratio.commonweal.bean.MySqlGood;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
@@ -38,6 +48,8 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     private PullToRefreshListView mListView;
     private LinearLayout mLlNoNet;
     private TextView mTvNowPrice;
+    private List<MySqlGood> mySqlGoods = new ArrayList<>();
+    private ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,7 +57,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         view = inflater.inflate(R.layout.fragment_good, null);
 
         initView();
-        initData();
+        findDataFromMySql();
         ifTime();
         return view;
     }
@@ -54,7 +66,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     /**
      * 初始化数据
      */
-    private void initData() {
+    private void findDataFromBmob() {
         BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
         goodBmobQuery.order("-createdAt");
         goodBmobQuery.include("Good_User");
@@ -62,7 +74,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             @Override
             public void done(List<Good> list, BmobException e) {
                 if (e == null) {
-                    myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
+                    myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), mySqlGoods, list);
                     mListView.setAdapter(myGoodListViewAdapter);
                     mListView.onRefreshComplete();
                     mGoodList = list;
@@ -74,7 +86,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             }
 
         });
-
     }
 
     /**
@@ -86,13 +97,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         mLlNoNet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initData();
-            }
-        });
-        view.findViewById(R.id.iv_add_good).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), GoodActivity.class));
+                findDataFromBmob();
             }
         });
         mListView = (PullToRefreshListView) view.findViewById(R.id.lv_good_all);
@@ -102,7 +107,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             public void onRefresh() {
                 //初始化数据
                 mGoodList.clear();
-                initData();
+                findDataFromMySql();
             }
 
             @Override
@@ -147,6 +152,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
                     intent.putExtra("EndTime", TimeLeft);
                     intent.putExtras(bundle);
                     startActivity(intent);
+                    progressDialog.dismiss();
                 } else {
                     Log.d("lxc", "获取服务器时间失败:" + e.getMessage());
                     Toast.makeText(getContext(), "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
@@ -161,12 +167,14 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        progressDialog = ProgressDialog.show(getContext(), null, "正在安全获取", true, false);
+
         //获取当前条目的截止时间
         endTime = mGoodList.get(position - 1).getGood_UpDateM();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("Good", mGoodList.get(position - 1));
+        bundle.putSerializable("Bmob_Good", mGoodList.get(position - 1));
+        bundle.putSerializable("Mysql_Good", mySqlGoods.get(0));
         StartAct(bundle);
-
         Object itemAtPosition = parent.getItemAtPosition(position);
         Log.d(TAG, "onItemClick: " + itemAtPosition);
     }
@@ -202,5 +210,46 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         if (mLlNoNet.getVisibility() == View.VISIBLE) {
             mLlNoNet.setVisibility(View.GONE);
         }
+    }
+
+    private void findDataFromMySql() {
+        RequestParams requestParams = new RequestParams("http://123.206.89.67/WebService1.asmx/GetAllGood");
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                MySqlGood mySqlGood = new MySqlGood();
+                Log.d("Kiuber_LOG", "onSuccess: " + result);
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        mySqlGood.setObject_Id(jsonObject.getString("Object_Id"));
+                        mySqlGood.setStart_Time(jsonObject.getString("Start_Time"));
+                        mySqlGood.setEnd_Time(jsonObject.getString("End_Time"));
+                        mySqlGood.setGood_Status(jsonObject.getString("Good_Status"));
+                        mySqlGoods.add(i, mySqlGood);
+                    }
+                    findDataFromBmob();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Toast.makeText(x.app(), "cancelled", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

@@ -29,6 +29,13 @@ import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -142,7 +149,6 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         Log.d(TAG, "testDate: now time--->" + str);
         mGood.setGood_UpDate(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", str));
         mGood.setGood_UpDateM(date);
-        mGood.setGood_ID(5);
         mGood.setGood_Name("张杰");
         mGood.save(new SaveListener<String>() {
             @Override
@@ -227,6 +233,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
     private void saveGoodInfo2Bmob() {
 
         long[] mLgTimes = {21600000, 32400000, 43200000, 64800000, 86400000};
+        int[] hours = {6, 9, 12, 18, 24};
         final String mStrName = mEtName.getText().toString();
         final String mStrDescription = mEtName.getText().toString();
         final long mLgTime = mLgTimes[mSrTime.getSelectedItemPosition()] + System.currentTimeMillis();
@@ -247,13 +254,16 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
             for (int i = 0; i < pathList.size(); i++) {
                 filePaths[i] = pathList.get(i).toString();
             }
-
-            doInBackground(filePaths, mStrName, mStrDescription, mLgTime);
-            finish();
+            if (mStrObjectId == null) {
+                Toast.makeText(this, "账号信息获取失败，请登录", Toast.LENGTH_SHORT).show();
+            } else {
+                doInBackground(filePaths, mStrName, mStrDescription, mLgTime, hours[mSrTime.getSelectedItemPosition()]);
+                finish();
+            }
         }
     }
 
-    private void doInBackground(final String[] filePaths, final String mStrName, final String mStrDescription, final long mLgTime) {
+    private void doInBackground(final String[] filePaths, final String mStrName, final String mStrDescription, final long mLgTime, final int hours) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -270,8 +280,8 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                             good.setGood_Description(mStrDescription);
                             good.setGood_Photos(list1);
                             good.setGood_Type(mStrType);
-                            good.setGood_StartCoin(Integer.parseInt(price));
-                            good.setGood_NowCoin(Integer.parseInt(price));
+                            good.setGood_StartCoin(price);
+                            good.setGood_NowCoin(price);
                             good.setGood_DonationRate(Integer.parseInt(prop));
                             good.setGood_UpDateM(mLgTime);
                             good.setGood_Status(true);
@@ -280,11 +290,11 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                                 @Override
                                 public void done(String s, BmobException e) {
                                     if (e == null) {
-                                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                        vibrator.vibrate(500);
-                                        Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                                    } else
-                                        Toast.makeText(GoodActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+
+                                        createAEvent(s, hours);
+                                    } else {
+                                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                                    }
                                 }
 
                             });
@@ -303,5 +313,38 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                 });
             }
         }).start();
+    }
+
+    private void createAEvent(String objectId, int hours) {
+        RequestParams requestParams = new RequestParams("http://123.206.89.67/WebService1.asmx/CreateAEvent");
+        requestParams.addBodyParameter("ObjectId", objectId);
+        requestParams.addBodyParameter("AfterHouer", String.valueOf(hours));
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                if (result.equals("success")) {
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(500);
+                    Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(GoodActivity.this, result, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+                Toast.makeText(x.app(), "cancelled", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

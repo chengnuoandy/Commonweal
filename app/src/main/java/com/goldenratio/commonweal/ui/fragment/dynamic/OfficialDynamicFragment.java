@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.ui.fragment.dynamic;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by 龙啸天 - 龙啸天 on 2016/6/21 0021.
@@ -75,6 +78,7 @@ public class OfficialDynamicFragment extends Fragment implements BGARefreshLayou
                 } else {
                     mBGARefreshLayout.endRefreshing();
                     Toast.makeText(getActivity(), "获取数据失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "done: " + e.getMessage() + "~~" + e.getErrorCode());
                 }
             }
         });

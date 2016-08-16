@@ -30,10 +30,10 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="bottom"
         android:orientation="vertical">
 
         <EditText
@@ -157,7 +157,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="微博登陆" />
+                android:text="推荐名人使用微博登陆"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

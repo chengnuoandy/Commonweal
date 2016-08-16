@@ -137,15 +137,6 @@
             android:drawableLeft="@drawable/ic_thumb_up_black_24dp"
             android:padding="5dp" />
 
-
-        <TextView
-            android:id="@+id/tv_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
-            android:padding="5dp" />
-
-
         <TextView
             android:id="@+id/tv_share"
             android:layout_width="wrap_content"

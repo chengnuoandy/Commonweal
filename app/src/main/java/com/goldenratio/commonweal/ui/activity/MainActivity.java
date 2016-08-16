@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import c.b.BP;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
@@ -82,6 +83,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         BmobInstallation.getCurrentInstallation().save();
         // 启动推送服务
         BmobPush.startWork(this);
+        BP.init(MainActivity.this,"727a409235aab18ae7b1e1f3933c9a64");
+
         mFragmentList = new ArrayList<Fragment>();
 
         mFragmentList.add(new HelpFragment());

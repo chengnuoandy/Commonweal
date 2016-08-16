@@ -239,7 +239,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             bmobQuery.findObjects(new FindListener<User_Profile>() {
                 @Override
                 public void done(List<User_Profile> list, BmobException e) {
-                    if (e == null){
+                    if (e == null) {
                         //判断查询到的行数
                         if (list.size() == 1) {
                             User_Profile mUser = list.get(0);
@@ -258,7 +258,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                             Completed();
                             Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                         }
-                    }else {
+                    } else {
                         //查询失败
                         Completed();
                         Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
@@ -280,7 +280,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         bmobQuery.findObjects(new FindListener<User_Profile>() {
             @Override
             public void done(List<User_Profile> list, BmobException e) {
-                if (e == null){
+                if (e == null) {
                     //判断查询到的行数
                     if (list.size() == 1) {
                         //如果此用户已存在，获得数据的objectId信息
@@ -294,7 +294,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                             new myAsyncTask(upUser).execute(upUser.profile_image_url);
                         }
                     }
-                }else {
+                } else {
                     //查询失败
                     Completed();
                     Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
@@ -490,16 +490,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             user.save(new SaveListener<String>() {
                 @Override
                 public void done(String s, BmobException e) {
-                    if (e == null){
-                        if (TextUtils.isEmpty(s)){
+                    if (e == null) {
+                        if (TextUtils.isEmpty(s)) {
                             Toast.makeText(LoginActivity.this, "提交数据失败", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             userID = s;
                             Toast.makeText(LoginActivity.this, "成功提交数据", Toast.LENGTH_SHORT).show();
                             returnData();
                             saveDB(user);
                         }
-                    }else {
+                    } else {
                         Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -520,9 +520,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      */
     private void saveDB(User_Profile user) {
         UserDao mUserDao = new UserDao(LoginActivity.this);
-        mUserDao.execSQL("insert into User_Profile (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
-                        ",User_Address,User_sex,User_image_min,User_image_max) values(?,?,?,?,?,?,?,?,?)",
-                new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
+        mUserDao.execSQL("insert into User_Profile (objectId,User_Name,User_Password,User_Autograph,User_Avatar,User_Nickname" +
+                        ",User_Address,User_sex,User_image_min,User_image_max) values(?,?,?,?,?,?,?,?,?,?)",
+                new String[]{userID, user.getUser_Name(), user.getUser_Password(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
                         user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max()});
         Completed();
         finish();

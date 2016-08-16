@@ -27,6 +27,16 @@ public class Help extends BmobObject {
     private String Help_Url; //项目全部信息
     private String Help_Result; //项目结果
 
+    private Help_Initiator InitiatorInfo; //发起方详细信息
+
+    public com.goldenratio.commonweal.bean.Help_Initiator getInitiatorInfo() {
+        return InitiatorInfo;
+    }
+
+    public void setInitiatorInfo(com.goldenratio.commonweal.bean.Help_Initiator initiatorInfo) {
+        InitiatorInfo = initiatorInfo;
+    }
+
     public String getHelp_Execute() {
         return Help_Execute;
     }

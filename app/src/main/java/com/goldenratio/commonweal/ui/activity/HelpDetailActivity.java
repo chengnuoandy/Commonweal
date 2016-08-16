@@ -111,7 +111,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 //        mBten = (Button) findViewById(R.id.btn_speak);
         mLvSpeak = (ListView) findViewById(R.id.lv_helpspeak);
 
-
+        mTvInitiator.setOnClickListener(this);
         findViewById(R.id.iv_share).setOnClickListener(this);
         findViewById(R.id.iv_comment).setOnClickListener(this);
         findViewById(R.id.tv_donate).setOnClickListener(this);
@@ -163,6 +163,11 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
                     InputMethodManager inputmanger = (InputMethodManager) getSystemService(HelpDetailActivity.INPUT_METHOD_SERVICE);
                     inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+                break;
+            case R.id.tv_initiator:
+                Intent intent = new Intent(this,HelpInitiatorDetailActivity.class);
+                intent.putExtra("name",mHelp.getHelp_Initiator());
+                startActivity(intent);
                 break;
         }
     }

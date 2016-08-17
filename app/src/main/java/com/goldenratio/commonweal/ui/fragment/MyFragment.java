@@ -65,7 +65,6 @@ public class MyFragment extends Fragment {
         if (isUserTableExist()) {
             getUserData();
             isLogin = true;
-            ((MyApplication) getActivity().getApplication()).setObjectID(mUserID);
         }
 
         mTextView = (TextView) view.findViewById(R.id.ceshi);
@@ -130,6 +129,7 @@ public class MyFragment extends Fragment {
                     mUserID = data.getStringExtra("objectId");
                     isLogin = true;
                     getUserData();
+                    ((MyApplication) getActivity().getApplication()).setObjectID(mUserID);
                     Log.i("lxc", "onActivityResult: " + mUserID);
                 }
                 break;

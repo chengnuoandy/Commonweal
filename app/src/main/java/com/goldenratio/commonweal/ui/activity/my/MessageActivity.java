@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -54,6 +55,8 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
 
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.cancel(1);
         mFragmentList = new ArrayList<Fragment>();
         mFragmentList.add(new MessageDynamicFragment());
         mFragmentList.add(new PrivateLetterFragment());
@@ -63,7 +66,10 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         initTabLineWidth();
         mVpMessage.setAdapter(mFragmentPagerAdapter);
         mVpMessage.addOnPageChangeListener(this);
-
+        String d = getIntent().getStringExtra("dyc");
+        if (d != null && d.equals("p"))
+            mVpMessage.setCurrentItem(1);
+        Log.i("message", "onCreate: " + getIntent().getStringExtra("dyc"));
     }
 
     @OnClick({R.id.tv_dynamicMessage, R.id.tv_privateLetter})
@@ -111,7 +117,7 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         } else if (currentIndex == 1 && position == 0) // 1->0
         {
             mLp.leftMargin = (int) (-(1 - positionOffset) * (screenWidth * 1.0 / 2) + currentIndex
-                    * (screenWidth / 2) + (screenWidth / 6) );
+                    * (screenWidth / 2) + (screenWidth / 6));
             Log.i("由1---0", mLp.leftMargin + "");
 
         }

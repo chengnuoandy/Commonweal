@@ -83,7 +83,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         BmobInstallation.getCurrentInstallation().save1();
         // 启动推送服务
         BmobPush.startWork(this);
-        BP.init(MainActivity.this,"727a409235aab18ae7b1e1f3933c9a64");
+        BP.init(MainActivity.this, "727a409235aab18ae7b1e1f3933c9a64");
 
         mFragmentList = new ArrayList<Fragment>();
 
@@ -173,6 +173,13 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         return super.onKeyDown(keyCode, event);
     }
 
+
+    /*  String installationId = "客户端installationId";  //在用户表-->User_DeviceInfo
+      BmobPushManager bmobPush = new BmobPushManager(this);
+      BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
+      query.addWhereEqualTo("installationId", installationId);
+      bmobPush.setQuery(query);
+      bmobPush.pushMessage("消息内容");*/
 
     @Override
     protected void onDestroy() {

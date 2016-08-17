@@ -1,11 +1,13 @@
 package com.goldenratio.commonweal.receiver;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.goldenratio.commonweal.ui.activity.GoodActivity;
+import com.goldenratio.commonweal.ui.activity.MainActivity;
+import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -61,11 +63,27 @@ public class MiBroadcastReceiver extends com.xiaomi.mipush.sdk.PushMessageReceiv
         } else if(!TextUtils.isEmpty(message.getUserAccount())) {
             mUserAccount=message.getUserAccount();
         }
-        //以下为暂时测试方法
+
+        /**
+         * 以下为暂时测试方法
+         * 发送的数据格式： 指令-数据
+         * 不输入指令或者格式错误等异常状态直接启动默认界面MainActivity
+         */
         Log.d("lxc", "onNotificationMessageClicked: " + mMessage);
-        Intent intent = new Intent(context, GoodActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        try {
+            String[] sPushData = mMessage.split("-");
+            Intent intent1 = new Intent(context, (sPushData[0].equals("p") || sPushData[0].equals("d")) ?
+                    MessageActivity.class : MainActivity.class);
+            intent1.putExtra("midata", sPushData[1]);
+            Log.d("lxc", "onNotificationMessageClicked: " + sPushData[0] + ":" + sPushData[1]);
+            PendingIntent pi = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            pi.send();
+        } catch (Exception e) {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            e.printStackTrace();
+        }
     }
 
     /**

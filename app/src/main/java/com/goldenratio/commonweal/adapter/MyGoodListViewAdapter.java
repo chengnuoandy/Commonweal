@@ -21,7 +21,6 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlGood;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -214,9 +213,9 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             if (mySqlGoods.size() != 0) {
                 String mStr = mySqlGoods.get(position).getGood_Status();
 //                Toast.makeText(mContext, position + mStr, Toast.LENGTH_SHORT).show();
-                if (Objects.equals(mStr, "1")) {
+                if (mStr.equals("1")) {
                     mTvGoodStatus.setText("正在进行");
-                } else if (Objects.equals(mStr, "0")) {
+                } else if (mStr.equals("0")) {
                     mTvGoodStatus.setText("已经结束");
                     mTvGoodStatus.setTextColor(Color.RED);
                 } else {

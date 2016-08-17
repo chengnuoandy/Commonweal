@@ -39,6 +39,10 @@ public class MyApplication extends Application {
         //初始化xUtils
         x.Ext.init(this);
 
+        if (isUserTableExist()) {
+            getUserData();
+        } else ObjectID = "";
+
         //初始化push推送服务
         if(shouldInit()) {
             MiPushClient.registerPush(this, APP_ID, APP_KEY);
@@ -97,6 +101,15 @@ public class MyApplication extends Application {
         }
         c.close();
         return isTableExist;
+    }
+
+    private void getUserData() {
+        String sqlCmd = "SELECT objectId FROM User_Profile ";
+        UserDao ud = new UserDao(this);
+        Cursor cursor = ud.query(sqlCmd);
+        if (cursor.moveToFirst()) {
+            ObjectID = cursor.getString(cursor.getColumnIndex("objectId"));
+        }
     }
 
     /**

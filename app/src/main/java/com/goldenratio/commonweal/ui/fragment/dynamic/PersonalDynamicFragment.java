@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.fragment.dynamic;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyDynamicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
@@ -36,8 +34,12 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
     private List<Dynamic> mDynamicList;
     private ListView mListView;
     private BGARefreshLayout mBGARefreshLayout;
-    private int mMAXItem = 3;
-    private List<Dynamic> mListPiece = new ArrayList<>();
+    //最大加载数
+    private int mMAXItem = 8;
+    //记录当前加载到第几页
+    private int count;
+    //数据是否加载完毕
+    private boolean dataDone = true;
 
     @Nullable
     @Override
@@ -57,16 +59,16 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
         mBGARefreshLayout.beginRefreshing();
         BmobQuery<Dynamic> data = new BmobQuery<>();
         data.order("-createdAt");
+        //限制返回的数据量
+        data.setLimit(mMAXItem);
         data.include("Dynamics_user");
         data.findObjects(new FindListener<Dynamic>() {
             @Override
             public void done(List<Dynamic> list, BmobException e) {
                 if (e == null) {
                     mDynamicList = list;
-                    for (int i = 0; i < mMAXItem; i++) {
-                        mListPiece.add(list.get(i));
-                    }
-                    mListView.setAdapter(new MyDynamicAdapter(getActivity(), mListPiece));
+                    mListView.setAdapter(new MyDynamicAdapter(getActivity(), list));
+                    count++;
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
                 } else {
@@ -123,47 +125,43 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
      * @param refreshLayout 刷新布局控件
      * @return true:显示正在刷新  false:不显示刷新
      *
-     * 现在逻辑：一次从数据库加载所有数据，分段向listview添加数据 (适合少量数据)
-     * 待改进方法：一次从服务器查少量数据，数据加载完毕再doInBackground里继续查剩余的 （适合大数据）
+     * 原来的方法(看历史推送)：一次从数据库加载所有数据，分段向listview添加数据 (适合少量数据)
+     * 现在方法(改进)：一次从服务器查少量数据，数据加载完毕再doInBackground里继续查剩余的 （适合大数据）
      */
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
 
-        final int sum = mListView.getAdapter().getCount();
-        //判断适配器中的数据是否已是全部数据
-        if (sum >= mDynamicList.size()) {
-            Toast.makeText(getContext(), "数据已经加载完毕！", Toast.LENGTH_SHORT).show();
+        if (!dataDone){
+            Toast.makeText(getContext(), "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
             return false;
         }
-        new AsyncTask<Void, Void, Void>() {
-
+        //查询后面的数据
+        BmobQuery<Dynamic> data = new BmobQuery<>();
+        data.order("-createdAt");
+        //限制返回的数据量
+        data.setLimit(mMAXItem);
+        data.setSkip(mMAXItem * count);
+        data.include("Dynamics_user");
+        data.findObjects(new FindListener<Dynamic>() {
             @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                // 加载完毕后在UI线程结束加载更多
-                mBGARefreshLayout.endLoadingMore();
-                //添加数据
-                if ((sum + mMAXItem) < mDynamicList.size()) {
-                    for (int i = 0; i < mMAXItem; i++) {
-                        mListPiece.add(mDynamicList.get(i + sum));
+            public void done(List<Dynamic> list, BmobException e) {
+                if (e == null) {
+                    //如果数据已经不足，设置上拉加载标志位
+                    if (list.size() < mMAXItem){
+                        Toast.makeText(getContext(), "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
+                        dataDone = false;
+                    }
+                    //追加数据
+                    for (int i = 0; i < list.size(); i++) {
+                        mDynamicList.add(list.get(i));
+                        // 加载完毕后在UI线程结束加载更多
+                        mBGARefreshLayout.endLoadingMore();
                     }
                 } else {
-                    //数据已经不足
-                    for (int i = sum; i < mDynamicList.size(); i++) {
-                        mListPiece.add(mDynamicList.get(i));
-                    }
+                    Toast.makeText(getContext(), "刷新失败！" + e, Toast.LENGTH_SHORT).show();
                 }
             }
-        }.execute();
+        });
 
         return true;
     }

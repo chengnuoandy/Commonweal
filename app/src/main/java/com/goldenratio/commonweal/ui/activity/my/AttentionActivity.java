@@ -1,11 +1,11 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.goldenratio.commonweal.R;
 
-public class AttentionActivity extends AppCompatActivity {
+public class AttentionActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

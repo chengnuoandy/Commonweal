@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Bid;
 import com.goldenratio.commonweal.bean.Deposit;
@@ -34,6 +36,11 @@ import com.goldenratio.commonweal.bean.MySqlGood;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.MD5Util;
+import com.goldenratio.commonweal.widget.PopEnterPassword;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -85,6 +92,9 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private GoodDetailActivity mContext;
     private Deposit mDeposit = null;
     private String mStrPwd;
+    private String mStrGoodCoin;
+    private String mStrUserCoin;
+    private String orderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,13 +154,13 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvGoodDescription.setText(mGood.getGood_Description());
         mTvStartCoin.setText(mGood.getGood_StartCoin());
         mTvNowCoin.setText(mGood.getGood_NowCoin());
-        // TODO 保证金的支付！
         picSize = mGood.getGood_Photos().size();
         if (picSize == 1) {
             Glide.with(this).load(mGood.getGood_Photos().get(0)).into(mIvOnePic);
         } else {
             mGvPic.setAdapter(new mAdapter());
         }
+        mStrGoodCoin = (Long.parseLong(mGood.getGood_StartCoin()) * 0.3) + "";
     }
 
     /**
@@ -209,11 +219,12 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.tv_deposit:
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
-                builder.setMessage("您将支付0.01保证金，是否继续？");
+                builder.setMessage("您将支付" + mStrGoodCoin + "保证金，是否继续？");
                 builder.setPositiveButton("继续", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        pwdConfirm();
+                        //pwdConfirm();
+                        queryUserCoinByObjectId();
                     }
                 });
                 builder.setNegativeButton("取消", null);
@@ -493,7 +504,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                         mTvDeposit.setVisibility(View.GONE);
                         mTvBid.setVisibility(View.VISIBLE);
                     } else if (listSize == 0) {
-                        Toast.makeText(mContext, "未支付保证金", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mContext, "未支付保证金", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, "未知状态", Toast.LENGTH_SHORT).show();
                         mTvDeposit.setVisibility(View.GONE);
@@ -506,11 +517,10 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         });
     }
 
-    private void pay(final boolean alipayOrWechatPay, double price, final ProgressDialog progressDialog) {
+    private void pay(final boolean alipayOrWechatPay, final double price, final ProgressDialog progressDialog) {
 
         BP.pay("名称", "描述", price, alipayOrWechatPay, new PListener() {
 
-            private String order;
 
             // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
             @Override
@@ -523,34 +533,14 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             // 支付成功,如果金额较大请手动查询确认
             @Override
             public void succeed() {
-                User_Profile user_profile = new User_Profile();
-                user_profile.setObjectId(mStrObjectId);
-
-                Deposit deposit = new Deposit();
-                deposit.setD_User(user_profile);
-                deposit.setD_GoodId(mGood.getObjectId());
-                deposit.setD_Coin("0.01");
-                deposit.setOrderId(order);
-                deposit.save(new SaveListener<String>() {
-                    @Override
-                    public void done(String s, BmobException e) {
-                        if (e == null) {
-                            Toast.makeText(mContext, "保证金收取成功", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                            finish();
-                            startActivity(getIntent());
-                        } else {
-                            Toast.makeText(mContext, "保证金支付失败", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        }
-                    }
-                });
+                Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
+                updateUserCoin(Double.valueOf(mStrGoodCoin) + price);
             }
 
             // 无论成功与否,返回订单号
             @Override
-            public void orderId(String orderId) {
-                order = orderId;
+            public void orderId(String orderI) {
+                orderId = orderI;
                 // 此处应该保存订单号,比如保存进数据库等,以便以后查询
                 progressDialog.dismiss();
             }
@@ -576,6 +566,50 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         });
     }
 
+    private void updateUserCoin(double sumCoin) {
+        Toast.makeText(mContext, sumCoin + "", Toast.LENGTH_SHORT).show();
+        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "正在加载", false);
+        String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        final String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
+        if (mStrObjectId != null) {
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", mStrObjectId)
+                    .add("UserCoin", sumCoin + "")
+                    .build();
+            Log.d("Kiuber_LOG", "updateUserCoin: " + mStrObjectId + "-->" + sumCoin);
+
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(GoodDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showPayKeyBoard(mStrGoodCoin, progressDialog, 0);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
     void installBmobPayPlugin(String fileName) {
         try {
             InputStream is = getAssets().open(fileName);
@@ -600,6 +634,87 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void showPayKeyBoard(String order_coin, ProgressDialog progressDialog, int flag) {
+        progressDialog.dismiss();
+        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "支付保证金", order_coin, flag,mGood.getObjectId(),orderId);
+
+        // 显示窗口
+        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+    }
+
+    private void queryUserCoinByObjectId() {
+        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "正在加载", false);
+        String url = "http://123.206.89.67/WebService1.asmx/QueryUserCoinByObjectId";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
+        if (mStrObjectId != null) {
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", mStrObjectId)
+                    .build();
+
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(GoodDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            JSONArray jsonArray = null;
+                            try {
+                                jsonArray = new JSONArray(result);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    mStrUserCoin = jsonObject.getString("User_Coin");
+                                }
+                                mStrGoodCoin = (Long.parseLong(mGood.getGood_StartCoin()) * 0.3) + "";
+                                final double poor = Double.valueOf(mStrGoodCoin) - Double.valueOf(mStrUserCoin);
+                                if (poor > 0) {
+                                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(GoodDetailActivity.this);
+                                    builder.setMessage("账号公益币不足，是否立即充值？");
+                                    builder.setPositiveButton("去充值", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            pay(false, poor, progressDialog);
+                                        }
+                                    });
+                                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            progressDialog.dismiss();
+                                        }
+                                    });
+                                    builder.show();
+                                } else {
+                                    showPayKeyBoard(mStrGoodCoin, progressDialog, 0);
+                                }
+                            } catch (JSONException e) {
+                                Log.d("Kiuber_LOG", e.getMessage() + request);
+                            }
+                        }
+                    });
+                }
+            });
         }
     }
 }

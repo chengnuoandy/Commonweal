@@ -71,12 +71,14 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+
         NetworkReceiver.ehList.add(this);
         //检测网络状态
         new NetworkReceiver().onReceive(getApplicationContext(), null);
 
         String libName = "bmob"; // 库名, 注意没有前缀lib和后缀.so
         System.loadLibrary(libName);
+
 
         //初始化Bmob
         Bmob.initialize(MainActivity.this, "727a409235aab18ae7b1e1f3933c9a64");
@@ -89,6 +91,25 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         BmobUpdateAgent.update(this);
 
         mFragmentList = new ArrayList<Fragment>();
+
+
+/*
+
+        Dynamic_Official dyc = new Dynamic_Official();
+        dyc.setDyc_Image("http://img0.imgtn.bdimg.com/it/u=1428667673,1929297421&fm=21&gp=0.jpg");
+        dyc.setDyc_Content("杀一个程序员不需要用枪，改三次需求就可以了。");
+        dyc.setDyc_Title("GoldenRatio总部发来的贺电");
+        List<String> list = new ArrayList<>();
+        list.add("http://img1.mydrivers.com/img/20150329/06e8f6b985744b43a53aa052dbbaf31f.jpg");
+        list.add("http://img1.mydrivers.com/img/20150329/6b5d5710d39d467583db6f2309fd434b.jpg");
+        dyc.setDyc_Pic(list);
+        dyc.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                Toast.makeText(MainActivity.this, "official成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+*/
 
         mFragmentList.add(new HelpFragment());
         mFragmentList.add(new GoodFragment());
@@ -183,6 +204,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
       query.addWhereEqualTo("installationId", installationId);
       bmobPush.setQuery(query);
       bmobPush.pushMessage("消息内容");*/
+
 
     @Override
     protected void onDestroy() {

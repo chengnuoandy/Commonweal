@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.fragment;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -173,7 +172,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         endTime = mGoodList.get(position - 1).getGood_UpDateM();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Bmob_Good", mGoodList.get(position - 1));
-        bundle.putSerializable("Mysql_Good", mySqlGoods.get(0));
+        bundle.putSerializable("Mysql_Good", mySqlGoods.get(position - 1));
         StartAct(bundle);
         Object itemAtPosition = parent.getItemAtPosition(position);
         Log.d(TAG, "onItemClick: " + itemAtPosition);

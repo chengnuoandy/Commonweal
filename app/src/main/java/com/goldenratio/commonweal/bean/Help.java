@@ -1,5 +1,7 @@
 package com.goldenratio.commonweal.bean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
 
@@ -7,7 +9,7 @@ import cn.bmob.v3.datatype.BmobDate;
  * Created by CharmNight on 2016/6/10.
  */
 
-public class Help extends BmobObject {
+public class Help extends BmobObject implements Serializable{
 
     private String Help_Type; // 项目类型
     private String Help_Coin;//项目申请金额

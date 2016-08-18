@@ -37,14 +37,39 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     private List<Help_Top> mList;
     private View mHeaderView;
     private LinearLayout mLlNoNet;
+    private List<Help> mHelpLlist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = initView();
-        initData();
+        initData4Sp();
         mListView.setOnItemClickListener(this);
         return view;
+    }
+
+    /**
+     * 从intent获取预加载的数据
+     * 当数据不完整时，重新进行获取
+     */
+    private void initData4Sp() {
+        Intent intent = getActivity().getIntent();
+        mHelpLlist = (List<Help>) intent.getSerializableExtra("help");
+        mList = (List<Help_Top>) intent.getSerializableExtra("top");
+        if (mHelpLlist != null){
+            mListView.setAdapter(new HelpListViewAdapter(getContext(), mHelpLlist));
+        }else {
+            initData(1);
+        }
+        if (mList != null){
+            mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
+            mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), mList));
+            indicator.setViewPager(mViewPager);
+            indicator.setSnap(true);
+            topSliding();
+        }else {
+            initData(2);
+        }
     }
 
     private View initView() {
@@ -63,7 +88,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                initData();
+                initData(0);
             }
 
             @Override
@@ -73,54 +98,62 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         return view;
     }
 
-    private List<Help> mHelpLlist;
-
-    public void initData() {
-        BmobQuery<Help> bmobQuery = new BmobQuery<>();
-        bmobQuery.order("-createdAt");
-        bmobQuery.findObjects(new FindListener<Help>() {
-            @Override
-            public void done(List<Help> list, BmobException e) {
-                if (e == null) {
-                    mHelpLlist = list;
+    /**
+     * 初始化数据
+     * @param flag 标志位  0-全部加载  1-加载项目  2-加载轮播数据
+     */
+    public void initData(int flag) {
+        if (flag == 1 || flag == 0){
+            BmobQuery<Help> bmobQuery = new BmobQuery<>();
+            bmobQuery.order("-createdAt");
+            bmobQuery.findObjects(new FindListener<Help>() {
+                @Override
+                public void done(List<Help> list, BmobException e) {
+                    if (e == null) {
+                        mHelpLlist = list;
 //
 //                mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
 //                mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(),list));
 //                indicator.setViewPager(mViewPager);
 //                indicator.setSnap(true);
 
-                    mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
-                    mListView.onRefreshComplete();
-                    hideLinearLayout();
-                } else {
-                    mLlNoNet.setVisibility(View.VISIBLE);
-                    Log.i("bmob", "下载失败：" + e.getMessage());
-                    mListView.onRefreshComplete();
+                        mListView.setAdapter(new HelpListViewAdapter(getContext(), list));
+                        mListView.onRefreshComplete();
+                        hideLinearLayout();
+                    } else {
+                        mLlNoNet.setVisibility(View.VISIBLE);
+                        Log.i("bmob", "下载失败：" + e.getMessage());
+                        mListView.onRefreshComplete();
+                    }
                 }
-            }
-        });
-        BmobQuery<Help_Top> bmobQueryTop = new BmobQuery<>();
-        bmobQueryTop.order("-createdAt");
-        bmobQueryTop.findObjects(new FindListener<Help_Top>() {
-            @Override
-            public void done(List<Help_Top> list, BmobException e) {
-                if (e == null) {
-                    mList = list;
-                    mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
-                    mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), list));
-                    indicator.setViewPager(mViewPager);
-                    indicator.setSnap(true);
+            });
+        }
+        if (flag == 2 || flag == 0){
+            BmobQuery<Help_Top> bmobQueryTop = new BmobQuery<>();
+            bmobQueryTop.order("-createdAt");
+            bmobQueryTop.findObjects(new FindListener<Help_Top>() {
+                @Override
+                public void done(List<Help_Top> list, BmobException e) {
+                    if (e == null) {
+                        mList = list;
+                        mViewPager = (ViewPager) mHeaderView.findViewById(R.id.vp_news_title);
+                        mViewPager.setAdapter(new HelpViewPagerAdapter(getContext(), list));
+                        indicator.setViewPager(mViewPager);
+                        indicator.setSnap(true);
 
-                    topSliding();
-                    hideLinearLayout();
-                } else {
-                    mLlNoNet.setVisibility(View.VISIBLE);
-                    Log.i("top", "查询失败：" + e.getMessage());
-                    mListView.onRefreshComplete();
+                        topSliding();
+                        hideLinearLayout();
+                    } else {
+                        mLlNoNet.setVisibility(View.VISIBLE);
+                        Log.i("top", "查询失败：" + e.getMessage());
+                        mListView.onRefreshComplete();
+                    }
                 }
-            }
 
-        });
+            });
+        }
+
+
 
     }
     // 获取头部数据
@@ -166,7 +199,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ll_no_net:
-                initData();
+                initData(0);
                 break;
         }
     }

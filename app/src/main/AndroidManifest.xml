@@ -124,11 +124,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name=".ui.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".ui.activity.LoginActivity"/>
         <!-- 必须注册在微博授权，分享微博时候用到 -->
@@ -252,10 +247,11 @@
         </receiver>
         <!-- 小米推送END -->
 
-        <!--bmob 自动更新-->
+
+        <!-- bmob 自动更新 -->
         <activity
             android:name="cn.bmob.v3.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
         </activity>
         <activity android:name=".ui.activity.my.MySetActivity"/>
         <activity android:name=".ui.activity.GoodTypeActivity"/>
@@ -295,14 +291,19 @@
         </activity>
         <activity android:name=".ui.activity.StarInfoActivity">
         </activity>
-        <activity android:name=".ui.activity.my.AttentionActivity">
-        </activity>
-        <activity android:name=".ui.activity.my.UserFeedbackActivity">
+        <activity android:name=".ui.activity.my.UserFeedbackActivity"/>
         <activity android:name=".ui.activity.my.AttentionStarActivity">
         </activity>
         <activity android:name=".ui.activity.OrderActivity" />
         <activity android:name=".ui.activity.OrderDetailActivity" />
         <activity android:name=".widget.NormalKeyBoardActivity" />
+        <activity android:name=".ui.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

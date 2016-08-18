@@ -1,11 +1,13 @@
 package com.goldenratio.commonweal.bean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
 /**
  * Created by 两个人 on 2016-06-20.
  */
-public class Help_Top extends BmobObject {
+public class Help_Top extends BmobObject implements Serializable{
 
     private String Help_Top_Pic;
     private String Help_Top_Url;

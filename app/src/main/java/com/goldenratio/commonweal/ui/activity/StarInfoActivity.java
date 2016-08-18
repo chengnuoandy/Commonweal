@@ -74,16 +74,19 @@ public class StarInfoActivity extends Activity {
     private void getData() {
         BmobQuery<U_Attention> query = new BmobQuery<U_Attention>();
 
-        query.addQueryKeys("Star_ID");
+        query.addQueryKeys("U_ID");
         query.addWhereEqualTo("Star_ID", starID);
         query.findObjects(new FindListener<U_Attention>() {
 
             @Override
             public void done(List<U_Attention> object, BmobException e) {
                 if (e == null && object.size() != 0) {
-                    isHasAttention = true;
-                    attentionID = object.get(0).getObjectId();
-                    mTvAttention.setText("已关注");
+                    String ID = ((MyApplication) getApplication()).getObjectID();
+                    if (ID.equals(object.get(0).getU_ID())) {
+                        isHasAttention = true;
+                        attentionID = object.get(0).getObjectId();
+                        mTvAttention.setText("已关注");
+                    }
                     Log.i("bmob", "查询成功：共" + object + object.size() + "条数据。");
                 } else {
                     Log.i("bmob", "失败：" + e.getMessage());
@@ -93,23 +96,7 @@ public class StarInfoActivity extends Activity {
         });
     }
 
-   /* private void addDataToBmob() {
-        String ID = ((MyApplication) getApplication()).getObjectID();
-        User_Profile u = new User_Profile();
-        u.setObjectId(ID);
-        u.addUnique("User_Attention", starID);
-        u.save(new SaveListener<String>() {
-            @Override
-            public void done(String s, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(StarInfoActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
-                    mTvAttention.setText("已关注");
-                } else {
-                    Toast.makeText(StarInfoActivity.this, "关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }*/
+
 
     private void addDataToBmob() {
         U_Attention mUAttention = new U_Attention();

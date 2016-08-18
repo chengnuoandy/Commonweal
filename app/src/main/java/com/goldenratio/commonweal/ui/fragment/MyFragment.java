@@ -19,7 +19,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.ui.activity.OrderActivity;
-import com.goldenratio.commonweal.ui.activity.my.AttentionActivity;
+import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
 import com.goldenratio.commonweal.ui.activity.my.LogisticsInformation;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
@@ -142,7 +142,8 @@ public class MyFragment extends Fragment {
                 startActivityForResult(intent1, 2);
                 break;
             case R.id.tv_my_attention:
-                Intent intent2 = new Intent(getActivity(), AttentionActivity.class);
+                Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
+                startActivity(intent2);
             default:
                 break;
         }

@@ -18,6 +18,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
+import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.my.AttentionActivity;
 import com.goldenratio.commonweal.ui.activity.my.LogisticsInformation;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
@@ -62,6 +63,7 @@ public class MyFragment extends Fragment {
     public static String mUserID; //用户objectid
 
     private TextView mTextView;
+    private TextView mTvOrder;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -76,6 +78,11 @@ public class MyFragment extends Fragment {
         }
 
         mTextView = (TextView) view.findViewById(R.id.ceshi);
+        view.findViewById(R.id.tv_love).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,9 +90,20 @@ public class MyFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        initView(view);
 
         return view;
 
+    }
+
+    private void initView(View view) {
+        mTvOrder = (TextView) view.findViewById(R.id.tv_order);
+        mTvOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), OrderActivity.class));
+            }
+        });
     }
 
 

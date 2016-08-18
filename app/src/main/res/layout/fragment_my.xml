@@ -110,6 +110,7 @@
                     android:background="@color/main_bg"/>
 
                 <TextView
+                    android:id="@+id/tv_love"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -126,6 +127,7 @@
 
 
                 <TextView
+                    android:id="@+id/ceshi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -142,7 +144,7 @@
                     android:background="@color/main_bg"/>
 
                 <TextView
-                    android:id="@+id/ceshi"
+                    android:id="@+id/tv_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

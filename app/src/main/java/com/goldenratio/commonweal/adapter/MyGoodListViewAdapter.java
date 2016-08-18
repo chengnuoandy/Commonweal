@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.adapter;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlGood;
+import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 
 import java.util.List;
 import java.util.Timer;
@@ -182,6 +184,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvThumbUp = (TextView) convertView.findViewById(R.id.tv_thumb_up);
             mTvGoodStatus = (TextView) convertView.findViewById(R.id.tv_good_status);
             mTvThumbUp.setOnClickListener(this);
+            mIvUserAvatar.setOnClickListener(this);
         }
 
 
@@ -259,6 +262,19 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         }
 
                     });
+                    break;
+                case R.id.iv_user_avatar:
+                    List<String> attenList;
+                    attenList = getItem(position).getGood_User().getUser_Attention();
+                    int isHas = -1;
+                    if (attenList != null)
+                        isHas = attenList.indexOf(getItem(position).getGood_User().getObjectId());
+                    Intent intent = new Intent(mContext, StarInfoActivity.class);
+                    intent.putExtra("ishas", isHas != -1);
+                    intent.putExtra("id", getItem(position).getGood_User().getObjectId());
+                    intent.putExtra("nickName", getItem(position).getGood_User().getUser_Nickname());
+                    intent.putExtra("Avatar", getItem(position).getGood_User().getUser_image_hd());
+                    mContext.startActivity(intent);
                     break;
             }
         }

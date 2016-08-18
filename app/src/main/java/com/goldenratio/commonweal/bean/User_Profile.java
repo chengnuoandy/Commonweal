@@ -19,25 +19,47 @@ public class User_Profile extends BmobObject {
     private String User_WbID; //绑定的微博ID
     private String User_Sex; //用户性别
     private String User_Coin; //用户公益币
+    private String User_DeviceInfo;
+    private List<String> User_Attention;
 
-    /**
+    public User_Profile() {
+    }
+
+    public List<String> getUser_Attention() {
+        return User_Attention;
+    }
+
+    public void setUser_Attention(List<String> user_Attention) {
+        User_Attention = user_Attention;
+    }
+
+        /**
      * 用户头像地址，50×50像素
      */
-    public String User_image_min;
+    private String User_image_min;
+
+    public String getUser_DeviceInfo() {
+        return User_DeviceInfo;
+    }
+
+    public void setUser_DeviceInfo(String user_DeviceInfo) {
+        User_DeviceInfo = user_DeviceInfo;
+    }
+
     /**
      * 用户大头像地址
      */
-    public String User_image_max;
+    private String User_image_max;
     /**
      * 用户高清大头像地址
      */
 
-    public String User_image_hd;
+    private String User_image_hd;
 
     /**
      * 认证原因
      */
-    public String User_VerifiedReason;
+    private String User_VerifiedReason;
     private boolean User_IsV;
     private List<String> User_Receive_Address;//用户收货地址
 

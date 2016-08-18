@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
+import com.goldenratio.commonweal.ui.activity.my.AttentionActivity;
 import com.goldenratio.commonweal.ui.activity.my.LogisticsInformation;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
@@ -42,6 +44,12 @@ public class MyFragment extends Fragment {
     ImageView mIvMessage;
     @BindView(R.id.iv_settings)
     ImageView mIvSetting;
+    @BindView(R.id.rl_background)
+    RelativeLayout mRlBackground;
+    @BindView(R.id.tv_my_attention)
+    TextView mTvMyAttention;
+    @BindView(R.id.ceshi)
+    TextView mCeshi;
 
     private boolean isLogin = false;
 
@@ -81,7 +89,7 @@ public class MyFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
@@ -115,6 +123,8 @@ public class MyFragment extends Fragment {
                 intent1.putExtra("islogin", isLogin);
                 startActivityForResult(intent1, 2);
                 break;
+            case R.id.tv_my_attention:
+                Intent intent2 = new Intent(getActivity(), AttentionActivity.class);
             default:
                 break;
         }
@@ -196,4 +206,5 @@ public class MyFragment extends Fragment {
         mTvName.setText(userNickname);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
     }
+
 }

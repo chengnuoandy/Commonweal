@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -473,6 +474,7 @@ public class RegisterActivity extends Activity {
         u.setUser_image_max(maxUrl);
         u.setUser_image_min(minUrl);
         u.setUser_Autograph(aut);
+        u.setUser_DeviceInfo(BmobInstallation.getCurrentInstallation().getInstallationId());
         u.setUser_Receive_Address(Arrays.asList("0"));
         u.save(new SaveListener<String>() {
             @Override
@@ -510,6 +512,33 @@ public class RegisterActivity extends Activity {
         });
     }
 
+
+  /*  private void updateDeviceInfo() {
+        BmobQuery<U_DeviceInfo> query = new BmobQuery<U_DeviceInfo>();
+        query.addWhereEqualTo("installationId", BmobInstallation.getInstallationId(this));
+        query.findObjects(new FindListener<U_DeviceInfo>() {
+                              @Override
+                              public void done(List<U_DeviceInfo> list, BmobException e) {
+                                  if (list.size() > 0) {
+                                      U_DeviceInfo mbi = list.get(0);
+                                      mbi.setUid("");
+                                      mbi.update(new UpdateListener() {
+                                          @Override
+                                          public void done(BmobException e) {
+                                              if (e == null) {
+                                                  Log.i("bmob", "设备信息更新成功");
+
+                                              } else Log.i("bmob", "设备信息更新失败:" + e.getMessage());
+                                          }
+                                      });
+
+                                  }
+                              }
+
+                          }
+
+        );
+    }*/
 
     //判断此用户是否已经注册
     private void isRegister() {

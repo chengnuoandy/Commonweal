@@ -66,6 +66,10 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
             @Override
             public void done(List<Dynamic> list, BmobException e) {
                 if (e == null) {
+                    //如果数据仅有一页，关闭上拉加载更多
+                    if (list.size() < mMAXItem){
+                        dataDone = false;
+                    }
                     mDynamicList = list;
                     mListView.setAdapter(new MyDynamicAdapter(getActivity(), list));
                     count++;
@@ -116,6 +120,8 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
         if (mDynamicList != null) {
             mDynamicList.clear();
             initData();
+        }else {
+            initData();
         }
     }
 
@@ -154,9 +160,9 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
                     //追加数据
                     for (int i = 0; i < list.size(); i++) {
                         mDynamicList.add(list.get(i));
-                        // 加载完毕后在UI线程结束加载更多
-                        mBGARefreshLayout.endLoadingMore();
                     }
+                    // 加载完毕后在UI线程结束加载更多
+                    mBGARefreshLayout.endLoadingMore();
                 } else {
                     Toast.makeText(getContext(), "刷新失败！" + e, Toast.LENGTH_SHORT).show();
                 }

@@ -27,9 +27,16 @@ import cn.bmob.v3.listener.FindListener;
 /**
  * Created by 龙啸天 - 龙啸天 on 2016/6/21 0021.
  * Email:jxfengmtx@163.com
+ * update: 冰封承諾Andy
  */
 public class HelpDynamicFragment extends Fragment implements BGARefreshLayout.BGARefreshLayoutDelegate {
 
+    //最大加载数
+    private int mMAXItem = 8;
+    //记录当前加载到第几页
+    private int count;
+    //数据是否加载完毕
+    private boolean dataDone = true;
 
     @BindView(R.id.lv_dynamic_help)
     ListView mLvDynamicHelp;
@@ -54,7 +61,7 @@ public class HelpDynamicFragment extends Fragment implements BGARefreshLayout.BG
         // 为BGARefreshLayout设置代理
         mBgaHelpRefresh.setDelegate(this);
         // 设置下拉刷新和上拉加载更多的风格     参数1：应用程序上下文，参数2：是否具有上拉加载更多功能
-        BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), false);
+        BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
         // 设置下拉刷新和上拉加载更多的风格
         mBgaHelpRefresh.setRefreshViewHolder(refreshViewHolder);
         //下拉刷新
@@ -65,10 +72,14 @@ public class HelpDynamicFragment extends Fragment implements BGARefreshLayout.BG
     private void getDataFromBmob() {
         BmobQuery<Dynamic_Help> query = new BmobQuery<>();
         query.order("-createdAt");
+        query.setLimit(mMAXItem);
         query.findObjects(new FindListener<Dynamic_Help>() {
             @Override
             public void done(List<Dynamic_Help> list, BmobException e) {
                 if (e == null) {
+                    if (list.size() < mMAXItem){
+                        dataDone = false;
+                    }
                     mDycHelpList = list;
                     mLvDynamicHelp.setAdapter(new DynamicHelpAdapter(list, getActivity()));
                     mBgaHelpRefresh.endRefreshing();
@@ -97,11 +108,44 @@ public class HelpDynamicFragment extends Fragment implements BGARefreshLayout.BG
         if (mDycHelpList != null) {
             mDycHelpList.clear();
             getDataFromBmob();
+        }else {
+            getDataFromBmob();
         }
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-        return false;
+        if (!dataDone){
+            Toast.makeText(getContext(), "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        //查询后面的数据
+        BmobQuery<Dynamic_Help> query = new BmobQuery<>();
+        query.order("-createdAt");
+        //限制返回的数据量
+        query.setLimit(mMAXItem);
+        query.setSkip(mMAXItem * count);
+        query.findObjects(new FindListener<Dynamic_Help>() {
+            @Override
+            public void done(List<Dynamic_Help> list, BmobException e) {
+                if (e == null) {
+                    //如果数据已经不足，设置上拉加载标志位
+                    if (list.size() < mMAXItem){
+                        Toast.makeText(getContext(), "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
+                        dataDone = false;
+                    }
+                    //追加数据
+                    for (int i = 0; i < list.size(); i++) {
+                        mDycHelpList.add(list.get(i));
+                    }
+                    // 加载完毕后在UI线程结束加载更多
+                    mBgaHelpRefresh.endLoadingMore();
+                } else {
+                    Toast.makeText(getContext(), "刷新失败！" + e, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        return true;
     }
 }

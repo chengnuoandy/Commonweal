@@ -77,9 +77,8 @@ public class HelpDynamicFragment extends Fragment implements BGARefreshLayout.BG
             @Override
             public void done(List<Dynamic_Help> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() < mMAXItem){
-                        dataDone = false;
-                    }
+                    dataDone = list.size() >= mMAXItem;
+                    count = 1;
                     mDycHelpList = list;
                     mLvDynamicHelp.setAdapter(new DynamicHelpAdapter(list, getActivity()));
                     mBgaHelpRefresh.endRefreshing();
@@ -138,6 +137,7 @@ public class HelpDynamicFragment extends Fragment implements BGARefreshLayout.BG
                     for (int i = 0; i < list.size(); i++) {
                         mDycHelpList.add(list.get(i));
                     }
+                    count++;
                     // 加载完毕后在UI线程结束加载更多
                     mBgaHelpRefresh.endLoadingMore();
                 } else {

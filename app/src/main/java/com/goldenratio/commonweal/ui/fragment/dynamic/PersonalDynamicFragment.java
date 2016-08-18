@@ -67,12 +67,12 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
             public void done(List<Dynamic> list, BmobException e) {
                 if (e == null) {
                     //如果数据仅有一页，关闭上拉加载更多
-                    if (list.size() < mMAXItem){
-                        dataDone = false;
-                    }
+                    //第一次加载或者刷新数据初始化加载更多逻辑
+                    dataDone = list.size() >= mMAXItem;
+                    count = 1;
+
                     mDynamicList = list;
                     mListView.setAdapter(new MyDynamicAdapter(getActivity(), list));
-                    count++;
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
                 } else {
@@ -161,6 +161,7 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
                     for (int i = 0; i < list.size(); i++) {
                         mDynamicList.add(list.get(i));
                     }
+                    count++;
                     // 加载完毕后在UI线程结束加载更多
                     mBGARefreshLayout.endLoadingMore();
                 } else {

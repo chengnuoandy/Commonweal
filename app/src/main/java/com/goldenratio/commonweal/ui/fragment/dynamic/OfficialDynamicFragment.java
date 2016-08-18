@@ -79,9 +79,8 @@ public class OfficialDynamicFragment extends Fragment implements BGARefreshLayou
             @Override
             public void done(List<Dynamic_Official> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() < mMAXItem){
-                        dataDone = false;
-                    }
+                    dataDone = list.size() >= mMAXItem;
+                    count = 1;
                     mDycOfficialList = list;
                     mLvDynamicOfficial.setAdapter(new DynamicOfficialAdapter(list, getActivity()));
                     //收起刷新
@@ -142,6 +141,7 @@ public class OfficialDynamicFragment extends Fragment implements BGARefreshLayou
                     for (int i = 0; i < list.size(); i++) {
                         mDycOfficialList.add(list.get(i));
                     }
+                    count++;
                     // 加载完毕后在UI线程结束加载更多
                     mBGARefreshLayout.endLoadingMore();
                 } else {

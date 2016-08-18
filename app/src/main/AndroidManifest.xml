@@ -252,6 +252,11 @@
         </receiver>
         <!-- 小米推送END -->
 
+        <!--bmob 自动更新-->
+        <activity
+            android:name="cn.bmob.v3.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
         <activity android:name=".ui.activity.my.MySetActivity"/>
         <activity android:name=".ui.activity.GoodTypeActivity"/>
         <activity android:name=".ui.activity.GoodDetailActivity"/>
@@ -291,6 +296,8 @@
         <activity android:name=".ui.activity.StarInfoActivity">
         </activity>
         <activity android:name=".ui.activity.my.AttentionActivity">
+        </activity>
+        <activity android:name=".ui.activity.my.UserFeedbackActivity">
         </activity>
     </application>
 

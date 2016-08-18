@@ -31,6 +31,7 @@ import c.b.BP;
 import cn.bmob.push.BmobPush;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.update.BmobUpdateAgent;
 
 /**
  * Created by Kiuber on 2016/6/6.
@@ -84,6 +85,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         // 启动推送服务
         BmobPush.startWork(this);
         BP.init(MainActivity.this, "727a409235aab18ae7b1e1f3933c9a64");
+        //检测更新
+        BmobUpdateAgent.update(this);
 
         mFragmentList = new ArrayList<Fragment>();
 

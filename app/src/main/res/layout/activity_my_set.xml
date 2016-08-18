@@ -70,6 +70,7 @@
 
 
     <TextView
+        android:id="@+id/tv_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -88,6 +89,7 @@
 
 
     <TextView
+        android:id="@+id/tv_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -105,6 +107,7 @@
 
 
     <TextView
+        android:id="@+id/tv_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"

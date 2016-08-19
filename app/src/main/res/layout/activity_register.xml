@@ -73,6 +73,7 @@
     </LinearLayout>
 
     <EditText
+
         android:id="@+id/et_phone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/normal_input_height"

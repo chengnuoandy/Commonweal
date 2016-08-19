@@ -162,18 +162,19 @@ public class EditAddressActivity extends Activity {
         String consigneePhone = mEtEditPhone.getText().toString();
         String consigneeAddress = mTvEditAddress.getText() +
                 " " + mEtDetailAddress.getText();
-        if (position == -1) {
-            address.add(consignee);
-            address.add(consigneePhone);
-            address.add(consigneeAddress);
-        } else {
-            address.set(position, consignee);
-            address.set(position + 1, consigneePhone);
-            address.set(position + 2, consigneeAddress);
-        }
+
         boolean isTrue = false;
         if (consignee.length() != 0 && consigneePhone.length() > 6
                 && mTvEditAddress.getText().length() != 3 && mEtDetailAddress.length() >= 5) {
+            if (position == -1) {
+                address.add(consignee);
+                address.add(consigneePhone);
+                address.add(consigneeAddress);
+            } else {
+                address.set(position, consignee);
+                address.set(position + 1, consigneePhone);
+                address.set(position + 2, consigneeAddress);
+            }
             isTrue = true;
         } else {
             Toast.makeText(EditAddressActivity.this, "请确认信息是否填写规范", Toast.LENGTH_SHORT).show();

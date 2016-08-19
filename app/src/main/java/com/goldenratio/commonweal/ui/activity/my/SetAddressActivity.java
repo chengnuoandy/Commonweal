@@ -2,8 +2,10 @@ package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -74,7 +76,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
     }
 
     @Override
-    public int click(View v) {
+    public int click(final View v) {
         Log.i("callback", "click: 执行");
         switch (v.getId()) {
             case R.id.rl_address:
@@ -84,9 +86,19 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                 startActivityForResult(intent, 1);
                 break;
             case R.id.tv_delete_address:
-                int position = (int) v.getTag();
-                showProgressDialog();
-                removeAddressToBmob(position);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setTitle("提示");
+                dialog.setMessage("您确定要删除此地址？");
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int position = (int) v.getTag();
+                        showProgressDialog();
+                        removeAddressToBmob(position);
+                    }
+                });
+                dialog.setNegativeButton("取消", null);
+                dialog.show();
                 Log.i("deleteAddress", "click: address点击");
                 break;
             default:
@@ -188,7 +200,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                     closeProgressDialog();
                 } else {
                     Toast.makeText(SetAddressActivity.this, "设置失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                    clickPosition=Integer.parseInt(address.get(0));
+                    clickPosition = Integer.parseInt(address.get(0));
                     closeProgressDialog();
                     Log.i("更新地址", e.getMessage());
                 }
@@ -261,9 +273,9 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
         }
     }
 
-    private void refreshListViewAdapter(){
 
-    }
+
+
     private void showProgressDialog() {
         if (mPd == null) {
             mPd = new ProgressDialog(this);

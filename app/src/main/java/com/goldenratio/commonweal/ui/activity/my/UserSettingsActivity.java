@@ -1,18 +1,20 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -276,23 +278,46 @@ public class UserSettingsActivity extends Activity {
      *
      * @param TV
      */
+/*    private void showInputDialog() {
+
+        new AlertDialog.Builder(this).setTitle("编辑").setView(
+                ETUSER).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setNegativeButton("取消", null).show();
+    }*/
     private void showInputDialog(final TextView TV) {
-        final EditText ETUSER = new EditText(this);
+        // 设置内容区域为自定义View
+        LinearLayout SetDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.dialog_register, null);
+        final EditText ETUSER = (EditText) SetDialog.findViewById(R.id.et_userName);
+        TextView tvTitle = (TextView) SetDialog.findViewById(R.id.tv_title_nickname);
         final int X;
         final String USERROW;
+        String dialogTitle;
         if (TV == mTvUserNickname) {
             ETUSER.setSingleLine(true);
             ETUSER.setText(mTvUserNickname.getText());
+            dialogTitle = "修改昵称";
             USERROW = "User_Nickname";
             X = 1;
         } else {
+            ETUSER.setMaxLines(3);
+            dialogTitle = "修改签名";
+            ETUSER.setHint("请输入个性签名");
+            ETUSER.setFilters(new InputFilter[]{new InputFilter.LengthFilter(26)});
             ETUSER.setMaxLines(3);
             ETUSER.setText(mTvUserAutograph.getText());
             USERROW = "User_Autograph";
             X = 2;
         }
-        new AlertDialog.Builder(this).setTitle("编辑").setView(
-                ETUSER).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        tvTitle.setText(dialogTitle);
+        AlertDialog.Builder builder = null;
+        builder = new AlertDialog.Builder(this);
+        // builder.setTitle(dialogTitle);
+        builder.setView(SetDialog);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 showProgressDialog();
@@ -300,7 +325,10 @@ public class UserSettingsActivity extends Activity {
                 TV.setText(userData);
                 updateDataToBmob(userData, X, USERROW);
             }
-        }).setNegativeButton("取消", null).show();
+        });
+        builder.setNegativeButton("取消", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void closeProgressDialog() {

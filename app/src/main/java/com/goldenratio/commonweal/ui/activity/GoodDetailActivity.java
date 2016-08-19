@@ -73,7 +73,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private CountdownView mCountdownView, mCountdownFive;
     private Long endTime;
     private Good mGood;
-    private MySqlGood mySqlGood;
     private TextView mTvGoodName, mTvGoodDescription, mTvUserName,
             mTvBid, mTvDeposit, mTvNowCoin, mTvStartCoin;
     private GridView mGvPic;
@@ -106,21 +105,21 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     }
 
     private void initIsGoodStatus() {
-        //初始化物品的状态（从MySql中获取的数据）
-        String status = mySqlGood.getGood_Status();
-        if (status.equals("1")) {
-            //正在进行
-            //有人已经出价，现在才获取服务器时间，尽可能的保证时间准确
-            getLastBidUpdatedAt();
-        } else if (status.equals("0")) {
-            changeTextViewVisibitity(2);
-            mTvBid.setText("出价结束");
-            //已经结束出价
-        } else {
-            changeTextViewVisibitity(2);
-            mTvBid.setText("状态未知");
-            //未知状态
-        }
+//        //初始化物品的状态（从MySql中获取的数据）
+//        String status = mySqlGood.getGood_Status();
+//        if (status.equals("1")) {
+//            //正在进行
+//            //有人已经出价，现在才获取服务器时间，尽可能的保证时间准确
+//            getLastBidUpdatedAt();
+//        } else if (status.equals("0")) {
+//            changeTextViewVisibitity(2);
+//            mTvBid.setText("出价结束");
+//            //已经结束出价
+//        } else {
+//            changeTextViewVisibitity(2);
+//            mTvBid.setText("状态未知");
+//            //未知状态
+//        }
     }
 
     /**
@@ -133,7 +132,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         Intent intent = getIntent();
         endTime = intent.getLongExtra("EndTime", 0);
         mGood = (Good) intent.getSerializableExtra("Bmob_Good");
-        mySqlGood = (MySqlGood) intent.getSerializableExtra("Mysql_Good");
         Log.d("lxc", "initData: ----> " + mGood.getObjectId() + "endtime-->" + endTime);
         mCountdownView.start(endTime);
 
@@ -511,7 +509,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     }
 
     public void showPayKeyBoard1(String coin) {
-        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "出价验证", coin, "出价", mUserId, mGood.getObjectId());
+        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "出价验证", coin, "出价", mUserId, mGood.getObjectId(),0);
 
         // 显示窗口
         popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
@@ -665,12 +663,12 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                         {
                             try {
                                 JSONArray jsonArray = new JSONArray(result);
-                                String sixPwd = "0";
+                                String sixPwd = "";
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                                     sixPwd = jsonObject.getString("User_SixPwd");
                                 }
-                                if (Objects.equals(sixPwd, "0")) {
+                                if (Objects.equals(sixPwd, "")) {
                                     showPayKeyBoard2();
                                 } else {
                                     showPayKeyBoard1(bidCoin);

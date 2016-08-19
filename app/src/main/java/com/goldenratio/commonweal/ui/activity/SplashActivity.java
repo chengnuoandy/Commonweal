@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -24,6 +25,7 @@ public class SplashActivity extends Activity {
 
     private List<Help> mHelpLlist;
     private List<Help_Top> mHelpTopList;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,9 @@ public class SplashActivity extends Activity {
         BP.init(this, "727a409235aab18ae7b1e1f3933c9a64");
 
         initData();
-        startMain();
+        isFirst();
+
+//        startMain();
     }
 
     private void startMain() {
@@ -52,7 +56,7 @@ public class SplashActivity extends Activity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this,MainActivity.class);
+                intent = new Intent(SplashActivity.this,MainActivity.class);
                 intent.putExtra("help", (Serializable) mHelpLlist);
                 intent.putExtra("top", (Serializable) mHelpTopList);
                 startActivity(intent);
@@ -91,5 +95,37 @@ public class SplashActivity extends Activity {
 
         });
 
+    }
+
+    public void isFirst() {
+        boolean isFirst;
+        SharedPreferences pref = getSharedPreferences("first",Activity.MODE_PRIVATE);
+        isFirst = pref.getBoolean("status",true);
+        if (isFirst){
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("status",false);
+            editor.apply();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    intent = new Intent(SplashActivity.this,MainActivity.class);
+                    intent.putExtra("help", (Serializable) mHelpLlist);
+                    intent.putExtra("top", (Serializable) mHelpTopList);
+                    Intent intent1 = new Intent(SplashActivity.this,GuideActivity.class);
+                    startActivity(intent1);
+                }
+            },3000);
+
+        }else {
+            startMain();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startActivity(intent);
+        finish();
     }
 }

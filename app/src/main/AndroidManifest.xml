@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.goldenratio.commonweal">
+          package="com.goldenratio.commonweal">
 
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -294,15 +294,17 @@
         <activity android:name=".ui.activity.my.UserFeedbackActivity"/>
         <activity android:name=".ui.activity.my.AttentionStarActivity">
         </activity>
-        <activity android:name=".ui.activity.OrderActivity" />
-        <activity android:name=".ui.activity.OrderDetailActivity" />
-        <activity android:name=".widget.NormalKeyBoardActivity" />
+        <activity android:name=".ui.activity.OrderActivity"/>
+        <activity android:name=".ui.activity.OrderDetailActivity"/>
+        <activity android:name=".widget.NormalKeyBoardActivity"/>
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.GuideActivity">
         </activity>
     </application>
 

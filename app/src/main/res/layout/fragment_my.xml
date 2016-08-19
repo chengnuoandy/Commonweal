@@ -160,6 +160,7 @@
                     android:background="@color/main_bg"/>
 
                 <TextView
+                    android:id="@+id/tv_share_form"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

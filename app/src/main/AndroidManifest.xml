@@ -306,6 +306,8 @@
         </activity>
         <activity android:name=".ui.activity.GuideActivity">
         </activity>
+        <activity android:name=".ui.activity.my.SellGoodActivity">
+        </activity>
         <activity android:name=".ui.activity.CommentActivity"/>
     </application>
 

@@ -23,6 +23,7 @@ import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
 import com.goldenratio.commonweal.ui.activity.my.LogisticsInformation;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
+import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.squareup.picasso.Picasso;
 
@@ -107,7 +108,7 @@ public class MyFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention ,R.id.tv_share_form})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
@@ -144,6 +145,11 @@ public class MyFragment extends Fragment {
             case R.id.tv_my_attention:
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.tv_share_form:
+                Intent intent3 = new Intent(getActivity(), SellGoodActivity.class);
+                startActivity(intent3);
+                break;
             default:
                 break;
         }

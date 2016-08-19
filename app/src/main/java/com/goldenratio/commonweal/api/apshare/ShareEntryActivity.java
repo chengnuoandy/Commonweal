@@ -1,5 +1,7 @@
 package com.goldenratio.commonweal.api.apshare;
 
-public class ShareEntryActivity {
+import cn.sharesdk.alipay.share.AlipayHandlerActivity;
+
+public class ShareEntryActivity extends AlipayHandlerActivity{
 
 }

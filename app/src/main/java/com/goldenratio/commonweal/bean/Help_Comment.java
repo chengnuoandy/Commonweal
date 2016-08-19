@@ -12,6 +12,24 @@ public class Help_Comment extends BmobObject {
     private User_Profile comment_user;//用户
     private String comment;//内容
     private String objcetid;//标识
+    private String reply;//回复对象
+    private int id; //层楼id
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
+    }
 
     public User_Profile getComment_user() {
         return comment_user;

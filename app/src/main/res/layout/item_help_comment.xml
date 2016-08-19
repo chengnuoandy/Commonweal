@@ -1,64 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/civ_hair"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="30dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/iv_unregister_head"
-            android:tag="1" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:paddingTop="20dp"
+            android:paddingLeft="10dp"
+            android:id="@+id/tv_id"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="熊猫爱吃粽子"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tv_id"
-                android:layout_marginTop="10dp"
-                android:text="2016-08-08 16:31:48"
-                android:textSize="10sp" />
-        </LinearLayout>
-    </LinearLayout>
+            android:text="熊猫爱吃粽子"
+            android:textColor="#AEEEEE"
+            android:textSize="18sp" />
 
 
     <TextView
+        android:paddingRight="10dp"
         android:id="@+id/tv_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/civ_hair"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:textColor="#000000"
         android:paddingTop="10dp"
-        android:text="000000000000"
-        android:textSize="@dimen/text_size_big" />
+        android:lines="2"
+        android:ellipsize="end"
+        android:text="000000000000000000000000000000000000000000000000000000000000000000000000"
+        android:textSize="@dimen/text_size_big"
+        android:layout_alignBaseline="@+id/tv_id"
+        android:layout_alignBottom="@+id/tv_id"
+        android:layout_toRightOf="@+id/tv_id"
+        android:layout_toEndOf="@+id/tv_id"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp" />
 
-    <ImageView
-        android:id="@+id/iv_pic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/little_space" />
-</LinearLayout>
+</RelativeLayout>

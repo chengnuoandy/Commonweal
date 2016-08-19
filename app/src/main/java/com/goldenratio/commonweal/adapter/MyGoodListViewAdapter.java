@@ -3,7 +3,6 @@ package com.goldenratio.commonweal.adapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.bean.MySqlGood;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 
 import java.util.List;
@@ -38,7 +36,6 @@ import cn.iwgang.countdownview.CountdownView;
 public class MyGoodListViewAdapter extends BaseAdapter {
     private static final String TAG = "lxc";
     private final SparseArray<ViewHolder> mCountdownVHList;
-    private final List<MySqlGood> mySqlGoods;
     private Context mContext;
     private List<Good> mGoodList;
     private LayoutInflater mInflater;
@@ -74,11 +71,10 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         }
     };
 
-    public MyGoodListViewAdapter(Context mContext, List<MySqlGood> mySqlGoods, List<Good> mGoodList) {
+    public MyGoodListViewAdapter(Context mContext, List<Good> mGoodList) {
         this.mContext = mContext;
         this.mGoodList = mGoodList;
         this.mInflater = LayoutInflater.from(mContext);
-        this.mySqlGoods = mySqlGoods;
         mCountdownVHList = new SparseArray<>();
         startRefreshTime();
     }
@@ -213,22 +209,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         @TargetApi(Build.VERSION_CODES.KITKAT)
         private void initData(final int position) {
             this.position = position;
-            if (mySqlGoods.size() != 0) {
-                String mStr = mySqlGoods.get(position).getGood_Status();
-//                Toast.makeText(mContext, position + mStr, Toast.LENGTH_SHORT).show();
-                if (mStr.equals("1")) {
-                    mTvGoodStatus.setText("正在进行");
-                } else if (mStr.equals("0")) {
-                    mTvGoodStatus.setText("已经结束");
-                    mTvGoodStatus.setTextColor(Color.RED);
-                } else {
-                    mTvGoodStatus.setText("未知的错误");
-                    mTvGoodStatus.setTextColor(Color.RED);
-                }
-            } else {
-                mTvGoodStatus.setText("未找到该物品的记录");
-                mTvGoodStatus.setTextColor(Color.RED);
-            }
             mTvTime.setText(getItem(position).getCreatedAt());
             mTvName.setText(getItem(position).getGood_Name());
             mTvUserName.setText(getItem(position).getGood_User().getUser_Nickname());

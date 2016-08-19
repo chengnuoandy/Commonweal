@@ -16,18 +16,9 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.bean.MySqlGood;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.view.PullToRefreshListView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.Bmob;
@@ -47,7 +38,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     private PullToRefreshListView mListView;
     private LinearLayout mLlNoNet;
     private TextView mTvNowPrice;
-    private List<MySqlGood> mySqlGoods = new ArrayList<>();
     private ProgressDialog progressDialog;
 
     @Override
@@ -56,7 +46,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         view = inflater.inflate(R.layout.fragment_good, null);
 
         initView();
-        findDataFromMySql();
+        findDataFromBmob();
         ifTime();
         return view;
     }
@@ -73,7 +63,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             @Override
             public void done(List<Good> list, BmobException e) {
                 if (e == null) {
-                    myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), mySqlGoods, list);
+                    myGoodListViewAdapter = new MyGoodListViewAdapter(getContext(), list);
                     mListView.setAdapter(myGoodListViewAdapter);
                     mListView.onRefreshComplete();
                     mGoodList = list;
@@ -106,7 +96,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             public void onRefresh() {
                 //初始化数据
                 mGoodList.clear();
-                findDataFromMySql();
             }
 
             @Override
@@ -172,7 +161,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         endTime = mGoodList.get(position - 1).getGood_UpDateM();
         Bundle bundle = new Bundle();
         bundle.putSerializable("Bmob_Good", mGoodList.get(position - 1));
-        bundle.putSerializable("Mysql_Good", mySqlGoods.get(position - 1));
         StartAct(bundle);
         Object itemAtPosition = parent.getItemAtPosition(position);
         Log.d(TAG, "onItemClick: " + itemAtPosition);
@@ -211,44 +199,4 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         }
     }
 
-    private void findDataFromMySql() {
-        RequestParams requestParams = new RequestParams("http://123.206.89.67/WebService1.asmx/GetAllGood");
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                MySqlGood mySqlGood = new MySqlGood();
-                Log.d("Kiuber_LOG", "onSuccess: " + result);
-                try {
-                    JSONArray jsonArray = new JSONArray(result);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        mySqlGood.setObject_Id(jsonObject.getString("Object_Id"));
-                        mySqlGood.setStart_Time(jsonObject.getString("Start_Time"));
-                        mySqlGood.setEnd_Time(jsonObject.getString("End_Time"));
-                        mySqlGood.setGood_Status(jsonObject.getString("Good_Status"));
-                        mySqlGoods.add(i, mySqlGood);
-                    }
-                    findDataFromBmob();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                Toast.makeText(x.app(), "cancelled", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
 }

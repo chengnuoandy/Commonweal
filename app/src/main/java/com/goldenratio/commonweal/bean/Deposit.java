@@ -10,7 +10,6 @@ public class Deposit extends BmobObject {
     private String D_Coin;
     private User_Profile D_User;
     private String D_GoodId;
-    private String OrderId;
 
     public String getD_Coin() {
         return D_Coin;
@@ -34,13 +33,5 @@ public class Deposit extends BmobObject {
 
     public void setD_GoodId(String d_GoodId) {
         D_GoodId = d_GoodId;
-    }
-
-    public String getOrderId() {
-        return OrderId;
-    }
-
-    public void setOrderId(String orderId) {
-        OrderId = orderId;
     }
 }

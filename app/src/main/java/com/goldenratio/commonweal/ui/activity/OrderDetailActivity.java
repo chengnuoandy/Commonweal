@@ -166,13 +166,13 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     }
 
     public void showPayKeyBoard(String order_coin, ProgressDialog progressDialog) {
-        progressDialog.dismiss();
-
-        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "物品支付", order_coin,1,"0","0");
-
-        // 显示窗口
-        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+//        progressDialog.dismiss();
+//
+//        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "物品支付", order_coin,1,"0","0");
+//
+//        // 显示窗口
+//        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
+//                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
     }
 
     private void pay(final boolean alipayOrWechatPay, double price, final ProgressDialog progressDialog) {

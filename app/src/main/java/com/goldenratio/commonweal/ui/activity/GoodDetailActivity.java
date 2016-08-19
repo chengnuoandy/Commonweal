@@ -1,17 +1,18 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,9 +34,7 @@ import com.goldenratio.commonweal.bean.Bid;
 import com.goldenratio.commonweal.bean.Deposit;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlGood;
-import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
-import com.goldenratio.commonweal.util.MD5Util;
 import com.goldenratio.commonweal.widget.PopEnterPassword;
 
 import org.json.JSONArray;
@@ -50,6 +49,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import c.b.BP;
 import c.b.PListener;
@@ -58,8 +58,6 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -72,29 +70,23 @@ import static android.content.ContentValues.TAG;
 
 public class GoodDetailActivity extends Activity implements View.OnClickListener {
 
-    private CountdownView mCountdownView;
-    private CountdownView mCountdownFive;
+    private CountdownView mCountdownView, mCountdownFive;
     private Long endTime;
     private Good mGood;
     private MySqlGood mySqlGood;
-    private TextView mTvGoodName;
-    private TextView mTvGoodDescription;
-    private TextView mTvUserName;
+    private TextView mTvGoodName, mTvGoodDescription, mTvUserName,
+            mTvBid, mTvDeposit, mTvNowCoin, mTvStartCoin;
     private GridView mGvPic;
-    private TextView mTvBid;
     private LinearLayout mLlCv;
     private ImageView mIvOnePic;
     private int picSize;
-    private TextView mTvNowCoin;
-    private TextView mTvStartCoin;
-    private String mStrObjectId;
-    private TextView mTvDeposit;
     private GoodDetailActivity mContext;
     private Deposit mDeposit = null;
+    private String mStrObjectId;
     private String mStrPwd;
-    private String mStrGoodCoin;
     private String mStrUserCoin;
-    private String orderId;
+    private String mUserId;
+    private Double deposit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,35 +96,30 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         initData();
         queryUserIdFromSqlite();
         isDeposit();
+        mUserId = ((MyApplication) getApplication()).getObjectID();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         initIsGoodStatus();
     }
 
     private void initIsGoodStatus() {
+        //初始化物品的状态（从MySql中获取的数据）
         String status = mySqlGood.getGood_Status();
         if (status.equals("1")) {
-            if (mGood.getGood_IsFirstBid()) {
-                Toast.makeText(GoodDetailActivity.this, "还未出价，争做沙发吧！", Toast.LENGTH_SHORT).show();
-                mLlCv.setVisibility(View.GONE);
-                mTvDeposit.setVisibility(View.VISIBLE);
-            } else {
-                getBidUpdateTime();
-                if (mTvDeposit.getVisibility() == View.VISIBLE) {
-                    mLlCv.setVisibility(View.GONE);
-                }
-            }
+            //正在进行
+            //有人已经出价，现在才获取服务器时间，尽可能的保证时间准确
+            getLastBidUpdatedAt();
         } else if (status.equals("0")) {
-            mLlCv.setVisibility(View.GONE);
-            mTvBid.setClickable(false);
-            mTvBid.setVisibility(View.VISIBLE);
-            mTvBid.setText("物品已经结束");
-            mTvDeposit.setVisibility(View.GONE);
-            mTvBid.setTextColor(Color.RED);
+            changeTextViewVisibitity(2);
+            mTvBid.setText("出价结束");
+            //已经结束出价
         } else {
-            mLlCv.setVisibility(View.GONE);
-            mTvBid.setClickable(false);
-            mTvBid.setVisibility(View.VISIBLE);
-            mTvBid.setText("物品状态获取失败");
-            mTvBid.setTextColor(Color.RED);
+            changeTextViewVisibitity(2);
+            mTvBid.setText("状态未知");
+            //未知状态
         }
     }
 
@@ -160,7 +147,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         } else {
             mGvPic.setAdapter(new mAdapter());
         }
-        mStrGoodCoin = (Long.parseLong(mGood.getGood_StartCoin()) * 0.3) + "";
+        //公益币
+        deposit = (Double.valueOf(mGood.getGood_StartCoin()) * 0.3);
     }
 
     /**
@@ -192,17 +180,16 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         final View root = View.inflate(mContext, R.layout.dialog_good_bid, null);
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                        dialog.setView(root);
-                        final Dialog dialog1 = dialog.create();
-                        dialog1.show();
-                        dialog1.getWindow().setSoftInputMode(
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setView(root);
+                        final Dialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setSoftInputMode(
                                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                         TextView mDialogTvBid = (TextView) root.findViewById(R.id.tv_bid);
                         mDialogTvBid.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mTvBid.setClickable(false);
                                 EditText mEtCoin = (EditText) root.findViewById(R.id.et_coin);
                                 String mStrCoin = mEtCoin.getText().toString();
                                 if (mStrCoin.equals("")) {
@@ -210,7 +197,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                                 } else if (Integer.parseInt(mStrCoin) <= Integer.parseInt(mGood.getGood_NowCoin())) {
                                     Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    saveBidToBmob(mEtCoin, dialog1);
+                                    dialog.dismiss();
+                                    querySixPwdStatusFromMySql(mEtCoin.getText().toString());
                                 }
                             }
                         });
@@ -219,11 +207,12 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 break;
             case R.id.tv_deposit:
                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
-                builder.setMessage("您将支付" + mStrGoodCoin + "保证金，是否继续？");
-                builder.setPositiveButton("继续", new DialogInterface.OnClickListener() {
+                builder.setMessage("保证金为物品起步价的30%。\n" + "本物品起步价：" + mGood.getGood_StartCoin() + "公益币\n保证金：" +
+                        deposit + "公益币");
+                builder.setPositiveButton("交保证金", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //pwdConfirm();
+                        //从Mysql查询用户当前公益币
                         queryUserCoinByObjectId();
                     }
                 });
@@ -233,40 +222,18 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private void pwdConfirm() {
-        View view = View.inflate(mContext, R.layout.dialog_good_deposit, null);
-        final EditText mEtPwd = (EditText) view.findViewById(R.id.et_password);
-        android.support.v7.app.AlertDialog.Builder builder1 = new android.support.v7.app.AlertDialog.Builder(mContext);
-        builder1.setView(view);
-        builder1.setPositiveButton("验证", new DialogInterface.OnClickListener() {
+    private void getLastBidUpdatedAt() {
+        BmobQuery<Bid> bidBmobQuery = new BmobQuery<>();
+        bidBmobQuery.addQueryKeys("createdAt");
+        bidBmobQuery.order("-createdAt");
+        bidBmobQuery.addWhereEqualTo("Bid_Good", mGood.getObjectId());
+        bidBmobQuery.findObjects(new FindListener<Bid>() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String mD5Pwd = MD5Util.createMD5(mEtPwd.getText().toString().trim());
-                if (mD5Pwd.equals(mStrPwd)) {
-                    ProgressDialog progressDialog = ProgressDialog.show(mContext, null, "正在跳转", false);
-                    pay(false, 0.01, progressDialog);
-                } else {
-                    Toast.makeText(mContext, "密码错误", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        builder1.setNegativeButton("取消", null);
-        builder1.show();
-    }
-
-    private void getBidUpdateTime() {
-        BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
-        goodBmobQuery.include("Good_Bid");
-        goodBmobQuery.getObject(mGood.getObjectId(), new QueryListener<Good>() {
-            @Override
-            public void done(Good good, BmobException e) {
+            public void done(List<Bid> list, BmobException e) {
                 if (e == null) {
-                    Log.d("Kiuber_LOG", "onSuccess: " + good.getGood_Bid().getCreatedAt());
-                    getBmobServerTime(good.getGood_Bid().getCreatedAt());
+                    getBmobServerTime(list.get(0).getCreatedAt());
                 } else {
-                    Log.d("Kiuber_LOG", "done: " + e.getMessage() + e.getErrorCode() + good);
-                    Toast.makeText(mContext, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
-                    finish();
+                    changeTextViewVisibitity(2);
                 }
             }
         });
@@ -279,61 +246,33 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 if (e == null) {
                     long createdTime = StringToLong(createdAt);
                     long nowTime = aLong * 1000L;
+                    //30000： 30秒内所有不能再次出价。降低服务器并发及最后一位出价者的不确定性。
                     long leftTime = 30000 - (nowTime - createdTime);
-                    Log.d(TAG, "onSuccess: " + createdTime + "-->" + nowTime);
-                    Log.d(TAG, "onSuccess: " + leftTime);
-                    mCountdownFive.start(leftTime);
-                    mCountdownFive.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
-                        @Override
-                        public void onEnd(CountdownView cv) {
-                            mTvBid.setClickable(true);
-                            mLlCv.setVisibility(View.GONE);
-                            mTvBid.setVisibility(View.VISIBLE);
-                        }
-                    });
                     if (leftTime < 0) {
-                        mLlCv.setVisibility(View.GONE);
-                        mTvBid.setVisibility(View.VISIBLE);
+                        changeTextViewVisibitity(2);
+                        Log.d(TAG, "onSuccess: " + createdTime + "-->" + nowTime);
+                        Log.d(TAG, "onSuccess: " + leftTime);
+                        //30秒内无用户出价
+                    } else {
+                        changeTextViewVisibitity(0);
+                        //30秒内有用户出价
+                        mCountdownFive.start(leftTime);
+                        mCountdownFive.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
+                            @Override
+                            public void onEnd(CountdownView cv) {
+                                //30秒倒计时结束，显示“出价”控件
+                                changeTextViewVisibitity(2);
+                            }
+                        });
                     }
                 } else {
-                    Log.d("Kiuber_LOG", "onSuccess: " + e.getMessage());
-                    Toast.makeText(mContext, "时间获取失败，取消进入详情页", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Log.d("Kiuber_LOG", "fail: " + e.getMessage());
+                    changeTextViewVisibitity(3);
                 }
             }
         });
     }
 
-    private void saveBidToBmob(final EditText mEtCoin, final Dialog dialog) {
-
-        if (mStrObjectId == null) {
-            Toast.makeText(this, "用户信息获取错误,请稍后再试", Toast.LENGTH_SHORT).show();
-        } else {
-            User_Profile user_profile = new User_Profile();
-            user_profile.setObjectId(mStrObjectId);
-            Good good = new Good();
-            good.setObjectId(mGood.getObjectId());
-
-            Bid bid = new Bid();
-            bid.setBid_User(user_profile);
-            bid.setBid_Good(good);
-            bid.setBid_Coin(mEtCoin.getText().toString());
-            final String finalMStrObjectId1 = mStrObjectId;
-            bid.save(new SaveListener<String>() {
-                @Override
-                public void done(String objectId, BmobException e) {
-                    if (e == null) {
-                        updateGood2Bmob(finalMStrObjectId1, mGood.getObjectId(), objectId, mEtCoin.getText().toString());
-                    } else {
-                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
-                    }
-                }
-            });
-            mTvBid.setClickable(false);
-            mTvBid.setVisibility(View.GONE);
-            dialog.dismiss();
-        }
-    }
 
     private void queryUserIdFromSqlite() {
         mStrObjectId = null;
@@ -346,75 +285,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             mStrPwd = cursor.getString(userPwdColumnIndex);
         }
         cursor.close();
-    }
-
-    private void updateGood2Bmob(String user_id, String good_id, final String bid_id, String coin) {
-        User_Profile user_profile = new User_Profile();
-        user_profile.setObjectId(user_id);
-        Bid bid = new Bid();
-        bid.setObjectId(bid_id);
-
-        Good good = new Good();
-        good.setGood_NowCoin(coin);
-        good.setGood_NowBidUser(user_profile);
-        good.setGood_Bid(bid);
-        good.setGood_IsFirstBid(false);
-        good.update(good_id, new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    updateGood2MySql(bid_id);
-                } else {
-                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
-                }
-            }
-        });
-    }
-
-    private void updateGood2MySql(final String bid_id) {
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateGoodNowBid";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("Good_ObjectId", mGood.getObjectId())
-                .add("Bid_ObjectId", bid_id)
-                .build();
-
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.contains("success")) {
-                            mTvBid.setVisibility(View.GONE);
-                            mLlCv.setVisibility(View.VISIBLE);
-                            Toast.makeText(mContext, "出价成功", Toast.LENGTH_SHORT).show();
-                            Log.d("Kiuber_LOG", mGood.getObjectId() + ": " + bid_id + "\n" + result);
-                            getBidUpdateTime();
-                        } else {
-                            Log.d("Kiuber_LOG", "fail: " + result);
-                        }
-                    }
-                });
-            }
-        });
     }
 
 
@@ -436,7 +306,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         int width, height;
 
         private mAdapter() {
-
             mContext = GoodDetailActivity.this;
             displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -485,7 +354,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             });
             return imageView;
         }
-
     }
 
     private void isDeposit() {
@@ -501,13 +369,11 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
 //                    Toast.makeText(mContext, list.get(0).getCreatedAt(), Toast.LENGTH_SHORT).show();
                     if (listSize == 1) {
                         mDeposit = list.get(0);
-                        mTvDeposit.setVisibility(View.GONE);
-                        mTvBid.setVisibility(View.VISIBLE);
                     } else if (listSize == 0) {
+                        changeTextViewVisibitity(1);
 //                        Toast.makeText(mContext, "未支付保证金", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, "未知状态", Toast.LENGTH_SHORT).show();
-                        mTvDeposit.setVisibility(View.GONE);
                     }
                 } else {
 //                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -519,7 +385,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
 
     private void pay(final boolean alipayOrWechatPay, final double price, final ProgressDialog progressDialog) {
 
-        BP.pay("名称", "描述", price, alipayOrWechatPay, new PListener() {
+        BP.pay("公益币充值", "描述", price, alipayOrWechatPay, new PListener() {
 
 
             // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
@@ -534,13 +400,12 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             @Override
             public void succeed() {
                 Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
-                updateUserCoin(Double.valueOf(mStrGoodCoin) + price);
+                updateUserCoin(deposit + price);
             }
 
             // 无论成功与否,返回订单号
             @Override
             public void orderId(String orderI) {
-                orderId = orderI;
                 // 此处应该保存订单号,比如保存进数据库等,以便以后查询
                 progressDialog.dismiss();
             }
@@ -567,7 +432,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     }
 
     private void updateUserCoin(double sumCoin) {
-        Toast.makeText(mContext, sumCoin + "", Toast.LENGTH_SHORT).show();
         final ProgressDialog progressDialog = ProgressDialog.show(this, null, "正在加载", false);
         String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -601,7 +465,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            showPayKeyBoard(mStrGoodCoin, progressDialog, 0);
+                            showPayKeyBoard(deposit + "", progressDialog);
                         }
                     });
                 }
@@ -637,9 +501,25 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         }
     }
 
-    public void showPayKeyBoard(String order_coin, ProgressDialog progressDialog, int flag) {
+    public void showPayKeyBoard(String coin, ProgressDialog progressDialog) {
         progressDialog.dismiss();
-        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "支付保证金", order_coin, flag,mGood.getObjectId(),orderId);
+        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "交保证金", coin, "保证金", mGood.getObjectId());
+
+        // 显示窗口
+        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+    }
+
+    public void showPayKeyBoard1(String coin) {
+        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "出价验证", coin, "出价", mUserId, mGood.getObjectId());
+
+        // 显示窗口
+        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+    }
+
+    public void showPayKeyBoard2() {
+        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "设置六位数密码", "", "新密码", mUserId, 0);
 
         // 显示窗口
         popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
@@ -650,7 +530,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         final ProgressDialog progressDialog = ProgressDialog.show(this, null, "正在加载", false);
         String url = "http://123.206.89.67/WebService1.asmx/QueryUserCoinByObjectId";
         OkHttpClient okHttpClient = new OkHttpClient();
-        String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
         if (mStrObjectId != null) {
             RequestBody body = new FormBody.Builder()
                     .add("ObjectId", mStrObjectId)
@@ -687,15 +566,23 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                                     mStrUserCoin = jsonObject.getString("User_Coin");
                                 }
-                                mStrGoodCoin = (Long.parseLong(mGood.getGood_StartCoin()) * 0.3) + "";
-                                final double poor = Double.valueOf(mStrGoodCoin) - Double.valueOf(mStrUserCoin);
+                                //保证金-用户的公益币
+                                double usercoin = Double.valueOf(mStrUserCoin);
+                                //用户所缺公益币数
+                                final double poor = deposit - usercoin;
+                                final double sxf = (poor / 10) * 0.05;
                                 if (poor > 0) {
-                                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(GoodDetailActivity.this);
-                                    builder.setMessage("账号公益币不足，是否立即充值？");
+                                    //公益币不足，提示充值
+                                    final android.support.v7.app.AlertDialog.Builder builder =
+                                            new android.support.v7.app.AlertDialog.Builder(GoodDetailActivity.this);
+                                    builder.setMessage("账号公益币：" + usercoin + "，还缺" + poor + "公益币，您将充值"
+                                            + poor + "公益币（由于个人开发团队限制，" +
+                                            "平台收取5%的手续费）");
                                     builder.setPositiveButton("去充值", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            pay(false, poor, progressDialog);
+                                            //充值金额包括公益币、充值Bmob收取的0.05的费率。
+                                            pay(false, sxf + poor / 10, progressDialog);
                                         }
                                     });
                                     builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -706,7 +593,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                                     });
                                     builder.show();
                                 } else {
-                                    showPayKeyBoard(mStrGoodCoin, progressDialog, 0);
+                                    //提交物品起步价的30%的公益币作为保证金
+                                    showPayKeyBoard(deposit + "", progressDialog);
                                 }
                             } catch (JSONException e) {
                                 Log.d("Kiuber_LOG", e.getMessage() + request);
@@ -716,5 +604,86 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 }
             });
         }
+    }
+
+    private void changeTextViewVisibitity(int flag) {
+        switch (flag) {
+            case 0:
+                mLlCv.setVisibility(View.VISIBLE);
+                mTvDeposit.setVisibility(View.GONE);
+                mTvBid.setVisibility(View.GONE);
+                break;
+            case 1:
+                mLlCv.setVisibility(View.GONE);
+                mTvDeposit.setVisibility(View.VISIBLE);
+                mTvBid.setVisibility(View.GONE);
+                break;
+            case 2:
+                mLlCv.setVisibility(View.GONE);
+                mTvDeposit.setVisibility(View.GONE);
+                mTvBid.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                mLlCv.setVisibility(View.GONE);
+                mTvDeposit.setVisibility(View.GONE);
+                mTvBid.setVisibility(View.GONE);
+                break;
+        }
+    }
+
+    private void querySixPwdStatusFromMySql(final String bidCoin) {
+        String url = "http://123.206.89.67/WebService1.asmx/QueryUserSixPwdByObjectId";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("ObjectId", mUserId)
+                .build();
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, final IOException e) {
+                final String e1 = e.getMessage();
+                mContext.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                mContext.runOnUiThread(new Runnable() {
+                    @TargetApi(Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void run() {
+                        {
+                            try {
+                                JSONArray jsonArray = new JSONArray(result);
+                                String sixPwd = "0";
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                    sixPwd = jsonObject.getString("User_SixPwd");
+                                }
+                                if (Objects.equals(sixPwd, "0")) {
+                                    showPayKeyBoard2();
+                                } else {
+                                    showPayKeyBoard1(bidCoin);
+                                }
+                                Log.d(TAG, "run: " + sixPwd + "-->" + result);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.d(TAG, "JSONException: " + e.getMessage());
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 }

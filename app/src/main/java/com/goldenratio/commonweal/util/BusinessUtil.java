@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.util;
 
 /**
  * Created by Administrator on 2016/8/20.
+ * 交易详情
  */
 
 public class BusinessUtil {

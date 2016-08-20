@@ -109,7 +109,7 @@ public class MyFragment extends Fragment {
                 startActivity(new Intent(getContext(), OrderActivity.class));
             }
         });
-        //地址栏跳转
+        //地址栏跳转到交易详情
         mTvAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

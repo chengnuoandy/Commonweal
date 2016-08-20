@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.Business;
 import com.goldenratio.commonweal.util.BusinessUtil;
 
 import java.util.ArrayList;

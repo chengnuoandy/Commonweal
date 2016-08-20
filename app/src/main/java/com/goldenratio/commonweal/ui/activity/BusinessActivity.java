@@ -122,9 +122,5 @@ public class BusinessActivity extends Activity {
                 }
             }
         });
-
-
     }
-
-
 }

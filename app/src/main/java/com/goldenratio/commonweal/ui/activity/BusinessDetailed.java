@@ -62,6 +62,7 @@ public class BusinessDetailed extends Activity {
 
     /**
      * 初始化界面
+     *
      */
     private void initView() {
       TextView business_money = (TextView) findViewById(R.id.business_money);

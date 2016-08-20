@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.BusinessActivity;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
@@ -63,6 +64,8 @@ public class MyFragment extends Fragment {
     private String avaMinUrl;//用户小头像
     public static String mUserID; //用户objectid
 
+    private TextView mTvAddress; //地址栏
+
     private TextView mTextView;
     private TextView mTvOrder;
 
@@ -98,11 +101,20 @@ public class MyFragment extends Fragment {
     }
 
     private void initView(View view) {
+        mTvAddress = (TextView) view.findViewById(R.id.tv_address);//地址栏
         mTvOrder = (TextView) view.findViewById(R.id.tv_order);
         mTvOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), OrderActivity.class));
+            }
+        });
+        //地址栏跳转到交易详情
+        mTvAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), BusinessActivity.class);
+                startActivity(intent);
             }
         });
     }

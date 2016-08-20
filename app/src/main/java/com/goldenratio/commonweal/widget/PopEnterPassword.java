@@ -11,7 +11,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Bid;
@@ -155,8 +154,8 @@ public class PopEnterPassword extends PopupWindow {
         });
     }
 
-    public PopEnterPassword(final Activity context, String type, final String coin, String remark,
-                            final String userObjectId, final String goodObjectId, int a) {
+    public PopEnterPassword(final Activity context, final String pwd, String type, final String coin, String remark,
+                            final String goodObjectId, double a) {
         //出价验证
         super(context);
         this.mContext = context;
@@ -169,14 +168,19 @@ public class PopEnterPassword extends PopupWindow {
         pwdView.setOnFinishInput(new OnPasswordInputFinish() {
             @Override
             public void inputFinish(String password) {
-                querySixPwdFromMysql(password, userObjectId, goodObjectId, coin, coin);
+                if (MD5Util.createMD5(password).equals(pwd)) {
+                    //querySixPwdFromMysql(password, userObjectId, goodObjectId, coin, coin);
+                    saveBid2Bmob(goodObjectId, coin);
+                } else {
+                    Toast.makeText(context, "密码错误", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void saveBidToBmob(final String user, final String goodId, String bidCoin, final String nowCoin) {
+    private void saveBid2Bmob(final String goodId, final String bidCoin) {
         User_Profile user_profile = new User_Profile();
-        user_profile.setObjectId(user);
+        user_profile.setObjectId(mUserId);
         Good good = new Good();
         good.setObjectId(goodId);
 
@@ -188,7 +192,7 @@ public class PopEnterPassword extends PopupWindow {
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
-                    updateGood2Bmob(user, goodId, objectId, nowCoin);
+                    updateGood2Bmob(goodId, objectId, bidCoin);
                 } else {
                     Log.d("Kiuber_LOG", "done: " + e.getMessage());
                 }
@@ -196,9 +200,9 @@ public class PopEnterPassword extends PopupWindow {
         });
     }
 
-    private void updateGood2Bmob(final String user_id, final String good_id, final String bid_id, String coin) {
+    private void updateGood2Bmob(final String good_id, final String bid_id, String coin) {
         User_Profile user_profile = new User_Profile();
-        user_profile.setObjectId(user_id);
+        user_profile.setObjectId(mUserId);
         Bid bid = new Bid();
         bid.setObjectId(bid_id);
 
@@ -211,7 +215,7 @@ public class PopEnterPassword extends PopupWindow {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    updateGood2MySql(good_id, user_id);
+                    updateGood2MySql(good_id);
                 } else {
                     Log.d("Kiuber_LOG", "done: " + e.getMessage());
                 }
@@ -219,16 +223,18 @@ public class PopEnterPassword extends PopupWindow {
         });
     }
 
-    private void updateGood2MySql(String good, final String user) {
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateGoodNowBid";
+    private void updateGood2MySql(String goodId) {
+        String root = "http://123.206.89.67/WebService1.asmx/";
+        String method = "BidGood";
+        String URL = root + method;
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
-                .add("Good_ObjectId", good)
-                .add("User_ObjectId", user)
+                .add("GoodObjectId", goodId)
+                .add("UserObjectId", mUserId)
                 .build();
 
         final Request request = new Request.Builder()
-                .url(url)
+                .url(URL)
                 .post(body)
                 .build();
         Call call = okHttpClient.newCall(request);
@@ -422,62 +428,6 @@ public class PopEnterPassword extends PopupWindow {
                             Toast.makeText(mContext, "支付失败", Toast.LENGTH_SHORT).show();
                         }
                         dismiss();
-                    }
-                });
-            }
-        });
-    }
-
-    private void querySixPwdFromMysql(final String pwd, final String user, final String
-            goodId, final String bidCoin, final String nowCoin) {
-        String url = "http://123.206.89.67/WebService1.asmx/QueryUserSixPwdByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", user)
-                .build();
-
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                mContext.runOnUiThread(new Runnable() {
-
-                    private String sixPwd;
-
-                    @Override
-                    public void run() {
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = new JSONArray(result);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                sixPwd = jsonObject.getString("User_SixPwd");
-                            }
-                            if (MD5Util.createMD5(pwd).equals(sixPwd)) {
-                                saveBidToBmob(user, goodId, bidCoin, nowCoin);
-                            } else {
-                                Toast.makeText(mContext, "密码错误", Toast.LENGTH_SHORT).show();
-                                dismiss();
-                            }
-                        } catch (JSONException e) {
-                            Log.d("Kiuber_LOG", e.getMessage() + request);
-                        }
                     }
                 });
             }

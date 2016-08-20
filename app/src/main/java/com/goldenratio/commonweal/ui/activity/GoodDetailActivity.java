@@ -139,11 +139,11 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                                 String mStrCoin = mEtCoin.getText().toString();
                                 if (mStrCoin.equals("")) {
                                     Toast.makeText(mContext, "请输入出价公益币", Toast.LENGTH_SHORT).show();
-                                } else if (Integer.parseInt(mStrCoin) <= Integer.parseInt(mGood.getGood_NowCoin())) {
+                                } else if (Double.valueOf(mStrCoin) <= Double.valueOf(mGood.getGood_NowCoin())) {
                                     Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
                                 } else {
                                     dialog.dismiss();
-//                                    querySixPwdStatusFromMySql(mEtCoin.getText().toString());
+                                    queryCoinAndSixPwd(1, mEtCoin.getText().toString());
                                 }
                             }
                         });
@@ -158,7 +158,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //从Mysql查询用户当前公益币和密码
-                        queryCoinAndSixPwd();
+                        queryCoinAndSixPwd(0, "");
                     }
                 });
                 builder.setNegativeButton("取消", null);
@@ -416,8 +416,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
     }
 
-    public void showPayKeyBoard2(String coin) {
-        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "出价验证", coin, "出价", mUserId, mGood.getObjectId(), 0);
+    public void showPayKeyBoard2(String userPwd, String coin) {
+        PopEnterPassword popEnterPassword = new PopEnterPassword(this, userPwd, "出价验证", coin, "出价", mGood.getObjectId(), 0.0);
 
         // 显示窗口
         popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
@@ -432,7 +432,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
     }
 
-    private void queryCoinAndSixPwd() {
+    private void queryCoinAndSixPwd(final int flag, final String bidCoin) {
         String root = "http://123.206.89.67/WebService1.asmx/";
         String method = "QueryUserCoinAndSixPwdByObjectId";
         String URL = root + method;
@@ -465,41 +465,52 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     @Override
                     public void run() {
                         try {
-                            String coin, pwd = "0";
+                            String coin, pwd;
                             JSONArray jsonArray = new JSONArray(result);
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 coin = jsonArray.getJSONObject(i).getString("User_Coin");
                                 pwd = jsonArray.getJSONObject(i).getString("User_SixPwd");
                                 //用户公益币与保证金公益币的差值
-                                final double poor = deposit - Double.valueOf(coin);
-                                final double sxf = poor * 0.05;
-                                if (poor < 0 || poor == 0) {
-                                    //用户公益币够交保证金的
-                                    if (Objects.equals(pwd, "0")) {
-                                        //用户的六位数密码为空，第一次设置六位数密码
-                                        Toast.makeText(GoodDetailActivity.this, "请先设置六位数密码", Toast.LENGTH_SHORT).show();
-                                        showPayKeyBoard();
-                                        //TODO 继续
-                                    } else {
-                                        Toast.makeText(GoodDetailActivity.this, "请输入支付密码" + pwd, Toast.LENGTH_SHORT).show();
-                                        showPayKeyBoard1(-poor + "", pwd, deposit.toString());
-                                        //用户已经设置6位数密码
-                                    }
-                                } else {
-                                    //用户当前公益币不足交保证金，提示充值
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(GoodDetailActivity.this);
-                                    builder.setMessage("账号公益币：" + coin + "，还缺" + poor + "公益币，您将充值"
-                                            + poor + "公益币（由于个人开发团队限制，" +
-                                            "平台收取5%的手续费）");
-                                    builder.setPositiveButton("去充值", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            pay(false, sxf + poor / 10);
+                                /**
+                                 * 0：支付保证金
+                                 * 1：出价验证
+                                 */
+                                if (flag == 0) {
+                                    final double poor = deposit - Double.valueOf(coin);
+                                    final double sxf = poor * 0.05;
+                                    if (poor < 0 || poor == 0) {
+                                        //用户公益币够交保证金的
+                                        if (Objects.equals(pwd, "0")) {
+                                            //用户的六位数密码为空，第一次设置六位数密码
+                                            Toast.makeText(GoodDetailActivity.this, "请先设置六位数密码", Toast.LENGTH_SHORT).show();
+                                            showPayKeyBoard();
+                                            //TODO 继续
+                                        } else {
+                                            showPayKeyBoard1(-poor + "", pwd, deposit.toString());
+                                            Toast.makeText(GoodDetailActivity.this, "请输入支付密码" + pwd, Toast.LENGTH_SHORT).show();
+                                            //用户已经设置6位数密码
                                         }
-                                    });
-                                    builder.setNegativeButton("取消", null);
-                                    builder.show();
+                                    } else {
+                                        //用户当前公益币不足交保证金，提示充值
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(GoodDetailActivity.this);
+                                        builder.setMessage("账号公益币：" + coin + "，还缺" + poor + "公益币，您将充值"
+                                                + poor + "公益币（由于个人开发团队限制，" +
+                                                "平台收取5%的手续费）");
+                                        builder.setPositiveButton("去充值", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                pay(false, sxf + poor / 10);
+                                            }
+                                        });
+                                        builder.setNegativeButton("取消", null);
+                                        builder.show();
+                                    }
+
+                                } else if (flag == 1) {
+                                    double poor = Double.valueOf(bidCoin) - Double.valueOf(coin);
+                                    showPayKeyBoard2(pwd, bidCoin);
                                 }
+
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

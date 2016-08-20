@@ -63,7 +63,9 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
     }
 
     private void queryOrderById() {
-        String url = "http://123.206.89.67/WebService1.asmx/QueryOrderByObjectId";
+        String root = "http://123.206.89.67/WebService1.asmx/";
+        String method = "QueryOrderByObjectId";
+        String URL = root + method;
         OkHttpClient okHttpClient = new OkHttpClient();
         String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
         if (mStrObjectId != null) {
@@ -72,7 +74,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                     .build();
 
             final Request request = new Request.Builder()
-                    .url(url)
+                    .url(URL)
                     .post(body)
                     .build();
             Call call = okHttpClient.newCall(request);
@@ -98,21 +100,29 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                             MySqlOrder mySqlOrder = new MySqlOrder();
                             try {
                                 jsonArray = new JSONArray(result);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                    mySqlOrder.setOrder_Name(jsonObject.getString("Order_Name"));
-                                    mySqlOrder.setOrder_Coin(jsonObject.getString("Order_Coin"));
-                                    mySqlOrder.setObject_Id(jsonObject.getString("Object_Id"));
-                                    mySqlOrder.setOrder_Status(jsonObject.getString("Order_Status"));
-                                    mySqlOrder.setOrder_PicURL(jsonObject.getString("Order_PicURL"));
-                                    mySqlOrder.setOrder_Good(jsonObject.getString("Order_Good"));
-                                    mySqlOrders.add(i, mySqlOrder);
+
+                                if (jsonArray.length() == 0) {
+                                    TextView textView = new TextView(OrderActivity.this);
+                                    textView.setText("无订单");
+//                                    addContentView(textView, null);
+                                    setContentView(textView);
+                                    mLvOrder.setVisibility(View.GONE);
+                                } else {
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        mySqlOrder.setOrder_Name(jsonObject.getString("Order_Name"));
+                                        mySqlOrder.setOrder_Coin(jsonObject.getString("Order_Coin"));
+                                        mySqlOrder.setObject_Id(jsonObject.getString("Object_Id"));
+                                        mySqlOrder.setOrder_Status(jsonObject.getString("Order_Status"));
+                                        mySqlOrder.setOrder_PicURL(jsonObject.getString("Order_PicURL"));
+                                        mySqlOrder.setOrder_Good(jsonObject.getString("Order_Good"));
+                                        mySqlOrders.add(i, mySqlOrder);
+                                    }
+                                    mLvOrder.setAdapter(new MyOrderAdapter());
                                 }
-                                mLvOrder.setAdapter(new MyOrderAdapter());
                                 Log.d("Kiuber_LOG", "run: " + result);
                             } catch (JSONException e) {
                                 Log.d("Kiuber_LOG", e.getMessage() + request);
-
                             }
                             Log.d("Kiuber_LOG", mySqlOrders.get(0).getOrder_Name() + ": " + "\n" + result);
                         }

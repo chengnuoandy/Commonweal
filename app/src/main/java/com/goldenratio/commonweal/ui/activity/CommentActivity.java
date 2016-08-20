@@ -196,7 +196,7 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
                         //评论用户
                         utils.UserName = comment.getComment_user().getUser_Name();
                         //评论用户头像地址
-                        utils.icom = comment.getComment_user().getUser_image_min();
+                        utils.icom = comment.getComment_user().getUser_image_hd();
                         utils.reply = comment.getReply();
                         //封装到list集合中
 

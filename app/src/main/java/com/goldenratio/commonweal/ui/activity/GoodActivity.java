@@ -36,6 +36,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,12 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Kiuber on 2016/6/11.
@@ -257,6 +264,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
             if (mStrObjectId == null) {
                 Toast.makeText(this, "账号信息获取失败，请登录", Toast.LENGTH_SHORT).show();
             } else {
+                Toast.makeText(GoodActivity.this, "正在发布", Toast.LENGTH_SHORT).show();
                 doInBackground(filePaths, mStrName, mStrDescription, mLgTime, hours[mSrTime.getSelectedItemPosition()]);
                 finish();
             }
@@ -274,7 +282,6 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                             User_Profile user_profile = new User_Profile();
                             user_profile.setObjectId(mStrObjectId);
                             Good good = new Good();
-                            Toast.makeText(GoodActivity.this, mStrObjectId, Toast.LENGTH_SHORT).show();
                             good.setGood_User(user_profile);
                             good.setGood_Name(mStrName);
                             good.setGood_Description(mStrDescription);
@@ -284,13 +291,12 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                             good.setGood_NowCoin(price);
                             good.setGood_DonationRate(Integer.parseInt(prop));
                             good.setGood_UpDateM(mLgTime);
-                            good.setGood_Status(true);
+                            good.setGood_Status(1);
                             good.setGood_IsFirstBid(true);
                             good.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String s, BmobException e) {
                                     if (e == null) {
-
                                         createAEvent(s, hours);
                                     } else {
                                         Log.d("Kiuber_LOG", "done: " + e.getMessage());
@@ -316,34 +322,47 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
     }
 
     private void createAEvent(String objectId, int hours) {
-        RequestParams requestParams = new RequestParams("http://123.206.89.67/WebService1.asmx/CreateAEvent");
-        requestParams.addBodyParameter("ObjectId", objectId);
-        requestParams.addBodyParameter("AfterHouer", String.valueOf(hours));
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        String URL = "http://123.206.89.67/WebService1.asmx/CreateAEvent";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("ObjectId", objectId)
+                .add("AfterHouer", String.valueOf(hours))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(URL)
+                .post(body)
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new okhttp3.Callback() {
             @Override
-            public void onSuccess(String result) {
-                if (result.equals("success")) {
-                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(500);
-                    Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(GoodActivity.this, result, Toast.LENGTH_SHORT).show();
-                }
+            public void onFailure(Call call, final IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "fail: " + e.getMessage());
+                        Toast.makeText(GoodActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-                Toast.makeText(x.app(), "cancelled", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFinished() {
-
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.equals("success")) {
+                            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                            vibrator.vibrate(500);
+                            Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, "run: " + result);
+                            Toast.makeText(GoodActivity.this, result, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
     }

@@ -38,6 +38,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static cn.bmob.v3.BmobRealTimeData.TAG;
+
 /**
  * Created by Kiuber on 2016/8/17.
  */
@@ -47,7 +49,6 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     private TextView mTvName;
     private MySqlOrder mySqlOrder;
     private Button mBtnExpress;
-    private String order_status;
     private TextView mTvCoin;
     private String user_coin;
 
@@ -61,28 +62,15 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
 
     private void initData() {
         mySqlOrder = (MySqlOrder) getIntent().getSerializableExtra("orderList");
-        isOrderStatus();
         mTvName.setText(mySqlOrder.getOrder_Name());
         mTvCoin.setText(mySqlOrder.getOrder_Coin());
-    }
-
-    private void isOrderStatus() {
-        order_status = mySqlOrder.getOrder_Status();
-        if (order_status.equals("1")) {
-            mBtnPay.setVisibility(View.VISIBLE);
-            mBtnPay.setOnClickListener(this);
-        } else if (order_status.equals("0")) {
-            mBtnExpress.setVisibility(View.VISIBLE);
-            mBtnExpress.setOnClickListener(this);
-        } else {
-            Toast.makeText(this, "订单状态信息异常", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void initView() {
         mTvName = (TextView) findViewById(R.id.tv_name);
         mTvCoin = (TextView) findViewById(R.id.tv_coin);
         mBtnPay = (Button) findViewById(R.id.btn_pay);
+        mBtnPay.setOnClickListener(this);
         mBtnExpress = (Button) findViewById(R.id.btn_express);
     }
 
@@ -152,11 +140,13 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                                     builder.setNegativeButton("取消", null);
                                     builder.show();
                                 } else {
-                                    showPayKeyBoard(mySqlOrder.getOrder_Coin(), progressDialog);
+                                    Log.d(TAG, "run: " + result);
+                                    //poor1 用户支付完成剩下的公益币
+                                    double poor1 = Double.valueOf(user_coin) - Double.valueOf(mySqlOrder.getOrder_Coin());
+                                    showPayKeyBoard(mySqlOrder.getOrder_Coin(), progressDialog, poor1 + "");
                                 }
                             } catch (JSONException e) {
                                 Log.d("Kiuber_LOG", e.getMessage() + request);
-
                             }
                         }
                     });
@@ -165,14 +155,16 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         }
     }
 
-    public void showPayKeyBoard(String order_coin, ProgressDialog progressDialog) {
-//        progressDialog.dismiss();
-//
-//        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "物品支付", order_coin,1,"0","0");
-//
-//        // 显示窗口
-//        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
-//                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+    public void showPayKeyBoard(String order_coin, ProgressDialog progressDialog, String userCoin) {
+        String mUserId = ((MyApplication) getApplication()).getObjectID();
+
+        progressDialog.dismiss();
+
+        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "物品支付", order_coin, "支付订单", mUserId, mySqlOrder.getObject_Id(), userCoin);
+
+        // 显示窗口
+        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
     }
 
     private void pay(final boolean alipayOrWechatPay, double price, final ProgressDialog progressDialog) {

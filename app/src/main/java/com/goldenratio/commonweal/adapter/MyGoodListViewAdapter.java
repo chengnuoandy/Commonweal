@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -70,6 +72,8 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             }
         }
     };
+    private final int width;
+    private final int height;
 
     public MyGoodListViewAdapter(Context mContext, List<Good> mGoodList) {
         this.mContext = mContext;
@@ -77,6 +81,12 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         this.mInflater = LayoutInflater.from(mContext);
         mCountdownVHList = new SparseArray<>();
         startRefreshTime();
+
+
+        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+
+        width = wm.getDefaultDisplay().getWidth();
+        height = wm.getDefaultDisplay().getHeight();
     }
 
     /**
@@ -166,7 +176,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         private TextView mTvThumbUp;
         private Integer position;
         private View conView;
-        private TextView mTvGoodStatus;
+        private ImageView mTvGoodStatus;
 
         public void initView(View convertView) {
             conView = convertView;
@@ -178,7 +188,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvNowPrice = (TextView) convertView.findViewById(R.id.tv_now_price);
             mIvUserAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
             mTvThumbUp = (TextView) convertView.findViewById(R.id.tv_thumb_up);
-            mTvGoodStatus = (TextView) convertView.findViewById(R.id.tv_good_status);
+            mTvGoodStatus = (ImageView) convertView.findViewById(R.id.tv_good_status);
             mTvThumbUp.setOnClickListener(this);
             mIvUserAvatar.setOnClickListener(this);
         }
@@ -218,10 +228,17 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 //                    .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                    .transform(new GlideCircleTransform(mContext))
 //                    .into(mIvPic);
+            //TODO 图片尺寸，物品详情页的状态
+            Glide.with(mContext).load(getItem(position).getGood_Photos().get(0).toString()).override(width * 2 / 3, height / 3).into(mIvPic);
 
-            Glide.with(mContext).load(getItem(position).getGood_Photos().get(0).toString()).into(mIvPic);
-
-            mTvNowPrice.setText(getItem(position).getGood_NowCoin() + "");
+            mTvNowPrice.setText(getItem(position).getGood_NowCoin());
+            long nowTime = System.currentTimeMillis();
+            long endTime = getItem(position).getGood_UpDateM();
+            if ((endTime - nowTime) > 0) {
+                mTvGoodStatus.setImageResource(R.mipmap.ing);
+            } else {
+                mTvGoodStatus.setImageResource(R.mipmap.end);
+            }
         }
 
         @Override

@@ -46,14 +46,12 @@
         android:id="@+id/btn_express"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="查看快递"
-        android:visibility="gone" />
+        android:text="查看快递" />
 
     <Button
         android:id="@+id/btn_pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="支付"
-        android:visibility="gone" />
+        android:text="支付" />
 
 </LinearLayout>

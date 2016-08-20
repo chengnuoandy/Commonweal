@@ -25,7 +25,7 @@ public class Good extends BmobObject {
     private String Good_Praise;
     private User_Profile Good_NowBidUser;
     private Long Good_Five;//五分钟之内不可出价
-    private Boolean Good_Status;
+    private Integer Good_Status;
     private Boolean Good_IsFirstBid;
     private Bid Good_Bid;
 
@@ -149,11 +149,11 @@ public class Good extends BmobObject {
         Good_Five = good_Five;
     }
 
-    public Boolean getGood_Status() {
+    public Integer getGood_Status() {
         return Good_Status;
     }
 
-    public void setGood_Status(Boolean good_Status) {
+    public void setGood_Status(Integer good_Status) {
         Good_Status = good_Status;
     }
 

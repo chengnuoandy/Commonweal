@@ -12,13 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_good_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:drawableTop="@drawable/ic_terrain_black_24dp"
-            android:text="正在进行" />
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:src="@mipmap/ing" />
 
 
         <LinearLayout
@@ -30,8 +31,8 @@
 
             <ImageView
                 android:id="@+id/iv_user_avatar"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/avatar" />
 
             <LinearLayout
@@ -45,31 +46,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="黄晓明"
+                    android:textColor="#3F51B5"
                     android:textSize="@dimen/text_size_default" />
-
-                <TextView
-                    android:id="@+id/tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="物品发布时间"
-                    android:textSize="@dimen/text_size_small" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
+        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
 
-        <TextView
+        <com.goldenratio.commonweal.util.CustomFontTextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:text="物品的名称"
-            android:textSize="@dimen/text_size_big" />
+            android:textSize="@dimen/text_size_default" />
 
         <TextView
             android:layout_width="0dp"
@@ -116,6 +112,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/little_space" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="物品发布时间"
+        android:textSize="12sp" />
 
     <TextView
         android:layout_width="match_parent"

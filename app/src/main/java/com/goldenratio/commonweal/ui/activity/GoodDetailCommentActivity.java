@@ -10,14 +10,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.CommentAdatper;
+import com.goldenratio.commonweal.adapter.GoodCommentAdapter;
+import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.bean.Good_Comment;
+
 import com.goldenratio.commonweal.bean.Help;
-import com.goldenratio.commonweal.bean.Help_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.Comment;
@@ -33,22 +35,17 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
- * Created by Administrator on 2016/8/17.
+ * Created by Administrator on 2016/8/20.
  */
 
-public class CommentActivity extends Activity implements View.OnClickListener,BGARefreshLayout.BGARefreshLayoutDelegate {
-
-    private ImageButton mIbtn_send;
+public class GoodDetailCommentActivity extends Activity implements View.OnClickListener,BGARefreshLayout.BGARefreshLayoutDelegate{
     private ListView mListView;
     private EditText edt_reply;
     private Button btn_reply;
+    private Good mGood;
 
-
-    private Help mHelp;
     private String mStrObjectId;
     private ArrayList arrayList;
-    private ArrayList mArrayList;
-
     /**
      * 下拉刷新
      */
@@ -59,8 +56,8 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        mHelp = (Help) getIntent().getSerializableExtra("Help");
         initView();
+        mGood = (Good) getIntent().getSerializableExtra("Good");
         show();
     }
 
@@ -84,12 +81,8 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibtn_send:
-//                Toast.makeText(getApplicationContext(), "111", Toast.LENGTH_SHORT).show();
-
                 showDialog(-1);
                 break;
-//            case R.id.tv_user_reply:
-//                showDialog(1);
         }
     }
 
@@ -112,7 +105,7 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
 
 //                    Toast.makeText(getApplication(), "" + edt_reply.getText(), Toast.LENGTH_SHORT).show();
                     //获取本地数据库
-                    UserDao userDao = new UserDao(CommentActivity.this);
+                    UserDao userDao = new UserDao(GoodDetailCommentActivity.this);
                     Cursor cursor = userDao.query("select * from User_Profile");
                     while (cursor.moveToNext()) {
                         int nameColumnIndex = cursor.getColumnIndex("objectId");
@@ -121,17 +114,17 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
                     cursor.close();
                     //判断用户是否登录
                     if (mStrObjectId != null) {
-                        final BmobQuery<Help_Comment> bmobQuery = new BmobQuery();
-                        final String title = mHelp.getObjectId();
+                        final BmobQuery<Good_Comment> bmobQuery = new BmobQuery();
+                        final String title = mGood.getObjectId().toString();
                         bmobQuery.addWhereEqualTo("objcetid", title);
-                        bmobQuery.findObjects(new FindListener<Help_Comment>() {
+                        bmobQuery.findObjects(new FindListener<Good_Comment>() {
                             @Override
-                            public void done(List<Help_Comment> list, BmobException e) {
-                                BmobQuery<Help_Comment> bmobQuery1 = new BmobQuery<Help_Comment>();
+                            public void done(List<Good_Comment> list, BmobException e) {
+                                BmobQuery<Good_Comment> bmobQuery1 = new BmobQuery<Good_Comment>();
                                 bmobQuery1.addWhereEqualTo("reply", title);
-                                bmobQuery1.findObjects(new FindListener<Help_Comment>() {
+                                bmobQuery1.findObjects(new FindListener<Good_Comment>() {
                                     @Override
-                                    public void done(List<Help_Comment> list, BmobException e) {
+                                    public void done(List<Good_Comment> list, BmobException e) {
                                         up(list.size() + 1, edt_reply.getText().toString());
                                         edt_reply.setText("");
                                         customDialog.dismiss();
@@ -155,10 +148,10 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
 
     private void up(int id, String ss) {
         User_Profile u_famousP = new User_Profile();
-        Help_Comment help_comment = new Help_Comment();
+        Good_Comment help_comment = new Good_Comment();
         //获得内容
         help_comment.setComment(ss);
-        help_comment.setObjcetid(mHelp.getObjectId());
+        help_comment.setObjcetid(mGood.getObjectId());
         help_comment.setReply("主题");
         help_comment.setId(id);
         u_famousP.setObjectId(mStrObjectId);
@@ -181,15 +174,15 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
         arrayList = new ArrayList();
 
 //        //从服务器端获取评论内容
-        final String title = mHelp.getObjectId();
-        BmobQuery<Help_Comment> bmobQuery = new BmobQuery<>();
+        final String title = mGood.getObjectId().toString();
+        BmobQuery<Good_Comment> bmobQuery = new BmobQuery<>();
         bmobQuery.addWhereEqualTo("objcetid", title);
         bmobQuery.include("comment_user");
-        bmobQuery.findObjects(new FindListener<Help_Comment>() {
+        bmobQuery.findObjects(new FindListener<Good_Comment>() {
             @Override
-            public void done(List<Help_Comment> list, BmobException e) {
+            public void done(List<Good_Comment> list, BmobException e) {
                 if (e == null) {
-                    for (Help_Comment comment : list) {
+                    for (Good_Comment comment : list) {
                         Comment utils = new Comment();
                         //                    评论内容
                         utils.comment = comment.getComment();
@@ -202,11 +195,11 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
 
                         if (comment.getReply().toString().equals(title)) {
                             arrayList.add(utils);
-                            CommentAdatper commentAdatper = new CommentAdatper(1, mHelp, CommentActivity.this, arrayList);
+                            GoodCommentAdapter commentAdatper = new GoodCommentAdapter(1,mGood, GoodDetailCommentActivity.this, arrayList);
                             mListView.setAdapter(commentAdatper);
                         } else {
                             arrayList.add(utils);
-                            CommentAdatper commentAdatper = new CommentAdatper(2, mHelp, CommentActivity.this, arrayList);
+                            GoodCommentAdapter commentAdatper = new GoodCommentAdapter(2,mGood ,GoodDetailCommentActivity.this, arrayList);
                             mListView.setAdapter(commentAdatper);
                         }
                     }

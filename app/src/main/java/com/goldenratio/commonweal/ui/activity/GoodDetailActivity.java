@@ -81,6 +81,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private String mUserId;
     private Double deposit;
 
+    private TextView mTvComment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,8 +115,10 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvStartCoin = (TextView) findViewById(R.id.tv_start_coin);
         mTvNowCoin = (TextView) findViewById(R.id.tv_now_coin);
         mTvDeposit = (TextView) findViewById(R.id.tv_deposit);
+        mTvComment = (TextView) findViewById(R.id.tv_comment);
         mTvBid.setOnClickListener(this);
         mTvDeposit.setOnClickListener(this);
+        mTvComment.setOnClickListener(this);
     }
 
     @Override
@@ -164,6 +168,16 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 builder.setNegativeButton("取消", null);
                 builder.show();
                 break;
+
+            //评论按钮
+            case R.id.tv_comment:
+                Intent intent = new Intent(GoodDetailActivity.this,GoodDetailCommentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Good", mGood);
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+                break;
         }
     }
 
@@ -179,6 +193,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mGood = (Good) intent.getSerializableExtra("Bmob_Good");
         Log.d("lxc", "initData: ----> " + mGood.getObjectId() + "endtime-->" + endTime);
         mCountdownView.start(endTime);
+
 
         mTvGoodName.setText(mGood.getGood_Name());
         mTvGoodDescription.setText(mGood.getGood_Description());

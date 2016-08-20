@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.bean.Good_Comment;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
@@ -32,25 +34,23 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
- * Created by Administrator on 2016/8/17.
- * 第一级评论
+ * Created by Administrator on 2016/8/20.
  */
 
-public class CommentAdatper extends BaseAdapter {
-    private static final String TAG = "lxc";
+public class GoodCommentAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList mArrayListOne;
     private EditText edt_reply;
     private Button btn_reply;
     private String mStrObjectId;
-    private Help mHelp;
+    private Good mGood;
     int mI;
     private int post;
 
-    public CommentAdatper(int i, Help help, Context context, ArrayList arrayList) {
+    public GoodCommentAdapter(int i, Good good, Context context, ArrayList arrayList) {
         this.mContext = context;
         this.mArrayListOne = arrayList;
-        this.mHelp = help;
+        this.mGood = good;
         this.mI = i;
     }
 
@@ -126,12 +126,12 @@ public class CommentAdatper extends BaseAdapter {
                 getlocality();
                 //
                 if (mStrObjectId != null) {
-                    BmobQuery<Help_Comment> bmobQuery = new BmobQuery<Help_Comment>();
-                    String title = mHelp.getObjectId();
+                    BmobQuery<Good_Comment> bmobQuery = new BmobQuery<Good_Comment>();
+                    String title = mGood.getObjectId();
                     bmobQuery.addWhereEqualTo("objectid", title);
-                    bmobQuery.findObjects(new FindListener<Help_Comment>() {
+                    bmobQuery.findObjects(new FindListener<Good_Comment>() {
                         @Override
-                        public void done(List<Help_Comment> list, BmobException e) {
+                        public void done(List<Good_Comment> list, BmobException e) {
                             if (e == null) {
                                 up(s, edt_reply.getText().toString());
                                 edt_reply.setText("");
@@ -161,16 +161,16 @@ public class CommentAdatper extends BaseAdapter {
         int p = id - 1;
         Comment comment = (Comment) mArrayListOne.get(p);
         User_Profile u_famousP = new User_Profile();
-        Help_Comment help_comment = new Help_Comment();
+        Good_Comment good_comment = new Good_Comment();
         //获得内容
-        help_comment.setComment(ss);
-        help_comment.setObjcetid(mHelp.getObjectId());
-        help_comment.setReply(comment.getUserName());
-        help_comment.setId(id);
+        good_comment.setComment(ss);
+        good_comment.setObjcetid(mGood.getObjectId());
+        good_comment.setReply(comment.getUserName());
+        good_comment.setId(id);
         u_famousP.setObjectId(mStrObjectId);
-        help_comment.setComment_user(u_famousP);
+        good_comment.setComment_user(u_famousP);
         //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();
-        help_comment.save(new SaveListener<String>() {
+        good_comment.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {

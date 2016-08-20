@@ -5,10 +5,11 @@
               android:orientation="vertical">
 
     <LinearLayout
+        android:layout_marginTop="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/assist"
+        android:background="#2e6e6e6e"
         android:padding="10dp">
 
         <ImageView
@@ -32,18 +33,23 @@
         android:text="状态：拍卖中(当前价格：111)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <Button
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2e6e6e6e"/>
+    <TextView
         android:id="@+id/btn_ship"
         android:layout_gravity="right"
         android:text="确认发货"
         android:gravity="center"
+        android:layout_marginBottom="10dp"
         android:padding="5dp"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:visibility="gone"
         android:background="@drawable/register_reset"
         android:layout_marginTop="5dp"
         android:textColor="@color/white"
         android:layout_marginRight="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"/>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

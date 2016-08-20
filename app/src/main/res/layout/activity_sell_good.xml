@@ -35,5 +35,7 @@
     <ListView
         android:id="@+id/lv_sell_good"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:divider="#476e6e6e"
+        android:dividerHeight="5dp"/>
 </LinearLayout>

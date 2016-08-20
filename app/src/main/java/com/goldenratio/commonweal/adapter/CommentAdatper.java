@@ -117,28 +117,33 @@ public class CommentAdatper extends BaseAdapter {
         customDialog.setContentView(mView);
         customDialog.show();
 
-        Toast.makeText(mContext, "" + s, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(mContext, "" + s, Toast.LENGTH_SHORT).show();
         //btn_reply 的点击事件  将内容传到数据库
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-                getlocality();
-                //
-                if (mStrObjectId != null) {
-                    BmobQuery<Help_Comment> bmobQuery = new BmobQuery<Help_Comment>();
-                    String title = mHelp.getObjectId();
-                    bmobQuery.addWhereEqualTo("objectid", title);
-                    bmobQuery.findObjects(new FindListener<Help_Comment>() {
-                        @Override
-                        public void done(List<Help_Comment> list, BmobException e) {
-                            if (e == null) {
-                                up(s, edt_reply.getText().toString());
-                                edt_reply.setText("");
-                                customDialog.dismiss();
+                if(! (edt_reply.getText().toString().isEmpty())) {
+                    getlocality();
+                    //
+                    if (mStrObjectId != null) {
+                        BmobQuery<Help_Comment> bmobQuery = new BmobQuery<Help_Comment>();
+                        String title = mHelp.getObjectId();
+                        bmobQuery.addWhereEqualTo("objectid", title);
+                        bmobQuery.findObjects(new FindListener<Help_Comment>() {
+                            @Override
+                            public void done(List<Help_Comment> list, BmobException e) {
+                                if (e == null) {
+                                    up(s, edt_reply.getText().toString());
+                                    edt_reply.setText("");
+                                    customDialog.dismiss();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                }else {
+                    Toast.makeText(mContext,"您什么也没有评论呦~",Toast.LENGTH_SHORT).show();
+                    edt_reply.setText("");
+                    customDialog.dismiss();
                 }
             }
         });

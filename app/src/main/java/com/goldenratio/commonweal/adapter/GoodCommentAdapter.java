@@ -122,23 +122,28 @@ public class GoodCommentAdapter extends BaseAdapter {
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //
-                getlocality();
-                //
-                if (mStrObjectId != null) {
-                    BmobQuery<Good_Comment> bmobQuery = new BmobQuery<Good_Comment>();
-                    String title = mGood.getObjectId();
-                    bmobQuery.addWhereEqualTo("objectid", title);
-                    bmobQuery.findObjects(new FindListener<Good_Comment>() {
-                        @Override
-                        public void done(List<Good_Comment> list, BmobException e) {
-                            if (e == null) {
-                                up(s, edt_reply.getText().toString());
-                                edt_reply.setText("");
-                                customDialog.dismiss();
+                if(!(edt_reply.getText().toString().isEmpty())) {
+                    getlocality();
+                    //
+                    if (mStrObjectId != null) {
+                        BmobQuery<Good_Comment> bmobQuery = new BmobQuery<Good_Comment>();
+                        String title = mGood.getObjectId();
+                        bmobQuery.addWhereEqualTo("objectid", title);
+                        bmobQuery.findObjects(new FindListener<Good_Comment>() {
+                            @Override
+                            public void done(List<Good_Comment> list, BmobException e) {
+                                if (e == null) {
+                                    up(s, edt_reply.getText().toString());
+                                    edt_reply.setText("");
+                                    customDialog.dismiss();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                }else {
+                    Toast.makeText(mContext,"您什么也没有评论呦~",Toast.LENGTH_SHORT).show();
+                    edt_reply.setText("");
+                    customDialog.dismiss();
                 }
             }
         });

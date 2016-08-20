@@ -101,7 +101,7 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 //如果评论内容不为空 就将数据添加到云端并由Adapter显示在 一级评论上
-                if (edt_reply.getText().toString() != "") {
+                if(! (edt_reply.getText().toString().isEmpty()) ){
 
 //                    Toast.makeText(getApplication(), "" + edt_reply.getText(), Toast.LENGTH_SHORT).show();
                     //获取本地数据库
@@ -139,6 +139,10 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
                     }
 
                     show();
+                }else {
+                    Toast.makeText(getApplicationContext(),"您什么也没有评论呦~",Toast.LENGTH_SHORT).show();
+                    edt_reply.setText("");
+                    customDialog.dismiss();
                 }
             }
         });

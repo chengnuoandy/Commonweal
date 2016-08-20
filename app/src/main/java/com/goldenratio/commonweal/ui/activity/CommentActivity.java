@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -108,7 +109,7 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
             @Override
             public void onClick(View v) {
                 //如果评论内容不为空 就将数据添加到云端并由Adapter显示在 一级评论上
-                if (edt_reply.getText().toString() != "") {
+                if (!(edt_reply.getText().toString().isEmpty())) {
 
 //                    Toast.makeText(getApplication(), "" + edt_reply.getText(), Toast.LENGTH_SHORT).show();
                     //获取本地数据库
@@ -146,6 +147,10 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
                     }
 
                     show();
+                }else {
+                    Toast.makeText(getApplicationContext(),"您什么也没有评论呦~",Toast.LENGTH_SHORT).show();
+                    edt_reply.setText("");
+                    customDialog.dismiss();
                 }
             }
         });

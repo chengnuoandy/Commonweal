@@ -6,27 +6,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.BusinessAdapter;
 import com.goldenratio.commonweal.bean.Business;
 import com.goldenratio.commonweal.util.BusinessUtil;
 
-import org.w3c.dom.Text;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by Administrator on 2016/8/20.
@@ -106,12 +99,12 @@ public class BusinessActivity extends Activity {
                         BusinessUtil businessUtil = new BusinessUtil();
                         businessUtil.Business_time=business.getBusiness_time();
                         businessUtil.Business_Name = business.getBusiness_Name();
-                        businessUtil.Business_money = business.getBusiness_money();
+                        businessUtil.Business_money = business.getBusiness_Coin();
                         businessUtil.Business_state = business.getBusiness_state();
                         businessUtil.Business_Use = business.getBusiness_Use();
-                        businessUtil.Business_type = business.getBusiness_type();
+                        businessUtil.Business_type = business.getBusiness_Type();
                         businessUtil.Business_payment = business.getBusiness_payment();
-                        businessUtil.Business_numbers = business.getBusiness_numbers();
+                        businessUtil.Business_numbers = business.getBusiness_Number();
                         businessUtil.Customer_numbers = business.getCustomer_numbers();
                         mArrayList.add(businessUtil);
                         BusinessAdapter businessAdapter = new BusinessAdapter(mArrayList,getApplicationContext());

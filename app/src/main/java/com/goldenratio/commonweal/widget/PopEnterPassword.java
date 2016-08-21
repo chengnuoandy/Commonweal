@@ -53,6 +53,10 @@ public class PopEnterPassword extends PopupWindow {
     private TextView mTvCoin;
     private String mUserId;
 
+    interface mySqlHandleCallBack {
+        public void updateUserCoinToMysql();
+    }
+
     public PopEnterPassword(Activity context, String type, final String coin, String remark) {
         //设置6位数密码
         super(context);
@@ -70,6 +74,27 @@ public class PopEnterPassword extends PopupWindow {
             }
         });
     }
+
+    //捐赠密码验证
+    public PopEnterPassword(final Activity context, String type, final String coin, String remark, final String userCoin, final String pwd) {
+        super(context);
+        this.mContext = context;
+        initView();
+
+        mTvType.setText(type);
+        mTvCoin.setText(coin);
+        mTvRemark.setText(remark);
+        //添加密码输入完成的响应
+        pwdView.setOnFinishInput(new OnPasswordInputFinish() {
+            @Override
+            public void inputFinish(String password) {
+                if (MD5Util.createMD5(password).equals(pwd)) {
+                    updateUserCoin(userCoin, "支付成功");
+                } else Toast.makeText(context, "密码错误", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void updateUserSixPwd2MySql(String md5Pwd) {
         String url = "http://123.206.89.67/WebService1.asmx/UpdateUserSixPwdByObjectId";
@@ -140,7 +165,7 @@ public class PopEnterPassword extends PopupWindow {
                         @Override
                         public void done(String s, BmobException e) {
                             if (e == null) {
-                                updateUserCoin(userCoin);
+                                updateUserCoin(userCoin, "保证金收取成功");
                             } else {
                                 Toast.makeText(mContext, "保证金支付失败", Toast.LENGTH_SHORT).show();
                             }
@@ -434,7 +459,7 @@ public class PopEnterPassword extends PopupWindow {
         });
     }
 
-    private void updateUserCoin(String sumCoin) {
+    private void updateUserCoin(String sumCoin, final String toast) {
         String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
@@ -464,7 +489,7 @@ public class PopEnterPassword extends PopupWindow {
                 mContext.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(mContext, "保证金收取成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
                         mContext.finish();
                         mContext.startActivity(mContext.getIntent());
                     }

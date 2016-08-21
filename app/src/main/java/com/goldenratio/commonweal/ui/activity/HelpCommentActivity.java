@@ -78,23 +78,15 @@ public class HelpCommentActivity extends CommentBase implements IComment {
         bmobQuery.findObjects(new FindListener<Help_Comment>() {
             @Override
             public void done(List<Help_Comment> list, BmobException e) {
-                BmobQuery<Help_Comment> bmobQuery1 = new BmobQuery<Help_Comment>();
-                bmobQuery1.addWhereEqualTo("reply", title);
-                bmobQuery1.findObjects(new FindListener<Help_Comment>() {
-                    @Override
-                    public void done(List<Help_Comment> list, BmobException e) {
-                        if(! (str.trim().isEmpty()) ){
-                            up(str);
-                        }
-                    }
-                });
-
+                if (!(str.trim().isEmpty())) {
+                    up(str);
+                }
             }
         });
     }
 
     @Override
-    public void Show(ListView listView , final BGARefreshLayout refreshLayout) {
+    public void Show(ListView listView, final BGARefreshLayout refreshLayout) {
         mListView = listView;
         if (arrayList.size() > 0 || arrayList != null)
             arrayList.clear();
@@ -120,7 +112,7 @@ public class HelpCommentActivity extends CommentBase implements IComment {
                         //封装到list集合中
 
                         arrayList.add(utils);
-                        CommentAdatper commentAdatper = new CommentAdatper( mHelp, HelpCommentActivity.this, arrayList);
+                        CommentAdatper commentAdatper = new CommentAdatper(mHelp, HelpCommentActivity.this, arrayList);
                         mListView.setAdapter(commentAdatper);
                         //结束刷新
                         refreshLayout.endRefreshing();

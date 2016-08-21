@@ -25,7 +25,7 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by Administrator on 2016/8/20.
  */
 
-class GoodDetailCommentActivity extends CommentBase implements IComment{
+class GoodDetailCommentActivity extends CommentBase implements IComment {
     private ListView mListView;
     private Good mGood;
     private String mStrObjectId;
@@ -47,9 +47,10 @@ class GoodDetailCommentActivity extends CommentBase implements IComment{
 
     /**
      * 将输入的内容传递到服务器中
+     *
      * @param ss 输入的内容
      */
-    private void up( String ss) {
+    private void up(String ss) {
         User_Profile u_famousP = new User_Profile();
         Good_Comment help_comment = new Good_Comment();
         //获得内容
@@ -81,16 +82,9 @@ class GoodDetailCommentActivity extends CommentBase implements IComment{
         bmobQuery.findObjects(new FindListener<Good_Comment>() {
             @Override
             public void done(List<Good_Comment> list, BmobException e) {
-                BmobQuery<Good_Comment> bmobQuery1 = new BmobQuery<Good_Comment>();
-                bmobQuery1.addWhereEqualTo("reply", title);
-                bmobQuery1.findObjects(new FindListener<Good_Comment>() {
-                    @Override
-                    public void done(List<Good_Comment> list, BmobException e) {
-                        if(! (str.trim().isEmpty()) ){
-                            up(str);
-                        }
-                    }
-                });
+                if (!(str.trim().isEmpty())) {
+                    up(str);
+                }
             }
         });
     }
@@ -99,9 +93,9 @@ class GoodDetailCommentActivity extends CommentBase implements IComment{
      * 从服务器读取数据并以ArrayList的形式传递到Adapter中 从而添加到ListView
      */
     @Override
-    public void Show(ListView listView , final BGARefreshLayout refreshLayout) {
+    public void Show(ListView listView, final BGARefreshLayout refreshLayout) {
         mListView = listView;
-        if (arrayList.size()>0 || arrayList != null)
+        if (arrayList.size() > 0 || arrayList != null)
             arrayList.clear();
 //        //从服务器端获取评论内容
         final String title = mGood.getObjectId();
@@ -123,7 +117,7 @@ class GoodDetailCommentActivity extends CommentBase implements IComment{
                         utils.reply = comment.getReply();
                         //封装到list集合中
                         arrayList.add(utils);
-                        GoodCommentAdapter commentAdatper = new GoodCommentAdapter(mGood ,GoodDetailCommentActivity.this, arrayList);
+                        GoodCommentAdapter commentAdatper = new GoodCommentAdapter(mGood, GoodDetailCommentActivity.this, arrayList);
                         mListView.setAdapter(commentAdatper);
                         //结束刷新
                         refreshLayout.endRefreshing();

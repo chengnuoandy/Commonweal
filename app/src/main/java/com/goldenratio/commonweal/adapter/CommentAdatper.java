@@ -44,14 +44,14 @@ public class CommentAdatper extends BaseAdapter {
     private Button btn_reply;
     private String mStrObjectId;
     private Help mHelp;
-
+    int mI;
     private int post;
 
-    public CommentAdatper( Help help, Context context, ArrayList arrayList) {
+    public CommentAdatper(int i, Help help, Context context, ArrayList arrayList) {
         this.mContext = context;
         this.mArrayListOne = arrayList;
         this.mHelp = help;
-
+        this.mI = i;
     }
 
     @Override
@@ -85,8 +85,11 @@ public class CommentAdatper extends BaseAdapter {
         Comment utils = (Comment) mArrayListOne.get(position);
         tv_comment.setText(utils.comment);
         tv_name.setText(utils.UserName);
+        if (mI == 1) {
+            tv_reply.setText("");
+        } else {
             tv_reply.setText("回复：" + utils.reply);
-
+        }
 
         Picasso.with(mContext).load(utils.icom).into(icom);
 
@@ -114,35 +117,28 @@ public class CommentAdatper extends BaseAdapter {
         customDialog.setContentView(mView);
         customDialog.show();
 
-//        Toast.makeText(mContext, "" + s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "" + s, Toast.LENGTH_SHORT).show();
         //btn_reply 的点击事件  将内容传到数据库
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(! (edt_reply.getText().toString().trim().isEmpty())) {
-                    getlocality();
-                    //
-                    if (mStrObjectId != null) {
-                        BmobQuery<Help_Comment> bmobQuery = new BmobQuery<Help_Comment>();
-                        String title = mHelp.getObjectId();
-                        bmobQuery.addWhereEqualTo("objectid", title);
-                        bmobQuery.findObjects(new FindListener<Help_Comment>() {
-                            @Override
-                            public void done(List<Help_Comment> list, BmobException e) {
-                                if (e == null) {
-                                    if(! (edt_reply.getText().toString().isEmpty())) {
-                                        up(s, edt_reply.getText().toString());
-                                        edt_reply.setText("");
-                                        customDialog.dismiss();
-                                    }
-                                }
+                //
+                getlocality();
+                //
+                if (mStrObjectId != null) {
+                    BmobQuery<Help_Comment> bmobQuery = new BmobQuery<Help_Comment>();
+                    String title = mHelp.getHelp_Title();
+                    bmobQuery.addWhereEqualTo("objectid", title);
+                    bmobQuery.findObjects(new FindListener<Help_Comment>() {
+                        @Override
+                        public void done(List<Help_Comment> list, BmobException e) {
+                            if (e == null) {
+                                up(s, edt_reply.getText().toString());
+                                edt_reply.setText("");
+                                customDialog.dismiss();
                             }
-                        });
-                    }
-                }else {
-                    Toast.makeText(mContext,"您什么也没有评论呦~",Toast.LENGTH_SHORT).show();
-                    edt_reply.setText("");
-                    customDialog.dismiss();
+                        }
+                    });
                 }
             }
         });
@@ -168,8 +164,9 @@ public class CommentAdatper extends BaseAdapter {
         Help_Comment help_comment = new Help_Comment();
         //获得内容
         help_comment.setComment(ss);
-        help_comment.setObjcetid(mHelp.getObjectId());
+        help_comment.setObjcetid(mHelp.getHelp_Title());
         help_comment.setReply(comment.getUserName());
+        help_comment.setId(id);
         u_famousP.setObjectId(mStrObjectId);
         help_comment.setComment_user(u_famousP);
         //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();

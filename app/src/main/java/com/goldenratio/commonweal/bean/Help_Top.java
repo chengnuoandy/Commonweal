@@ -5,12 +5,13 @@ import java.io.Serializable;
 import cn.bmob.v3.BmobObject;
 
 /**
- * Created by 两个人 on 2016-06-20.
+ * Created by Kiuber on 2016-08-21.
  */
-public class Help_Top extends BmobObject implements Serializable{
+public class Help_Top extends BmobObject implements Serializable {
 
     private String Help_Top_Pic;
     private String Help_Top_Url;
+    private String Help_Top_Title;
 
     public String getHelp_Top_Pic() {
         return Help_Top_Pic;
@@ -26,5 +27,13 @@ public class Help_Top extends BmobObject implements Serializable{
 
     public void setHelp_Top_Url(String help_Top_Url) {
         Help_Top_Url = help_Top_Url;
+    }
+
+    public String getHelp_Top_Title() {
+        return Help_Top_Title;
+    }
+
+    public void setHelp_Top_Title(String help_Top_Title) {
+        Help_Top_Title = help_Top_Title;
     }
 }

@@ -3,7 +3,6 @@ package com.goldenratio.commonweal.ui.activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Bid;
@@ -36,7 +40,6 @@ import com.goldenratio.commonweal.widget.PopEnterPassword;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,6 +48,8 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,22 +71,20 @@ import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class GoodDetailActivity extends Activity implements View.OnClickListener {
+public class GoodDetailActivity extends Activity implements View.OnClickListener
+        , BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
     private CountdownView mCountdownView, mCountdownFive;
     private Long endTime;
     private Good mGood;
     private TextView mTvGoodName, mTvGoodDescription, mTvUserName,
-            mTvBid, mTvDeposit, mTvNowCoin, mTvStartCoin;
-    private GridView mGvPic;
+            mTvBid, mTvDeposit, mTvNowCoin, mTvStartCoin, mTvStartTime, mTvLastTime, mTvLoading;
     private LinearLayout mLlCv;
-    private ImageView mIvOnePic;
     private int picSize;
     private GoodDetailActivity mContext;
     private String mUserId;
     private Double deposit;
-
-    private TextView mTvComment;
+    private SliderLayout mDemoSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +92,40 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_good_detail);
         initView();
         initData();
+        initSliderLayout();
         mUserId = ((MyApplication) getApplication()).getObjectID();
+    }
+
+    private void initSliderLayout() {
+        mDemoSlider = (SliderLayout) findViewById(R.id.slider);
+        HashMap<String, String> urlMaps = new HashMap<>();
+        Log.d(TAG, "initView: " + mGood.getGood_Photos().size());
+        List picList = mGood.getGood_Photos();
+        for (int i = 0; i < picList.size(); i++) {
+            urlMaps.put(i + "", picList.get(i).toString());
+        }
+
+        for (String name : urlMaps.keySet()) {
+            TextSliderView textSliderView = new TextSliderView(this);
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(urlMaps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra", name);
+
+            mDemoSlider.addSlider(textSliderView);
+        }
+        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+        mDemoSlider.setDuration(4000);
+        mDemoSlider.addOnPageChangeListener(this);
     }
 
     @Override
@@ -108,17 +144,16 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mCountdownView = (CountdownView) findViewById(R.id.cv_endtime);
         mCountdownFive = (CountdownView) findViewById(R.id.cv_five);
         mTvGoodDescription = (TextView) findViewById(R.id.tv_good_description);
-        mGvPic = (GridView) findViewById(R.id.gv_show_detail_pic);
         mTvBid = (TextView) findViewById(R.id.tv_bid);
         mLlCv = (LinearLayout) findViewById(R.id.ll_good_detail_cv);
-        mIvOnePic = (ImageView) findViewById(R.id.iv_one_pic);
         mTvStartCoin = (TextView) findViewById(R.id.tv_start_coin);
+        mTvStartTime = (TextView) findViewById(R.id.tv_start_time);
+        mTvLastTime = (TextView) findViewById(R.id.tv_last_time);
+        mTvLoading = (TextView) findViewById(R.id.tv_loading);
         mTvNowCoin = (TextView) findViewById(R.id.tv_now_coin);
         mTvDeposit = (TextView) findViewById(R.id.tv_deposit);
-        mTvComment = (TextView) findViewById(R.id.tv_comment);
         mTvBid.setOnClickListener(this);
         mTvDeposit.setOnClickListener(this);
-        mTvComment.setOnClickListener(this);
     }
 
     @Override
@@ -168,16 +203,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 builder.setNegativeButton("取消", null);
                 builder.show();
                 break;
-
-            //评论按钮
-            case R.id.tv_comment:
-                Intent intent = new Intent(GoodDetailActivity.this,GoodDetailCommentActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Good", mGood);
-                intent.putExtras(bundle);
-
-                startActivity(intent);
-                break;
         }
     }
 
@@ -194,19 +219,21 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         Log.d("lxc", "initData: ----> " + mGood.getObjectId() + "endtime-->" + endTime);
         mCountdownView.start(endTime);
 
-
         mTvGoodName.setText(mGood.getGood_Name());
         mTvGoodDescription.setText(mGood.getGood_Description());
         mTvStartCoin.setText(mGood.getGood_StartCoin());
         mTvNowCoin.setText(mGood.getGood_NowCoin());
         picSize = mGood.getGood_Photos().size();
-        if (picSize == 1) {
-            Glide.with(this).load(mGood.getGood_Photos().get(0)).into(mIvOnePic);
-        } else {
-            mGvPic.setAdapter(new mAdapter());
-        }
+//        if (picSize == 1) {
+//            Glide.with(this).load(mGood.getGood_Photos().get(0)).into(mIvOnePic);
+//        } else {
+//            mGvPic.setAdapter(new mAdapter());
+//        }
         //保证金为公益币的30%
         deposit = (Double.valueOf(mGood.getGood_StartCoin()) * 0.3);
+
+        mTvStartTime.setText(mGood.getCreatedAt());
+        mTvLastTime.setText(mGood.getUpdatedAt());
     }
 
     private void initIsGoodStatus() {
@@ -241,7 +268,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             @Override
             public void done(Long aLong, BmobException e) {
                 if (e == null) {
-                    long createdTime = StringToLong(createdAt);
+                    long createdTime = StringToLongAll(createdAt);
                     long nowTime = aLong * 1000L;
                     //30000： 30秒内所有不能再次出价。降低服务器并发及最后一位出价者的不确定性。
                     long leftTime = 30000 - (nowTime - createdTime);
@@ -270,8 +297,20 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         });
     }
 
-    public long StringToLong(String time) {
+    public long StringToLongAll(String time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long updateTime = 0;
+        try {
+            updateTime = sdf.parse(time).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(updateTime);
+        return updateTime;
+    }
+
+    public long StringToLongPart(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         long updateTime = 0;
         try {
             updateTime = sdf.parse(time).getTime();
@@ -540,26 +579,50 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private void changeTextViewVisibitity(int flag) {
         switch (flag) {
             case 0:
+                mTvLoading.setVisibility(View.GONE);
                 mLlCv.setVisibility(View.VISIBLE);
                 mTvDeposit.setVisibility(View.GONE);
                 mTvBid.setVisibility(View.GONE);
                 break;
             case 1:
+                mTvLoading.setVisibility(View.GONE);
                 mLlCv.setVisibility(View.GONE);
                 mTvDeposit.setVisibility(View.VISIBLE);
                 mTvBid.setVisibility(View.GONE);
                 break;
             case 2:
+                mTvLoading.setVisibility(View.GONE);
                 mLlCv.setVisibility(View.GONE);
                 mTvDeposit.setVisibility(View.GONE);
                 mTvBid.setVisibility(View.VISIBLE);
                 break;
             case 3:
+                mTvLoading.setVisibility(View.GONE);
                 mLlCv.setVisibility(View.GONE);
                 mTvDeposit.setVisibility(View.GONE);
                 mTvBid.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 
     class mAdapter extends BaseAdapter {

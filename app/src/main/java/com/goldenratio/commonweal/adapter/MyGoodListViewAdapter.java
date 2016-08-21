@@ -188,7 +188,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvNowPrice = (TextView) convertView.findViewById(R.id.tv_now_price);
             mIvUserAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
             mTvThumbUp = (TextView) convertView.findViewById(R.id.tv_thumb_up);
-            mTvGoodStatus = (ImageView) convertView.findViewById(R.id.tv_good_status);
             mTvThumbUp.setOnClickListener(this);
             mIvUserAvatar.setOnClickListener(this);
         }
@@ -234,11 +233,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvNowPrice.setText(getItem(position).getGood_NowCoin());
             long nowTime = System.currentTimeMillis();
             long endTime = getItem(position).getGood_UpDateM();
-            if ((endTime - nowTime) > 0) {
-                mTvGoodStatus.setImageResource(R.mipmap.ing);
-            } else {
-                mTvGoodStatus.setImageResource(R.mipmap.end);
-            }
         }
 
         @Override

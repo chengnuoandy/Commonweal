@@ -69,4 +69,5 @@ dependencies {
     compile 'cn.bingoogolapple:bga-refreshlayout:1.1.6@aar'
     compile files('libs/BmobPay_v3.0.3_160621.jar')
     compile files('libs/special_fix_save_push.jar')
+    compile 'com.daimajia.slider:library:1.1.5@aar'
 }

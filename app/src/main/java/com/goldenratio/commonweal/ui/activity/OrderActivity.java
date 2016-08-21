@@ -104,8 +104,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                                 if (jsonArray.length() == 0) {
                                     TextView textView = new TextView(OrderActivity.this);
                                     textView.setText("无订单");
-//                                    addContentView(textView, null);
-                                    setContentView(textView);
+                                    addContentView(textView, null);
                                     mLvOrder.setVisibility(View.GONE);
                                 } else {
                                     for (int i = 0; i < jsonArray.length(); i++) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -102,7 +103,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
             //评论
             case R.id.iv_comment:
                 //开启评论页面
-                Intent intent = new Intent(getApplicationContext(), HelpCommentActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CommentActivity.class);
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Help", mHelp);

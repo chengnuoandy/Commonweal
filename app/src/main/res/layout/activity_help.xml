@@ -145,9 +145,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="@dimen/normal_space"
-                    android:background="@drawable/board"
-                    android:padding="@dimen/normal_space"
+                    android:background="@drawable/default_frame"
                     android:text="查看全部"
+                    android:padding="@dimen/normal_space"
                     android:textColor="@color/colorPrimary" />
 
             </LinearLayout>

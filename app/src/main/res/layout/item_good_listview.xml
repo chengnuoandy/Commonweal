@@ -12,14 +12,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/tv_good_status"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
-            android:src="@mipmap/ing" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <cn.iwgang.countdownview.CountdownView
+                android:id="@+id/cv_good"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="@dimen/little_space"
+                app:isShowHour="true"
+                app:isShowMinute="true"
+                app:isShowSecond="false"
+                app:isTimeTextBold="true"
+                app:suffixGravity="bottom"
+                app:suffixHour="小时"
+                app:suffixMillisecond="毫秒"
+                app:suffixMinute="分钟"
+                app:suffixSecond="秒"
+                app:suffixTextColor="#000000"
+                app:suffixTextSize="12sp"
+                app:timeTextColor="#000000"
+                app:timeTextSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/default_fill"
+                android:padding="@dimen/little_space"
+                android:text="正在进行"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
 
         <LinearLayout
@@ -53,11 +83,11 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/little_space">
 
         <com.goldenratio.commonweal.util.CustomFontTextView
             android:id="@+id/tv_name"
@@ -78,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity=""
-            android:drawableLeft="@drawable/ic_insert_chart_black_24dp"
+            android:drawableLeft="@drawable/ic_gavel_black_24dp"
             android:drawablePadding="@dimen/little_space"
             android:gravity="center"
             android:text="当前价格" />
@@ -86,26 +116,6 @@
 
     </LinearLayout>
 
-    <cn.iwgang.countdownview.CountdownView
-        android:id="@+id/cv_good"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:layout_marginTop="@dimen/little_space"
-        app:isShowHour="true"
-        app:isShowMillisecond="true"
-        app:isShowMinute="true"
-        app:isShowSecond="true"
-        app:isTimeTextBold="true"
-        app:suffixGravity="bottom"
-        app:suffixHour="小时"
-        app:suffixMillisecond="毫秒"
-        app:suffixMinute="分钟"
-        app:suffixSecond="秒"
-        app:suffixTextColor="#000000"
-        app:suffixTextSize="12sp"
-        app:timeTextColor="#000000"
-        app:timeTextSize="22sp" />
 
     <ImageView
         android:id="@+id/iv_pic"

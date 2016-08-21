@@ -1,7 +1,6 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -188,7 +187,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvNowPrice = (TextView) convertView.findViewById(R.id.tv_now_price);
             mIvUserAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
             mTvThumbUp = (TextView) convertView.findViewById(R.id.tv_thumb_up);
-            mTvGoodStatus = (ImageView) convertView.findViewById(R.id.tv_good_status);
             mTvThumbUp.setOnClickListener(this);
             mIvUserAvatar.setOnClickListener(this);
         }

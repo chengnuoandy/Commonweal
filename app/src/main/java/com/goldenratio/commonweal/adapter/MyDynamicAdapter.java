@@ -18,6 +18,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
+import com.goldenratio.commonweal.ui.activity.MyDynamicCommentActivity;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
@@ -83,6 +84,7 @@ public class MyDynamicAdapter extends BaseAdapter {
         private TextView mLocation;
         private ImageView mUserPic;
         private TextView mDelete;
+        private TextView mComment;
         private NineGridImageView mNineGridImageView;
         private int pos;
 
@@ -94,8 +96,11 @@ public class MyDynamicAdapter extends BaseAdapter {
             mLocation = (TextView) view.findViewById(R.id.tv_location);
             mDelete = (TextView) view.findViewById(R.id.tv_delete);
             mUserPic = (ImageView) view.findViewById(R.id.iv_user_avatar);
+            mComment = (TextView) view.findViewById(R.id.tv_comment);
 
             mDelete.setOnClickListener(this);
+            mComment.setOnClickListener(this);
+
             //九宫格加载图片
             mNineGridImageView.setAdapter(new NineGridImageViewAdapter<String>() {
 //                    图片点击事件,启动浏览模式
@@ -138,32 +143,43 @@ public class MyDynamicAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View v) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setTitle("提示");
-            builder.setMessage("你确定要删除这条动态吗？");
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //删除此动态
-                    Dynamic dynamic = new Dynamic();
-                    dynamic.setObjectId(mList.get(pos).getObjectId());
-                    dynamic.delete(new UpdateListener() {
+            switch (v.getId()){
+                case R.id.tv_delete:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("提示");
+                    builder.setMessage("你确定要删除这条动态吗？");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
-                        public void done(BmobException e) {
-                            if (e == null){
-                                Toast.makeText(mContext, "删除成功！", Toast.LENGTH_SHORT).show();
-                                mList.remove(pos);
-                                notifyDataSetChanged();
-                            }else {
-                                Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
-                            }
+                        public void onClick(DialogInterface dialog, int which) {
+                            //删除此动态
+                            Dynamic dynamic = new Dynamic();
+                            dynamic.setObjectId(mList.get(pos).getObjectId());
+                            dynamic.delete(new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null){
+                                        Toast.makeText(mContext, "删除成功！", Toast.LENGTH_SHORT).show();
+                                        mList.remove(pos);
+                                        notifyDataSetChanged();
+                                    }else {
+                                        Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
                     });
-                }
-            });
-            builder.setNegativeButton("取消",null);
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+                    builder.setNegativeButton("取消",null);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    break;
+                //评论页面
+                case R.id.tv_comment:
+                    Intent intent = new Intent(mContext, MyDynamicCommentActivity.class);
+                    intent.putExtra("dyc",mList.get(pos));
+                    mContext.startActivity(intent);
+                    break;
+            }
+
         }
     }
 }

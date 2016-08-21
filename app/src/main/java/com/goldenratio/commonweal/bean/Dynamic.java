@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -8,7 +9,7 @@ import cn.bmob.v3.BmobObject;
  * Created by 冰封承諾Andy on 2016/8/6 0006.
  * 动态页面的信息
  */
-public class Dynamic extends BmobObject{
+public class Dynamic extends BmobObject implements Serializable{
     private String Dynamics_title;
     private List Dynamics_pic;
     private String Dynamics_location;

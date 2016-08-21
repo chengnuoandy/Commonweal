@@ -312,6 +312,7 @@
         <activity android:name=".ui.activity.BusinessActivity"/>
         <activity android:name=".ui.activity.BusinessDetailed"/>
         <activity android:name=".ui.activity.GoodDetailCommentActivity"/>
+        <activity android:name=".ui.activity.MyDynamicCommentActivity"/>
     </application>
 
 </manifest>

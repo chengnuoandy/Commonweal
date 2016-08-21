@@ -16,7 +16,6 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -69,23 +68,9 @@ public class SellGoodActivity extends Activity implements AdapterView.OnItemClic
                         mGoodList = list;
                         mLvSellGood.setAdapter(new MySellGoodAdapter(SellGoodActivity.this,list));
                     }else {
-                        //临时测试
-                        mGoodList = new ArrayList<Good>();
-                        Good good = new Good();
-                        good.setGood_Name("aaaa");
-                        mGoodList.add(good);
-                        good.setGood_Name("bbb");
-                        mGoodList.add(good);
-                        mLvSellGood.setAdapter(new MySellGoodAdapter(SellGoodActivity.this,mGoodList));
                         Toast.makeText(SellGoodActivity.this, "未查询到相关订单", Toast.LENGTH_SHORT).show();
                     }
                 }else {
-                    //临时测试
-                    mGoodList = new ArrayList<Good>();
-                    Good good = new Good();
-                    good.setGood_Name("aaaa");
-                    mGoodList.add(good);
-                    mLvSellGood.setAdapter(new MySellGoodAdapter(SellGoodActivity.this,mGoodList));
                     Toast.makeText(SellGoodActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -44,14 +44,14 @@ public class CommentAdatper extends BaseAdapter {
     private Button btn_reply;
     private String mStrObjectId;
     private Help mHelp;
-    int mI;
+
     private int post;
 
-    public CommentAdatper(int i, Help help, Context context, ArrayList arrayList) {
+    public CommentAdatper( Help help, Context context, ArrayList arrayList) {
         this.mContext = context;
         this.mArrayListOne = arrayList;
         this.mHelp = help;
-        this.mI = i;
+
     }
 
     @Override
@@ -85,11 +85,8 @@ public class CommentAdatper extends BaseAdapter {
         Comment utils = (Comment) mArrayListOne.get(position);
         tv_comment.setText(utils.comment);
         tv_name.setText(utils.UserName);
-        if (mI == 1) {
-            tv_reply.setText("");
-        } else {
             tv_reply.setText("回复：" + utils.reply);
-        }
+
 
         Picasso.with(mContext).load(utils.icom).into(icom);
 

@@ -44,14 +44,19 @@ public class GoodCommentAdapter extends BaseAdapter {
     private Button btn_reply;
     private String mStrObjectId;
     private Good mGood;
-    int mI;
     private int post;
 
-    public GoodCommentAdapter(int i, Good good, Context context, ArrayList arrayList) {
+    /**
+     *
+     * @param good  传递过来的实例
+     * @param context  上下文对象
+     * @param arrayList  传递过来的含有数据的集合
+     */
+    public GoodCommentAdapter( Good good, Context context, ArrayList arrayList) {
         this.mContext = context;
         this.mArrayListOne = arrayList;
         this.mGood = good;
-        this.mI = i;
+
     }
 
     @Override
@@ -85,11 +90,8 @@ public class GoodCommentAdapter extends BaseAdapter {
         Comment utils = (Comment) mArrayListOne.get(position);
         tv_comment.setText(utils.comment);
         tv_name.setText(utils.UserName);
-        if (mI == 1) {
-            tv_reply.setText("");
-        } else {
             tv_reply.setText("回复：" + utils.reply);
-        }
+
 
         Picasso.with(mContext).load(utils.icom).into(icom);
 
@@ -105,7 +107,11 @@ public class GoodCommentAdapter extends BaseAdapter {
         });
         return view;
     }
-    //弹出对话框
+    /**
+     * 弹出 输入框
+     * @param s  传递数据的位置
+     * @return
+     */
     protected Dialog onCreateDialog(final int s) {
 
         final Dialog customDialog = new Dialog(mContext);
@@ -149,7 +155,10 @@ public class GoodCommentAdapter extends BaseAdapter {
         });
         return customDialog;
     }
-    //获取本地数据库
+
+    /**
+     * 获取本地登录的数据
+     */
     private void getlocality() {
         //获取本地数据库
         UserDao userDao = new UserDao(mContext);
@@ -160,7 +169,11 @@ public class GoodCommentAdapter extends BaseAdapter {
         }
         cursor.close();
     }
-    //从服务器获取内容
+    /**
+     * 将输入的内容传递到服务器中
+     * @param id 获得位置
+     * @param ss 输入的内容
+     */
     //参一  楼层Id   参二 回复内容
     private void up(int id, String ss) {
         int p = id - 1;

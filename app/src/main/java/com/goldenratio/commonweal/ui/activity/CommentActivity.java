@@ -133,7 +133,7 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
                                 bmobQuery1.findObjects(new FindListener<Help_Comment>() {
                                     @Override
                                     public void done(List<Help_Comment> list, BmobException e) {
-                                        up(list.size() + 1, edt_reply.getText().toString());
+                                        up(edt_reply.getText().toString());
                                         edt_reply.setText("");
                                         customDialog.dismiss();
 
@@ -158,14 +158,13 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
         return customDialog;
     }
 
-    private void up(int id, String ss) {
+    private void up( String ss) {
         User_Profile u_famousP = new User_Profile();
         Help_Comment help_comment = new Help_Comment();
         //获得内容
         help_comment.setComment(ss);
         help_comment.setObjcetid(mHelp.getObjectId());
         help_comment.setReply("主题");
-        help_comment.setId(id);
         u_famousP.setObjectId(mStrObjectId);
         help_comment.setComment_user(u_famousP);
         //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();
@@ -204,16 +203,9 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
                         utils.icom = comment.getComment_user().getUser_image_hd();
                         utils.reply = comment.getReply();
                         //封装到list集合中
-
-                        if (comment.getReply().toString().equals(title)) {
                             arrayList.add(utils);
-                            CommentAdatper commentAdatper = new CommentAdatper(1, mHelp, CommentActivity.this, arrayList);
+                            CommentAdatper commentAdatper = new CommentAdatper( mHelp, CommentActivity.this, arrayList);
                             mListView.setAdapter(commentAdatper);
-                        } else {
-                            arrayList.add(utils);
-                            CommentAdatper commentAdatper = new CommentAdatper(2, mHelp, CommentActivity.this, arrayList);
-                            mListView.setAdapter(commentAdatper);
-                        }
                     }
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();

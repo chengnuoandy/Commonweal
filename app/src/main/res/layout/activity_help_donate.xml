@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              android:id="@+id/layoutContent"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_top"
@@ -17,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/normal_space"
-            android:src="@mipmap/back_ic" />
+            android:src="@mipmap/back_ic"/>
 
         <TextView
             android:id="@+id/textView"
@@ -27,7 +29,7 @@
             android:layout_centerVertical="true"
             android:text="捐赠详情"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size" />
+            android:textSize="@dimen/title_text_size"/>
 
 
     </RelativeLayout>
@@ -35,20 +37,23 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
-            android:paddingLeft="30dp"
-            android:paddingTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="可用金额："/>
-        <TextView
-            android:paddingLeft="30dp"
+            android:layout_marginLeft="5dp"
             android:paddingTop="20dp"
+            android:text="可用公益币："
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/avail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:id="@+id/avail"/>
+            android:paddingTop="20dp"
+            android:text="0"
+            android:textColor="@color/red"
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <RadioGroup
@@ -62,8 +67,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="1元"
-            android:textSize="20sp" />
+            android:checked="true"
+            android:text="10"
+            android:textSize="20sp"/>
 
 
         <RadioButton
@@ -71,32 +77,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="5元"
-            android:textSize="20sp" />
+            android:text="50"
+            android:textSize="20sp"/>
 
         <RadioButton
             android:id="@+id/checkBox3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="10元"
-            android:textSize="20sp" />
+            android:text="100"
+            android:textSize="20sp"/>
 
         <RadioButton
             android:id="@+id/checkBox4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="30元"
-            android:textSize="20sp" />
+            android:text="200"
+            android:textSize="20sp"/>
 
         <RadioButton
             android:id="@+id/checkBox5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="50元"
-            android:textSize="20sp" />
+            android:text="500"
+            android:textSize="20sp"/>
 
 
         <RadioButton
@@ -105,31 +111,31 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="其他"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
     </RadioGroup>
 
     <EditText
+        android:id="@+id/et_other"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/et_other"
+        android:hint="请输入公益币金额"
+        android:inputType="number"
+        android:maxLength="10"
+        android:maxLines="1"
         android:visibility="gone"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_donate_mo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/register_reset"
-            android:gravity="center"
-            android:padding="@dimen/normal_space"
-            android:text="立即捐赠"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_default"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_donate_mo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:background="@drawable/register_reset"
+        android:gravity="center"
+        android:padding="@dimen/normal_space"
+        android:text="立即捐赠"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_default"/>
 </LinearLayout>

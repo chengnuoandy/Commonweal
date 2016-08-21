@@ -136,8 +136,9 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
     }
 
     private boolean checkUserName(String uName) {
-        //用户名由3-15个字符组  成（不能为中文）
-        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,15}$";
+        //用户名由3-15个字符组成（不能为中文）
+//        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,15}$";
+        String regex = "^\\w{3,15}$";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(uName);
         return m.matches();

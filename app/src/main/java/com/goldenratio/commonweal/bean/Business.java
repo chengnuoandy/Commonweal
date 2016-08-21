@@ -9,12 +9,12 @@ import cn.bmob.v3.BmobObject;
 public class Business extends BmobObject {
     private String Business_Name;//交易名称
     private String Business_Use;//交易对象  ----商户对象
-    private int Business_type;  //交易类型   公益币 或 Rmb
+    private int Business_Type;  //交易类型   公益币 或 Rmb
     private String Business_time; //交易时间
     private String Business_state;//交易状态 是否支付成功 ---当前状态
     private String Business_payment;   //支付方式
-    private String Business_money;  //交易金额
-    private String Business_numbers;//交易单号
+    private String Business_Coin;  //交易金额
+    private String Business_Number;//交易单号
     private String Customer_numbers;//客户单号
 
     public String getBusiness_Name() {
@@ -33,12 +33,12 @@ public class Business extends BmobObject {
         Business_Use = business_Use;
     }
 
-    public int getBusiness_type() {
-        return Business_type;
+    public int getBusiness_Type() {
+        return Business_Type;
     }
 
-    public void setBusiness_type(int business_type) {
-        Business_type = business_type;
+    public void setBusiness_Type(int business_Type) {
+        Business_Type = business_Type;
     }
 
     public String getBusiness_time() {
@@ -65,20 +65,20 @@ public class Business extends BmobObject {
         Business_payment = business_payment;
     }
 
-    public String getBusiness_money() {
-        return Business_money;
+    public String getBusiness_Coin() {
+        return Business_Coin;
     }
 
-    public void setBusiness_money(String business_money) {
-        Business_money = business_money;
+    public void setBusiness_Coin(String business_Coin) {
+        Business_Coin = business_Coin;
     }
 
-    public String getBusiness_numbers() {
-        return Business_numbers;
+    public String getBusiness_Number() {
+        return Business_Number;
     }
 
-    public void setBusiness_numbers(String business_numbers) {
-        Business_numbers = business_numbers;
+    public void setBusiness_Number(String business_Number) {
+        Business_Number = business_Number;
     }
 
     public String getCustomer_numbers() {

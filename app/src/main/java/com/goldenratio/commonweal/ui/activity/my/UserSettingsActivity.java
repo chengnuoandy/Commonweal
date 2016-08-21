@@ -1,13 +1,13 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
@@ -125,7 +125,7 @@ public class UserSettingsActivity extends Activity {
         }
     }
 
-    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.civ_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.rl_set_address})
+    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.civ_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.rl_set_address, R.id.alter_login_pwd, R.id.alter_pay_pwd})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -163,6 +163,10 @@ public class UserSettingsActivity extends Activity {
             case R.id.rl_set_address:
                 intent = new Intent(this, SetAddressActivity.class);
                 startActivityForResult(intent, 3);
+                break;
+            case R.id.alter_login_pwd:
+                break;
+            case R.id.alter_pay_pwd:
                 break;
         }
     }
@@ -358,4 +362,5 @@ public class UserSettingsActivity extends Activity {
         autograph = intent.getStringExtra("autograph");
         avaUrl = intent.getStringExtra("avaUrl");
     }
+
 }

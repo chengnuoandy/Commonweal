@@ -4,6 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,6 +30,15 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="常规设置"
+        android:textColor="@color/colorAccent"
+        android:textSize="13sp"/>
 
     <RelativeLayout
         android:id="@+id/rl_set_avatar"
@@ -191,10 +201,60 @@
         android:layout_height="1dp"
         android:background="@color/main_bg"/>
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="安全设置"
+        android:textColor="@color/colorAccent"
+        android:textSize="13sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
+    <TextView
+        android:id="@+id/alter_login_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_tv_selector"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:gravity="left"
+        android:padding="@dimen/normal_space"
+        android:text="修改登陆密码"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
+    <TextView
+        android:id="@+id/alter_pay_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_tv_selector"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:gravity="left"
+        android:padding="@dimen/normal_space"
+        android:text="修改支付密码"
+        android:textColor="@color/black"
+        android:textSize="16sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/main_bg"/>
+
     <RelativeLayout
         android:id="@+id/rl_set_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
@@ -208,6 +268,4 @@
             android:textSize="16sp"/>
 
     </RelativeLayout>
-
-
 </LinearLayout>

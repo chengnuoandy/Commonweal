@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -37,7 +36,7 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by Administrator on 2016/8/17.
  */
 
-public class CommentActivity extends Activity implements View.OnClickListener,BGARefreshLayout.BGARefreshLayoutDelegate {
+public class HelpCommentActivity extends Activity implements View.OnClickListener,BGARefreshLayout.BGARefreshLayoutDelegate {
 
     private ImageButton mIbtn_send;
     private ListView mListView;
@@ -47,7 +46,7 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
 
     private Help mHelp;
     private String mStrObjectId;
-    private ArrayList arrayList;
+    private ArrayList arrayList = new ArrayList();
 
     /**
      * 下拉刷新
@@ -113,7 +112,7 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
                 //如果评论内容不为空 就将数据添加到云端并由Adapter显示在 一级评论上
                 if (!(edt_reply.getText().toString().isEmpty())) {
                     //获取本地数据库
-                    UserDao userDao = new UserDao(CommentActivity.this);
+                    UserDao userDao = new UserDao(HelpCommentActivity.this);
                     Cursor cursor = userDao.query("select * from User_Profile");
                     while (cursor.moveToNext()) {
                         int nameColumnIndex = cursor.getColumnIndex("objectId");
@@ -182,7 +181,9 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
 
     private void show() {
 
-        arrayList = new ArrayList();
+
+        if (arrayList.size()>0)
+            arrayList.clear();
 
 //        //从服务器端获取评论内容
         final String title = mHelp.getObjectId();
@@ -204,7 +205,7 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
                         utils.reply = comment.getReply();
                         //封装到list集合中
                             arrayList.add(utils);
-                            CommentAdatper commentAdatper = new CommentAdatper( mHelp, CommentActivity.this, arrayList);
+                            CommentAdatper commentAdatper = new CommentAdatper( mHelp, HelpCommentActivity.this, arrayList);
                             mListView.setAdapter(commentAdatper);
                     }
                     //收起刷新

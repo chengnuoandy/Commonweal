@@ -44,7 +44,7 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
     private Button btn_reply;
     private Good mGood;
     private String mStrObjectId;
-    private ArrayList arrayList;
+    private ArrayList arrayList = new ArrayList();
     /**
      * 下拉刷新
      */
@@ -174,7 +174,8 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
      * 从服务器读取数据并以ArrayList的形式传递到Adapter中 从而添加到ListView
      */
     private void show() {
-        arrayList = new ArrayList();
+        if (arrayList.size()>0)
+            arrayList.clear();
 //        //从服务器端获取评论内容
         final String title = mGood.getObjectId().toString();
         BmobQuery<Good_Comment> bmobQuery = new BmobQuery<>();

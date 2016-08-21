@@ -13,15 +13,8 @@ public class Help_Comment extends BmobObject {
     private String comment;//内容
     private String objcetid;//标识
     private String reply;//回复对象
-    private int id; //层楼id
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getReply() {
         return reply;

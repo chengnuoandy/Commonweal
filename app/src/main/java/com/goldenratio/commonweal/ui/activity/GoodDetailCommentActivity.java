@@ -124,7 +124,7 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
                                 bmobQuery1.findObjects(new FindListener<Good_Comment>() {
                                     @Override
                                     public void done(List<Good_Comment> list, BmobException e) {
-                                        up(list.size() + 1, edt_reply.getText().toString());
+                                        up(edt_reply.getText().toString());
                                         edt_reply.setText("");
                                         customDialog.dismiss();
                                     }
@@ -147,17 +147,15 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
 
     /**
      * 将输入的内容传递到服务器中
-     * @param id 获得位置
      * @param ss 输入的内容
      */
-    private void up(int id, String ss) {
+    private void up( String ss) {
         User_Profile u_famousP = new User_Profile();
         Good_Comment help_comment = new Good_Comment();
         //获得内容
         help_comment.setComment(ss);
         help_comment.setObjcetid(mGood.getObjectId());
         help_comment.setReply("主题");
-        help_comment.setId(id);
         u_famousP.setObjectId(mStrObjectId);
         help_comment.setComment_user(u_famousP);
         help_comment.save(new SaveListener<String>() {

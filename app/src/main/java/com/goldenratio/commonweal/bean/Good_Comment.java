@@ -11,7 +11,6 @@ public class Good_Comment extends BmobObject {
     private String comment;//内容
     private String objcetid;//标识
     private String reply;//回复对象
-    private int id; //层楼id
 
     public User_Profile getComment_user() {
         return comment_user;
@@ -45,11 +44,4 @@ public class Good_Comment extends BmobObject {
         this.reply = reply;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

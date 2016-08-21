@@ -48,7 +48,6 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
     private Help mHelp;
     private String mStrObjectId;
     private ArrayList arrayList;
-    private ArrayList mArrayList;
 
     /**
      * 下拉刷新
@@ -65,6 +64,9 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
         show();
     }
 
+    /**
+     * 初始化布局
+     */
     private void initView() {
         findViewById(R.id.ibtn_send).setOnClickListener(this);
         mListView = (ListView) findViewById(R.id.lv_comment_one);
@@ -85,16 +87,16 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ibtn_send:
-//                Toast.makeText(getApplicationContext(), "111", Toast.LENGTH_SHORT).show();
-
                 showDialog(-1);
                 break;
-//            case R.id.tv_user_reply:
-//                showDialog(1);
         }
     }
 
-    //弹出对话框
+    /**
+     * 弹出对话框
+     * @param id 传递数据
+     * @return
+     */
     protected Dialog onCreateDialog(final int id) {
         final Dialog customDialog = new Dialog(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -110,8 +112,6 @@ public class CommentActivity extends Activity implements View.OnClickListener,BG
             public void onClick(View v) {
                 //如果评论内容不为空 就将数据添加到云端并由Adapter显示在 一级评论上
                 if (!(edt_reply.getText().toString().isEmpty())) {
-
-//                    Toast.makeText(getApplication(), "" + edt_reply.getText(), Toast.LENGTH_SHORT).show();
                     //获取本地数据库
                     UserDao userDao = new UserDao(CommentActivity.this);
                     Cursor cursor = userDao.query("select * from User_Profile");

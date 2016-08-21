@@ -184,7 +184,6 @@ public class GoodCommentAdapter extends BaseAdapter {
         good_comment.setComment(ss);
         good_comment.setObjcetid(mGood.getObjectId());
         good_comment.setReply(comment.getUserName());
-        good_comment.setId(id);
         u_famousP.setObjectId(mStrObjectId);
         good_comment.setComment_user(u_famousP);
         //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();

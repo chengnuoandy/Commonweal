@@ -168,7 +168,6 @@ public class CommentAdatper extends BaseAdapter {
         help_comment.setComment(ss);
         help_comment.setObjcetid(mHelp.getObjectId());
         help_comment.setReply(comment.getUserName());
-        help_comment.setId(id);
         u_famousP.setObjectId(mStrObjectId);
         help_comment.setComment_user(u_famousP);
         //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();

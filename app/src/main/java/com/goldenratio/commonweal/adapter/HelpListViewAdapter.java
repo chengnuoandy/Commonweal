@@ -1,7 +1,6 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,40 +9,28 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
-import com.goldenratio.commonweal.bean.Help_Top;
 
-import java.util.HashMap;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobDate;
-
-import static java.security.AccessController.getContext;
 
 
 /**
  * Created by Kiuber on 2016-06-28.
  */
-public class HelpListViewAdapter extends BaseAdapter implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+public class HelpListViewAdapter extends BaseAdapter {
 
     List<Help> mHelpList;
 
     public Context mContext;
-    private SliderLayout mDemoSlider;
 
-
-    public HelpListViewAdapter(Context context, List<Help> mHelp) {
-        this.mContext = context;
-        this.mHelpList = mHelp;
+    public HelpListViewAdapter(Context mContext, List<Help> help) {
+        this.mContext = mContext;
+        this.mHelpList = help;
     }
 
     @Override
@@ -62,12 +49,13 @@ public class HelpListViewAdapter extends BaseAdapter implements BaseSliderView.O
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        if (viewHolder == null) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
+
+        ViewHolder viewHolder;
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.item_help_listview, parent, false);
-            viewHolder = new ViewHolder();
             viewHolder.initView(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -75,26 +63,6 @@ public class HelpListViewAdapter extends BaseAdapter implements BaseSliderView.O
         }
         viewHolder.initData(position);
         return convertView;
-    }
-
-    @Override
-    public void onSliderClick(BaseSliderView slider) {
-        Toast.makeText(mContext, slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
     }
 
 
@@ -109,6 +77,7 @@ public class HelpListViewAdapter extends BaseAdapter implements BaseSliderView.O
         private TextView mTvLeftDayBottom;
         private ProgressBar mPbProgress;
         private int leftDay;
+
 
 
         public void initView(View view) {
@@ -156,36 +125,5 @@ public class HelpListViewAdapter extends BaseAdapter implements BaseSliderView.O
             mPbProgress.setMax(allDay);
             mPbProgress.setProgress(usedDay);
         }
-
     }
-
-    private void initSliderLayout(List<Help_Top> list, View view) {
-        mDemoSlider = (SliderLayout) view.findViewById(R.id.slider);
-        HashMap<String, String> urlMaps = new HashMap<>();
-
-        for (int i = 0; i < list.size(); i++) {
-            urlMaps.put(list.get(i).getHelp_Top_Title(), list.get(i).getHelp_Top_Pic());
-
-            TextSliderView textSliderView = new TextSliderView(mContext);
-            // initialize a SliderLayout
-            textSliderView
-                    .description(list.get(i).getHelp_Top_Title())
-                    .image(urlMaps.get(list.get(i).getHelp_Top_Title()))
-                    .setScaleType(BaseSliderView.ScaleType.Fit)
-                    .setOnSliderClickListener(this);
-
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra", list.get(i).getHelp_Top_Url());
-
-            mDemoSlider.addSlider(textSliderView);
-        }
-        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
-        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-        mDemoSlider.setDuration(4000);
-        mDemoSlider.addOnPageChangeListener(this);
-    }
-
 }

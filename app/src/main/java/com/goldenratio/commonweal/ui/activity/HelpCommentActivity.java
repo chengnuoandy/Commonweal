@@ -46,7 +46,7 @@ public class HelpCommentActivity extends Activity implements View.OnClickListene
 
     private Help mHelp;
     private String mStrObjectId;
-    private ArrayList arrayList = new ArrayList();
+    private ArrayList arrayList ;
 
     /**
      * 下拉刷新
@@ -110,7 +110,7 @@ public class HelpCommentActivity extends Activity implements View.OnClickListene
             @Override
             public void onClick(View v) {
                 //如果评论内容不为空 就将数据添加到云端并由Adapter显示在 一级评论上
-                if (!(edt_reply.getText().toString().isEmpty())) {
+                if (!(edt_reply.getText().toString().trim() .isEmpty())) {
                     //获取本地数据库
                     UserDao userDao = new UserDao(HelpCommentActivity.this);
                     Cursor cursor = userDao.query("select * from User_Profile");
@@ -132,10 +132,11 @@ public class HelpCommentActivity extends Activity implements View.OnClickListene
                                 bmobQuery1.findObjects(new FindListener<Help_Comment>() {
                                     @Override
                                     public void done(List<Help_Comment> list, BmobException e) {
-                                        up(edt_reply.getText().toString());
-                                        edt_reply.setText("");
-                                        customDialog.dismiss();
-
+                                        if (!(edt_reply.getText().toString().trim() .isEmpty())) {
+                                            up(edt_reply.getText().toString());
+                                            edt_reply.setText("");
+                                            customDialog.dismiss();
+                                        }
                                     }
                                 });
 
@@ -158,6 +159,7 @@ public class HelpCommentActivity extends Activity implements View.OnClickListene
     }
 
     private void up( String ss) {
+
         User_Profile u_famousP = new User_Profile();
         Help_Comment help_comment = new Help_Comment();
         //获得内容
@@ -182,8 +184,7 @@ public class HelpCommentActivity extends Activity implements View.OnClickListene
     private void show() {
 
 
-        if (arrayList.size()>0)
-            arrayList.clear();
+       arrayList = new ArrayList();
 
 //        //从服务器端获取评论内容
         final String title = mHelp.getObjectId();

@@ -119,7 +119,7 @@ public class CommentAdatper extends BaseAdapter {
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(! (edt_reply.getText().toString().isEmpty())) {
+                if(! (edt_reply.getText().toString().trim().isEmpty())) {
                     getlocality();
                     //
                     if (mStrObjectId != null) {
@@ -130,9 +130,11 @@ public class CommentAdatper extends BaseAdapter {
                             @Override
                             public void done(List<Help_Comment> list, BmobException e) {
                                 if (e == null) {
-                                    up(s, edt_reply.getText().toString());
-                                    edt_reply.setText("");
-                                    customDialog.dismiss();
+                                    if(! (edt_reply.getText().toString().isEmpty())) {
+                                        up(s, edt_reply.getText().toString());
+                                        edt_reply.setText("");
+                                        customDialog.dismiss();
+                                    }
                                 }
                             }
                         });

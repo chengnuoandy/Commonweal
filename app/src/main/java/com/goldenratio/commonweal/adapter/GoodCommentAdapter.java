@@ -128,7 +128,7 @@ public class GoodCommentAdapter extends BaseAdapter {
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(edt_reply.getText().toString().isEmpty())) {
+                if(!(edt_reply.getText().toString().trim() .isEmpty())) {
                     getlocality();
                     //
                     if (mStrObjectId != null) {

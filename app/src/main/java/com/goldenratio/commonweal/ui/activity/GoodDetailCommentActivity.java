@@ -44,7 +44,7 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
     private Button btn_reply;
     private Good mGood;
     private String mStrObjectId;
-    private ArrayList arrayList = new ArrayList();
+    private ArrayList arrayList;
     /**
      * 下拉刷新
      */
@@ -101,7 +101,7 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 //如果评论内容不为空 就将数据添加到云端并由Adapter显示在 一级评论上
-                if(! (edt_reply.getText().toString().isEmpty()) ){
+                if(! (edt_reply.getText().toString().trim().isEmpty()) ){
 
                     //获取本地数据库
                     UserDao userDao = new UserDao(GoodDetailCommentActivity.this);
@@ -124,9 +124,11 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
                                 bmobQuery1.findObjects(new FindListener<Good_Comment>() {
                                     @Override
                                     public void done(List<Good_Comment> list, BmobException e) {
-                                        up(edt_reply.getText().toString());
-                                        edt_reply.setText("");
-                                        customDialog.dismiss();
+                                        if(! (edt_reply.getText().toString().trim().isEmpty()) ) {
+                                            up(edt_reply.getText().toString());
+                                            edt_reply.setText("");
+                                            customDialog.dismiss();
+                                        }
                                     }
                                 });
                             }
@@ -174,8 +176,7 @@ public class GoodDetailCommentActivity extends Activity implements View.OnClickL
      * 从服务器读取数据并以ArrayList的形式传递到Adapter中 从而添加到ListView
      */
     private void show() {
-        if (arrayList.size()>0)
-            arrayList.clear();
+        arrayList = new ArrayList();
 //        //从服务器端获取评论内容
         final String title = mGood.getObjectId().toString();
         BmobQuery<Good_Comment> bmobQuery = new BmobQuery<>();

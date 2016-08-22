@@ -109,7 +109,7 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
                     mCoin = mEtOther.getText().toString();
                 }
                 //是否已设置支付密码
-                if (mSixPwd.equals("0") || TextUtils.isEmpty(mSixPwd)) {
+                if (TextUtils.isEmpty(mSixPwd) || mSixPwd.equals("0")) {
                     Toast.makeText(this, "请先设置六位数密码", Toast.LENGTH_SHORT).show();
                     showPayKeyBoard2();
                 } else {
@@ -274,8 +274,6 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
         }
     }
 
-    //完成之后
-    @Override
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
         Log.i("六位数密码", "showSixPwdOnFinishInput: " + sixPwd);
         if (event == 0) {
@@ -298,7 +296,7 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
     public boolean queryUserCoinAndSixPwdByObjectId(String mUserCoin, String sixPwd) {
         mStrUserCoin = mUserCoin;
         mSixPwd = sixPwd;
-        mAvail.setText(mStrUserCoin);
+        mAvail.setText(mUserCoin);
         return false;
     }
 

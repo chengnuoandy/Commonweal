@@ -1,8 +1,11 @@
 package com.goldenratio.commonweal.iview.impl;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.iview.IMySqlManager;
+import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.goldenratio.commonweal.widget.OnPasswordInputFinish;
 import com.goldenratio.commonweal.widget.PasswordView;
@@ -49,9 +53,11 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     private TextView mTvCoin;
     private IMySqlManager mSqlManager;
     private String mUserId;
+    private ProgressDialog mPd;
 
     public MySqlManagerImpl(Activity context, IMySqlManager mySqlManager) {
         super(context);
+        isObjectID();
         mUserId = ((MyApplication) context.getApplication()).getObjectID();
         this.mContext = context;
         this.mSqlManager = mySqlManager;
@@ -60,6 +66,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     public MySqlManagerImpl(Activity context, IMySqlManager mySqlManager, String type, final String coin, String remark) {
         super(context);
         mUserId = ((MyApplication) context.getApplication()).getObjectID();
+        isObjectID();
         this.mContext = context;
         this.mSqlManager = mySqlManager;
         initView();
@@ -68,6 +75,13 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         mTvRemark.setText(remark);
         showAtLocation(context.findViewById(R.id.layoutContent),
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+    }
+
+    private void isObjectID() {
+        if (TextUtils.isEmpty(mUserId)) {
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
+            Toast.makeText(mContext, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initView() {
@@ -112,6 +126,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     @Override
     public boolean updateUserCoinByObjectId(final String sumCoin) {
+        showProgressDialog();
         String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
@@ -132,6 +147,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                     @Override
                     public void run() {
                         Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                        closeProgressDialog();
                     }
                 });
             }
@@ -142,6 +158,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                     @Override
                     public void run() {
                         Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
+                        closeProgressDialog();
                         dismiss();
                         mSqlManager.updateUserCoinByObjectId(sumCoin);
                         // TODO: 2016/8/21 继续
@@ -171,6 +188,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         break;
                     case 1:
                         if (pwd != null && pwd.equals(password)) {
+                            dismiss();
                             mSqlManager.showSixPwdOnFinishInput(password, event);
                         } else Toast.makeText(mContext, "支付密码错误", Toast.LENGTH_SHORT).show();
                         break;
@@ -184,6 +202,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     @Override
     public boolean updateUserSixPwdByObjectId(final String sixPwd) {
+        showProgressDialog();
         String url = "http://123.206.89.67/WebService1.asmx/UpdateUserSixPwdByObjectId";
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
@@ -204,6 +223,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                     @Override
                     public void run() {
                         Toast.makeText(mContext, "密码设置失败" + e1, Toast.LENGTH_SHORT).show();
+                        closeProgressDialog();
                     }
                 });
             }
@@ -221,6 +241,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         } else {
                             Log.d("Kiuber_LOG", "fail: " + result);
                         }
+                        closeProgressDialog();
                     }
                 });
             }
@@ -230,6 +251,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     @Override
     public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+        showProgressDialog();
         String rootCatalog = "http://123.206.89.67/WebService1.asmx/";
         String method = "QueryUserCoinAndSixPwdByObjectId";
         String url = rootCatalog + method;
@@ -252,6 +274,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         @Override
                         public void run() {
                             Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                            closeProgressDialog();
                         }
                     });
                 }
@@ -277,6 +300,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                             } catch (JSONException e) {
                                 Log.d("Kiuber_LOG", e.getMessage() + request);
                             }
+                            closeProgressDialog();
                             mSqlManager.queryUserCoinAndSixPwdByObjectId(userCoin, payPwd);
                         }
                     });
@@ -284,5 +308,22 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             });
         }
         return false;
+    }
+
+
+    private void closeProgressDialog() {
+        if (mPd != null && mPd.isShowing()) {
+            mPd.dismiss();
+            mPd = null;
+        }
+    }
+
+    private void showProgressDialog() {
+        if (mPd == null) {
+            mPd = new ProgressDialog(mContext);
+            mPd.setMessage("加载中");
+            mPd.setCancelable(false);
+            mPd.show();
+        }
     }
 }

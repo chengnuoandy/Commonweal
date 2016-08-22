@@ -5,6 +5,8 @@ package com.goldenratio.commonweal.iview;
  * Email:jxfengmtx@163.com
  */
 public interface IMySqlManager {
+    void pay(boolean alipayOrWechatPay, double price, double allCoin);
+
     void showSixPwdOnFinishInput(String sixPwd, int event);
 
     boolean updateUserCoinByObjectId(String sumCoin);

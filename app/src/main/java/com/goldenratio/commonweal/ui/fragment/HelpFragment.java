@@ -27,18 +27,23 @@ import com.goldenratio.commonweal.ui.activity.HelpTopDetailActivity;
 
 import java.util.List;
 
+import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class
 HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener
-        , BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+        , BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, BGARefreshLayout.BGARefreshLayoutDelegate {
 
     private LinearLayout mLlNoNet;
     private List<Help> mHelp;
     private ListView mLv;
     private View view;
+    private BGARefreshLayout mBGARefreshLayout;
+    private View mTopView;
+
 
     @Nullable
     @Override
@@ -53,6 +58,14 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         mLlNoNet = (LinearLayout) view.findViewById(R.id.ll_no_net);
         mLv = (ListView) view.findViewById(R.id.lv_help);
         mLv.setOnItemClickListener(this);
+
+        mBGARefreshLayout = (BGARefreshLayout) view.findViewById(R.id.rl_BGA_refresh);
+        // 为BGARefreshLayout设置代理
+        mBGARefreshLayout.setDelegate(this);
+        // 设置下拉刷新和上拉加载更多的风格     参数1：应用程序上下文，参数2：是否具有上拉加载更多功能
+        BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), false);
+        // 设置下拉刷新和上拉加载更多的风格
+        mBGARefreshLayout.setRefreshViewHolder(refreshViewHolder);
     }
 
     private void initData() {
@@ -68,13 +81,17 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                 if (e == null) {
                     if (list.size() != 0) {
                         //轮播有数据时才显示
-                        View view = View.inflate(getContext(), R.layout.item_help_listview_top, null);
-                        initSliderLayout(view, list);
+                        mTopView = View.inflate(getContext(), R.layout.item_help_listview_top, null);
+                        initSliderLayout(mTopView, list);
                     } else {
                     }
                     mLv.setAdapter(new HelpListViewAdapter(getContext(), mHelp));
                     hideLinearLayout();
+                    //收起刷新
+                    mBGARefreshLayout.endRefreshing();
                 } else {
+                    //收起刷新
+                    mBGARefreshLayout.endRefreshing();
                     Log.d("Kiuber_LOG", "done: " + e.getMessage() + e.getErrorCode());
                     Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                 }
@@ -92,6 +109,8 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                     mHelp = list;
                     queryHelp_TopData();
                 } else {
+                    //收起刷新
+                    mBGARefreshLayout.endRefreshing();
                     Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -129,7 +148,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(), HelpDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("HelpList", mHelp.get(position));
+        bundle.putSerializable("HelpList", mHelp.get(position - 1));
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -164,5 +183,23 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+        //重新装填数据
+        if (mHelp != null) {
+            mHelp.clear();
+            mLv.removeHeaderView(mTopView);
+            initData();
+        }else {
+            mLv.removeHeaderView(mTopView);
+            initData();
+        }
+    }
+
+    @Override
+    public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+        return false;
     }
 }

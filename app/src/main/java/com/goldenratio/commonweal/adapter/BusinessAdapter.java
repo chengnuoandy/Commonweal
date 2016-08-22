@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.util.BusinessUtil;
 
 import java.util.ArrayList;
 
@@ -51,12 +50,12 @@ public class BusinessAdapter extends BaseAdapter {
         TextView tv_bus_state = (TextView) view.findViewById(R.id.tv_bus_state);
         TextView tv_bus_money = (TextView) view.findViewById(R.id.tv_bus_money);
 
-        BusinessUtil businessUtil = (BusinessUtil) mArrayList.get(position);
-
-        tv_bus_name.setText(businessUtil.Business_Name);
-        tv_bus_state.setText(businessUtil.Business_state);
-        tv_bus_money.setText(businessUtil.Business_money);
-        tv_bus_time.setText(businessUtil.Business_time);
+//        BusinessUtil businessUtil = (BusinessUtil) mArrayList.get(position);
+//
+//        tv_bus_name.setText(businessUtil.Business_Name);
+//        tv_bus_state.setText(businessUtil.Business_state);
+//        tv_bus_money.setText(businessUtil.Business_money);
+//        tv_bus_time.setText(businessUtil.Business_time);
         return view;
     }
 }

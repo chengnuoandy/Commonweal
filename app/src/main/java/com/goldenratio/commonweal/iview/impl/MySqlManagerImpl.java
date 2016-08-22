@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.PayRecord;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.util.MD5Util;
@@ -112,6 +112,12 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                 closeProgressDialog();
             }
         });
+    }
+
+    private void savePayHistoryToBmob() {
+        PayRecord payRecord = new PayRecord();
+
+
     }
 
     private void installBmobPayPlugin(String fileName) {

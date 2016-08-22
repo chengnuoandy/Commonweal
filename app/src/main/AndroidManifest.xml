@@ -309,7 +309,7 @@
         <activity android:name=".ui.activity.my.SellGoodActivity">
         </activity>
         <activity android:name=".ui.activity.HelpCommentActivity"/>
-        <activity android:name=".ui.activity.BusinessActivity"/>
+        <activity android:name=".ui.activity.PayRecordActivity"/>
         <activity android:name=".ui.activity.BusinessDetailed"/>
         <activity android:name=".TestActivity"/>
         <activity android:name=".ui.activity.GoodDetailCommentActivity"/>

@@ -156,7 +156,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     }
 
     private void isObjectID() {
-        if (TextUtils.isEmpty(mUserId)) {
+        if (mUserId == "") {
             mContext.startActivity(new Intent(mContext, LoginActivity.class));
             Toast.makeText(mContext, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
         }

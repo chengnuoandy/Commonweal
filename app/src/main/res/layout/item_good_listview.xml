@@ -89,7 +89,7 @@
         android:orientation="horizontal"
         android:padding="@dimen/little_space">
 
-        <com.goldenratio.commonweal.util.CustomFontTextView
+        <com.goldenratio.commonweal.util.NormalFontTextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
             android:layout_weight="1" />
 
 
-        <TextView
+        <com.goldenratio.commonweal.util.NumberFontTextView
             android:id="@+id/tv_now_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

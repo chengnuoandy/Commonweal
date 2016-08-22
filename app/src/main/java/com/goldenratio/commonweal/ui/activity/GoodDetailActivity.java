@@ -88,6 +88,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private double bidPoorMoney;
     private double dePoorMoney;
     private double bidCoin;
+    private CountdownView mCountdownView1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +147,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvGoodName = (TextView) findViewById(R.id.tv_good_name);
         mTvUserName = (TextView) findViewById(R.id.tv_user_name);
         mCountdownView = (CountdownView) findViewById(R.id.cv_endtime);
+        mCountdownView1 = (CountdownView) findViewById(R.id.cv_endtime1);
         mCountdownFive = (CountdownView) findViewById(R.id.cv_five);
         mTvGoodDescription = (TextView) findViewById(R.id.tv_good_description);
         mTvBid = (TextView) findViewById(R.id.tv_bid);
@@ -221,7 +223,10 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.iv_show_more:
-
+                mCountdownView.setVisibility(View.GONE);
+                mCountdownView1.setVisibility(View.VISIBLE);
+                mCountdownView1.start(endTime);
+                mIvShowMore.setVisibility(View.GONE);
                 break;
         }
     }
@@ -391,130 +396,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         });
     }
 
-    private void pay(final boolean alipayOrWechatPay, final double price) {
-
-        BP.pay("公益币充值", "描述", price, alipayOrWechatPay, new PListener() {
-
-
-            // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
-            @Override
-            public void unknow() {
-                Toast.makeText(mContext, "支付结果未知,请稍后手动查询", Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-            // 支付成功,如果金额较大请手动查询确认
-            @Override
-            public void succeed() {
-                Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
-                updateUserCoin();
-            }
-
-            // 无论成功与否,返回订单号
-            @Override
-            public void orderId(String orderI) {
-                // 此处应该保存订单号,比如保存进数据库等,以便以后查询
-            }
-
-            // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
-            @Override
-            public void fail(int code, String reason) {
-
-                // 当code为-2,意味着用户中断了操作
-                // code为-3意味着没有安装BmobPlugin插件
-                if (code == -3) {
-                    Toast.makeText(
-                            mContext,
-                            "监测到你尚未安装支付插件,无法进行支付,请先安装插件(已打包在本地,无流量消耗),安装结束后重新支付",
-                            Toast.LENGTH_SHORT).show();
-                    installBmobPayPlugin("bp.db");
-                } else {
-                    Toast.makeText(mContext, "支付中断!" + reason, Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        });
-    }
-
-    private void updateUserCoin() {
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        final String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
-        if (mStrObjectId != null) {
-            RequestBody body = null;
-            if (mTvDeposit.getVisibility() == View.VISIBLE) {
-                body = new FormBody.Builder()
-                        .add("ObjectId", mStrObjectId)
-                        .add("UserCoin", userCoin + dePoorMoney)
-                        .build();
-                Log.d("Kiuber_LOG", "updateUserCoin: " + mStrObjectId + "-->" + dePoorMoney);
-            } else if (mTvBid.getVisibility() == View.VISIBLE) {
-                body = new FormBody.Builder()
-                        .add("ObjectId", mStrObjectId)
-                        .add("UserCoin", userCoin + bidPoorMoney)
-                        .build();
-                Log.d("Kiuber_LOG", "updateUserCoin: " + mStrObjectId + "-->" + bidPoorMoney);
-            } else {
-
-            }
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new okhttp3.Callback() {
-                @Override
-                public void onFailure(Call call, final IOException e) {
-                    final String e1 = e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(GoodDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            showPayKeyBoard1(deposit.toString());
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-
-    void installBmobPayPlugin(String fileName) {
-        try {
-            InputStream is = getAssets().open(fileName);
-            File file = new File(Environment.getExternalStorageDirectory()
-                    + File.separator + fileName + ".apk");
-            if (file.exists())
-                file.delete();
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] temp = new byte[1024];
-            int i = 0;
-            while ((i = is.read(temp)) > 0) {
-                fos.write(temp, 0, i);
-            }
-            fos.close();
-            is.close();
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(Uri.parse("file://" + file),
-                    "application/vnd.android.package-archive");
-            startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void changeTextViewVisibitity(int flag) {
         switch (flag) {
             case 0:
@@ -566,6 +447,11 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
 
 
     @Override
+    public void pay(boolean alipayOrWechatPay, double price, double allCoin) {
+
+    }
+
+    @Override
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
         if (event == 0) {
             mySqlManager.updateUserSixPwdByObjectId(sixPwd);
@@ -590,7 +476,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     }
 
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String userCoin, String sixPwd) {
+    public boolean queryUserCoinAndSixPwdByObjectId(final String userCoin, String sixPwd) {
         this.sixPwd = sixPwd;
         this.userCoin = userCoin;
         if (sixPwd.equals("0")) {
@@ -610,7 +496,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                             .setPositiveButton("充值", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    pay(false, (-dePoorMoney) + (-dePoorMoney) * 0.05);
+                                    mySqlManager.pay(false, (-dePoorMoney) + (-dePoorMoney) * 0.05, Double.valueOf(userCoin) + depositCoin);
                                 }
                             })
                             .setNegativeButton("取消", null)
@@ -621,7 +507,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                             .setPositiveButton("充值", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    pay(false, (-bidPoorMoney) + (-bidPoorMoney) * 0.05);
+                                    mySqlManager.pay(false, (-bidPoorMoney) + (-bidPoorMoney) * 0.05, Double.valueOf(userCoin) + bidPoorCoin);
                                 }
                             })
                             .setNegativeButton("取消", null)

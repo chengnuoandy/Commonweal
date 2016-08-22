@@ -144,6 +144,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
                         dismiss();
                         mSqlManager.updateUserCoinByObjectId(sumCoin);
+                        // TODO: 2016/8/21 继续
                     }
                 });
             }

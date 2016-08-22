@@ -51,8 +51,6 @@ public class MyFragment extends Fragment {
     RelativeLayout mRlBackground;
     @BindView(R.id.tv_my_attention)
     TextView mTvMyAttention;
-    @BindView(R.id.ceshi)
-    TextView mCeshi;
 
     private boolean isLogin = false;
 
@@ -81,19 +79,20 @@ public class MyFragment extends Fragment {
             isLogin = true;
         }
 
-        mTextView = (TextView) view.findViewById(R.id.ceshi);
-        view.findViewById(R.id.tv_love).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.tv_my_good).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent3 = new Intent(getActivity(), SellGoodActivity.class);
+                startActivity(intent3);
             }
         });
-        mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), LogisticsInformation.class);
-                startActivity(intent);
-            }
-        });
+//        mTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), LogisticsInformation.class);
+//                startActivity(intent);
+//            }
+//        });
         initView(view);
 
         return view;
@@ -102,7 +101,7 @@ public class MyFragment extends Fragment {
 
     private void initView(View view) {
         mTvAddress = (TextView) view.findViewById(R.id.tv_address);//地址栏
-        mTvOrder = (TextView) view.findViewById(R.id.tv_order);
+        mTvOrder = (TextView) view.findViewById(R.id.tv_my_order);
         mTvOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +119,7 @@ public class MyFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention ,R.id.tv_share_form})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
@@ -157,10 +156,6 @@ public class MyFragment extends Fragment {
             case R.id.tv_my_attention:
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
                 startActivity(intent2);
-                break;
-            case R.id.tv_share_form:
-                Intent intent3 = new Intent(getActivity(), SellGoodActivity.class);
-                startActivity(intent3);
                 break;
             default:
                 break;

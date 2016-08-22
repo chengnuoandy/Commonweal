@@ -232,11 +232,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvNowPrice.setText(getItem(position).getGood_NowCoin());
             long nowTime = System.currentTimeMillis();
             long endTime = getItem(position).getGood_UpDateM();
-            if ((endTime - nowTime) > 0) {
-                mTvGoodStatus.setImageResource(R.mipmap.ing);
-            } else {
-                mTvGoodStatus.setImageResource(R.mipmap.end);
-            }
         }
 
         @Override

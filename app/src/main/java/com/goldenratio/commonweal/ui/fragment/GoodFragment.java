@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.ui.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,13 +45,21 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_good, null);
-
-        initView();
-        findDataFromBmob();
-        ifTime();
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initView();
+        findDataFromBmob();
+        ifTime();
+    }
 
     /**
      * 初始化数据
@@ -94,8 +103,13 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         mListView.setOnRefreshListener(new PullToRefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //初始化数据
-                mGoodList.clear();
+                if (mGoodList != null) {
+                    //初始化数据
+                    mGoodList.clear();
+                    findDataFromBmob();
+                } else {
+                    findDataFromBmob();
+                }
             }
 
             @Override
@@ -104,6 +118,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             }
         });
     }
+
 
     /**
      * 判断用户本地时间是否准确

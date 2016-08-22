@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_share_black_24dp" />
+            android:src="@drawable/ic_help_black_24dp" />
     </RelativeLayout>
 
     <ScrollView
@@ -183,10 +183,11 @@
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/iv_show_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|end"
-                    android:src="@drawable/ic_help_black_24dp" />
+                    android:src="@drawable/ic_more_horiz_black_24dp1" />
             </LinearLayout>
 
             <TextView
@@ -202,6 +203,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/little_space"
         android:layout_marginRight="@dimen/little_space"
+        android:gravity="center"
         android:background="@color/white"
         android:orientation="horizontal">
 
@@ -224,6 +226,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/default_fill"
+            android:padding="@dimen/normal_space"
             android:text="正在获取"
             android:textColor="@color/white" />
 
@@ -244,12 +247,11 @@
             android:id="@+id/tv_bid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
+            android:background="@drawable/default_fill"
+            android:layout_gravity="center"
             android:padding="@dimen/normal_space"
             android:text="出价"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_big"
             android:visibility="gone" />
 
 
@@ -281,12 +283,6 @@
                 app:suffixTextSize="10sp"
                 app:timeTextColor="#000000"
                 app:timeTextSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="当前不可出价"
-                android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

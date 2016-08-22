@@ -42,6 +42,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
     private List<MySqlOrder> mySqlOrders = new ArrayList<>();
     private Context mContext;
     private LinearLayout mLlItem;
+    private TextView mTvNoOrder;
 
 
     @Override
@@ -55,6 +56,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
     private void initView() {
         mContext = OrderActivity.this;
         mLvOrder = (ListView) findViewById(R.id.lv_order);
+        mTvNoOrder = (TextView) findViewById(R.id.tv_no_order);
         mLvOrder.setOnItemClickListener(this);
     }
 
@@ -102,11 +104,9 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                                 jsonArray = new JSONArray(result);
 
                                 if (jsonArray.length() == 0) {
-                                    TextView textView = new TextView(OrderActivity.this);
-                                    textView.setText("无订单");
-                                    addContentView(textView, null);
-                                    mLvOrder.setVisibility(View.GONE);
                                 } else {
+                                    mLvOrder.setVisibility(View.VISIBLE);
+                                    mTvNoOrder.setVisibility(View.GONE);
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                                         mySqlOrder.setOrder_Name(jsonObject.getString("Order_Name"));
@@ -123,7 +123,8 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                             } catch (JSONException e) {
                                 Log.d("Kiuber_LOG", e.getMessage() + request);
                             }
-                            Log.d("Kiuber_LOG", mySqlOrders.get(0).getOrder_Name() + ": " + "\n" + result);
+                            Log.d("Kiuber_LOG",
+                                    result);
                         }
                     });
                 }

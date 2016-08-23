@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,9 +22,13 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.iview.IMySqlManager;
+import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
+import com.goldenratio.commonweal.ui.activity.RegisterActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.GlideLoader;
+import com.goldenratio.commonweal.util.MD5Util;
 import com.squareup.picasso.Picasso;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
@@ -36,8 +41,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
@@ -45,7 +52,7 @@ import cn.bmob.v3.listener.UploadFileListener;
  * 作者：Created by 龙啸天 on 2016/7/01 0025.
  * 邮箱：jxfengmtx@163.com ---17718
  */
-public class UserSettingsActivity extends Activity {
+public class UserSettingsActivity extends Activity implements IMySqlManager {
 
 
     @BindView(R.id.tv_user_name)
@@ -68,6 +75,8 @@ public class UserSettingsActivity extends Activity {
     private int whichSex;
     private ProgressDialog mPd;
     private ImageConfig mImageConfig;
+    private String mUserID;
+    private MySqlManagerImpl mySqlManager;
 
 
     @Override
@@ -75,6 +84,8 @@ public class UserSettingsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_settings);
         ButterKnife.bind(this);
+        mUserID = MyFragment.mUserID;
+
 
         getMyData();
         Picasso.with(this).load(avaUrl).into(mMinAvatar);
@@ -165,10 +176,83 @@ public class UserSettingsActivity extends Activity {
                 startActivityForResult(intent, 3);
                 break;
             case R.id.alter_login_pwd:
+                showPwdDialog();
                 break;
             case R.id.alter_pay_pwd:
+                showPayPwdDialog();
                 break;
         }
+    }
+
+    /**
+     * 修改支付密码
+     */
+    private void showPayPwdDialog() {
+//        mySqlManager = new MySqlManagerImpl(this, this ,,);
+
+    }
+
+    /**
+     * 修改登陆密码的提示框
+     */
+    private void showPwdDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.view_pwd_dialog, null);
+        builder.setTitle("修改密码");
+        builder.setView(view);
+        builder.setCancelable(false);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        final EditText editText = (EditText) view.findViewById(R.id.et_old);
+        final EditText editText1 = (EditText) view.findViewById(R.id.et_new1);
+        final EditText editText2 = (EditText) view.findViewById(R.id.et_new2);
+
+        view.findViewById(R.id.btn_yes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(editText.getText()) || TextUtils.isEmpty(editText1.getText()) || TextUtils.isEmpty(editText2.getText())) {
+                    Toast.makeText(UserSettingsActivity.this, "请填写所有数据！", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    if (editText1.getText().toString().equals(editText2.getText().toString())) {
+                        BmobQuery<User_Profile> query = new BmobQuery<User_Profile>();
+                        query.getObject(mUserID, new QueryListener<User_Profile>() {
+                            @Override
+                            public void done(User_Profile user_profile, BmobException e) {
+                                if (e == null) {
+                                    if (user_profile.getUser_Password().equals(MD5Util.createMD5(editText.getText().toString()))) {
+                                        showProgressDialog();
+                                        updateDataToBmob(MD5Util.createMD5(editText1.getText().toString()),4,null);
+                                        alertDialog.dismiss();
+                                    } else {
+                                        Toast.makeText(UserSettingsActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(UserSettingsActivity.this, "修改失败！", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    } else {
+                        Toast.makeText(UserSettingsActivity.this, "两次输入的密码不同！", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        view.findViewById(R.id.btn_no).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.btn_forget).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentFp = new Intent(UserSettingsActivity.this, RegisterActivity.class);
+                startActivityForResult(intentFp, 2);
+                alertDialog.dismiss();
+            }
+        });
     }
 
     private void showChoiceDialog() {
@@ -229,10 +313,9 @@ public class UserSettingsActivity extends Activity {
      * 更新Bmob数据库
      *
      * @param userData
-     * @param i        用来判断更新的字段  0:Sex,1:昵称,2:个签,3:头像;
+     * @param i        用来判断更新的字段  0:Sex,1:昵称,2:个签,3:头像,4:登陆密码;
      */
     private void updateDataToBmob(final String userData, int i, final String userRow) {
-        String userID = MyFragment.mUserID;
         User_Profile u = new User_Profile();
         if (i == 0) {
             u.setUser_Sex(userData);
@@ -240,13 +323,19 @@ public class UserSettingsActivity extends Activity {
             u.setUser_Nickname(userData);
         else if (i == 2) {
             u.setUser_Autograph(userData);
-        } else u.setUser_image_hd(userData);
-        u.update(userID, new UpdateListener() {
+        } else if (i == 3) {
+            u.setUser_image_hd(userData);
+        } else if (i == 4) {
+            u.setUser_Password(userData);
+        }
+        u.update(mUserID, new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
                     closeProgressDialog();
-                    updateDataToSqlite(userData, userRow);
+                    if (userRow != null) {
+                        updateDataToSqlite(userData, userRow);
+                    }
                     Toast.makeText(UserSettingsActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i("why", e.getMessage());
@@ -363,4 +452,28 @@ public class UserSettingsActivity extends Activity {
         avaUrl = intent.getStringExtra("avaUrl");
     }
 
+    @Override
+    public void pay(boolean alipayOrWechatPay, double price, double allCoin, String changeCoin) {
+
+    }
+
+    @Override
+    public void showSixPwdOnFinishInput(String sixPwd, int event) {
+
+    }
+
+    @Override
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin) {
+        return false;
+    }
+
+    @Override
+    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+        return false;
+    }
+
+    @Override
+    public boolean updateUserSixPwdByObjectId(String sixPwd) {
+        return false;
+    }
 }

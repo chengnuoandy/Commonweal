@@ -480,6 +480,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             } else {
                 user.setUser_Sex("未知");
             }
+            user.setUser_Name(wbuser.screen_name);
             user.setUser_WbID(wbuser.id);
             user.setUser_image_max(wbuser.avatar_large);
             user.setUser_image_min(wbuser.profile_image_url);

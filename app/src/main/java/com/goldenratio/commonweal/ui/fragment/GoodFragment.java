@@ -38,7 +38,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     private Long endTime;
     private PullToRefreshListView mListView;
     private LinearLayout mLlNoNet;
-    private TextView mTvNowPrice;
     private ProgressDialog progressDialog;
 
     @Override
@@ -90,7 +89,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
      * 初始化布局
      */
     private void initView() {
-        mTvNowPrice = (TextView) view.findViewById(R.id.tv_now_price);
         mLlNoNet = (LinearLayout) view.findViewById(R.id.ll_no_net);
         mLlNoNet.setOnClickListener(new View.OnClickListener() {
             @Override

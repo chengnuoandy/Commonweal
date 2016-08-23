@@ -140,7 +140,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (viewHolder == null) {
-            convertView = mInflater.inflate(R.layout.item_good_listview1, null);
+            convertView = mInflater.inflate(R.layout.item_good_listview, null);
             viewHolder = new ViewHolder();
             //初始化布局
             viewHolder.initView(convertView);
@@ -272,7 +272,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
                     });
                     break;
-                case R.id.iv_user_avatar:
+                case R.id.civ_user_avatar:
                     List<String> attenList;
                     attenList = getItem(position).getGood_User().getUser_Attention();
                     int isHas = -1;

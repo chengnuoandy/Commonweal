@@ -27,7 +27,6 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
     private TextView mTvInitiator;
     private TextView mTvContent;
     private TextView mTvSmile;
-    private TextView mTvAll;
     private LinearLayout mLayout;
     private TextView mTvExecute;
 
@@ -72,12 +71,12 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         mTvExecute = (TextView) findViewById(R.id.tv_execute);
         mTvSmile = (TextView) findViewById(R.id.smile);
         mTvContent = (TextView) findViewById(R.id.tv_content);
-        mTvAll = (TextView) findViewById(R.id.tv_all);
         mLayout = (LinearLayout) findViewById(R.id.help_layout);
         mTvInitiator.setOnClickListener(this);
         findViewById(R.id.iv_share).setOnClickListener(this);
         findViewById(R.id.iv_comment).setOnClickListener(this);
         findViewById(R.id.tv_donate).setOnClickListener(this);
+        findViewById(R.id.tv_all).setOnClickListener(this);
     }
 
 

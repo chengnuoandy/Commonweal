@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ShareUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +32,8 @@ public class MySetActivity extends Activity {
     @BindView(R.id.tv_exit)
     TextView mTvExit;
     private boolean isLogin = false;
+    private TextView mTvNowVer;
+    private TextView mTvShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,21 @@ public class MySetActivity extends Activity {
 
         isLogin = getIntent().getExtras().getBoolean("islogin");
 
+        mTvNowVer = (TextView) findViewById(R.id.tv_now_ver);
+        mTvShare = (TextView) findViewById(R.id.tv_share);
+        mTvShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://123.206.89.67/loadpage/index.html";
+                ShareUtils shareUtils = new ShareUtils();
+                shareUtils.showShare(MySetActivity.this, url, "爱点App", "内容", "评论");
+            }
+        });
+        try {
+            mTvNowVer.setText("当前版本：v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -58,7 +76,7 @@ public class MySetActivity extends Activity {
      *
      * @param view
      */
-    @OnClick({R.id.tv_exit, R.id.iv_set_back ,R.id.tv_feedback ,R.id.tv_about ,R.id.tv_update})
+    @OnClick({R.id.tv_exit, R.id.iv_set_back, R.id.tv_feedback, R.id.tv_about, R.id.tv_update})
     public void onClick(View view) {
         switch (view.getId()) {
             //退出登陆
@@ -76,7 +94,7 @@ public class MySetActivity extends Activity {
                 finish();
                 break;
             case R.id.tv_feedback:
-                Intent intent = new Intent(this,UserFeedbackActivity.class);
+                Intent intent = new Intent(this, UserFeedbackActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_about:
@@ -98,9 +116,9 @@ public class MySetActivity extends Activity {
                 // TODO Auto-generated method stub
                 if (updateStatus == UpdateStatus.Yes) {//版本有更新
                     Toast.makeText(MySetActivity.this, "发现新版本！", Toast.LENGTH_SHORT).show();
-                }else if(updateStatus == UpdateStatus.No){
+                } else if (updateStatus == UpdateStatus.No) {
                     Toast.makeText(MySetActivity.this, "版本无更新", Toast.LENGTH_SHORT).show();
-                }else if(updateStatus==UpdateStatus.TimeOut){
+                } else if (updateStatus == UpdateStatus.TimeOut) {
                     Toast.makeText(MySetActivity.this, "查询出错或查询超时", Toast.LENGTH_SHORT).show();
                 }
                 /*else if(updateStatus==UpdateStatus.EmptyField){//此提示只是提醒开发者关注那些必填项，测试成功后，无需对用户提示
@@ -119,7 +137,7 @@ public class MySetActivity extends Activity {
         builder.setTitle("关于");
         try {
             builder.setMessage("XXX\n" +
-                    "版本："+getPackageManager().getPackageInfo(getPackageName(),0).versionName+"\n" +
+                    "版本：" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "\n" +
                     "这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍" +
                     "这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍" +
                     "这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍" +

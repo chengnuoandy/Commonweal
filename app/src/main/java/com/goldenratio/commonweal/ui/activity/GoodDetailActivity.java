@@ -5,20 +5,22 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,18 +39,12 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import c.b.BP;
-import c.b.PListener;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -57,12 +53,6 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
-import okhttp3.Call;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -74,7 +64,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private Good mGood;
     private TextView mTvGoodName, mTvGoodDescription, mTvUserName,
             mTvBid, mTvDeposit, mTvNowCoin, mTvStartCoin, mTvStartTime, mTvLastTime, mTvLoading;
-    private LinearLayout mLlCv;
+    private LinearLayout mLlCv, mLlCv1;
     private int picSize;
     private GoodDetailActivity mContext;
     private String mUserId;
@@ -88,7 +78,9 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private double bidPoorMoney;
     private double dePoorMoney;
     private double bidCoin;
+    private TextView mTvBidRecord;
     private CountdownView mCountdownView1;
+    private FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +128,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     @Override
     protected void onStart() {
         super.onStart();
-        isDeposit();
+        initIsGoodStatus();
     }
 
     /**
@@ -161,8 +153,14 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvBid.setOnClickListener(this);
         mTvDeposit.setOnClickListener(this);
         mIvComment = (ImageView) findViewById(R.id.iv_comment);
+        mIvComment.setOnClickListener(this);
         mIvShowMore = (ImageView) findViewById(R.id.iv_show_more);
+        mLlCv1 = (LinearLayout) findViewById(R.id.ll_cd);
         mIvShowMore.setOnClickListener(this);
+        mTvBidRecord = (TextView) findViewById(R.id.tv_bid_record);
+        mTvBidRecord.setOnClickListener(this);
+        mFrameLayout = (FrameLayout) findViewById(R.id.id_content);
+
     }
 
     @Override
@@ -228,8 +226,36 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 mCountdownView1.start(endTime);
                 mIvShowMore.setVisibility(View.GONE);
                 break;
+            case R.id.tv_bid_record:
+                Intent intent1 = new Intent(GoodDetailActivity.this, BidRecordActivity.class);
+                intent1.putExtra("goodId", mGood.getObjectId());
+                startActivity(intent1);
+                break;
         }
     }
+
+    private void getData(List<Bid> list) {
+
+
+        List<String> strings = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            strings.add(i, list.get(i).getBid_User().getUser_Name() + "在"
+                    + list.get(i).getCreatedAt()
+                    + "出价" + list.get(i).getBid_Coin());
+        }
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(GoodDetailActivity.this);
+        Adapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
+        builder1.setAdapter((ListAdapter) adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder1.setNegativeButton("关闭", null);
+        builder1.show();
+    }
+
 
     /**
      * 初始化数据
@@ -264,9 +290,11 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private void initIsGoodStatus() {
         //根据最后一位出价者字段判断是否有人出价
         if (endTime > 0) {
-            getLastBidUpdatedAt();
+
         } else {
             changeTextViewVisibitity(2);
+            mTvBid.setClickable(false);
+            mLlCv1.setVisibility(View.GONE);
             mTvBid.setText("出价结束");
         }
     }
@@ -358,7 +386,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     int listSize = list.size();
                     if (listSize == 1) {
                         //支付保证金了
-                        initIsGoodStatus();
+                        getLastBidUpdatedAt();
                     } else if (listSize == 0) {
                         //未支付保证金
                         changeTextViewVisibitity(1);
@@ -630,7 +658,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(mContext, "出价成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "出价成功" + mUserId, Toast.LENGTH_SHORT).show();
                     getLastBidUpdatedAt();
                     mTvBid.setVisibility(View.GONE);
                     mLlCv.setVisibility(View.VISIBLE);

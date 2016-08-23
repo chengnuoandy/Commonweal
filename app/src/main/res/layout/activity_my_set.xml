@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".ui.activity.my.MySetActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.my.MySetActivity">
 
 
     <RelativeLayout
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back"/>
+            android:src="@mipmap/ic_back" />
 
 
         <TextView
@@ -28,30 +28,25 @@
             android:layout_centerInParent="true"
             android:text="设置"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
+            android:textSize="@dimen/title_text_size" />
 
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:text="应用信息"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/my_set_selector"
         android:padding="@dimen/normal_space">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_delete_black_24dp"
+            android:drawablePadding="@dimen/little_space"
             android:gravity="left"
             android:text="清除缓存"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,69 +54,80 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:text="缓存大小"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </RelativeLayout>
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_bg"/>
-
-
-    <TextView
-        android:id="@+id/tv_update"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:drawableRight="@mipmap/news_cate_arr"
-        android:gravity="left"
-        android:padding="@dimen/normal_space"
-        android:text="版本更新"
-        android:textColor="@color/black"
-        android:textSize="16sp"/>
+        android:background="@drawable/my_set_selector"
+        android:orientation="horizontal">
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        <TextView
+            android:id="@+id/tv_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_refresh_black_24dp"
+            android:drawablePadding="@dimen/little_space"
+            android:padding="@dimen/normal_space"
+            android:text="版本更新"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_now_ver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/news_cate_arr"
+            android:text="当前版本：" />
+
+    </LinearLayout>
 
 
     <TextView
         android:id="@+id/tv_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/my_set_selector"
+        android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
+        android:drawablePadding="@dimen/little_space"
         android:drawableRight="@mipmap/news_cate_arr"
         android:gravity="left"
         android:padding="@dimen/normal_space"
         android:text="意见反馈"
         android:textColor="@color/black"
-        android:textSize="16sp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_bg"/>
-
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@drawable/my_set_selector"
+        android:drawableLeft="@drawable/ic_loyalty_black_24dp"
+        android:drawablePadding="@dimen/little_space"
         android:drawableRight="@mipmap/news_cate_arr"
         android:gravity="start"
         android:padding="@dimen/normal_space"
         android:text="关于我们"
         android:textColor="@color/black"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
-    <View
+
+    <TextView
+        android:id="@+id/tv_share"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/my_set_selector"
+        android:drawableLeft="@drawable/ic_share_black_24dp"
+        android:drawablePadding="@dimen/little_space"
+        android:drawableRight="@mipmap/news_cate_arr"
+        android:gravity="start"
+        android:padding="@dimen/normal_space"
+        android:text="分享给好友"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_exit"
@@ -132,6 +138,6 @@
         android:gravity="center"
         android:text="退出登陆"
         android:textColor="@color/white"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
 </LinearLayout>

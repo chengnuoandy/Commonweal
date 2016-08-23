@@ -121,12 +121,18 @@
                         android:drawableLeft="@drawable/ic_loyalty_black_24dp"
                         android:gravity="center" />
 
-                    <TextView
+                    <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/little_space"
+                    android:layout_marginTop="@dimen/little_space"
+                    android:background="@color/normal_bg_color" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -135,7 +141,6 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-
                     <com.goldenratio.commonweal.util.NumberFontTextView
                         android:id="@+id/tv_now_coin"
                         android:layout_width="wrap_content"
@@ -143,16 +148,15 @@
                         android:drawableLeft="@drawable/ic_gavel_black_24dp"
                         android:gravity="center" />
 
-                    <TextView
+                    <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_last_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-
-
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_cd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/normal_space"
@@ -212,9 +216,60 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_bid_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/default_frame"
+                android:padding="@dimen/little_space"
+                android:text="出价记录"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_small" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/normal_space"
+                android:paddingRight="@dimen/normal_space">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/normal_bg_color" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/little_space"
+                    android:paddingRight="@dimen/little_space">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_drop_up_black_24dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/normal_bg_color" />
+
+            </LinearLayout>
+
+            <TextView
                 android:id="@+id/tv_good_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/normal_space"
                 android:text="物品详情" />
         </LinearLayout>
     </ScrollView>
@@ -306,4 +361,13 @@
                 app:timeTextSize="16sp" />
         </LinearLayout>
     </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/id_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </FrameLayout>
 </LinearLayout>

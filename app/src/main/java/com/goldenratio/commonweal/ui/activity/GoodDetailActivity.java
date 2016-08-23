@@ -475,7 +475,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
 
 
     @Override
-    public void pay(boolean alipayOrWechatPay, double price, double allCoin) {
+    public void pay(boolean alipayOrWechatPay, double price, double allCoin, String changeCoin) {
 
     }
 
@@ -487,17 +487,17 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             if (flag == 1) {
                 //保证金
                 saveDeposit2Bmob();
-                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - depositCoin) + "");
+                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - depositCoin) + "", depositCoin + "");
             } else if (flag == 2) {
                 //出价
                 saveBid2Bmob(mGood.getObjectId(), bidCoin + "");
-                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "");
+                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "", bidCoin + "");
             }
         }
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin) {
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin) {
         Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
         mTvDeposit.setVisibility(View.GONE);
         return false;
@@ -524,7 +524,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                             .setPositiveButton("充值", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mySqlManager.pay(false, (-dePoorMoney) + (-dePoorMoney) * 0.05, Double.valueOf(userCoin) + depositCoin);
+                                    mySqlManager.pay(false,
+                                            (-dePoorMoney) + (-dePoorMoney) * 0.05, Double.valueOf(userCoin) + depositCoin, depositCoin + "");
                                 }
                             })
                             .setNegativeButton("取消", null)
@@ -535,7 +536,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                             .setPositiveButton("充值", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mySqlManager.pay(false, (-bidPoorMoney) + (-bidPoorMoney) * 0.05, Double.valueOf(userCoin) + bidPoorCoin);
+                                    mySqlManager.pay(false, (-bidPoorMoney) + (-bidPoorMoney) * 0.05, Double.valueOf(userCoin) + bidPoorCoin, +bidCoin + "");
                                 }
                             })
                             .setNegativeButton("取消", null)

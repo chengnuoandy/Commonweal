@@ -33,9 +33,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 import c.b.BP;
 import c.b.PListener;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -52,7 +55,6 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
 
     private PasswordView pwdView;
-    private View mMenuView;
 
     private Activity mContext;
     private TextView mTvType;
@@ -70,7 +72,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         this.mSqlManager = mySqlManager;
     }
 
-    public void pay(final boolean alipayOrWechatPay, double price, final double allCoin) {
+    public void pay(final boolean alipayOrWechatPay, final double price, final double allCoin, final String changeCoin) {
 
         BP.pay("公益币充值", "描述", price, alipayOrWechatPay, new PListener() {
 
@@ -85,7 +87,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             // 支付成功,如果金额较大请手动查询确认
             @Override
             public void succeed() {
-                updateUserCoinByObjectId(allCoin + "");
+                updateUserCoinByObjectId(allCoin + "", changeCoin);
             }
 
             // 无论成功与否,返回订单号
@@ -114,10 +116,41 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         });
     }
 
-    private void savePayHistoryToBmob() {
+    public void savePayHistoryToBmob(boolean PR_Type,
+                                     String PR_Money,
+                                     String PR_Coin,
+                                     String PR_Number,
+                                     Boolean PR_Status,
+                                     boolean PayType) {
         PayRecord payRecord = new PayRecord();
+        payRecord.setPR_Name((PR_Type ? "充值公益币" : "公益币支出"));
+        payRecord.setPR_Money(PR_Type ? "花费" + PR_Money + "元" : "0");
+        payRecord.setPR_PayType(PR_Type ? (PayType ? "支付宝支付" : "微信支付") : "爱点公益币支付");
+        payRecord.setPR_Coin((PayType ? "+" : "-") + PR_Coin);
+        payRecord.setPR_Number(PR_Type ? PR_Number : createRndNumber());
+        payRecord.setPR_Status(PR_Status);
+        payRecord.setUser_ID(mUserId);
+        payRecord.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(mContext, "本次交易记录已保存", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(mContext, "交易记录保存失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-
+    private String createRndNumber() {
+        Random rad = new Random();
+        String result = rad.nextInt(9) + "";
+        if (result.length() == 1) {
+            result = "0" + result;
+        }
+        String orderId = result +
+                (System.currentTimeMillis() + "").substring(1) +
+                (System.nanoTime() + "").substring(7, 10);
+        return orderId;
     }
 
     private void installBmobPayPlugin(String fileName) {
@@ -209,7 +242,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
 
     @Override
-    public boolean updateUserCoinByObjectId(final String sumCoin) {
+    public boolean updateUserCoinByObjectId(final String sumCoin, final String changeCoin) {
         showProgressDialog();
         String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -231,6 +264,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                     @Override
                     public void run() {
                         Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                        savePayHistoryToBmob(false, "", changeCoin, createRndNumber(), false, false);
                         closeProgressDialog();
                     }
                 });
@@ -244,7 +278,8 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
                         closeProgressDialog();
                         dismiss();
-                        mSqlManager.updateUserCoinByObjectId(sumCoin);
+                        savePayHistoryToBmob(false, "", changeCoin, createRndNumber(), true, false);
+                        mSqlManager.updateUserCoinByObjectId(sumCoin, changeCoin);
                         // TODO: 2016/8/21 继续
                     }
                 });

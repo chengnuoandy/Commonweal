@@ -7,15 +7,28 @@
     android:orientation="vertical"
     tools:context="com.goldenratio.commonweal.ui.activity.StarInfoActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/civ_star_avatar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/iv_unregister_head"
-        android:tag="1" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_star_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/iv_unregister_head"
+            android:tag="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/little_space"
+            android:layout_marginLeft="@dimen/little_space"
+            android:src="@mipmap/v_yellow" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_star_name"

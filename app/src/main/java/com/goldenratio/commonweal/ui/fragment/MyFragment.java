@@ -17,11 +17,10 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
-import com.goldenratio.commonweal.ui.activity.BusinessActivity;
+import com.goldenratio.commonweal.ui.activity.PayRecordActivity;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
-import com.goldenratio.commonweal.ui.activity.my.LogisticsInformation;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
@@ -112,7 +111,7 @@ public class MyFragment extends Fragment {
         mTvAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), BusinessActivity.class);
+                Intent intent = new Intent(getContext(), PayRecordActivity.class);
                 startActivity(intent);
             }
         });

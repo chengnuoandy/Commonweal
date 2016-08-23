@@ -32,6 +32,7 @@ public class StarInfoActivity extends Activity {
     @BindView(R.id.tv_star_name)
     TextView mTvStarName;
     @BindView(R.id.tv_attention)
+
     TextView mTvAttention;
 
     private String starID;
@@ -73,20 +74,18 @@ public class StarInfoActivity extends Activity {
 
     private void getData() {
         BmobQuery<U_Attention> query = new BmobQuery<U_Attention>();
-
+        String ID = ((MyApplication) getApplication()).getObjectID();
         query.addQueryKeys("U_ID");
+        query.addWhereEqualTo("U_ID", ID);
         query.addWhereEqualTo("Star_ID", starID);
         query.findObjects(new FindListener<U_Attention>() {
 
             @Override
             public void done(List<U_Attention> object, BmobException e) {
-                if (e == null && object.size() != 0) {
-                    String ID = ((MyApplication) getApplication()).getObjectID();
-                    if (ID.equals(object.get(0).getU_ID())) {
-                        isHasAttention = true;
-                        attentionID = object.get(0).getObjectId();
-                        mTvAttention.setText("已关注");
-                    }
+                if (e == null && object.size() == 1) {
+                    isHasAttention = true;
+                    attentionID = object.get(0).getObjectId();
+                    mTvAttention.setText("已关注");
                     Log.i("bmob", "查询成功：共" + object + object.size() + "条数据。");
                 } else {
                     Log.i("bmob", "失败：" + e.getMessage());
@@ -95,7 +94,6 @@ public class StarInfoActivity extends Activity {
 
         });
     }
-
 
 
     private void addDataToBmob() {

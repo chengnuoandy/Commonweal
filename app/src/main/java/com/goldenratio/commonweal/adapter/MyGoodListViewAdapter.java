@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.adapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +29,7 @@ import java.util.TimerTask;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Kiuber on 2016/6/26.
@@ -163,32 +165,35 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
     //缓存类
     class ViewHolder implements View.OnClickListener {
+        private CircleImageView mCivAvatar;
         private TextView mTvUserName;
-        private TextView mTvTime;
-        private TextView mTvName;
-        private ImageView mIvPic;
-        private TextView mTvDescription;
         private CountdownView mCountdownView;
+        private TextView mTvStatus;
+        private TextView mTvName;
+        private TextView mTvNowCoin;
+        private ImageView mIvPic;
+        private TextView mTvTime;
+        private ImageView mIvThumbUp;
+        private ImageView mIvShare;
+
         private Good mGood;
-        private TextView mTvNowPrice;
-        private ImageView mIvUserAvatar;
-        private TextView mTvThumbUp;
         private Integer position;
-        private View conView;
-        private ImageView mTvGoodStatus;
 
         public void initView(View convertView) {
-            conView = convertView;
+            mCivAvatar = (CircleImageView) convertView.findViewById(R.id.civ_user_avatar);
             mTvUserName = (TextView) convertView.findViewById(R.id.tv_user_name);
             mCountdownView = (CountdownView) convertView.findViewById(R.id.cv_good);
-            mTvTime = (TextView) convertView.findViewById(R.id.tv_time);
+            mTvStatus = (TextView) convertView.findViewById(R.id.tv_status);
             mTvName = (TextView) convertView.findViewById(R.id.tv_name);
+            mTvNowCoin = (TextView) convertView.findViewById(R.id.tv_now_coin);
             mIvPic = (ImageView) convertView.findViewById(R.id.iv_pic);
-            mTvNowPrice = (TextView) convertView.findViewById(R.id.tv_now_price);
-            mIvUserAvatar = (ImageView) convertView.findViewById(R.id.iv_user_avatar);
-            mTvThumbUp = (TextView) convertView.findViewById(R.id.tv_thumb_up);
-            mTvThumbUp.setOnClickListener(this);
-            mIvUserAvatar.setOnClickListener(this);
+            mTvTime = (TextView) convertView.findViewById(R.id.tv_time);
+            mIvThumbUp = (ImageView) convertView.findViewById(R.id.iv_thumb_up);
+            mIvShare = (ImageView) convertView.findViewById(R.id.iv_share);
+
+            mIvThumbUp.setOnClickListener(this);
+            mIvShare.setOnClickListener(this);
+            mCivAvatar.setOnClickListener(this);
         }
 
 
@@ -227,17 +232,31 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 //                    .transform(new GlideCircleTransform(mContext))
 //                    .into(mIvPic);
             //TODO 图片尺寸，物品详情页的状态
+            Glide.with(mContext).load(getItem(position).getGood_User().getUser_image_max()).into(mCivAvatar);
             Glide.with(mContext).load(getItem(position).getGood_Photos().get(0).toString()).override(width * 2 / 3, height / 3).into(mIvPic);
 
-            mTvNowPrice.setText(getItem(position).getGood_NowCoin());
+            mTvNowCoin.setText(getItem(position).getGood_NowCoin());
             long nowTime = System.currentTimeMillis();
             long endTime = getItem(position).getGood_UpDateM();
+            long result = nowTime - endTime;
+            if (result > 0) {
+                mTvStatus.setText("已经结束");
+                mCountdownView.setVisibility(View.GONE);
+                mTvStatus.setTextColor(Color.RED);
+                mTvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.default_frame));
+            } else if (result < 0) {
+                mTvStatus.setText("正在进行");
+            } else {
+                mTvStatus.setText("未知状态");
+                mTvStatus.setTextColor(Color.RED);
+                mTvStatus.setBackground(null);
+            }
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.tv_thumb_up:
+                case R.id.iv_thumb_up:
                     Good good = new Good();
                     good.increment("Good_Praise");
                     good.update(getItem(position).getObjectId(), new UpdateListener() {
@@ -253,7 +272,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
                     });
                     break;
-                case R.id.iv_user_avatar:
+                case R.id.civ_user_avatar:
                     List<String> attenList;
                     attenList = getItem(position).getGood_User().getUser_Attention();
                     int isHas = -1;

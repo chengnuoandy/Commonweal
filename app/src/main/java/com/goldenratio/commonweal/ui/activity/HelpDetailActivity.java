@@ -27,7 +27,6 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
     private TextView mTvInitiator;
     private TextView mTvContent;
     private TextView mTvSmile;
-    private TextView mTvAll;
     private LinearLayout mLayout;
     private TextView mTvExecute;
 
@@ -72,12 +71,12 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         mTvExecute = (TextView) findViewById(R.id.tv_execute);
         mTvSmile = (TextView) findViewById(R.id.smile);
         mTvContent = (TextView) findViewById(R.id.tv_content);
-        mTvAll = (TextView) findViewById(R.id.tv_all);
         mLayout = (LinearLayout) findViewById(R.id.help_layout);
         mTvInitiator.setOnClickListener(this);
         findViewById(R.id.iv_share).setOnClickListener(this);
         findViewById(R.id.iv_comment).setOnClickListener(this);
         findViewById(R.id.tv_donate).setOnClickListener(this);
+        findViewById(R.id.tv_all).setOnClickListener(this);
     }
 
 
@@ -118,9 +117,14 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
                 break;
             //发起方详情界面
             case R.id.tv_initiator:
-                Intent intent2 = new Intent(this,HelpInitiatorDetailActivity.class);
-                intent2.putExtra("name",mHelp.getHelp_Initiator());
+                Intent intent2 = new Intent(this, HelpInitiatorDetailActivity.class);
+                intent2.putExtra("name", mHelp.getHelp_Initiator());
                 startActivity(intent2);
+                break;
+            case R.id.tv_all:
+                Intent intent1 = new Intent(this, HelpTopDetailActivity.class);
+                intent1.putExtra("TopUrl", mHelp.getHelp_Url());
+                startActivity(intent1);
                 break;
 
         }

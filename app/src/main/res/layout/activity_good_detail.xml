@@ -114,18 +114,25 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.goldenratio.commonweal.util.NumberFontTextView
                         android:id="@+id/tv_start_coin"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:drawableLeft="@drawable/ic_loyalty_black_24dp" />
+                        android:drawableLeft="@drawable/ic_loyalty_black_24dp"
+                        android:gravity="center" />
 
-                    <TextView
+                    <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/little_space"
+                    android:layout_marginTop="@dimen/little_space"
+                    android:background="@color/normal_bg_color" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -134,23 +141,22 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-
-                    <TextView
+                    <com.goldenratio.commonweal.util.NumberFontTextView
                         android:id="@+id/tv_now_coin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_gavel_black_24dp" />
+                        android:drawableLeft="@drawable/ic_gavel_black_24dp"
+                        android:gravity="center" />
 
-                    <TextView
+                    <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_last_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-
-
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_cd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/normal_space"
@@ -177,6 +183,26 @@
                     app:timeTextColor="#000000"
                     app:timeTextSize="22sp" />
 
+                <cn.iwgang.countdownview.CountdownView
+                    android:id="@+id/cv_endtime1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:isShowHour="true"
+                    app:isShowMillisecond="true"
+                    app:isShowMinute="true"
+                    app:isShowSecond="true"
+                    app:isTimeTextBold="true"
+                    app:suffixGravity="bottom"
+                    app:suffixHour="小时"
+                    app:suffixMillisecond="毫秒"
+                    app:suffixMinute="分钟"
+                    app:suffixSecond="秒"
+                    app:suffixTextColor="#000000"
+                    app:suffixTextSize="10sp"
+                    app:timeTextColor="#000000"
+                    app:timeTextSize="22sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,14 +212,64 @@
                     android:id="@+id/iv_show_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
                     android:src="@drawable/ic_more_horiz_black_24dp1" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_bid_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/default_frame"
+                android:padding="@dimen/little_space"
+                android:text="出价记录"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_small" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="@dimen/normal_space"
+                android:paddingRight="@dimen/normal_space">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/normal_bg_color" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/little_space"
+                    android:paddingRight="@dimen/little_space">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_drop_up_black_24dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_drop_down_black_24dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="@color/normal_bg_color" />
+
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_good_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/normal_space"
                 android:text="物品详情" />
         </LinearLayout>
     </ScrollView>
@@ -203,8 +279,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/little_space"
         android:layout_marginRight="@dimen/little_space"
-        android:gravity="center"
         android:background="@color/white"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
@@ -247,8 +323,8 @@
             android:id="@+id/tv_bid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/default_fill"
             android:layout_gravity="center"
+            android:background="@drawable/default_fill"
             android:padding="@dimen/normal_space"
             android:text="出价"
             android:textColor="@color/white"
@@ -285,4 +361,13 @@
                 app:timeTextSize="16sp" />
         </LinearLayout>
     </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/id_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </FrameLayout>
 </LinearLayout>

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.Help;
-import com.goldenratio.commonweal.util.BusinessUtil;
 
 /**
  * Created by Administrator on 2016/8/20.

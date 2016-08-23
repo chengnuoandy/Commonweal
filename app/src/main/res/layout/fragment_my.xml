@@ -65,7 +65,7 @@
                     android:src="@drawable/iv_unregister_head"
                     android:tag="1" />
 
-                <TextView
+                <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -5,20 +5,22 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,18 +39,12 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import c.b.BP;
-import c.b.PListener;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -57,12 +53,6 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
-import okhttp3.Call;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -74,7 +64,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private Good mGood;
     private TextView mTvGoodName, mTvGoodDescription, mTvUserName,
             mTvBid, mTvDeposit, mTvNowCoin, mTvStartCoin, mTvStartTime, mTvLastTime, mTvLoading;
-    private LinearLayout mLlCv;
+    private LinearLayout mLlCv, mLlCv1;
     private int picSize;
     private GoodDetailActivity mContext;
     private String mUserId;
@@ -88,6 +78,9 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private double bidPoorMoney;
     private double dePoorMoney;
     private double bidCoin;
+    private TextView mTvBidRecord;
+    private CountdownView mCountdownView1;
+    private FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +128,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     @Override
     protected void onStart() {
         super.onStart();
-        isDeposit();
+        initIsGoodStatus();
     }
 
     /**
@@ -146,6 +139,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvGoodName = (TextView) findViewById(R.id.tv_good_name);
         mTvUserName = (TextView) findViewById(R.id.tv_user_name);
         mCountdownView = (CountdownView) findViewById(R.id.cv_endtime);
+        mCountdownView1 = (CountdownView) findViewById(R.id.cv_endtime1);
         mCountdownFive = (CountdownView) findViewById(R.id.cv_five);
         mTvGoodDescription = (TextView) findViewById(R.id.tv_good_description);
         mTvBid = (TextView) findViewById(R.id.tv_bid);
@@ -159,8 +153,14 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvBid.setOnClickListener(this);
         mTvDeposit.setOnClickListener(this);
         mIvComment = (ImageView) findViewById(R.id.iv_comment);
+        mIvComment.setOnClickListener(this);
         mIvShowMore = (ImageView) findViewById(R.id.iv_show_more);
+        mLlCv1 = (LinearLayout) findViewById(R.id.ll_cd);
         mIvShowMore.setOnClickListener(this);
+        mTvBidRecord = (TextView) findViewById(R.id.tv_bid_record);
+        mTvBidRecord.setOnClickListener(this);
+        mFrameLayout = (FrameLayout) findViewById(R.id.id_content);
+
     }
 
     @Override
@@ -221,10 +221,41 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.iv_show_more:
-
+                mCountdownView.setVisibility(View.GONE);
+                mCountdownView1.setVisibility(View.VISIBLE);
+                mCountdownView1.start(endTime);
+                mIvShowMore.setVisibility(View.GONE);
+                break;
+            case R.id.tv_bid_record:
+                Intent intent1 = new Intent(GoodDetailActivity.this, BidRecordActivity.class);
+                intent1.putExtra("goodId", mGood.getObjectId());
+                startActivity(intent1);
                 break;
         }
     }
+
+    private void getData(List<Bid> list) {
+
+
+        List<String> strings = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            strings.add(i, list.get(i).getBid_User().getUser_Name() + "在"
+                    + list.get(i).getCreatedAt()
+                    + "出价" + list.get(i).getBid_Coin());
+        }
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(GoodDetailActivity.this);
+        Adapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
+        builder1.setAdapter((ListAdapter) adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder1.setNegativeButton("关闭", null);
+        builder1.show();
+    }
+
 
     /**
      * 初始化数据
@@ -259,9 +290,11 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private void initIsGoodStatus() {
         //根据最后一位出价者字段判断是否有人出价
         if (endTime > 0) {
-            getLastBidUpdatedAt();
+
         } else {
             changeTextViewVisibitity(2);
+            mTvBid.setClickable(false);
+            mLlCv1.setVisibility(View.GONE);
             mTvBid.setText("出价结束");
         }
     }
@@ -353,7 +386,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     int listSize = list.size();
                     if (listSize == 1) {
                         //支付保证金了
-                        initIsGoodStatus();
+                        getLastBidUpdatedAt();
                     } else if (listSize == 0) {
                         //未支付保证金
                         changeTextViewVisibitity(1);
@@ -389,130 +422,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 }
             }
         });
-    }
-
-    private void pay(final boolean alipayOrWechatPay, final double price) {
-
-        BP.pay("公益币充值", "描述", price, alipayOrWechatPay, new PListener() {
-
-
-            // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
-            @Override
-            public void unknow() {
-                Toast.makeText(mContext, "支付结果未知,请稍后手动查询", Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-            // 支付成功,如果金额较大请手动查询确认
-            @Override
-            public void succeed() {
-                Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
-                updateUserCoin();
-            }
-
-            // 无论成功与否,返回订单号
-            @Override
-            public void orderId(String orderI) {
-                // 此处应该保存订单号,比如保存进数据库等,以便以后查询
-            }
-
-            // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
-            @Override
-            public void fail(int code, String reason) {
-
-                // 当code为-2,意味着用户中断了操作
-                // code为-3意味着没有安装BmobPlugin插件
-                if (code == -3) {
-                    Toast.makeText(
-                            mContext,
-                            "监测到你尚未安装支付插件,无法进行支付,请先安装插件(已打包在本地,无流量消耗),安装结束后重新支付",
-                            Toast.LENGTH_SHORT).show();
-                    installBmobPayPlugin("bp.db");
-                } else {
-                    Toast.makeText(mContext, "支付中断!" + reason, Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        });
-    }
-
-    private void updateUserCoin() {
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        final String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
-        if (mStrObjectId != null) {
-            RequestBody body = null;
-            if (mTvDeposit.getVisibility() == View.VISIBLE) {
-                body = new FormBody.Builder()
-                        .add("ObjectId", mStrObjectId)
-                        .add("UserCoin", userCoin + dePoorMoney)
-                        .build();
-                Log.d("Kiuber_LOG", "updateUserCoin: " + mStrObjectId + "-->" + dePoorMoney);
-            } else if (mTvBid.getVisibility() == View.VISIBLE) {
-                body = new FormBody.Builder()
-                        .add("ObjectId", mStrObjectId)
-                        .add("UserCoin", userCoin + bidPoorMoney)
-                        .build();
-                Log.d("Kiuber_LOG", "updateUserCoin: " + mStrObjectId + "-->" + bidPoorMoney);
-            } else {
-
-            }
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new okhttp3.Callback() {
-                @Override
-                public void onFailure(Call call, final IOException e) {
-                    final String e1 = e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(GoodDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            showPayKeyBoard1(deposit.toString());
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-
-    void installBmobPayPlugin(String fileName) {
-        try {
-            InputStream is = getAssets().open(fileName);
-            File file = new File(Environment.getExternalStorageDirectory()
-                    + File.separator + fileName + ".apk");
-            if (file.exists())
-                file.delete();
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] temp = new byte[1024];
-            int i = 0;
-            while ((i = is.read(temp)) > 0) {
-                fos.write(temp, 0, i);
-            }
-            fos.close();
-            is.close();
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(Uri.parse("file://" + file),
-                    "application/vnd.android.package-archive");
-            startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void changeTextViewVisibitity(int flag) {
@@ -566,6 +475,11 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
 
 
     @Override
+    public void pay(boolean alipayOrWechatPay, double price, double allCoin, String changeCoin) {
+
+    }
+
+    @Override
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
         if (event == 0) {
             mySqlManager.updateUserSixPwdByObjectId(sixPwd);
@@ -573,24 +487,24 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             if (flag == 1) {
                 //保证金
                 saveDeposit2Bmob();
-                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - depositCoin) + "");
+                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - depositCoin) + "", depositCoin + "");
             } else if (flag == 2) {
                 //出价
                 saveBid2Bmob(mGood.getObjectId(), bidCoin + "");
-                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "");
+                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "", bidCoin + "");
             }
         }
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin) {
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin) {
         Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
         mTvDeposit.setVisibility(View.GONE);
         return false;
     }
 
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String userCoin, String sixPwd) {
+    public boolean queryUserCoinAndSixPwdByObjectId(final String userCoin, String sixPwd) {
         this.sixPwd = sixPwd;
         this.userCoin = userCoin;
         if (sixPwd.equals("0")) {
@@ -610,7 +524,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                             .setPositiveButton("充值", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    pay(false, (-dePoorMoney) + (-dePoorMoney) * 0.05);
+                                    mySqlManager.pay(false,
+                                            (-dePoorMoney) + (-dePoorMoney) * 0.05, Double.valueOf(userCoin) + depositCoin, depositCoin + "");
                                 }
                             })
                             .setNegativeButton("取消", null)
@@ -621,7 +536,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                             .setPositiveButton("充值", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    pay(false, (-bidPoorMoney) + (-bidPoorMoney) * 0.05);
+                                    mySqlManager.pay(false, (-bidPoorMoney) + (-bidPoorMoney) * 0.05, Double.valueOf(userCoin) + bidPoorCoin, +bidCoin + "");
                                 }
                             })
                             .setNegativeButton("取消", null)
@@ -744,7 +659,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(mContext, "出价成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "出价成功" + mUserId, Toast.LENGTH_SHORT).show();
                     getLastBidUpdatedAt();
                     mTvBid.setVisibility(View.GONE);
                     mLlCv.setVisibility(View.VISIBLE);

@@ -25,7 +25,7 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by Administrator on 2016/8/20.
  */
 
-class GoodDetailCommentActivity extends CommentBase implements IComment {
+public class GoodDetailCommentActivity extends CommentBase implements IComment {
     private ListView mListView;
     private Good mGood;
     private String mStrObjectId;

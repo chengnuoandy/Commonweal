@@ -101,7 +101,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
             //评论
             case R.id.iv_comment:
                 //开启评论页面
-                Intent intent = new Intent(getApplicationContext(), GoodDetailCommentActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HelpCommentActivity.class);
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Help", mHelp);

@@ -93,7 +93,10 @@ public class HelpListViewAdapter extends BaseAdapter {
 
         private void initData(final int position) {
             mTvCity.setText(getItem(position).getHelp_SmilePro() + "" + getItem(position).getHelp_SmileCity());
-            Glide.with(mContext).load(getItem(position).getHelp_Pic()).into(mIvPic);
+            Glide.with(mContext).load(getItem(position)
+                    .getHelp_Pic())
+                    .skipMemoryCache(true)
+                    .into(mIvPic);
             mTvTitle.setText(getItem(position).getHelp_Title());
             mTvOneSentence.setText(getItem(position).getHelp_OneSentence());
             mTvCoin.setText(getItem(position).getHelp_Coin());

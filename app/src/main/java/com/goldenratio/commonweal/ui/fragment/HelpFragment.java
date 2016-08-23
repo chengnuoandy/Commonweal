@@ -43,6 +43,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     private View view;
     private BGARefreshLayout mBGARefreshLayout;
     private View mTopView;
+    private List<Help_Top> mList;
 
 
     @Nullable
@@ -68,8 +69,26 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         mBGARefreshLayout.setRefreshViewHolder(refreshViewHolder);
     }
 
+    /**
+     * 从intent获取预加载的数据
+     * 当数据不完整时，重新进行获取
+     */
     private void initData() {
-        queryHelpData();
+        Intent intent = getActivity().getIntent();
+        mHelp = (List<Help>) intent.getSerializableExtra("help");
+        mList = (List<Help_Top>) intent.getSerializableExtra("top");
+        if (mHelp != null && mList != null) {
+            mTopView = View.inflate(getContext(), R.layout.item_help_listview_top, null);
+            initSliderLayout(mTopView, mList);
+            mLv.setAdapter(new HelpListViewAdapter(getContext(), mHelp));
+            hideLinearLayout();
+        } else if (mList == null && mHelp != null) {
+            queryHelp_TopData();
+        } else if (mList != null) {
+            queryHelpData(false);
+        } else {
+            queryHelpData(true);
+        }
     }
 
     private void queryHelp_TopData() {
@@ -99,22 +118,48 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         });
     }
 
-    private void queryHelpData() {
-        BmobQuery<Help> bmobQuery = new BmobQuery<>();
-        bmobQuery.order("-createdAt");
-        bmobQuery.findObjects(new FindListener<Help>() {
-            @Override
-            public void done(List<Help> list, BmobException e) {
-                if (e == null) {
-                    mHelp = list;
-                    queryHelp_TopData();
-                } else {
-                    //收起刷新
-                    mBGARefreshLayout.endRefreshing();
-                    Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+    /**
+     * 初始化数据
+     * @param flag  true-加载全部数据  false-加载列表数据
+     */
+    private void queryHelpData(boolean flag) {
+        if (flag) {
+            BmobQuery<Help> bmobQuery = new BmobQuery<>();
+            bmobQuery.order("-createdAt");
+            bmobQuery.findObjects(new FindListener<Help>() {
+                @Override
+                public void done(List<Help> list, BmobException e) {
+                    if (e == null) {
+                        mHelp = list;
+                        queryHelp_TopData();
+                    } else {
+                        //收起刷新
+                        mBGARefreshLayout.endRefreshing();
+                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            BmobQuery<Help> bmobQuery = new BmobQuery<>();
+            bmobQuery.order("-createdAt");
+            bmobQuery.findObjects(new FindListener<Help>() {
+                @Override
+                public void done(List<Help> list, BmobException e) {
+                    if (e == null) {
+                        mHelp = list;
+                        mTopView = View.inflate(getContext(), R.layout.item_help_listview_top, null);
+                        initSliderLayout(mTopView, mList);
+                        mLv.setAdapter(new HelpListViewAdapter(getContext(), mHelp));
+                        hideLinearLayout();
+                    } else {
+                        //收起刷新
+                        mBGARefreshLayout.endRefreshing();
+                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
     }
 
     private void initSliderLayout(View view, List<Help_Top> list) {
@@ -191,10 +236,10 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         if (mHelp != null) {
             mHelp.clear();
             mLv.removeHeaderView(mTopView);
-            initData();
-        }else {
+            queryHelpData(true);
+        } else {
             mLv.removeHeaderView(mTopView);
-            initData();
+            queryHelpData(true);
         }
     }
 

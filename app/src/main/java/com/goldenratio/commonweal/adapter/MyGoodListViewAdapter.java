@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.adapter;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
@@ -273,18 +275,22 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                     });
                     break;
                 case R.id.civ_user_avatar:
-                    List<String> attenList;
-                    attenList = mGoodList.get(position).getGood_User().getUser_Attention();
-                    int isHas = -1;
-                    if (attenList != null)
-                        isHas = attenList.indexOf(mGoodList.get(position).getGood_User().getObjectId());
-                    Intent intent = new Intent(mContext, StarInfoActivity.class);
-                    intent.putExtra("ishas", isHas != -1);
-                    intent.putExtra("id", mGoodList.get(position).getGood_User().getObjectId());
-                    intent.putExtra("nickName", mGoodList.get(position).getGood_User().getUser_Nickname());
-                    intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());
-                    mContext.startActivity(intent);
-                    break;
+                    MyApplication myApplication = (MyApplication) ((Activity) mContext).getApplication();
+                    String mStrObjectId = myApplication.getObjectID();
+                    if (!mGoodList.get(position).getGood_User().getObjectId().equals(mStrObjectId)) {
+                        List<String> attenList;
+                        attenList = mGoodList.get(position).getGood_User().getUser_Attention();
+                        int isHas = -1;
+                        if (attenList != null)
+                            isHas = attenList.indexOf(mGoodList.get(position).getGood_User().getObjectId());
+                        Intent intent = new Intent(mContext, StarInfoActivity.class);
+                        intent.putExtra("ishas", isHas != -1);
+                        intent.putExtra("id", mGoodList.get(position).getGood_User().getObjectId());
+                        intent.putExtra("nickName", mGoodList.get(position).getGood_User().getUser_Nickname());
+                        intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());
+                        mContext.startActivity(intent);
+                        break;
+                    }
             }
         }
     }

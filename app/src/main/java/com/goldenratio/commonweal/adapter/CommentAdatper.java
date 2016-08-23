@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Comment;
@@ -52,6 +54,8 @@ public class CommentAdatper extends BaseAdapter {
     public CommentAdatper(Help help, Context context, ArrayList arrayList) {
         this.mContext = context;
         this.mArrayListOne = arrayList;
+        MyApplication myApplication = (MyApplication) ((Activity) context).getApplication();
+        mStrObjectId = myApplication.getObjectID();
         this.mHelp = help;
 
     }

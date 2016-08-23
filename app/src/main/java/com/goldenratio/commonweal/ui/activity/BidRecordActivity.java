@@ -78,7 +78,7 @@ public class BidRecordActivity extends Activity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = new TextView(BidRecordActivity.this);
                 Bid bid = getItem(position);
-                textView.setText(bid.getBid_User().getUser_Name() + "在" + bid.getCreatedAt()
+                textView.setText(bid.getBid_User().getUser_Nickname() + "在" + bid.getCreatedAt()
                         + "出价" + bid.getBid_Coin());
                 return textView;
             }

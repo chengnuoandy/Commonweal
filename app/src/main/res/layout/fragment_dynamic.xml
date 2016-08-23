@@ -19,12 +19,6 @@
             android:text="动态"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
-        <ImageView
-            android:id="@+id/iv_add_dynamic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/fragment_good_add" />
     </RelativeLayout>
 
     <View

@@ -1,8 +1,13 @@
 package com.goldenratio.commonweal.ui.fragment;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,17 +19,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.PayRecordActivity;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.ui.activity.OrderActivity;
+import com.goldenratio.commonweal.ui.activity.WalletActivity;
 import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
+import com.goldenratio.commonweal.util.BitmapUtil;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -65,6 +75,7 @@ public class MyFragment extends Fragment {
 
     private TextView mTextView;
     private TextView mTvOrder;
+    private TextView mTvWallet;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -113,6 +124,13 @@ public class MyFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), PayRecordActivity.class);
                 startActivity(intent);
+            }
+        });
+        mTvWallet = (TextView) view.findViewById(R.id.tv_my_wallet);
+        mTvWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), WalletActivity.class));
             }
         });
     }
@@ -213,6 +231,7 @@ public class MyFragment extends Fragment {
      * <p/>
      * 用户唯一id（objectid）
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void getUserData() {
         String sqlCmd = "SELECT * FROM User_Profile ";
         UserDao ud = new UserDao(getActivity());
@@ -232,10 +251,21 @@ public class MyFragment extends Fragment {
             //   Log.i("ud", avaUrl);
         }
         cursor.close();
-        mTvName.setBackgroundResource(R.color.color_FMy_Context);
         mTvName.setTextColor(getResources().getColor(R.color.colorPrimary));
+        mTvName.setBackground(null);
         mTvName.setText(userNickname);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
-    }
 
+        //将头像进行高斯模糊
+        Glide.with(getContext()).load(avaUrl).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+
+                Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
+                Drawable drawable = new BitmapDrawable(blurBitmap);
+                mRlBackground.setBackground(drawable);
+            }
+        });
+    }
 }

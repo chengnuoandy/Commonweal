@@ -19,13 +19,6 @@
             android:text="物品"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
-
-        <ImageView
-            android:id="@+id/iv_add_good"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/fragment_good_add" />
     </RelativeLayout>
 
     <include layout="@layout/view_no_net" />

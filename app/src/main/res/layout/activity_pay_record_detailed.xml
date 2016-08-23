@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+
+            android:layout_marginLeft="10dp"
+            android:text="付款金额"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/business_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:text="￥0.01"
+            android:textColor="#000"
+            android:textSize="28sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#C0C0C0C0"
+        android:textSize="1sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/business_top_style"
+            android:layout_alignParentLeft="true"
+            android:text="商  品" />
+
+        <TextView
+            android:id="@+id/business_name"
+            style="@style/business_style"
+            android:layout_marginRight="5dp"
+            android:text="名称" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/business_top_style"
+            android:layout_alignParentLeft="true"
+            android:text="商户名称" />
+
+        <TextView
+            android:id="@+id/business_use"
+            style="@style/business_style"
+            android:layout_marginRight="5dp"
+            android:text="广州是比目网络科技有限公司" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/business_top_style"
+            android:layout_alignParentLeft="true"
+            android:text="当前状态" />
+
+        <TextView
+            android:id="@+id/business_state"
+            style="@style/business_style"
+            android:layout_marginRight="5dp"
+            android:text="支付成功" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/business_top_style"
+            android:layout_alignParentLeft="true"
+            android:text="交易时间" />
+
+        <TextView
+            android:id="@+id/business_time"
+            style="@style/business_style"
+            android:layout_marginRight="5dp"
+            android:text="2012-8-19 19：59" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/business_top_style"
+            android:layout_alignParentLeft="true"
+            android:text="支付方式" />
+
+        <TextView
+            android:id="@+id/business_payment"
+            style="@style/business_style"
+            android:layout_marginRight="5dp"
+            android:text="天地银行" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/business_top_style"
+            android:layout_alignParentLeft="true"
+            android:text="交易单号" />
+
+        <TextView
+            android:id="@+id/business_numbers"
+            style="@style/business_style"
+            android:layout_marginRight="5dp"
+            android:text="4007092001001608197140481804" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            style="@style/business_top_style"
+            android:layout_alignParentLeft="true"
+            android:text="商户单号" />
+
+        <TextView
+            android:id="@+id/Customer_numbers"
+            style="@style/business_style"
+            android:layout_marginRight="5dp"
+            android:text="215fa45bb73fff5e3517486df94721a" />
+    </RelativeLayout>
+</LinearLayout>

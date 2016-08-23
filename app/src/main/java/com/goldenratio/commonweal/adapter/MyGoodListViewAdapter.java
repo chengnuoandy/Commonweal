@@ -133,13 +133,13 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        if (viewHolder == null) {
+        ViewHolder viewHolder;
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_good_listview, null);
             viewHolder = new ViewHolder();
             //初始化布局

@@ -5,11 +5,9 @@
               android:orientation="vertical">
 
     <LinearLayout
-        android:layout_marginTop="7dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#2e6e6e6e"
         android:padding="10dp">
 
         <ImageView

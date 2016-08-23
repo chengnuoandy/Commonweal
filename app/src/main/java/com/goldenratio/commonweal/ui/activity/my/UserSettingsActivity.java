@@ -188,8 +188,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
      * 修改支付密码
      */
     private void showPayPwdDialog() {
-//        mySqlManager = new MySqlManagerImpl(this, this ,,);
-
+        mySqlManager = new MySqlManagerImpl(this, this , "设置新密码","", "请输入旧支付密码");
     }
 
     /**
@@ -457,9 +456,14 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
 
     }
 
+    /**
+     * 密码验证正确后回调
+     * @param sixPwd 加密后的输入的密码
+     * @param event 无
+     */
     @Override
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
-
+//        mySqlManager.updateUserSixPwdByObjectId()
     }
 
     @Override
@@ -467,8 +471,16 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         return false;
     }
 
+    /**
+     * 输入密码后回调
+     * @param mStrUserCoin 用户硬币
+     * @param sixPwd 用户的支付密码
+     * @return 无
+     */
     @Override
     public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+        //检测密码是否正确
+        mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
         return false;
     }
 

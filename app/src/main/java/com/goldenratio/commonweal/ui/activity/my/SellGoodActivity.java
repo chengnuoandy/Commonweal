@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
@@ -27,12 +28,14 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 
-public class SellGoodActivity extends Activity implements AdapterView.OnItemClickListener{
+public class SellGoodActivity extends Activity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.iv_back)
     ImageView mIvBack;
     @BindView(R.id.lv_sell_good)
     ListView mLvSellGood;
+    @BindView(R.id.tv_no_order)
+    TextView mTvNoOrder;
 
     private List<Good> mGoodList;
     private Long endTime;
@@ -58,19 +61,21 @@ public class SellGoodActivity extends Activity implements AdapterView.OnItemClic
         BmobQuery<Good> query = new BmobQuery<>();
         User_Profile user = new User_Profile();
         user.setObjectId(uID);
-        query.addWhereEqualTo("Good_User",user);
+        query.addWhereEqualTo("Good_User", user);
         query.order("-updatedAt");
         query.findObjects(new FindListener<Good>() {
             @Override
             public void done(List<Good> list, BmobException e) {
-                if (e == null){
-                    if (list.size() > 0){
+                if (e == null) {
+                    if (list.size() > 0) {
                         mGoodList = list;
-                        mLvSellGood.setAdapter(new MySellGoodAdapter(SellGoodActivity.this,list));
-                    }else {
+                        mLvSellGood.setAdapter(new MySellGoodAdapter(SellGoodActivity.this, list));
+                    } else {
+                        mTvNoOrder.setVisibility(View.VISIBLE);
                         Toast.makeText(SellGoodActivity.this, "未查询到相关订单", Toast.LENGTH_SHORT).show();
                     }
-                }else {
+                } else {
+                    mTvNoOrder.setVisibility(View.VISIBLE);
                     Toast.makeText(SellGoodActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
                 }
             }

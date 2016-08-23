@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -34,7 +35,9 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mGood = (Good) getIntent().getSerializableExtra("Good");
+       Intent intent = this.getIntent();
+        mGood = (Good) intent.getSerializableExtra("Good");
+//        mGood = (Good) getIntent().getSerializableExtra("Good");
         setData(this);
         super.onCreate(savedInstanceState);
     }
@@ -97,7 +100,7 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
         mListView = listView;
         if (arrayList.size() > 0 || arrayList != null)
             arrayList.clear();
-//        //从服务器端获取评论内容
+        //从服务器端获取评论内容
         final String title = mGood.getObjectId();
         BmobQuery<Good_Comment> bmobQuery = new BmobQuery<>();
         bmobQuery.addWhereEqualTo("objcetid", title);

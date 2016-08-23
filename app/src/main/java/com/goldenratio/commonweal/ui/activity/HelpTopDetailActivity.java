@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.ui.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,7 +33,7 @@ public class HelpTopDetailActivity extends Activity {
 
         String helpTopUrl = getIntent().getStringExtra("TopUrl");
 
-        mWvHelptop.getSettings().setJavaScriptEnabled(true);//设置使用够执行JS脚本
+        mWvHelptop.getSettings().setJavaScriptEnabled(true);    //设置使用够执行JS脚本
         mWvHelptop.getSettings().setBuiltInZoomControls(false);//设置使支持缩放
         mWvHelptop.loadUrl(helpTopUrl);
 
@@ -55,6 +56,13 @@ public class HelpTopDetailActivity extends Activity {
         });
     }
 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && mWvHelptop.canGoBack()) {
+            mWvHelptop.goBack();// 返回前一个页面
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @OnClick(R.id.iv_helpTop_back)
     public void onClick() {

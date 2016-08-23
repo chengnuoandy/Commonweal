@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,10 +36,11 @@ public class StarInfoActivity extends Activity {
 
     TextView mTvAttention;
 
-    private String starID;
+    private String userID;
     private String attentionID;
 
     private boolean isHasAttention;
+    private ProgressDialog mPd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +48,11 @@ public class StarInfoActivity extends Activity {
         setContentView(R.layout.activity_star_info);
         ButterKnife.bind(this);
 
-        getData();
         isHasAttention = getIntent().getBooleanExtra("ishas", false);
-        starID = getIntent().getStringExtra("id");
+        userID = getIntent().getStringExtra("id");
         String nickName = getIntent().getStringExtra("nickName");
         String avatar = getIntent().getStringExtra("Avatar");
+        getData();
         mTvStarName.setText(nickName);
         Picasso.with(this).load(avatar).into(mCivStarAvatar);
     }
@@ -73,16 +75,17 @@ public class StarInfoActivity extends Activity {
 
 
     private void getData() {
+        showProgressDialog();
         BmobQuery<U_Attention> query = new BmobQuery<U_Attention>();
         String ID = ((MyApplication) getApplication()).getObjectID();
-        query.addQueryKeys("U_ID");
         query.addWhereEqualTo("U_ID", ID);
-        query.addWhereEqualTo("Star_ID", starID);
+        query.addWhereEqualTo("Star_ID", userID);
+        query.addQueryKeys("U_ID");
         query.findObjects(new FindListener<U_Attention>() {
 
             @Override
             public void done(List<U_Attention> object, BmobException e) {
-                if (e == null && object.size() == 1) {
+                if (e == null && object.size() >= 1) {
                     isHasAttention = true;
                     attentionID = object.get(0).getObjectId();
                     mTvAttention.setText("已关注");
@@ -90,6 +93,7 @@ public class StarInfoActivity extends Activity {
                 } else {
                     Log.i("bmob", "失败：" + e.getMessage());
                 }
+                closeProgressDialog();
             }
 
         });
@@ -97,12 +101,13 @@ public class StarInfoActivity extends Activity {
 
 
     private void addDataToBmob() {
+        showProgressDialog();
         U_Attention mUAttention = new U_Attention();
         String ID = ((MyApplication) getApplication()).getObjectID();
         mUAttention.setU_ID(ID);
-        mUAttention.setStar_ID(starID);
+        mUAttention.setStar_ID(userID);
         User_Profile u = new User_Profile();
-        u.setObjectId(starID);
+        u.setObjectId(userID);
         mUAttention.setStar_Info(u);
         mUAttention.save(new SaveListener<String>() {
             @Override
@@ -114,6 +119,7 @@ public class StarInfoActivity extends Activity {
                     isHasAttention = true;
                 } else
                     Toast.makeText(StarInfoActivity.this, "关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                closeProgressDialog();
                 mTvAttention.setClickable(true);
             }
         });
@@ -121,6 +127,7 @@ public class StarInfoActivity extends Activity {
 
     private void removeDataToBmob() {
 //        mUAttention.remove(mUAttention.getObjectId());
+        showProgressDialog();
         U_Attention mUAttention = new U_Attention();
         mUAttention.setObjectId(attentionID);
         mUAttention.delete(new UpdateListener() {
@@ -133,8 +140,27 @@ public class StarInfoActivity extends Activity {
                 } else {
                     Toast.makeText(StarInfoActivity.this, "取消关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+                closeProgressDialog();
                 mTvAttention.setClickable(true);
             }
         });
+    }
+
+    //关闭对话框
+
+    private void closeProgressDialog() {
+        if (mPd != null && mPd.isShowing()) {
+            mPd.dismiss();
+            mPd = null;
+        }
+    }
+
+    private void showProgressDialog() {
+        if (mPd == null) {
+            mPd = new ProgressDialog(this);
+            mPd.setMessage("加载中");
+            mPd.setCancelable(false);
+            mPd.show();
+        }
     }
 }

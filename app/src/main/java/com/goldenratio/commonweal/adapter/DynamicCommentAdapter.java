@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.adapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.Dynamic_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 import com.goldenratio.commonweal.util.Comment;
 import com.squareup.picasso.Picasso;
 
@@ -48,7 +50,7 @@ public class DynamicCommentAdapter extends BaseAdapter {
         mArrayListOne = arrayListOne;
         mContext = context;
         mDynamic = dynamic;
-        MyApplication myApplication = (MyApplication) ((Activity)context).getApplication();
+        MyApplication myApplication = (MyApplication) ((Activity) context).getApplication();
         mStrObjectId = myApplication.getObjectID();
     }
 
@@ -100,6 +102,7 @@ public class DynamicCommentAdapter extends BaseAdapter {
             tv_reply = (TextView) view.findViewById(R.id.tv_reply);
             tv_user_reply = (TextView) view.findViewById(R.id.tv_user_reply);
 
+
             //回复的点击事件
             tv_user_reply.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,7 +117,7 @@ public class DynamicCommentAdapter extends BaseAdapter {
 
         public void initData(int position) {
             pos = position;
-            Comment utils = (Comment) mArrayListOne.get(position);
+            final Comment utils = (Comment) mArrayListOne.get(position);
             tv_comment.setText(utils.comment);
             tv_name.setText(utils.UserName);
             tv_reply.setText("回复：" + utils.reply);
@@ -122,12 +125,25 @@ public class DynamicCommentAdapter extends BaseAdapter {
             if (utils.icom != null) {
                 Picasso.with(mContext).load(utils.icom).into(icom);
             }
+            icom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("55555", "onClick: " + "0.0.00.0执行");
+                    Intent intent = new Intent(mContext, StarInfoActivity.class);
+                    intent.putExtra("id", utils.getUserID());
+                    intent.putExtra("nickName", utils.getUserName());
+                    intent.putExtra("Avatar", utils.getIcom());
+                    mContext.startActivity(intent);
+                }
+            });
         }
+
     }
 
     /**
      * 弹出 输入框
-     * @param s  传递数据的位置
+     *
+     * @param s 传递数据的位置
      * @return
      */
     protected Dialog onCreateDialog(final int s) {
@@ -146,7 +162,7 @@ public class DynamicCommentAdapter extends BaseAdapter {
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(edt_reply.getText().toString().trim() .isEmpty())) {
+                if (!(edt_reply.getText().toString().trim().isEmpty())) {
                     if (mStrObjectId != null) {
                         BmobQuery<Dynamic_Comment> bmobQuery = new BmobQuery<Dynamic_Comment>();
                         String title = mDynamic.getObjectId();
@@ -162,8 +178,8 @@ public class DynamicCommentAdapter extends BaseAdapter {
                             }
                         });
                     }
-                }else {
-                    Toast.makeText(mContext,"您什么也没有评论呦~",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "您什么也没有评论呦~", Toast.LENGTH_SHORT).show();
                     edt_reply.setText("");
                     customDialog.dismiss();
                 }
@@ -174,6 +190,7 @@ public class DynamicCommentAdapter extends BaseAdapter {
 
     /**
      * 将输入的内容传递到服务器中
+     *
      * @param id 获得位置
      * @param ss 输入的内容
      */

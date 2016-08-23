@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/iv_user_avatar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"/>
+            android:layout_width="35dp"
+            android:layout_height="35dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -26,12 +26,12 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/little_space"
                 android:layout_marginStart="@dimen/little_space"
                 android:gravity="center"
                 android:text="昵称"
                 android:textColor="@color/colorPrimary"
-                android:textSize="13sp"
-                android:layout_marginLeft="@dimen/little_space"/>
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_time"
@@ -40,17 +40,20 @@
                 android:layout_marginLeft="@dimen/little_space"
                 android:layout_marginStart="@dimen/little_space"
                 android:text="发布时间"
-                android:textSize="@dimen/text_size_small"/>
+                android:textSize="11dp"/>
         </LinearLayout>
+
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
         <TextView
             android:id="@+id/tv_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_dele_24dp"/>
+            android:background="@drawable/ic_dele_24dp"
+            android:text="删除"/>
     </LinearLayout>
 
 
@@ -58,11 +61,11 @@
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:drawablePadding="@dimen/little_space"
         android:gravity="center"
+        android:lineSpacingExtra="2dp"
         android:text="内容"
-        android:textSize="15sp"/>
+        android:textColor="@color/dark_gray"
+        android:textSize="14sp"/>
 
     <com.jaeger.ninegridimageview.NineGridImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"

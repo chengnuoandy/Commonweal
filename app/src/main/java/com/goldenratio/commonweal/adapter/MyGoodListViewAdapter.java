@@ -274,15 +274,15 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                     break;
                 case R.id.civ_user_avatar:
                     List<String> attenList;
-                    attenList = getItem(position).getGood_User().getUser_Attention();
+                    attenList = mGoodList.get(position).getGood_User().getUser_Attention();
                     int isHas = -1;
                     if (attenList != null)
-                        isHas = attenList.indexOf(getItem(position).getGood_User().getObjectId());
+                        isHas = attenList.indexOf(mGoodList.get(position).getGood_User().getObjectId());
                     Intent intent = new Intent(mContext, StarInfoActivity.class);
                     intent.putExtra("ishas", isHas != -1);
-                    intent.putExtra("id", getItem(position).getGood_User().getObjectId());
-                    intent.putExtra("nickName", getItem(position).getGood_User().getUser_Nickname());
-                    intent.putExtra("Avatar", getItem(position).getGood_User().getUser_image_hd());
+                    intent.putExtra("id", mGoodList.get(position).getGood_User().getObjectId());
+                    intent.putExtra("nickName", mGoodList.get(position).getGood_User().getUser_Nickname());
+                    intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());
                     mContext.startActivity(intent);
                     break;
             }

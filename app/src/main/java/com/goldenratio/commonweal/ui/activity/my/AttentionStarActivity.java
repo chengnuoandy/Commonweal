@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ public class AttentionStarActivity extends Activity {
     ListView mLvAttention;
 
     private List<U_Attention> AttentionList;
+    private ProgressDialog mPd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +40,13 @@ public class AttentionStarActivity extends Activity {
         ButterKnife.bind(this);
 
         AttentionList = new ArrayList<>();
+
         getAttentionInfoFromBmob();
 
     }
 
     private void getAttentionInfoFromBmob() {
+        showProgressDialog();
         String objectID = ((MyApplication) getApplication()).getObjectID();
         BmobQuery<U_Attention> query = new BmobQuery<>();
         query.order("-updatedAt");
@@ -56,12 +60,13 @@ public class AttentionStarActivity extends Activity {
                         AttentionList = list;
                         Toast.makeText(AttentionStarActivity.this, "获取成功", Toast.LENGTH_SHORT).show();
                         mLvAttention.setAdapter(new AttentionStarListAdapter(list, AttentionStarActivity.this));
-                    }else
+                    } else
                         Toast.makeText(AttentionStarActivity.this, "您尚未关注任何人", Toast.LENGTH_SHORT).show();
                     Log.i("查询信息成功", "done: " + list);
                 } else {
                     Toast.makeText(AttentionStarActivity.this, "获取信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+                closeProgressDialog();
             }
         });
     }
@@ -69,5 +74,21 @@ public class AttentionStarActivity extends Activity {
     @OnClick(R.id.iv_attention_back)
     public void onClick() {
         finish();
+    }
+
+    private void closeProgressDialog() {
+        if (mPd != null && mPd.isShowing()) {
+            mPd.dismiss();
+            mPd = null;
+        }
+    }
+
+    private void showProgressDialog() {
+        if (mPd == null) {
+            mPd = new ProgressDialog(this);
+            mPd.setMessage("加载中");
+            mPd.setCancelable(false);
+            mPd.show();
+        }
     }
 }

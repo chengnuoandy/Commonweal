@@ -102,6 +102,7 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
                     for (Dynamic_Comment comment : list) {
                         Comment utils = new Comment();
                         //                    评论内容
+                        utils.setUserID(comment.getComment_user().getObjectId());
                         utils.comment = comment.getComment();
                         //评论用户
                         utils.UserName = comment.getComment_user().getUser_Nickname();

@@ -52,6 +52,7 @@ public class HelpViewPagerAdapter extends PagerAdapter implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, HelpTopDetailActivity.class);
+                intent.putExtra("flag", true);
                 intent.putExtra("TopUrl", HelpDetailUrl);
                 mContext.startActivity(intent);
             }

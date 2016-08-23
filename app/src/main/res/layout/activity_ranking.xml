@@ -1,43 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.activity.HelpTopDetailActivity">
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/snow"
-        android:orientation="horizontal">
+        android:background="@color/snow">
 
         <ImageView
-            android:id="@+id/iv_helpTop_back"
+            android:id="@+id/iv_attention_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/normal_space"
-            android:src="@mipmap/back_ic"/>
+            android:src="@mipmap/ic_back"/>
 
         <TextView
+            android:id="@+id/tv_attentionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="项目详情"
+            android:layout_centerInParent="true"
+            android:text="排名"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size"/>
-
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/wv_helptop"
+    <ListView
+        android:id="@+id/lv_Ranking"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"/>
 
-    </WebView>
 </LinearLayout>

@@ -97,7 +97,7 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
                     final double sxf = (poor / 10) * 0.05;  //手续费
                     final double money = (poor / 10) * (1 + 0.05);
                     //选择的币数大于用户现有的金币，公益币不足，提示充值
-                    if (poor > 0 || poor == 0) {
+                    if (poor > 0) {
                         final AlertDialog.Builder builder =
                                 new AlertDialog.Builder(HelpDonateActivity.this);
                         builder.setMessage("账号公益币：" + usercoin + "，还缺" + poor + "公益币，您将花费"

@@ -1,18 +1,25 @@
 package com.goldenratio.commonweal.util;
 
-import android.graphics.drawable.Drawable;
-
 /**
  * Created by Administrator on 2016/8/9.
  */
 
 public class Comment {
 
+    private String userID;
     public String UserName;
     public String times;
     public String icom;
     public String comment;
     public String reply;
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
     public String getReply() {
         return reply;

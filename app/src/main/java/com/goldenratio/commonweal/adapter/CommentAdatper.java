@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 import com.goldenratio.commonweal.util.Comment;
 import com.squareup.picasso.Picasso;
 
@@ -47,7 +49,7 @@ public class CommentAdatper extends BaseAdapter {
 
     private int post;
 
-    public CommentAdatper( Help help, Context context, ArrayList arrayList) {
+    public CommentAdatper(Help help, Context context, ArrayList arrayList) {
         this.mContext = context;
         this.mArrayListOne = arrayList;
         this.mHelp = help;
@@ -82,14 +84,22 @@ public class CommentAdatper extends BaseAdapter {
         TextView tv_comment = (TextView) view.findViewById(R.id.tv_user_comment);
         TextView tv_name = (TextView) view.findViewById(R.id.tv_user_name);
         TextView tv_reply = (TextView) view.findViewById(R.id.tv_reply);
-        Comment utils = (Comment) mArrayListOne.get(position);
+        final Comment utils = (Comment) mArrayListOne.get(position);
         tv_comment.setText(utils.comment);
         tv_name.setText(utils.UserName);
-            tv_reply.setText("回复：" + utils.reply);
-
-
+        tv_reply.setText("回复：" + utils.reply);
         Picasso.with(mContext).load(utils.icom).into(icom);
-
+        icom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("55555", "onClick: " + "0.0.00.0执行");
+                Intent intent = new Intent(mContext, StarInfoActivity.class);
+                intent.putExtra("id", utils.getUserID());
+                intent.putExtra("nickName", utils.getUserName());
+                intent.putExtra("Avatar", utils.getIcom());
+                mContext.startActivity(intent);
+            }
+        });
         //回复的点击事件
         view.findViewById(R.id.tv_user_reply).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +112,7 @@ public class CommentAdatper extends BaseAdapter {
         });
         return view;
     }
+
     //弹出对话框
     protected Dialog onCreateDialog(final int s) {
 
@@ -119,7 +130,7 @@ public class CommentAdatper extends BaseAdapter {
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(! (edt_reply.getText().toString().trim().isEmpty())) {
+                if (!(edt_reply.getText().toString().trim().isEmpty())) {
                     getlocality();
                     //
                     if (mStrObjectId != null) {
@@ -130,7 +141,7 @@ public class CommentAdatper extends BaseAdapter {
                             @Override
                             public void done(List<Help_Comment> list, BmobException e) {
                                 if (e == null) {
-                                    if(! (edt_reply.getText().toString().isEmpty())) {
+                                    if (!(edt_reply.getText().toString().isEmpty())) {
                                         up(s, edt_reply.getText().toString());
                                         edt_reply.setText("");
                                         customDialog.dismiss();
@@ -139,8 +150,8 @@ public class CommentAdatper extends BaseAdapter {
                             }
                         });
                     }
-                }else {
-                    Toast.makeText(mContext,"您什么也没有评论呦~",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "您什么也没有评论呦~", Toast.LENGTH_SHORT).show();
                     edt_reply.setText("");
                     customDialog.dismiss();
                 }
@@ -148,6 +159,7 @@ public class CommentAdatper extends BaseAdapter {
         });
         return customDialog;
     }
+
     //获取本地数据库
     private void getlocality() {
         //获取本地数据库
@@ -159,6 +171,7 @@ public class CommentAdatper extends BaseAdapter {
         }
         cursor.close();
     }
+
     //从服务器获取内容
     //参一  楼层Id   参二 回复内容
     private void up(int id, String ss) {

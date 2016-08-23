@@ -77,7 +77,7 @@ public class MyDynamicAdapter extends BaseAdapter {
     }
 
 
-    class ViewHolder implements View.OnClickListener{
+    class ViewHolder implements View.OnClickListener {
         private TextView mTvTime;
         private TextView mTvName;
         private TextView mText;
@@ -103,15 +103,15 @@ public class MyDynamicAdapter extends BaseAdapter {
 
             //九宫格加载图片
             mNineGridImageView.setAdapter(new NineGridImageViewAdapter<String>() {
-//                    图片点击事件,启动浏览模式
+                //                    图片点击事件,启动浏览模式
                 @Override
                 protected void onItemImageClick(Context context, int index, List<String> list) {
                     Intent intent = new Intent(mContext, DynamicPhotoShow.class);
-                    intent.putExtra("index",index);
+                    intent.putExtra("index", index);
                     intent.putStringArrayListExtra("list", (ArrayList<String>) list);
                     mContext.startActivity(intent);
                     //设置切换动画
-                    ((Activity)mContext).overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                    ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
 
                 @Override
@@ -143,7 +143,7 @@ public class MyDynamicAdapter extends BaseAdapter {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.tv_delete:
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle("提示");
@@ -157,26 +157,29 @@ public class MyDynamicAdapter extends BaseAdapter {
                             dynamic.delete(new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
-                                    if (e == null){
+                                    if (e == null) {
                                         Toast.makeText(mContext, "删除成功！", Toast.LENGTH_SHORT).show();
                                         mList.remove(pos);
                                         notifyDataSetChanged();
-                                    }else {
+                                    } else {
                                         Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         }
                     });
-                    builder.setNegativeButton("取消",null);
+                    builder.setNegativeButton("取消", null);
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                     break;
                 //评论页面
                 case R.id.tv_comment:
                     Intent intent = new Intent(mContext, MyDynamicCommentActivity.class);
-                    intent.putExtra("dyc",mList.get(pos));
+                    intent.putExtra("dyc", mList.get(pos));
                     mContext.startActivity(intent);
+                    break;
+                case R.id.iv_user_avatar:
+
                     break;
             }
 

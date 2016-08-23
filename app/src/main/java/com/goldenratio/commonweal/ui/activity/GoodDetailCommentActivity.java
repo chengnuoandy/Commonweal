@@ -114,7 +114,7 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
                         //                    评论内容
                         utils.comment = comment.getComment();
                         //评论用户
-                        utils.UserName = comment.getComment_user().getUser_Name();
+                        utils.UserName = comment.getComment_user().getUser_Nickname();
                         //评论用户头像地址
                         utils.icom = comment.getComment_user().getUser_image_hd();
                         utils.reply = comment.getReply();

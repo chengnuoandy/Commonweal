@@ -126,16 +126,22 @@ public class DynamicCommentAdapter extends BaseAdapter {
                 Picasso.with(mContext).load(utils.icom).into(icom);
             }
             icom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.i("55555", "onClick: " + "0.0.00.0执行");
-                    Intent intent = new Intent(mContext, StarInfoActivity.class);
-                    intent.putExtra("id", utils.getUserID());
-                    intent.putExtra("nickName", utils.getUserName());
-                    intent.putExtra("Avatar", utils.getIcom());
-                    mContext.startActivity(intent);
-                }
-            });
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (!utils.getUserID().equals(mStrObjectId)) {
+                                                Log.i("55555", "onClick: " + "0.0.00.0执行");
+                                                Intent intent = new Intent(mContext, StarInfoActivity.class);
+                                                intent.putExtra("id", utils.getUserID());
+                                                intent.putExtra("nickName", utils.getUserName());
+                                                intent.putExtra("Avatar", utils.getIcom());
+                                                mContext.startActivity(intent);
+                                            } else
+                                                Toast.makeText(mContext, "哈哈哈哈" + "这里还没写", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+
+            );
         }
 
     }

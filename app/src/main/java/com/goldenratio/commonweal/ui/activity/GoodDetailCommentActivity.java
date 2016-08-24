@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.GoodCommentAdapter;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.Good_Comment;
@@ -123,9 +124,10 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
                         arrayList.add(utils);
                         GoodCommentAdapter commentAdatper = new GoodCommentAdapter(mGood, GoodDetailCommentActivity.this, arrayList);
                         mListView.setAdapter(commentAdatper);
-                        //结束刷新
-                        refreshLayout.endRefreshing();
                     }
+                    //结束刷新
+                    refreshLayout.endRefreshing();
+                    mListView.setEmptyView(findViewById(R.id.tv_emty));
                 } else {
                     //结束刷新
                     refreshLayout.endRefreshing();

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.CommentAdatper;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Comment;
@@ -115,9 +116,10 @@ public class HelpCommentActivity extends CommentBase implements IComment {
                         arrayList.add(utils);
                         CommentAdatper commentAdatper = new CommentAdatper(mHelp, HelpCommentActivity.this, arrayList);
                         mListView.setAdapter(commentAdatper);
-                        //结束刷新
-                        refreshLayout.endRefreshing();
                     }
+                    //结束刷新
+                    refreshLayout.endRefreshing();
+                    mListView.setEmptyView(findViewById(R.id.tv_emty));
                 } else {
                     //结束刷新
                     refreshLayout.endRefreshing();

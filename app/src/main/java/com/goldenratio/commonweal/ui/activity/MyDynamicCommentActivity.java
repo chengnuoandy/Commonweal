@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.DynamicCommentAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.Dynamic_Comment;
@@ -114,9 +115,10 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
                         arrayList.add(utils);
                         DynamicCommentAdapter commentAdatper = new DynamicCommentAdapter(arrayList, MyDynamicCommentActivity.this, mDynamic);
                         mListView.setAdapter(commentAdatper);
-                        //结束刷新
-                        refreshLayout.endRefreshing();
                     }
+                    //结束刷新
+                    refreshLayout.endRefreshing();
+                    mListView.setEmptyView(findViewById(R.id.tv_emty));
                 } else {
                     //结束刷新
                     refreshLayout.endRefreshing();

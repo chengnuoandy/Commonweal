@@ -12,6 +12,14 @@
         android:background="#ffff"
         android:src="@drawable/btn_comment_send" />
 
+    <TextView
+        android:paddingTop="30dp"
+        android:id="@+id/tv_emty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="亲~  还没有人评论呦~"/>
+
     <cn.bingoogolapple.refreshlayout.BGARefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rl_BGA_refresh"
         android:layout_width="match_parent"
@@ -23,4 +31,5 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
     </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
+
 </LinearLayout>

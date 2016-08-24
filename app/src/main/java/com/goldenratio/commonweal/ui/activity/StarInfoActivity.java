@@ -109,6 +109,9 @@ public class StarInfoActivity extends Activity {
         User_Profile u = new User_Profile();
         u.setObjectId(userID);
         mUAttention.setStar_Info(u);
+        User_Profile u1 = new User_Profile();
+        u1.setObjectId(ID);
+        mUAttention.setUser_Info(u1);
         mUAttention.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {

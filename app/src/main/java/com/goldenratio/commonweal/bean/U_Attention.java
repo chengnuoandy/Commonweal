@@ -8,6 +8,7 @@ import cn.bmob.v3.BmobObject;
  */
 public class U_Attention extends BmobObject {
     User_Profile Star_Info;
+    User_Profile User_Info;
     String U_ID;
     String Star_ID;
 
@@ -17,6 +18,14 @@ public class U_Attention extends BmobObject {
 
     public void setStar_Info(User_Profile star_Info) {
         Star_Info = star_Info;
+    }
+
+    public User_Profile getUser_Info() {
+        return User_Info;
+    }
+
+    public void setUser_Info(User_Profile user_Info) {
+        User_Info = user_Info;
     }
 
     public String getU_ID() {

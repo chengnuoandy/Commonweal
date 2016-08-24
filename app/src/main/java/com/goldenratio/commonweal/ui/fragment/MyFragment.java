@@ -136,7 +136,7 @@ public class MyFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention, R.id.tv_my_fans})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
@@ -172,7 +172,12 @@ public class MyFragment extends Fragment {
                 break;
             case R.id.tv_my_attention:
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
+                intent2.putExtra("is_attention", true);
                 startActivity(intent2);
+                break;
+            case R.id.tv_my_fans:
+                Intent intent3 = new Intent(getActivity(), AttentionStarActivity.class);
+                startActivity(intent3);
                 break;
             default:
                 break;

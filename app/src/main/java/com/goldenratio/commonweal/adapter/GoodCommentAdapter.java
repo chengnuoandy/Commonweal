@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.Good_Comment;
@@ -55,7 +57,8 @@ public class GoodCommentAdapter extends BaseAdapter {
         this.mContext = context;
         this.mArrayListOne = arrayList;
         this.mGood = good;
-
+        MyApplication myApplication = (MyApplication) ((Activity) context).getApplication();
+        mStrObjectId = myApplication.getObjectID();
     }
 
     @Override

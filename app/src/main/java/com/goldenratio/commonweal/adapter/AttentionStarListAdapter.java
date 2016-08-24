@@ -25,26 +25,28 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class AttentionStarListAdapter extends BaseAdapter {
 
-    private List<U_Attention> mStarInfoList;
+    private List<U_Attention> mInfoList;
     private LayoutInflater mInflater;
     private Context mContext;
 
+    private boolean isAttention;
 
-    public AttentionStarListAdapter(List<U_Attention> starInfoList, Context context) {
-        mStarInfoList = starInfoList;
+    public AttentionStarListAdapter(List<U_Attention> InfoList, boolean attention, Context context) {
+        mInfoList = InfoList;
         mContext = context;
+        isAttention = attention;
         mInflater = LayoutInflater.from(context);
     }
 
 
     @Override
     public int getCount() {
-        return mStarInfoList.size();
+        return mInfoList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mStarInfoList.get(position);
+        return mInfoList.get(position);
     }
 
     @Override
@@ -63,9 +65,10 @@ public class AttentionStarListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        User_Profile starInfo = mStarInfoList.get(position).getStar_Info();
-        Picasso.with(mContext).load(starInfo.getUser_image_hd()).into(viewHolder.mCivAttentionAvatar);
-        viewHolder.mTvAttentionName.setText(starInfo.getUser_Nickname());
+        User_Profile starOrUserInfo = (isAttention ? (mInfoList.get(position).getStar_Info()) :
+                mInfoList.get(position).getUser_Info());
+        Picasso.with(mContext).load(starOrUserInfo.getUser_image_hd()).into(viewHolder.mCivAttentionAvatar);
+        viewHolder.mTvAttentionName.setText(starOrUserInfo.getUser_Nickname());
         return convertView;
     }
 

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
@@ -29,9 +31,14 @@ public class AttentionStarActivity extends Activity {
     ImageView mIvAttentionBack;
     @BindView(R.id.lv_attention)
     ListView mLvAttention;
+    @BindView(R.id.tv_attentionTitle)
+    TextView mTvAttentionTitle;
+    @BindView(R.id.tv_no_data)
+    TextView mTvNoData;
 
     private List<U_Attention> AttentionList;
     private ProgressDialog mPd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +48,22 @@ public class AttentionStarActivity extends Activity {
 
         AttentionList = new ArrayList<>();
 
-        getAttentionInfoFromBmob();
+        boolean isAttention = getIntent().getBooleanExtra("is_attention", false);
+        if (!isAttention)
+            mTvAttentionTitle.setText("我的粉丝");
+        getAttentionInfoFromBmob(isAttention);
 
     }
 
-    private void getAttentionInfoFromBmob() {
+    private void getAttentionInfoFromBmob(final boolean isAttention) {
+        String where = isAttention ? "U_ID" : "Star_ID";
+        String include = isAttention ? "Star_Info" : "User_Info";
         showProgressDialog();
         String objectID = ((MyApplication) getApplication()).getObjectID();
         BmobQuery<U_Attention> query = new BmobQuery<>();
         query.order("-updatedAt");
-        query.addWhereEqualTo("U_ID", objectID);
-        query.include("Star_Info");
+        query.addWhereEqualTo(where, objectID);
+        query.include(include);
         query.findObjects(new FindListener<U_Attention>() {
             @Override
             public void done(List<U_Attention> list, BmobException e) {
@@ -59,11 +71,12 @@ public class AttentionStarActivity extends Activity {
                     if (list.size() != 0) {
                         AttentionList = list;
                         Toast.makeText(AttentionStarActivity.this, "获取成功", Toast.LENGTH_SHORT).show();
-                        mLvAttention.setAdapter(new AttentionStarListAdapter(list, AttentionStarActivity.this));
+                        mLvAttention.setAdapter(new AttentionStarListAdapter(list, isAttention, AttentionStarActivity.this));
                     } else
-                        Toast.makeText(AttentionStarActivity.this, "您尚未关注任何人", Toast.LENGTH_SHORT).show();
+                        mTvNoData.setVisibility(View.VISIBLE);
                     Log.i("查询信息成功", "done: " + list);
                 } else {
+                    mTvNoData.setVisibility(View.VISIBLE);
                     Toast.makeText(AttentionStarActivity.this, "获取信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 closeProgressDialog();

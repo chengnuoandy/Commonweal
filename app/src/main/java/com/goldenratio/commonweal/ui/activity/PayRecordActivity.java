@@ -27,7 +27,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 /**
- * Created by Administrator on 2016/8/20.
+ * Created by Kiuber on 2016/8/20.
  */
 
 
@@ -35,6 +35,7 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
 
     private ListView mLv;
     private List<PayRecord> mPayRecord;
+    private TextView mTvNoRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,73 +53,80 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
             @Override
             public void done(final List<PayRecord> list, BmobException e) {
                 if (e == null) {
-                    mPayRecord = list;
-                    mLv.setAdapter(new BaseAdapter() {
-
-                        @Override
-                        public int getCount() {
-                            return list.size();
-                        }
-
-                        @Override
-                        public PayRecord getItem(int position) {
-                            return null;
-                        }
-
-                        @Override
-                        public long getItemId(int position) {
-                            return 0;
-                        }
-
-                        @Override
-                        public View getView(int position, View convertView, ViewGroup parent) {
-                            ViewHolder viewHolder = null;
-                            if (viewHolder == null) {
-                                viewHolder = new ViewHolder();
-                                convertView = View.inflate(PayRecordActivity.this, R.layout.item_pay_record_listview, null);
-                                convertView.setTag(viewHolder);
-                            } else {
-                                viewHolder = (ViewHolder) convertView.getTag();
-                            }
-                            viewHolder.initView(convertView);
-                            viewHolder.initData(position);
-                            return convertView;
-                        }
-
-                        class ViewHolder {
-
-                            private TextView mTvPRName;
-                            private TextView mTvPRCoin;
-                            private TextView mTvPRStatus;
-                            private TextView mTvPRTime;
-                            private boolean pr_status;
-
-                            public void initView(View convertView) {
-                                mTvPRName = (TextView) convertView.findViewById(R.id.tv_pr_name);
-                                mTvPRCoin = (TextView) convertView.findViewById(R.id.tv_pr_coin);
-                                mTvPRStatus = (TextView) convertView.findViewById(R.id.tv_pr_status);
-                                mTvPRTime = (TextView) convertView.findViewById(R.id.tv_pr_time);
-
-                            }
-
-                            public void initData(int position) {
-                                mTvPRName.setText(mPayRecord.get(position).getPR_Name());
-                                mTvPRCoin.setText(mPayRecord.get(position).getPR_Coin());
-                                pr_status = mPayRecord.get(position).isPR_Status();
-                                if (pr_status) {
-                                    mTvPRStatus.setText("支付成功");
-                                } else if (!pr_status) {
-                                    mTvPRStatus.setText("支付失败");
-                                } else {
-                                    mTvPRStatus.setText("未知状态");
-                                }
-                                mTvPRTime.setText(mPayRecord.get(position).getCreatedAt());
-                            }
-                        }
-                    });
+                    if (list.size() != 0) {
+                        mPayRecord = list;
+                        mTvNoRecord.setVisibility(View.GONE);
+                        mLv.setVisibility(View.VISIBLE);
+                        loadData2ListView();
+                    }
                 } else {
                     Toast.makeText(PayRecordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            private void loadData2ListView() {
+                mLv.setAdapter(new BaseAdapter() {
+
+                    @Override
+                    public int getCount() {
+                        return mPayRecord.size();
+                    }
+
+                    @Override
+                    public PayRecord getItem(int position) {
+                        return null;
+                    }
+
+                    @Override
+                    public long getItemId(int position) {
+                        return 0;
+                    }
+
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        ViewHolder viewHolder = null;
+                        if (viewHolder == null) {
+                            viewHolder = new ViewHolder();
+                            convertView = View.inflate(PayRecordActivity.this, R.layout.item_pay_record_listview, null);
+                            convertView.setTag(viewHolder);
+                        } else {
+                            viewHolder = (ViewHolder) convertView.getTag();
+                        }
+                        viewHolder.initView(convertView);
+                        viewHolder.initData(position);
+                        return convertView;
+                    }
+
+                    class ViewHolder {
+
+                        private TextView mTvPRName;
+                        private TextView mTvPRCoin;
+                        private TextView mTvPRStatus;
+                        private TextView mTvPRTime;
+                        private boolean pr_status;
+
+                        public void initView(View convertView) {
+                            mTvPRName = (TextView) convertView.findViewById(R.id.tv_pr_name);
+                            mTvPRCoin = (TextView) convertView.findViewById(R.id.tv_pr_coin);
+                            mTvPRStatus = (TextView) convertView.findViewById(R.id.tv_pr_status);
+                            mTvPRTime = (TextView) convertView.findViewById(R.id.tv_pr_time);
+                        }
+
+                        public void initData(int position) {
+                            mTvPRName.setText(mPayRecord.get(position).getPR_Name());
+                            mTvPRCoin.setText(mPayRecord.get(position).getPR_Coin());
+                            pr_status = mPayRecord.get(position).isPR_Status();
+                            if (pr_status) {
+                                mTvPRStatus.setText("支付成功");
+                            } else if (!pr_status) {
+                                mTvPRStatus.setText("支付失败");
+                            } else {
+                                mTvPRStatus.setText("未知状态");
+                            }
+                            mTvPRTime.setText(mPayRecord.get(position).getCreatedAt());
+                        }
+                    }
+                });
             }
         });
     }
@@ -128,6 +136,7 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
      */
     private void initView() {
         mLv = (ListView) findViewById(R.id.lv_pay_record);
+        mTvNoRecord = (TextView) findViewById(R.id.tv_no_record);
         mLv.setOnItemClickListener(this);
     }
 

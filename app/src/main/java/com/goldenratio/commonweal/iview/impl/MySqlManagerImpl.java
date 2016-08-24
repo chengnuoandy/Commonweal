@@ -20,7 +20,6 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.PayRecord;
 import com.goldenratio.commonweal.iview.IMySqlManager;
-import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.goldenratio.commonweal.widget.OnPasswordInputFinish;
 import com.goldenratio.commonweal.widget.PasswordView;
@@ -67,10 +66,31 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     public MySqlManagerImpl(Activity context, IMySqlManager mySqlManager) {
         super(context);
         mUserId = ((MyApplication) context.getApplication()).getObjectID();
-        isObjectID();
         this.mContext = context;
         this.mSqlManager = mySqlManager;
     }
+
+
+    public MySqlManagerImpl(Activity context, IMySqlManager mySqlManager, String type, final String coin, String remark) {
+        super(context);
+        mUserId = ((MyApplication) context.getApplication()).getObjectID();
+        this.mContext = context;
+        this.mSqlManager = mySqlManager;
+        initView();
+        mTvType.setText(type);
+        mTvCoin.setText(coin);
+        mTvRemark.setText(remark);
+        showAtLocation(context.findViewById(R.id.layoutContent),
+                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+    }
+
+/*    private void isObjectID() {
+        if (mUserId.equals("")) {
+            Toast.makeText(mContext, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
+            mContext.finish();
+            mContext.startActivity(new Intent(mContext, LoginActivity.class));
+        }
+    }*/
 
     public void pay(final boolean alipayOrWechatPay, final double price, final double allCoin, final String changeCoin) {
 
@@ -87,7 +107,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             // 支付成功,如果金额较大请手动查询确认
             @Override
             public void succeed() {
-                updateUserCoinByObjectId(allCoin + "", changeCoin);
+                updateUserCoinByObjectId("+" + allCoin, changeCoin);
             }
 
             // 无论成功与否,返回订单号
@@ -126,7 +146,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         payRecord.setPR_Name((PR_Type ? "充值公益币" : "公益币支出"));
         payRecord.setPR_Money(PR_Type ? "花费" + PR_Money + "元" : "0");
         payRecord.setPR_PayType(PR_Type ? (PayType ? "支付宝支付" : "微信支付") : "爱点公益币支付");
-        payRecord.setPR_Coin((PayType ? "+" : "-") + PR_Coin);
+        payRecord.setPR_Coin(PR_Coin);
         payRecord.setPR_Number(PR_Type ? PR_Number : createRndNumber());
         payRecord.setPR_Status(PR_Status);
         payRecord.setUser_ID(mUserId);
@@ -177,27 +197,6 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             mContext.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public MySqlManagerImpl(Activity context, IMySqlManager mySqlManager, String type, final String coin, String remark) {
-        super(context);
-        mUserId = ((MyApplication) context.getApplication()).getObjectID();
-        isObjectID();
-        this.mContext = context;
-        this.mSqlManager = mySqlManager;
-        initView();
-        mTvType.setText(type);
-        mTvCoin.setText(coin);
-        mTvRemark.setText(remark);
-        showAtLocation(context.findViewById(R.id.layoutContent),
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
-    }
-
-    private void isObjectID() {
-        if (mUserId == "") {
-            mContext.startActivity(new Intent(mContext, LoginActivity.class));
-            Toast.makeText(mContext, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -309,7 +308,10 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         if (pwd != null && pwd.equals(password)) {
                             dismiss();
                             mSqlManager.showSixPwdOnFinishInput(password, event);
-                        } else Toast.makeText(mContext, "支付密码错误", Toast.LENGTH_SHORT).show();
+                        } else {
+                            dismiss();
+                            Toast.makeText(mContext, "支付密码错误", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case 2:
                         break;

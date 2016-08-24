@@ -13,13 +13,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Donate_Info;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by Administrator on 2016/7/3.
@@ -146,14 +151,38 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
         } else {
             double usercoin = Double.valueOf(mStrUserCoin);
             final double choiceCoin = Double.valueOf(mCoin);
-            mySqlManager.updateUserCoinByObjectId(usercoin - choiceCoin + "", mCoin);
+            mySqlManager.updateUserCoinByObjectId(usercoin - choiceCoin + "", "-" + mCoin);
         }
+    }
+
+    private void saveDoanteInfoToBmob(String changeCoin) {
+        Donate_Info donate_info = new Donate_Info();
+        String objectID = ((MyApplication) getApplication()).getObjectID();
+        donate_info.setUser_ID(objectID);
+        donate_info.setHelp_ID(getIntent().getStringExtra("id"));
+        donate_info.setDonate_Coin(Double.valueOf(changeCoin));
+        User_Profile u = new User_Profile();
+        u.setObjectId(objectID);
+        donate_info.setUser_Info(u);
+        donate_info.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存成功", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin) {
         mStrUserCoin = sumCoin;
         mAvail.setText(mStrUserCoin);
+        double coin = Double.valueOf(changeCoin);
+        if (coin < 0 || coin == 0) {
+            saveDoanteInfoToBmob(-coin + "");
+        }
         return false;
     }
 

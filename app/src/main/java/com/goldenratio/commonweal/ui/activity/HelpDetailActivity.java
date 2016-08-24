@@ -8,8 +8,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.util.ShareUtils;
@@ -90,6 +92,8 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
             //奖杯图标 查看排名
             case R.id.iv_rank:
+                Intent intent0 = new Intent(this, DonateInfoActivity.class);
+                startActivity(intent0);
                 break;
 
             //分享
@@ -112,8 +116,14 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
             //捐赠
             case R.id.tv_donate:
-                Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
-                startActivity(i);
+                String mUserId = ((MyApplication) getApplication()).getObjectID();
+                if (mUserId.equals("")) {
+                    Toast.makeText(this, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
+                    i.putExtra("id", mHelp.getObjectId());
+                    startActivity(i);
+                }
                 break;
             //发起方详情界面
             case R.id.tv_initiator:
@@ -129,5 +139,4 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
         }
     }
-
 }

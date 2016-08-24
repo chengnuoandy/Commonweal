@@ -152,14 +152,14 @@
             android:label="PushService"
             android:process=":bmobpush">
             <intent-filter>
-                <action android:name="cn.bmob.push.lib.service.PushService" />
+                <action android:name="cn.bmob.push.lib.service.PushService"/>
             </intent-filter>
         </service>
 
         <!-- 用于进程保活 -->
         <service
             android:name="cn.bmob.push.lib.service.PushNotifyService"
-            android:process=":bmobpush"></service>
+            android:process=":bmobpush"/>
 
         <receiver android:name="cn.bmob.push.PushReceiver">
             <intent-filter>
@@ -289,15 +289,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.GuideActivity" />
-        <activity android:name=".ui.activity.my.SellGoodActivity" />
-        <activity android:name=".ui.activity.HelpCommentActivity" />
-        <activity android:name=".ui.activity.PayRecordActivity" />
-        <activity android:name=".ui.activity.BusinessDetailed" />
-        <activity android:name=".TestActivity" />
-        <activity android:name=".ui.activity.GoodDetailCommentActivity" />
-        <activity android:name=".ui.activity.MyDynamicCommentActivity" />
-        <activity android:name=".ui.activity.BidRecordActivity" />
+        <activity android:name=".ui.activity.GuideActivity"/>
+        <activity android:name=".ui.activity.my.SellGoodActivity"/>
+        <activity android:name=".ui.activity.HelpCommentActivity"/>
+        <activity android:name=".ui.activity.PayRecordActivity"/>
+        <activity android:name=".ui.activity.BusinessDetailed"/>
+        <activity android:name=".TestActivity"/>
+        <activity android:name=".ui.activity.GoodDetailCommentActivity"/>
+        <activity android:name=".ui.activity.MyDynamicCommentActivity"/>
+        <activity android:name=".ui.activity.BidRecordActivity"/>
+        <activity android:name=".ui.activity.DonateInfoActivity">
+        </activity>
     </application>
 
 </manifest>

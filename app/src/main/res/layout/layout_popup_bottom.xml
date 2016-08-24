@@ -65,7 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:text="￥35.55"
+            android:drawableLeft="@drawable/ic_loyalty_black_24dp"
+            android:text="35.55"
             android:textColor="#000000"
             android:textSize="30sp" />
 

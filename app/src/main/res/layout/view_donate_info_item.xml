@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rl_donate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_space"
+                android:background="@drawable/item_tv_selector"
+                android:padding="@dimen/normal_space">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_donate_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/iv_unregister_head"
+        android:tag="1"/>
+
+    <TextView
+        android:id="@+id/tv_donate_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/civ_donate_avatar"
+        android:text="昵称"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tv_donate_coin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_donate_name"
+        android:layout_below="@+id/tv_donate_name"
+        android:layout_marginTop="5dp"
+        android:text="已捐公益币"/>
+
+    <TextView
+        android:id="@+id/tv_ranking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="我的排名"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"/>
+</RelativeLayout>

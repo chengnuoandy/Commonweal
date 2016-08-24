@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.ShareUtils;
@@ -85,6 +86,7 @@ public class MySetActivity extends Activity {
                     Toast.makeText(MySetActivity.this, "您尚未登陆", Toast.LENGTH_SHORT).show();
                 } else {
                     deleteTable();
+                    ((MyApplication) getApplication()).setObjectID("");
                     setResult(RESULT_OK, null);
                     finish();
                 }

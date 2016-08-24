@@ -289,6 +289,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.GuideActivity" />
+        <activity android:name=".ui.activity.my.SellGoodActivity" />
+        <activity android:name=".ui.activity.HelpCommentActivity" />
+        <activity android:name=".ui.activity.PayRecordActivity" />
+        <activity android:name=".ui.activity.WalletActivity" />
+        <activity android:name=".TestActivity" />
+        <activity android:name=".ui.activity.GoodDetailCommentActivity" />
+        <activity android:name=".ui.activity.MyDynamicCommentActivity" />
+        <activity android:name=".ui.activity.BidRecordActivity" />
         <activity android:name=".ui.activity.GuideActivity"/>
         <activity android:name=".ui.activity.my.SellGoodActivity"/>
         <activity android:name=".ui.activity.HelpCommentActivity"/>

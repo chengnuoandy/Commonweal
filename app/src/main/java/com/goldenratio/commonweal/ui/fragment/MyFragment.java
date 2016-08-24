@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.PayRecordActivity;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
@@ -37,10 +39,17 @@ import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.goldenratio.commonweal.util.BitmapUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 
 /**
  * 作者：Created by 龙啸天 on 2016/6/29 0025.
@@ -54,8 +63,6 @@ public class MyFragment extends Fragment {
 
     @BindView(R.id.iv_my_message)
     ImageView mIvMessage;
-    @BindView(R.id.iv_settings)
-    ImageView mIvSetting;
     @BindView(R.id.rl_background)
     RelativeLayout mRlBackground;
     @BindView(R.id.tv_my_attention)
@@ -71,11 +78,13 @@ public class MyFragment extends Fragment {
     private String avaMinUrl;//用户小头像
     public static String mUserID; //用户objectid
 
-    private TextView mTvAddress; //地址栏
 
     private TextView mTextView;
     private TextView mTvOrder;
     private TextView mTvWallet;
+    private View mTvSetting;
+    private ImageView mIvIsV;
+    private TextView mTvFans;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -103,27 +112,18 @@ public class MyFragment extends Fragment {
 //                startActivity(intent);
 //            }
 //        });
+        mIvIsV = (ImageView) view.findViewById(R.id.iv_v);
         initView(view);
-
         return view;
-
     }
 
+
     private void initView(View view) {
-        mTvAddress = (TextView) view.findViewById(R.id.tv_address);//地址栏
         mTvOrder = (TextView) view.findViewById(R.id.tv_my_order);
         mTvOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), OrderActivity.class));
-            }
-        });
-        //地址栏跳转到交易详情
-        mTvAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), PayRecordActivity.class);
-                startActivity(intent);
             }
         });
         mTvWallet = (TextView) view.findViewById(R.id.tv_my_wallet);
@@ -133,10 +133,27 @@ public class MyFragment extends Fragment {
                 startActivity(new Intent(getContext(), WalletActivity.class));
             }
         });
+        mTvSetting = view.findViewById(R.id.tv_settings);
+        mTvSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getActivity(), MySetActivity.class);
+                intent1.putExtra("islogin", isLogin);
+                startActivityForResult(intent1, 2);
+            }
+        });
+        mTvFans = (TextView) view.findViewById(R.id.tv_my_fans);
+        mTvFans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent3 = new Intent(getActivity(), AttentionStarActivity.class);
+                startActivity(intent3);
+            }
+        });
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.iv_settings, R.id.tv_my_attention, R.id.tv_my_fans})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.tv_my_attention})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
@@ -165,19 +182,10 @@ public class MyFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), MessageActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.iv_settings:
-                Intent intent1 = new Intent(getActivity(), MySetActivity.class);
-                intent1.putExtra("islogin", isLogin);
-                startActivityForResult(intent1, 2);
-                break;
             case R.id.tv_my_attention:
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
                 intent2.putExtra("is_attention", true);
                 startActivity(intent2);
-                break;
-            case R.id.tv_my_fans:
-                Intent intent3 = new Intent(getActivity(), AttentionStarActivity.class);
-                startActivity(intent3);
                 break;
             default:
                 break;
@@ -272,5 +280,28 @@ public class MyFragment extends Fragment {
                 mRlBackground.setBackground(drawable);
             }
         });
+        Log.d("Kiuber_LOG", "getUserData: " + mUserID);
+        if (!TextUtils.isEmpty(mUserID)) {
+            BmobQuery<User_Profile> user_profileBmobQuery = new BmobQuery<>();
+            user_profileBmobQuery.addWhereEqualTo("objectId", mUserID);
+            user_profileBmobQuery.findObjects(new FindListener<User_Profile>() {
+                @Override
+                public void done(List<User_Profile> list, BmobException e) {
+                    if (e == null) {
+                        if (list.size() == 1) {
+                            if (list.get(0).isUser_IsV()) {
+                                mIvIsV.setVisibility(View.VISIBLE);
+                            } else {
+                                Log.d("Kiuber_LOG", "done: " + list.get(0).isUser_IsV() + "");
+                            }
+                        } else {
+                            Log.d("Kiuber_LOG", "done: " + list.size());
+                        }
+                    } else {
+                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    }
+                }
+            });
+        }
     }
 }

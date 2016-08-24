@@ -31,8 +31,16 @@
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_no_record"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="暂无交易记录..." />
+
     <ListView
         android:id="@+id/lv_pay_record"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </LinearLayout>

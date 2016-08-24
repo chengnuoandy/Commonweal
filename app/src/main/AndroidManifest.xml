@@ -293,7 +293,7 @@
         <activity android:name=".ui.activity.my.SellGoodActivity" />
         <activity android:name=".ui.activity.HelpCommentActivity" />
         <activity android:name=".ui.activity.PayRecordActivity" />
-        <activity android:name=".ui.activity.BusinessDetailed" />
+        <activity android:name=".ui.activity.WalletActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".ui.activity.GoodDetailCommentActivity" />
         <activity android:name=".ui.activity.MyDynamicCommentActivity" />

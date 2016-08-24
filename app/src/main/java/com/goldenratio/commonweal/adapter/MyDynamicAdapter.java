@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.User_Profile;
@@ -37,11 +38,13 @@ public class MyDynamicAdapter extends BaseAdapter {
     private List<Dynamic> mList;
     private LayoutInflater mInflater;
     private Context mContext;
+    private String ObjectID;
 
     public MyDynamicAdapter(Context context, List<Dynamic> list) {
         mList = list;
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        ObjectID = ((MyApplication)context.getApplicationContext()).getObjectID();
     }
 
     @Override
@@ -134,6 +137,10 @@ public class MyDynamicAdapter extends BaseAdapter {
             mText.setText(mList.get(position).getDynamics_title());
             mLocation.setText(mList.get(position).getDynamics_location());
             mNineGridImageView.setImagesData(mList.get(position).getDynamics_pic());
+
+            if (user.getObjectId().equals(ObjectID)){
+                mDelete.setVisibility(View.VISIBLE);
+            }
 
             Glide.with(mContext)
                     .load(user.getUser_image_hd())

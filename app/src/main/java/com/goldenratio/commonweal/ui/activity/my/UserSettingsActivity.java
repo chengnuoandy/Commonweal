@@ -77,6 +77,8 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     private ImageConfig mImageConfig;
     private String mUserID;
     private MySqlManagerImpl mySqlManager;
+    private MySqlManagerImpl mManager2;
+    private boolean flag;
 
 
     @Override
@@ -188,7 +190,19 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
      * 修改支付密码
      */
     private void showPayPwdDialog() {
-        mySqlManager = new MySqlManagerImpl(this, this , "设置新密码","", "请输入旧支付密码");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(new String[]{"我记得支付密码", "我忘记了支付密码"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0){
+                    mySqlManager = new MySqlManagerImpl(UserSettingsActivity.this, UserSettingsActivity.this , "设置新密码","", "请输入旧支付密码");
+                }else {
+                    Toast.makeText(UserSettingsActivity.this, "待添加", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /**
@@ -463,7 +477,13 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
      */
     @Override
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
-//        mySqlManager.updateUserSixPwdByObjectId()
+        //判断是不是第二次输入
+        if (flag){
+            mySqlManager.updateUserSixPwdByObjectId(sixPwd);
+        }else {
+            flag = true;
+            mManager2 = new MySqlManagerImpl(this, this , "设置新密码","", "请输入新的支付密码");
+        }
     }
 
     @Override
@@ -479,8 +499,12 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
      */
     @Override
     public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
-        //检测密码是否正确
-        mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
+        if (flag){
+            mySqlManager.showSixPwdOnFinishInput(sixPwd, 0);
+        }else {
+            //检测密码是否正确
+            mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
+        }
         return false;
     }
 

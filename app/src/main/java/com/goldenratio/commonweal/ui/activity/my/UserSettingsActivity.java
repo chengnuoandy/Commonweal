@@ -196,6 +196,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0){
                     mySqlManager = new MySqlManagerImpl(UserSettingsActivity.this, UserSettingsActivity.this , "设置新密码","", "请输入旧支付密码");
+                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null);
                 }else {
                     Toast.makeText(UserSettingsActivity.this, "待添加", Toast.LENGTH_SHORT).show();
                 }
@@ -479,10 +480,12 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
         //判断是不是第二次输入
         if (flag){
-            mySqlManager.updateUserSixPwdByObjectId(sixPwd);
+            mManager2.updateUserSixPwdByObjectId(sixPwd);
+            flag = false;
         }else {
             flag = true;
             mManager2 = new MySqlManagerImpl(this, this , "设置新密码","", "请输入新的支付密码");
+            mManager2.queryUserCoinAndSixPwdByObjectId(null,null);
         }
     }
 
@@ -500,7 +503,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     @Override
     public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
         if (flag){
-            mySqlManager.showSixPwdOnFinishInput(sixPwd, 0);
+            mManager2.showSixPwdOnFinishInput(sixPwd, 0);
         }else {
             //检测密码是否正确
             mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);

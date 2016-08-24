@@ -16,10 +16,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.api.Constants;
+import com.goldenratio.commonweal.api.ErrorInfo;
+import com.goldenratio.commonweal.api.User;
+import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.iview.IMySqlManager;
@@ -29,6 +34,12 @@ import com.goldenratio.commonweal.ui.activity.RegisterActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.goldenratio.commonweal.util.MD5Util;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WeiboAuthListener;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
+import com.sina.weibo.sdk.exception.WeiboException;
+import com.sina.weibo.sdk.net.RequestListener;
 import com.squareup.picasso.Picasso;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
@@ -65,12 +76,22 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     TextView mTvUserSex;
     @BindView(R.id.civ_set_avatar)
     ImageView mMinAvatar;
+    @BindView(R.id.tv_setweibo)
+    TextView mTvSetweibo;
+    @BindView(R.id.rl_set_weibo)
+    RelativeLayout mRlSetWeibo;
 
     private String userName;
     private String userNickname;
     private String autograph;
     private String userSex;
     private String avaUrl;
+
+    private SsoHandler mSsoHandler;
+    private UsersAPI mUsersAPI;
+    private AuthInfo mAuthInfo;
+    private Oauth2AccessToken mAccessToken = null;
+    private User upUser = null;
 
     private int whichSex;
     private ProgressDialog mPd;
@@ -79,6 +100,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     private MySqlManagerImpl mySqlManager;
     private MySqlManagerImpl mManager2;
     private boolean flag;
+    private String wbID;
 
 
     @Override
@@ -88,6 +110,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         ButterKnife.bind(this);
         mUserID = MyFragment.mUserID;
 
+        // 创建微博实例
+        // 快速授权时，不要传入 SCOPE，否则可能会授权不成功
+        mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, null);
+        mSsoHandler = new SsoHandler(this, mAuthInfo);
 
         getMyData();
         Picasso.with(this).load(avaUrl).into(mMinAvatar);
@@ -95,6 +121,8 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         mTvUserName.setText(userName);
         mTvUserNickname.setText(userNickname);
         mTvUserAutograph.setText(autograph);
+        if (!TextUtils.isEmpty(wbID))
+            mTvSetweibo.setText("已绑定");
     }
 
     /**
@@ -106,6 +134,12 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // SSO 授权回调
+        // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
+        if (mSsoHandler != null) {
+            mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
+
         switch (requestCode) {
             case 1:
                 break;
@@ -138,7 +172,9 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         }
     }
 
-    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.civ_set_avatar, R.id.rl_set_userName, R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph, R.id.rl_set_address, R.id.alter_login_pwd, R.id.alter_pay_pwd})
+    @OnClick({R.id.iv_us_back, R.id.rl_set_avatar, R.id.civ_set_avatar, R.id.rl_set_userName,
+            R.id.rl_set_userNickName, R.id.rl_set_userSex, R.id.rl_set_autograph,
+            R.id.rl_set_address, R.id.alter_login_pwd, R.id.alter_pay_pwd, R.id.rl_set_weibo})
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
@@ -183,7 +219,32 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
             case R.id.alter_pay_pwd:
                 showPayPwdDialog();
                 break;
+            case R.id.rl_set_weibo:
+                if (TextUtils.isEmpty(wbID)){
+                    wbAuthorize();
+                }else {
+                    Toast.makeText(UserSettingsActivity.this, "你已经绑定了！", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
+    }
+
+    /**
+     * 微博绑定
+     */
+    private void wbAuthorize() {
+        new AlertDialog.Builder(this)
+                .setTitle("警告")
+                .setMessage("微博只能绑定一次，由于特殊原因，解绑需要联系官方，绑定之前请慎重考虑，你确定要绑定吗？")
+                .setPositiveButton("朕知道了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mSsoHandler.authorize(new AuthListener());
+                    }
+                })
+                .setNegativeButton("取消",null)
+                .create()
+                .show();
     }
 
     /**
@@ -194,10 +255,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         builder.setItems(new String[]{"我记得支付密码", "我忘记了支付密码"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (which == 0){
-                    mySqlManager = new MySqlManagerImpl(UserSettingsActivity.this, UserSettingsActivity.this , "设置新密码","", "请输入旧支付密码");
-                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null);
-                }else {
+                if (which == 0) {
+                    mySqlManager = new MySqlManagerImpl(UserSettingsActivity.this, UserSettingsActivity.this, "设置新密码", "", "请输入旧支付密码");
+                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                } else {
                     Toast.makeText(UserSettingsActivity.this, "待添加", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -237,7 +298,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                                 if (e == null) {
                                     if (user_profile.getUser_Password().equals(MD5Util.createMD5(editText.getText().toString()))) {
                                         showProgressDialog();
-                                        updateDataToBmob(MD5Util.createMD5(editText1.getText().toString()),4,null);
+                                        updateDataToBmob(MD5Util.createMD5(editText1.getText().toString()), 4, null);
                                         alertDialog.dismiss();
                                     } else {
                                         Toast.makeText(UserSettingsActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
@@ -346,10 +407,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    closeProgressDialog();
                     if (userRow != null) {
                         updateDataToSqlite(userData, userRow);
                     }
+                    closeProgressDialog();
                     Toast.makeText(UserSettingsActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i("why", e.getMessage());
@@ -464,6 +525,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         userNickname = intent.getStringExtra("user_nickname");
         autograph = intent.getStringExtra("autograph");
         avaUrl = intent.getStringExtra("avaUrl");
+        wbID = intent.getStringExtra("wbid");
     }
 
     @Override
@@ -473,19 +535,20 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
 
     /**
      * 密码验证正确后回调
+     *
      * @param sixPwd 加密后的输入的密码
-     * @param event 无
+     * @param event  无
      */
     @Override
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
         //判断是不是第二次输入
-        if (flag){
+        if (flag) {
             mManager2.updateUserSixPwdByObjectId(sixPwd);
             flag = false;
-        }else {
+        } else {
             flag = true;
-            mManager2 = new MySqlManagerImpl(this, this , "设置新密码","", "请输入新的支付密码");
-            mManager2.queryUserCoinAndSixPwdByObjectId(null,null);
+            mManager2 = new MySqlManagerImpl(this, this, "设置新密码", "", "请输入新的支付密码");
+            mManager2.queryUserCoinAndSixPwdByObjectId(null, null);
         }
     }
 
@@ -496,15 +559,16 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
 
     /**
      * 输入密码后回调
+     *
      * @param mStrUserCoin 用户硬币
-     * @param sixPwd 用户的支付密码
+     * @param sixPwd       用户的支付密码
      * @return 无
      */
     @Override
     public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
-        if (flag){
+        if (flag) {
             mManager2.showSixPwdOnFinishInput(sixPwd, 0);
-        }else {
+        } else {
             //检测密码是否正确
             mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
         }
@@ -515,4 +579,103 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     public boolean updateUserSixPwdByObjectId(String sixPwd) {
         return false;
     }
+
+
+    /**
+     * 微博 OpenAPI 回调接口。
+     */
+    private RequestListener mListener = new RequestListener() {
+        @Override
+        public void onComplete(String response) {
+            if (!TextUtils.isEmpty(response)) {
+                // 调用 User_Profile#parse 将JSON串解析成User对象
+                upUser = User.parse(response);
+                if (upUser != null) {
+                    updateDB(upUser);
+                } else {
+                    closeProgressDialog();
+                    Toast.makeText(UserSettingsActivity.this, response,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+
+        @Override
+        public void onWeiboException(WeiboException e) {
+            ErrorInfo info = ErrorInfo.parse(e.getMessage());
+            Log.d("lxc", "onWeiboException: openAPI访问错误 " + info);
+            closeProgressDialog();
+            Toast.makeText(UserSettingsActivity.this, "网络访问异常！", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private void updateDB(final User upUser) {
+        User_Profile userProfile = new User_Profile();
+        userProfile.setUser_WbID(upUser.id);
+        userProfile.setUser_IsV(upUser.verified);
+        userProfile.setUser_VerifiedReason(upUser.verified_reason); //认证原因
+        final String id = mUserID;
+        userProfile.update(mUserID, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    mTvSetweibo.setText("已绑定");
+                    wbID = upUser.id;
+                    MyFragment.userWBid = upUser.id;
+                    UserDao mUserDao = new UserDao(UserSettingsActivity.this);
+                    mUserDao.execSQL("update User_Profile set User_weiboID = ? where objectId = ?", new String[]{upUser.id,id});
+                    closeProgressDialog();
+                    Toast.makeText(UserSettingsActivity.this, "绑定成功！", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UserSettingsActivity.this, "绑定失败！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    class AuthListener implements WeiboAuthListener {
+
+        @Override
+        public void onComplete(Bundle values) {
+            showProgressDialog();
+            // 从 Bundle 中解析 Token
+            mAccessToken = Oauth2AccessToken.parseAccessToken(values);
+            if (mAccessToken.isSessionValid()) {
+
+                mUsersAPI = new UsersAPI(UserSettingsActivity.this, Constants.APP_KEY, mAccessToken);
+                //openAPI相关
+                long uid = Long.parseLong(mAccessToken.getUid());
+
+                mUsersAPI.show(uid, mListener);
+                Toast.makeText(UserSettingsActivity.this,
+                        "授权成功", Toast.LENGTH_SHORT).show();
+            } else {
+                // 以下几种情况，您会收到 Code：
+                // 1. 当您未在平台上注册的应用程序的包名与签名时；
+                // 2. 当您注册的应用程序包名与签名不正确时；
+                // 3. 当您在平台上注册的包名和签名与您当前测试的应用的包名和签名不匹配时。
+                String code = values.getString("code");
+                String message = "授权失败";
+                if (!TextUtils.isEmpty(code)) {
+                    message = message + "\nObtained the code: " + code;
+                }
+                closeProgressDialog();
+                Toast.makeText(UserSettingsActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void onCancel() {
+            Toast.makeText(UserSettingsActivity.this,
+                    "取消授权", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onWeiboException(WeiboException e) {
+            Toast.makeText(UserSettingsActivity.this,
+                    "Auth exception : " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 }

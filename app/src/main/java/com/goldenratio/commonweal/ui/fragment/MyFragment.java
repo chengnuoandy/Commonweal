@@ -27,11 +27,11 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
-import com.goldenratio.commonweal.ui.activity.PayRecordActivity;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.WalletActivity;
 import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
+import com.goldenratio.commonweal.ui.activity.my.DynamicActivity;
 import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
@@ -48,8 +48,6 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 
 /**
  * 作者：Created by 龙啸天 on 2016/6/29 0025.
@@ -85,10 +83,11 @@ public class MyFragment extends Fragment {
     private View mTvSetting;
     private ImageView mIvIsV;
     private TextView mTvFans;
+    public static String userWBid;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
 
         ButterKnife.bind(this, view);
@@ -153,7 +152,7 @@ public class MyFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.tv_my_attention})
+    @OnClick({R.id.civ_avatar, R.id.tv_name, R.id.iv_my_message, R.id.tv_my_attention, R.id.tv_my_dynamic})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_avatar:
@@ -164,6 +163,7 @@ public class MyFragment extends Fragment {
                     intent.putExtra("user_name", userName);
                     intent.putExtra("autograph", autograph);
                     intent.putExtra("avaUrl", avaUrl);
+                    intent.putExtra("wbid", userWBid);
                     intent.putExtra("avaMinUrl", avaMinUrl);
                     startActivityForResult(intent, 3);
                     break;
@@ -186,6 +186,10 @@ public class MyFragment extends Fragment {
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
                 intent2.putExtra("is_attention", true);
                 startActivity(intent2);
+                break;
+            case R.id.tv_my_dynamic:
+                Intent intent1 = new Intent(getActivity(), DynamicActivity.class);
+                startActivity(intent1);
                 break;
             default:
                 break;
@@ -261,6 +265,7 @@ public class MyFragment extends Fragment {
             autograph = cursor.getString(cursor.getColumnIndex("User_Autograph"));
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
             avaMinUrl = cursor.getString(cursor.getColumnIndex("User_image_min"));
+            userWBid = cursor.getString(cursor.getColumnIndex("User_weiboID"));
             //   Log.i("ud", avaUrl);
         }
         cursor.close();

@@ -520,11 +520,16 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      * 保存数据到本地
      */
     private void saveDB(User_Profile user) {
+        try {
+            user.getUser_WbID();
+        } catch (Exception e) {
+           user.setUser_WbID("");
+        }
         UserDao mUserDao = new UserDao(LoginActivity.this);
         mUserDao.execSQL("insert into User_Profile (objectId,User_Name,User_Password,User_Autograph,User_Avatar,User_Nickname" +
-                        ",User_Address,User_sex,User_image_min,User_image_max) values(?,?,?,?,?,?,?,?,?,?)",
+                        ",User_Address,User_sex,User_image_min,User_image_max,User_weiboID) values(?,?,?,?,?,?,?,?,?,?,?)",
                 new String[]{userID, user.getUser_Name(), user.getUser_Password(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
-                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max()});
+                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max(), user.getUser_WbID()});
         Completed();
         finish();
     }

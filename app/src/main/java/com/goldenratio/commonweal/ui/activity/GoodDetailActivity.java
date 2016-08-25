@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -277,7 +278,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvStartTime.setText(mGood.getCreatedAt());
         String good_startCoin = mGood.getGood_StartCoin();
         String good_nowCoin = mGood.getGood_NowCoin();
-        if (good_startCoin.equals(good_nowCoin)) {
+        if (TextUtils.equals(good_startCoin, good_nowCoin)) {
+            Toast.makeText(mContext, good_startCoin + good_nowCoin, Toast.LENGTH_SHORT).show();
             mTvNowCoin.setText("暂未出价");
             mTvLastTime.setVisibility(View.GONE);
         } else {
@@ -308,7 +310,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             public void done(List<Bid> list, BmobException e) {
                 if (e == null) {
                     if (list.size() == 0) {
-                        changeTextViewVisibitity(1);
+                        //唯有出价的
+                        changeTextViewVisibitity(2);
                     } else {
                         getBmobServerTime(list.get(0).getCreatedAt());
                     }
@@ -389,17 +392,16 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     int listSize = list.size();
                     if (listSize == 1) {
                         //支付保证金了
-                        initIsGoodStatus();
                         getLastBidUpdatedAt();
                     } else if (listSize == 0) {
                         //未支付保证金
                         changeTextViewVisibitity(1);
-//                        Toast.makeText(mContext, "未支付保证金", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "未支付保证金", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, "未知状态", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-//                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.d("Kiuber_LOG", "done: " + mUserId + "~" + mGood.getObjectId());
                 }
             }

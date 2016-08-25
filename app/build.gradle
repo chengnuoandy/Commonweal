@@ -70,4 +70,5 @@ dependencies {
     compile files('libs/BmobPay_v3.0.3_160621.jar')
     compile files('libs/special_fix_save_push.jar')
     compile 'com.daimajia.slider:library:1.1.5@aar'
+    compile 'com.android.support:cardview-v7:22.2.0'
 }

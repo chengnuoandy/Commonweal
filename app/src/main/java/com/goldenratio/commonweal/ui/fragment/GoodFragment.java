@@ -1,7 +1,6 @@
 package com.goldenratio.commonweal.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 
 import java.util.List;
 
@@ -30,7 +27,7 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 
 
-public class GoodFragment extends Fragment implements AdapterView.OnItemClickListener, BGARefreshLayout.BGARefreshLayoutDelegate {
+public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefreshLayoutDelegate {
 
     private static final String TAG = "lxc";
     private View view;
@@ -53,7 +50,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_good, null);
         initView();
-        findDataFromBmob();
         ifTime();
         return view;
     }
@@ -66,7 +62,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
     @Override
     public void onStart() {
         super.onStart();
-
+        findDataFromBmob();
     }
 
     /**
@@ -113,7 +109,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             }
         });
         mListView = (ListView) view.findViewById(R.id.lv_good_all);
-        mListView.setOnItemClickListener(this);
 
         mBGARefreshLayout = (BGARefreshLayout) view.findViewById(R.id.rl_BGA_refresh);
         // 为BGARefreshLayout设置代理
@@ -144,48 +139,6 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             }
         });
     }
-
-    /**
-     * 跳转activity逻辑代码
-     * 获取现在时间与截止时间的差值 传给activity
-     * 由于bmob获取时间方法限制，故提取方法作
-     */
-    private void StartAct(final Bundle bundle) {
-        Bmob.getServerTime(new QueryListener<Long>() {
-            @Override
-            public void done(Long aLong, BmobException e) {
-                if (e == null) {
-                    Long TimeLeft = endTime - (aLong * 1000L);
-                    Intent intent = new Intent(getContext(), GoodDetailActivity.class);
-                    intent.putExtra("EndTime", TimeLeft);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    progressDialog.dismiss();
-                } else {
-                    Log.d("lxc", "获取服务器时间失败:" + e.getMessage());
-                    Toast.makeText(getContext(), "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
-    }
-
-    /**
-     * listview 列表点击事件--跳转activity
-     */
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        progressDialog = ProgressDialog.show(getContext(), null, "正在安全获取", true, false);
-
-        //获取当前条目的截止时间
-        endTime = mGoodList.get(position).getGood_UpDateM();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Bmob_Good", mGoodList.get(position));
-        StartAct(bundle);
-//        Object itemAtPosition = parent.getItemAtPosition(position);
-//        Log.d(TAG, "onItemClick: " + itemAtPosition);
-    }
-
 
     //    以下为生命周期部分
     @Override
@@ -224,14 +177,14 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
         if (mGoodList != null) {
             mGoodList.clear();
             findDataFromBmob();
-        }else {
+        } else {
             findDataFromBmob();
         }
     }
 
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-        if (!dataDone){
+        if (!dataDone) {
             Toast.makeText(getContext(), "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -247,7 +200,7 @@ public class GoodFragment extends Fragment implements AdapterView.OnItemClickLis
             public void done(List<Good> list, BmobException e) {
                 if (e == null) {
                     //如果数据已经不足，设置上拉加载标志位
-                    if (list.size() < mMAXItem){
+                    if (list.size() < mMAXItem) {
                         Toast.makeText(getContext(), "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
                         dataDone = false;
                     }

@@ -13,15 +13,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -168,25 +165,26 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_bid:
-                mTvBid.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final View root = View.inflate(mContext, R.layout.dialog_good_bid, null);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                        builder.setView(root);
-                        final Dialog dialog = builder.create();
-                        dialog.show();
-                        dialog.getWindow().setSoftInputMode(
-                                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                        TextView mDialogTvBid = (TextView) root.findViewById(R.id.tv_bid);
-                        mDialogTvBid.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                EditText mEtCoin = (EditText) root.findViewById(R.id.et_coin);
-                                String mStrCoin = mEtCoin.getText().toString();
-                                if (mStrCoin.equals("")) {
-                                    Toast.makeText(mContext, "请输入出价公益币", Toast.LENGTH_SHORT).show();
-                                } else if (mTvNowCoin.getText().equals("暂未出价")) {
+                if (TextUtils.isEmpty(mUserId)) {
+                    Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
+                } else {
+                    final View root = View.inflate(mContext, R.layout.dialog_good_bid, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setView(root);
+                    final Dialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                    TextView mDialogTvBid = (TextView) root.findViewById(R.id.tv_bid);
+                    mDialogTvBid.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            EditText mEtCoin = (EditText) root.findViewById(R.id.et_coin);
+                            String mStrCoin = mEtCoin.getText().toString();
+                            if (mStrCoin.equals("")) {
+                                Toast.makeText(mContext, "请输入出价公益币", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (mTvNowCoin.getText().equals("暂未出价")) {
                                     if (Double.valueOf(mStrCoin) <= Double.valueOf(mGood.getGood_NowCoin())) {
                                         Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
                                     } else {
@@ -209,23 +207,27 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                                     Toast.makeText(GoodDetailActivity.this, "未知状态", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        });
-                    }
-                });
+                        }
+                    });
+                }
                 break;
             case R.id.tv_deposit:
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(mContext);
-                builder.setMessage("保证金为物品起步价的30%。\n" + "本物品起步价：" + mGood.getGood_StartCoin() + "公益币\n保证金：" +
-                        depositCoin + "公益币");
-                builder.setPositiveButton("交保证金", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
-                        flag = 1;
-                    }
-                });
-                builder.setNegativeButton("取消", null);
-                builder.show();
+                if (TextUtils.isEmpty(mUserId)) {
+                    Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setMessage("保证金为物品起步价的30%。\n" + "本物品起步价：" + mGood.getGood_StartCoin() + "公益币\n保证金：" +
+                            depositCoin + "公益币");
+                    builder.setPositiveButton("交保证金", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                            flag = 1;
+                        }
+                    });
+                    builder.setNegativeButton("取消", null);
+                    builder.show();
+                }
                 break;
             //评论按钮
             case R.id.iv_comment:
@@ -267,11 +269,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvGoodDescription.setText(mGood.getGood_Description());
         mTvStartCoin.setText(mGood.getGood_StartCoin());
         picSize = mGood.getGood_Photos().size();
-//        if (picSize == 1) {
-//            Glide.with(this).load(mGood.getGood_Photos().get(0)).into(mIvOnePic);
-//        } else {
-//            mGvPic.setAdapter(new mAdapter());
-//        }
         //保证金为公益币的30%
         depositCoin = (Double.valueOf(mGood.getGood_StartCoin()) * 0.3);
 
@@ -279,7 +276,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         String good_startCoin = mGood.getGood_StartCoin();
         String good_nowCoin = mGood.getGood_NowCoin();
         if (TextUtils.equals(good_startCoin, good_nowCoin)) {
-            Toast.makeText(mContext, good_startCoin + good_nowCoin, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "起步价" + good_startCoin + "现在出价" + good_nowCoin, Toast.LENGTH_SHORT).show();
             mTvNowCoin.setText("暂未出价");
             mTvLastTime.setVisibility(View.GONE);
         } else {
@@ -642,7 +639,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
-                    updateGood2Bmob(goodId, objectId, bidCoin);
+                    updateGood2Bmob(goodId, objectId);
                 } else {
                     Log.d("Kiuber_LOG", "done: " + e.getMessage());
                 }
@@ -650,14 +647,14 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         });
     }
 
-    private void updateGood2Bmob(final String good_id, final String bid_id, String coin) {
+    private void updateGood2Bmob(final String good_id, final String bid_id) {
         User_Profile user_profile = new User_Profile();
         user_profile.setObjectId(mUserId);
         Bid bid = new Bid();
         bid.setObjectId(bid_id);
 
         Good good = new Good();
-        good.setGood_NowCoin(coin);
+        good.setGood_NowCoin(bidCoin + "");
         good.setGood_NowBidUser(user_profile);
         good.setGood_Bid(bid);
         good.setGood_IsFirstBid(false);

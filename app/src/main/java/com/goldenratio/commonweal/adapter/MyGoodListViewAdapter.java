@@ -2,11 +2,15 @@ package com.goldenratio.commonweal.adapter;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -22,13 +26,17 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
+import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -177,9 +185,9 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         private TextView mTvTime;
         private ImageView mIvThumbUp;
         private ImageView mIvShare;
-
         private Good mGood;
         private Integer position;
+        private CardView mCv;
 
         public void initView(View convertView) {
             mCivAvatar = (CircleImageView) convertView.findViewById(R.id.civ_user_avatar);
@@ -192,10 +200,12 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mTvTime = (TextView) convertView.findViewById(R.id.tv_time);
             mIvThumbUp = (ImageView) convertView.findViewById(R.id.iv_thumb_up);
             mIvShare = (ImageView) convertView.findViewById(R.id.iv_share);
+            mCv = (CardView) convertView.findViewById(R.id.cv_good_item);
 
             mIvThumbUp.setOnClickListener(this);
             mIvShare.setOnClickListener(this);
             mCivAvatar.setOnClickListener(this);
+            mCv.setOnClickListener(this);
         }
 
 
@@ -234,11 +244,11 @@ public class MyGoodListViewAdapter extends BaseAdapter {
 //                    .transform(new GlideCircleTransform(mContext))
 //                    .into(mIvPic);
             //TODO 图片尺寸，物品详情页的状态
-            Glide.with(mContext).load(getItem(position).getGood_User().getUser_image_max()).into(mCivAvatar);
+            Glide.with(mContext).load(getItem(position).getGood_User().getUser_image_hd()).into(mCivAvatar);
             Glide.with(mContext).load(getItem(position).getGood_Photos().get(0).toString()).override(width * 2 / 3, height / 3).into(mIvPic);
             String good_nowCoin = getItem(position).getGood_NowCoin();
             String good_startCoin = getItem(position).getGood_StartCoin();
-            if (good_nowCoin.equals(good_startCoin)) {
+            if (TextUtils.equals(good_nowCoin, (good_startCoin))) {
                 mTvNowCoin.setText("暂未出价");
             } else {
                 mTvNowCoin.setText(getItem(position).getGood_NowCoin());
@@ -294,9 +304,42 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         intent.putExtra("nickName", mGoodList.get(position).getGood_User().getUser_Nickname());
                         intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());
                         mContext.startActivity(intent);
-                        break;
                     }
+                    break;
+                case R.id.cv_good_item:
+                    ProgressDialog progressDialog = ProgressDialog.show(mContext, null, "正在安全获取", true, false);
+                    //获取当前条目的截止时间
+                    long endTime = mGoodList.get(position).getGood_UpDateM();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Bmob_Good", mGoodList.get(position));
+                    StartAct(bundle, endTime, progressDialog);
+                    break;
             }
+        }
+
+        /**
+         * 跳转activity逻辑代码
+         * 获取现在时间与截止时间的差值 传给activity
+         * 由于bmob获取时间方法限制，故提取方法作
+         */
+        private void StartAct(final Bundle bundle, final long endTime, final ProgressDialog progressDialog) {
+            Bmob.getServerTime(new QueryListener<Long>() {
+                @Override
+                public void done(Long aLong, BmobException e) {
+                    if (e == null) {
+                        Long TimeLeft = endTime - (aLong * 1000L);
+                        Intent intent = new Intent(mContext, GoodDetailActivity.class);
+                        intent.putExtra("EndTime", TimeLeft);
+                        intent.putExtras(bundle);
+                        mContext.startActivity(intent);
+                        progressDialog.dismiss();
+                    } else {
+                        Log.d("lxc", "获取服务器时间失败:" + e.getMessage());
+                        Toast.makeText(mContext, "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            });
         }
     }
 }

@@ -13,7 +13,7 @@
         android:background="@color/snow">
 
         <ImageView
-            android:id="@+id/iv_attention_back"
+            android:id="@+id/iv_donate_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -21,7 +21,6 @@
             android:src="@mipmap/ic_back"/>
 
         <TextView
-            android:id="@+id/tv_attentionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -34,6 +33,7 @@
         android:id="@+id/rl_donate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:background="@drawable/item_tv_selector"
         android:padding="@dimen/normal_space">
 
@@ -85,6 +85,7 @@
     </ListView>
 
     <TextView
+        android:id="@+id/no_ranking"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

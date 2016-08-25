@@ -12,7 +12,7 @@
         android:background="@color/snow">
 
         <ImageView
-            android:id="@+id/iv_attention_back"
+            android:id="@+id/iv_donate_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

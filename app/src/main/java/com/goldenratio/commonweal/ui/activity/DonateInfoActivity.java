@@ -3,17 +3,18 @@ package com.goldenratio.commonweal.ui.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.DonateInfoListAdapter;
 import com.goldenratio.commonweal.bean.Donate_Info;
+import com.goldenratio.commonweal.bean.User_Profile;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -28,10 +29,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DonateInfoActivity extends Activity {
 
 
-    @BindView(R.id.iv_attention_back)
-    ImageView mIvAttentionBack;
-    @BindView(R.id.tv_attentionTitle)
-    TextView mTvAttentionTitle;
     @BindView(R.id.civ_donate_avatar)
     CircleImageView mCivDonateAvatar;
     @BindView(R.id.tv_donate_name)
@@ -44,6 +41,8 @@ public class DonateInfoActivity extends Activity {
     RelativeLayout mRlDonate;
     @BindView(R.id.lv_donate)
     ListView mLvDonate;
+    @BindView(R.id.no_ranking)
+    TextView mNoRanking;
     private ProgressDialog mPd;
 
     @Override
@@ -57,16 +56,38 @@ public class DonateInfoActivity extends Activity {
     }
 
     private void getDonateInfoFromBmob(String helpID) {
+        final String ID = ((MyApplication) getApplication()).getObjectID();
         showProgressDialog();
         BmobQuery<Donate_Info> query = new BmobQuery<Donate_Info>();
         query.addWhereEqualTo("Help_ID", helpID);
+        query.include("User_Info");
         query.order("-Donate_Coin");
         query.findObjects(new FindListener<Donate_Info>() {
             @Override
             public void done(List<Donate_Info> list, BmobException e) {
-                Log.i("lxt", "done: " + list.get(0).getObjectId());
                 if (e == null) {
-                    mLvDonate.setAdapter(new DonateInfoListAdapter(list, getApplicationContext()));
+                    if (list.size() != 0) {
+                        User_Profile u = null;
+                        int i;
+                        for (i = 0; i < list.size(); i++) {
+                            u = list.get(i).getUser_Info();
+                            if ((u.getObjectId()).equals(ID)) {
+                                mTvMyRanking.setText(String.valueOf("第" + (i + 1) + "名"));
+                                break;
+                            } else {
+                                mTvMyRanking.setText("无排名");
+                            }
+                        }
+                        if (u != null) {
+                            Picasso.with(getApplicationContext()).load(u.getUser_image_hd()).into(mCivDonateAvatar);
+                            mTvDonateName.setText(u.getUser_Nickname());
+                            mTvDonateCoin.setText("捐赠" + list.get(i).getDonate_Coin() + "公益币");
+                        }
+                        mRlDonate.setVisibility(View.VISIBLE);
+                        mLvDonate.setAdapter(new DonateInfoListAdapter(list, getApplicationContext()));
+                    } else {
+                        mNoRanking.setVisibility(View.VISIBLE);
+                    }
                 } else
                     Toast.makeText(DonateInfoActivity.this, "获取捐赠信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 closeProgressDialog();
@@ -75,10 +96,10 @@ public class DonateInfoActivity extends Activity {
         });
     }
 
-    @OnClick({R.id.iv_attention_back, R.id.rl_donate})
+    @OnClick({R.id.iv_donate_back, R.id.rl_donate})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_attention_back:
+            case R.id.iv_donate_back:
                 finish();
                 break;
             case R.id.rl_donate:
@@ -100,5 +121,10 @@ public class DonateInfoActivity extends Activity {
             mPd.setCancelable(false);
             mPd.show();
         }
+    }
+
+    @OnClick(R.id.iv_donate_back)
+    public void onClick() {
+        finish();
     }
 }

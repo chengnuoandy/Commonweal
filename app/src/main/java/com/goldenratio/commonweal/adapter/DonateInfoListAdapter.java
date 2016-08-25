@@ -65,21 +65,21 @@ public class DonateInfoListAdapter extends BaseAdapter {
         User_Profile user_profile = mInfoList.get(position).getUser_Info();
         Picasso.with(mContext).load(user_profile.getUser_image_hd()).into(viewHolder.mCivDonateAvatar);
         viewHolder.mTvDonateName.setText(user_profile.getUser_Nickname());
-        viewHolder.mTvDonateCoin.setText(mInfoList.get(position).getDonate_Coin().toString());
-        //viewHolder.mTvRanking.setText(position + 1);
+        viewHolder.mTvDonateCoin.setText("捐赠" + mInfoList.get(position).getDonate_Coin() + "公益币");
+        viewHolder.mTvDonateRanking.setText(String.valueOf("第" + (position + 1) + "名"));
 
         return convertView;
     }
 
-    static class ViewHolder {
+    class ViewHolder {
         @BindView(R.id.civ_donate_avatar)
         CircleImageView mCivDonateAvatar;
         @BindView(R.id.tv_donate_name)
         TextView mTvDonateName;
         @BindView(R.id.tv_donate_coin)
         TextView mTvDonateCoin;
-        @BindView(R.id.tv_ranking)
-        TextView mTvRanking;
+        @BindView(R.id.tv_donate_ranking)
+        TextView mTvDonateRanking;
         @BindView(R.id.rl_donate)
         RelativeLayout mRlDonate;
 

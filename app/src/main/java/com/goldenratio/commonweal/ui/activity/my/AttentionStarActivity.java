@@ -27,7 +27,7 @@ import cn.bmob.v3.listener.FindListener;
 
 public class AttentionStarActivity extends Activity {
 
-    @BindView(R.id.iv_attention_back)
+    @BindView(R.id.iv_donate_back)
     ImageView mIvAttentionBack;
     @BindView(R.id.lv_attention)
     ListView mLvAttention;
@@ -84,7 +84,7 @@ public class AttentionStarActivity extends Activity {
         });
     }
 
-    @OnClick(R.id.iv_attention_back)
+    @OnClick(R.id.iv_donate_back)
     public void onClick() {
         finish();
     }

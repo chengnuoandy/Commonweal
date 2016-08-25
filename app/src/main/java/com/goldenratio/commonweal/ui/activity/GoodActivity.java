@@ -29,13 +29,6 @@ import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -292,7 +285,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                             good.setGood_DonationRate(Integer.parseInt(prop));
                             good.setGood_UpDateM(mLgTime);
                             good.setGood_Status(1);
-                            good.setGood_IsFirstBid(true);
+                            good.setIsFirstDeposit(true);
                             good.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String s, BmobException e) {

@@ -657,7 +657,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         good.setGood_NowCoin(bidCoin + "");
         good.setGood_NowBidUser(user_profile);
         good.setGood_Bid(bid);
-        good.setGood_IsFirstBid(false);
+        good.setIsFirstDeposit(false);
         good.update(good_id, new UpdateListener() {
             @Override
             public void done(BmobException e) {

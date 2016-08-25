@@ -40,6 +40,7 @@ public class MySellGoodAdapter extends BaseAdapter {
     private Spinner mSpinner;
     private EditText mText; //单号
     private List<String> mStrings;
+    private boolean isDel;
 
     public MySellGoodAdapter(Context context, List<Good> list) {
         mContext = context;
@@ -116,30 +117,36 @@ public class MySellGoodAdapter extends BaseAdapter {
             mBtnShip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("确认发货");
-                    builder.setView(mView);
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ((ViewGroup)mView.getParent()).removeView(mView);
-                            if (mText.getText().toString().isEmpty()){
-                                Toast.makeText(mContext, "运单编号不能为空！", Toast.LENGTH_SHORT).show();
-                            }else {
-                                saveData();
+                    if (isDel) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setTitle("提示");
+                        builder.setMessage("你确定要删除这件物品吗？");
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //删除此物品
+                                Good good = new Good();
+                                good.setObjectId(mList.get(mPos).getObjectId());
+                                good.delete(new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            Toast.makeText(mContext, "删除成功！", Toast.LENGTH_SHORT).show();
+                                            mList.remove(mPos);
+                                            notifyDataSetChanged();
+                                        } else {
+                                            Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                             }
-                        }
-                    });
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //防止父布局冲突，移除子view
-                            ((ViewGroup)mView.getParent()).removeView(mView);
-                        }
-                    });
-                    builder.setCancelable(false);
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
+                        });
+                        builder.setNegativeButton("取消", null);
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    } else {
+                        ship();
+                    }
                 }
             });
         }
@@ -165,6 +172,11 @@ public class MySellGoodAdapter extends BaseAdapter {
             }
             mTvTitle.setText(mList.get(pos).getGood_Name() + "\n" + mList.get(pos).getGood_Description());
             mTvStatus.setText("状态：" + str + "(现在价格:" + mList.get(pos).getGood_NowCoin() + ")");
+            if (!mList.get(pos).getIsFirstDeposit()){
+                mBtnShip.setText("删除物品");
+                isDel = true;
+                mBtnShip.setVisibility(View.VISIBLE);
+            }
 
             if (mList.get(pos).getGood_Photos() != null) {
                 Glide.with(mContext)
@@ -217,6 +229,36 @@ public class MySellGoodAdapter extends BaseAdapter {
                     }
                 });
             }
+        }
+
+        /**
+         * 发货按钮点击
+         */
+        private void ship() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("确认发货");
+            builder.setView(mView);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((ViewGroup)mView.getParent()).removeView(mView);
+                    if (mText.getText().toString().isEmpty()){
+                        Toast.makeText(mContext, "运单编号不能为空！", Toast.LENGTH_SHORT).show();
+                    }else {
+                        saveData();
+                    }
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //防止父布局冲突，移除子view
+                    ((ViewGroup)mView.getParent()).removeView(mView);
+                }
+            });
+            builder.setCancelable(false);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
     }
 

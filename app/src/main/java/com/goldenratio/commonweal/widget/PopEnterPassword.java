@@ -235,7 +235,7 @@ public class PopEnterPassword extends PopupWindow {
         good.setGood_NowCoin(coin);
         good.setGood_NowBidUser(user_profile);
         good.setGood_Bid(bid);
-        good.setGood_IsFirstBid(false);
+        good.setIsFirstDeposit(false);
         good.update(good_id, new UpdateListener() {
             @Override
             public void done(BmobException e) {

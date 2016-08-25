@@ -20,11 +20,16 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Administrator on 2016/7/3.
@@ -47,8 +52,12 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
     private String mStrUserCoin;
     private String mSixPwd;
 
+    private boolean isHasDonate;
+    private String helpID;
+    private String DonateInfoID;
     private MySqlManagerImpl mySqlManager;
 
+    private Double DonateCoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +66,10 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
         ButterKnife.bind(this);
 
         mCoin = "10";
-
+        helpID = getIntent().getStringExtra("help_id");
         mySqlManager = new MySqlManagerImpl(this, this);
         mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+        queryDonateInfoFromBmob();
 
         mRgMoney.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -71,6 +81,67 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
                     mEtOther.setVisibility(View.GONE);
                     mCoin = ((RadioButton) findViewById(checkedId)).getText().toString();
                 }
+            }
+        });
+    }
+
+    private void queryDonateInfoFromBmob() {
+        String objectID = ((MyApplication) getApplication()).getObjectID();
+        BmobQuery<Donate_Info> query = new BmobQuery<Donate_Info>();
+        query.addQueryKeys("Donate_Coin");
+        query.addWhereEqualTo("Help_ID", helpID);
+        query.addWhereEqualTo("User_ID", objectID);
+        query.findObjects(new FindListener<Donate_Info>() {
+            @Override
+            public void done(List<Donate_Info> list, BmobException e) {
+                Log.i("lxt", list.size() + "done: " + list.get(0));
+                if (e == null) {
+                    if (list.size() == 0) {
+                        isHasDonate = false;
+                    } else {
+                        DonateInfoID = list.get(0).getObjectId();
+                        DonateCoin = list.get(0).getDonate_Coin();
+                        isHasDonate = true;
+                        Log.i("lxt", "done: " + DonateInfoID + "00000" + DonateCoin);
+                    }
+                }
+            }
+        });
+    }
+
+    private void updateDonateInfoFromBmob(Double sumDonateCoin) {
+        Donate_Info donate_info = new Donate_Info();
+        donate_info.setDonate_Coin(sumDonateCoin);
+        donate_info.update(DonateInfoID, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(HelpDonateActivity.this, "更新捐赠记录成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(HelpDonateActivity.this, "更新捐赠记录失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void saveDoanteInfoToBmob(Double changeCoin) {
+        Donate_Info donate_info = new Donate_Info();
+        String objectID = ((MyApplication) getApplication()).getObjectID();
+        donate_info.setUser_ID(objectID);
+        donate_info.setHelp_ID(helpID);
+        donate_info.setDonate_Coin(changeCoin);
+        User_Profile u = new User_Profile();
+        u.setObjectId(objectID);
+        donate_info.setUser_Info(u);
+        donate_info.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    DonateInfoID = s;
+                    isHasDonate = true;
+                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存成功", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存失败", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -151,37 +222,20 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
         } else {
             double usercoin = Double.valueOf(mStrUserCoin);
             final double choiceCoin = Double.valueOf(mCoin);
-            mySqlManager.updateUserCoinByObjectId(usercoin - choiceCoin + "", "-" + mCoin,0);
+            mySqlManager.updateUserCoinByObjectId(usercoin - choiceCoin + "", "-" + mCoin, 0);
         }
     }
 
-    private void saveDoanteInfoToBmob(String changeCoin) {
-        Donate_Info donate_info = new Donate_Info();
-        String objectID = ((MyApplication) getApplication()).getObjectID();
-        donate_info.setUser_ID(objectID);
-        donate_info.setHelp_ID(getIntent().getStringExtra("id"));
-        donate_info.setDonate_Coin(Double.valueOf(changeCoin));
-        User_Profile u = new User_Profile();
-        u.setObjectId(objectID);
-        donate_info.setUser_Info(u);
-        donate_info.save(new SaveListener<String>() {
-            @Override
-            public void done(String s, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存成功", Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin,int flag) {
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
         mStrUserCoin = sumCoin;
         mAvail.setText(mStrUserCoin);
         double coin = Double.valueOf(changeCoin);
         if (coin < 0 || coin == 0) {
-            saveDoanteInfoToBmob(-coin + "");
+            if (isHasDonate) {
+                updateDonateInfoFromBmob(DonateCoin - coin);
+            } else saveDoanteInfoToBmob(-coin);
         }
         return false;
     }

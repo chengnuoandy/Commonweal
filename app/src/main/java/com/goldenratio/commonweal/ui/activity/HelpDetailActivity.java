@@ -93,6 +93,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
             //奖杯图标 查看排名
             case R.id.iv_rank:
                 Intent intent0 = new Intent(this, DonateInfoActivity.class);
+                intent0.putExtra("help_id", mHelp.getObjectId());
                 startActivity(intent0);
                 break;
 
@@ -121,7 +122,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
                     Toast.makeText(this, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
-                    i.putExtra("id", mHelp.getObjectId());
+                    i.putExtra("help_id", mHelp.getObjectId());
                     startActivity(i);
                 }
                 break;

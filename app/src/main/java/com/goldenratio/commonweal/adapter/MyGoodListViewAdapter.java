@@ -236,8 +236,13 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             //TODO 图片尺寸，物品详情页的状态
             Glide.with(mContext).load(getItem(position).getGood_User().getUser_image_max()).into(mCivAvatar);
             Glide.with(mContext).load(getItem(position).getGood_Photos().get(0).toString()).override(width * 2 / 3, height / 3).into(mIvPic);
-
-            mTvNowCoin.setText(getItem(position).getGood_NowCoin());
+            String good_nowCoin = getItem(position).getGood_NowCoin();
+            String good_startCoin = getItem(position).getGood_StartCoin();
+            if (good_nowCoin.equals(good_startCoin)) {
+                mTvNowCoin.setText("暂未出价");
+            } else {
+                mTvNowCoin.setText(getItem(position).getGood_NowCoin());
+            }
             long nowTime = System.currentTimeMillis();
             long endTime = getItem(position).getGood_UpDateM();
             long result = nowTime - endTime;

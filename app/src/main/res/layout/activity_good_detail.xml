@@ -119,12 +119,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:drawableLeft="@drawable/ic_loyalty_black_24dp"
+                        android:drawablePadding="@dimen/little_space"
                         android:gravity="center" />
 
                     <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_start_time"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="2016-08-24 16:29:00" />
                 </LinearLayout>
 
                 <TextView
@@ -146,12 +148,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_gavel_black_24dp"
+                        android:drawablePadding="@dimen/little_space"
                         android:gravity="center" />
 
                     <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_last_time"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="2016-08-24 16:29:00" />
                 </LinearLayout>
             </LinearLayout>
 

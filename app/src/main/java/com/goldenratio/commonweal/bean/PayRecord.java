@@ -7,27 +7,14 @@ import cn.bmob.v3.BmobObject;
  */
 
 public class PayRecord extends BmobObject {
-    private String PR_Name;
+    private String PR_Name;//
     private String PR_Money;
     private String PR_Coin;
     private String PR_Type;
-    private String PR_PayType;
+    private int PR_PayWay; //1支付宝支付 2微信支付 3爱点公益币支付
     private boolean PR_Status;
     private String PR_Number;
     private String User_ID;
-
-
-    /*
-        public String Business_Name;//交易名称
-        public String Business_state;//交易状态 是否支付成功 ---当前状态
-        public String Business_money;  //交易金额
-        public String Business_time;//交易时间
-        public String Business_Use;//交易对象  ----商户对象
-        public int Business_type;  //交易类型   公益币 或 Rmb
-        public String Business_payment;   //支付方式
-        public String Business_numbers;//交易单号
-        public String Customer_numbers;//客户单号
-         */
 
     public String getPR_Name() {
         return PR_Name;
@@ -61,12 +48,12 @@ public class PayRecord extends BmobObject {
         this.PR_Type = PR_Type;
     }
 
-    public String getPR_PayType() {
-        return PR_PayType;
+    public int getPR_PayWay() {
+        return PR_PayWay;
     }
 
-    public void setPR_PayType(String PR_PayType) {
-        this.PR_PayType = PR_PayType;
+    public void setPR_PayWay(int PR_PayWay) {
+        this.PR_PayWay = PR_PayWay;
     }
 
     public boolean isPR_Status() {

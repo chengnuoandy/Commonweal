@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/normal_space"
-            android:src="@mipmap/back_ic" />
+            android:src="@drawable/ic_arrow_back_black_24dp" />
 
         <TextView
             android:id="@+id/textView"
@@ -26,17 +26,17 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="交易中心"
+            android:text="交易记录"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/tv_no_record"
+        android:id="@+id/tv_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="暂无交易记录..." />
+        android:text="正在获取交易记录..." />
 
     <ListView
         android:id="@+id/lv_pay_record"

@@ -3,23 +3,18 @@ package com.goldenratio.commonweal.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.adapter.BusinessAdapter;
 import com.goldenratio.commonweal.bean.PayRecord;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -35,7 +30,7 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
 
     private ListView mLv;
     private List<PayRecord> mPayRecord;
-    private TextView mTvNoRecord;
+    private TextView mTvLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +50,11 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
                 if (e == null) {
                     if (list.size() != 0) {
                         mPayRecord = list;
-                        mTvNoRecord.setVisibility(View.GONE);
+                        mTvLoading.setVisibility(View.GONE);
                         mLv.setVisibility(View.VISIBLE);
                         loadData2ListView();
+                    } else {
+                        mTvLoading.setText("暂无交易记录");
                     }
                 } else {
                     Toast.makeText(PayRecordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -136,7 +133,7 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
      */
     private void initView() {
         mLv = (ListView) findViewById(R.id.lv_pay_record);
-        mTvNoRecord = (TextView) findViewById(R.id.tv_no_record);
+        mTvLoading = (TextView) findViewById(R.id.tv_loading);
         mLv.setOnItemClickListener(this);
     }
 

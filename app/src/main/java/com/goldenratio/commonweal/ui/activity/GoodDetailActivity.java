@@ -185,13 +185,27 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                                 String mStrCoin = mEtCoin.getText().toString();
                                 if (mStrCoin.equals("")) {
                                     Toast.makeText(mContext, "请输入出价公益币", Toast.LENGTH_SHORT).show();
-                                } else if (Double.valueOf(mStrCoin) <= Double.valueOf(mTvNowCoin.getText().toString())) {
+                                } else if (mTvNowCoin.getText().equals("暂未出价")) {
+                                    if (Double.valueOf(mStrCoin) <= Double.valueOf(mGood.getGood_NowCoin())) {
+                                        Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        dialog.dismiss();
+                                        bidCoin = Double.valueOf(mStrCoin);
+                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                                        flag = 2;
+                                    }
+                                } else if (!mTvNowCoin.getText().equals("暂未出价")) {
+                                    if (Double.valueOf(mStrCoin) <= Double.valueOf(mTvNowCoin.getText().toString())) {
+                                        Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        dialog.dismiss();
+                                        bidCoin = Double.valueOf(mStrCoin);
+                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                                        flag = 2;
+                                    }
                                     Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    dialog.dismiss();
-                                    bidCoin = Double.valueOf(mStrCoin);
-                                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
-                                    flag = 2;
+                                    Toast.makeText(GoodDetailActivity.this, "未知状态", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -234,28 +248,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         }
     }
 
-    private void getData(List<Bid> list) {
-
-
-        List<String> strings = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            strings.add(i, list.get(i).getBid_User().getUser_Name() + "在"
-                    + list.get(i).getCreatedAt()
-                    + "出价" + list.get(i).getBid_Coin());
-        }
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(GoodDetailActivity.this);
-        Adapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
-        builder1.setAdapter((ListAdapter) adapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder1.setNegativeButton("关闭", null);
-        builder1.show();
-    }
-
 
     /**
      * 初始化数据
@@ -273,7 +265,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvGoodName.setText(mGood.getGood_Name());
         mTvGoodDescription.setText(mGood.getGood_Description());
         mTvStartCoin.setText(mGood.getGood_StartCoin());
-        mTvNowCoin.setText(mGood.getGood_NowCoin());
         picSize = mGood.getGood_Photos().size();
 //        if (picSize == 1) {
 //            Glide.with(this).load(mGood.getGood_Photos().get(0)).into(mIvOnePic);
@@ -284,13 +275,21 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         depositCoin = (Double.valueOf(mGood.getGood_StartCoin()) * 0.3);
 
         mTvStartTime.setText(mGood.getCreatedAt());
-        mTvLastTime.setText(mGood.getUpdatedAt());
+        String good_startCoin = mGood.getGood_StartCoin();
+        String good_nowCoin = mGood.getGood_NowCoin();
+        if (good_startCoin.equals(good_nowCoin)) {
+            mTvNowCoin.setText("暂未出价");
+            mTvLastTime.setVisibility(View.GONE);
+        } else {
+            mTvNowCoin.setText(mGood.getGood_NowCoin());
+            mTvLastTime.setText(mGood.getUpdatedAt());
+        }
+        mTvUserName.setText(mGood.getGood_User().getUser_Nickname());
     }
 
     private void initIsGoodStatus() {
-        //根据最后一位出价者字段判断是否有人出价
         if (endTime > 0) {
-
+            isDeposit();
         } else {
             changeTextViewVisibitity(2);
             mTvBid.setClickable(false);
@@ -308,9 +307,13 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             @Override
             public void done(List<Bid> list, BmobException e) {
                 if (e == null) {
-                    getBmobServerTime(list.get(0).getCreatedAt());
+                    if (list.size() == 0) {
+                        changeTextViewVisibitity(1);
+                    } else {
+                        getBmobServerTime(list.get(0).getCreatedAt());
+                    }
                 } else {
-                    changeTextViewVisibitity(2);
+                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -386,6 +389,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     int listSize = list.size();
                     if (listSize == 1) {
                         //支付保证金了
+                        initIsGoodStatus();
                         getLastBidUpdatedAt();
                     } else if (listSize == 0) {
                         //未支付保证金
@@ -487,17 +491,17 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             if (flag == 1) {
                 //保证金
                 saveDeposit2Bmob();
-                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - depositCoin) + "", depositCoin + "");
+                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - depositCoin) + "", depositCoin + "", 1);
             } else if (flag == 2) {
                 //出价
                 saveBid2Bmob(mGood.getObjectId(), bidCoin + "");
-                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "", bidCoin + "");
+                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "", bidCoin + "", -2);
             }
         }
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin) {
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
         Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
         mTvDeposit.setVisibility(View.GONE);
         return false;
@@ -664,6 +668,10 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     mTvBid.setVisibility(View.GONE);
                     mLlCv.setVisibility(View.VISIBLE);
                     mTvNowCoin.setText(bidCoin + "");
+                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd    hh:mm:ss");
+                    String date = sDateFormat.format(new java.util.Date());
+                    mTvLastTime.setText(date);
+                    mTvLastTime.setVisibility(View.VISIBLE);
                 } else {
                     Log.d("Kiuber_LOG", "done: " + e.getMessage());
                 }

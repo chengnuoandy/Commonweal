@@ -17,7 +17,7 @@ import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.util.ShareUtils;
 
 /**
- * Created by Administrator on 2016/6/22.
+ * Created by Kiuber on 2016/6/22.
  */
 
 public class HelpDetailActivity extends Activity implements View.OnClickListener {

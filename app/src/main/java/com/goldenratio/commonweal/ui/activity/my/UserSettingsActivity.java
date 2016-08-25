@@ -553,7 +553,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin) {
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin,int flag) {
         return false;
     }
 

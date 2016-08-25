@@ -107,7 +107,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             // 支付成功,如果金额较大请手动查询确认
             @Override
             public void succeed() {
-                updateUserCoinByObjectId("+" + allCoin, changeCoin);
+                updateUserCoinByObjectId("+" + allCoin, changeCoin,-1);
             }
 
             // 无论成功与否,返回订单号
@@ -141,11 +141,13 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                                      String PR_Coin,
                                      String PR_Number,
                                      Boolean PR_Status,
-                                     boolean PayType) {
+                                     boolean PayType,
+                                     int PR_Name) {
         PayRecord payRecord = new PayRecord();
-        payRecord.setPR_Name((PR_Type ? "充值公益币" : "公益币支出"));
+        payRecord.setPR_Type((PR_Type ? "充值公益币" : "公益币支出"));
+        payRecord.setPR_Name(PR_Name == 0 ? "捐赠项目" : (PR_Name == 1 ? "交保证金" : "购买物品"));
         payRecord.setPR_Money(PR_Type ? "花费" + PR_Money + "元" : "0");
-        payRecord.setPR_PayType(PR_Type ? (PayType ? "支付宝支付" : "微信支付") : "爱点公益币支付");
+        payRecord.setPR_PayWay(PR_Type ? (PayType ? 1 : 2) : 3);
         payRecord.setPR_Coin(PR_Coin);
         payRecord.setPR_Number(PR_Type ? PR_Number : createRndNumber());
         payRecord.setPR_Status(PR_Status);
@@ -241,7 +243,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
 
     @Override
-    public boolean updateUserCoinByObjectId(final String sumCoin, final String changeCoin) {
+    public boolean updateUserCoinByObjectId(final String sumCoin, final String changeCoin, final int PRName) {
         showProgressDialog();
         String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -263,7 +265,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                     @Override
                     public void run() {
                         Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                        savePayHistoryToBmob(false, "", changeCoin, createRndNumber(), false, false);
+                        savePayHistoryToBmob(false, "", changeCoin, createRndNumber(), false, false,PRName);
                         closeProgressDialog();
                     }
                 });
@@ -277,8 +279,8 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
                         closeProgressDialog();
                         dismiss();
-                        savePayHistoryToBmob(false, "", changeCoin, createRndNumber(), true, false);
-                        mSqlManager.updateUserCoinByObjectId(sumCoin, changeCoin);
+                        savePayHistoryToBmob(false, "", changeCoin, createRndNumber(), true, false,PRName);
+                        mSqlManager.updateUserCoinByObjectId(sumCoin, changeCoin,PRName);
                         // TODO: 2016/8/21 继续
                     }
                 });

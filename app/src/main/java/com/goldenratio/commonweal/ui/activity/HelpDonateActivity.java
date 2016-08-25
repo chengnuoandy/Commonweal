@@ -151,7 +151,7 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
         } else {
             double usercoin = Double.valueOf(mStrUserCoin);
             final double choiceCoin = Double.valueOf(mCoin);
-            mySqlManager.updateUserCoinByObjectId(usercoin - choiceCoin + "", "-" + mCoin);
+            mySqlManager.updateUserCoinByObjectId(usercoin - choiceCoin + "", "-" + mCoin,0);
         }
     }
 
@@ -176,7 +176,7 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin) {
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin,int flag) {
         mStrUserCoin = sumCoin;
         mAvail.setText(mStrUserCoin);
         double coin = Double.valueOf(changeCoin);

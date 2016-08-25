@@ -9,7 +9,7 @@ public interface IMySqlManager {
 
     void showSixPwdOnFinishInput(String sixPwd, int event);
 
-    boolean updateUserCoinByObjectId(String sumCoin, String changeCoin);
+    boolean updateUserCoinByObjectId(String sumCoin, String changeCoin,int PRName);
 
     boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd);
 

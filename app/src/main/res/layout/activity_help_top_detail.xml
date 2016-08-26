@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="项目详情"
+            android:text="活动详情"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size"/>
 

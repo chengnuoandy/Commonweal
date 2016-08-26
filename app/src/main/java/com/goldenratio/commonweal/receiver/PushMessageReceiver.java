@@ -27,6 +27,12 @@ public class PushMessageReceiver extends BroadcastReceiver {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onReceive(Context context, Intent intent) {
+       /* d------MessageActivity-- Dynamic
+        p------MessageActivity--Privite
+        w------WebView1
+
+
+        p-Title-Data*/
         if (intent.getAction().equals(PushConstants.ACTION_MESSAGE)) {
             String jsonPushData = intent.getStringExtra("msg");
             JSONObject jsonObject = null;

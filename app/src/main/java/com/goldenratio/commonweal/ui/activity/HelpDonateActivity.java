@@ -94,7 +94,6 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
         query.findObjects(new FindListener<Donate_Info>() {
             @Override
             public void done(List<Donate_Info> list, BmobException e) {
-                Log.i("lxt", list.size() + "done: " + list.get(0));
                 if (e == null) {
                     if (list.size() == 0) {
                         isHasDonate = false;

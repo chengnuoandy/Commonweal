@@ -2,27 +2,21 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -39,7 +33,6 @@ import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -365,18 +358,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         return updateTime;
     }
 
-    public long StringToLongPart(String time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        long updateTime = 0;
-        try {
-            updateTime = sdf.parse(time).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        System.out.println(updateTime);
-        return updateTime;
-    }
-
     private void isDeposit() {
         BmobQuery<Deposit> depositBmobQuery = new BmobQuery<>();
         depositBmobQuery.addWhereEqualTo("D_User", mUserId);
@@ -567,62 +548,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     @Override
     public boolean updateUserSixPwdByObjectId(String sixPwd) {
         return false;
-    }
-
-    class mAdapter extends BaseAdapter {
-        private DisplayMetrics displayMetrics;
-        private Context mContext;
-        int width, height;
-
-        private mAdapter() {
-            mContext = GoodDetailActivity.this;
-            displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            width = displayMetrics.widthPixels;
-            height = displayMetrics.heightPixels;
-        }
-
-        @Override
-        public int getCount() {
-            return picSize;
-        }
-
-        @Override
-        public List getItem(int position) {
-            return mGood.getGood_Photos();
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            ImageView imageView;
-            if (convertView == null) {
-                imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(width / 3, width / 3));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 8);
-            } else {
-                imageView = (ImageView) convertView;
-            }
-            Glide.with(mContext).load(getItem(position).get(position)).into(imageView);
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, DynamicPhotoShow.class);
-                    intent.putExtra("index", position);
-                    intent.putStringArrayListExtra("list", (ArrayList<String>) mGood.getGood_Photos());
-                    mContext.startActivity(intent);
-                    //设置切换动画
-                    ((Activity) mContext).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }
-            });
-            return imageView;
-        }
     }
 
     private void saveBid2Bmob(final String goodId, final String bidCoin) {

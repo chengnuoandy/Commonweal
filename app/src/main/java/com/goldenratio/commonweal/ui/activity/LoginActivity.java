@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -484,6 +485,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             user.setUser_WbID(wbuser.id);
             user.setUser_image_max(wbuser.avatar_large);
             user.setUser_image_min(wbuser.profile_image_url);
+            user.setUser_DeviceInfo(BmobInstallation.getCurrentInstallation().getInstallationId());
             user.setUser_image_hd(wbuser.avatar_hd);
             user.setUser_VerifiedReason(wbuser.verified_reason); //认证原因
             user.setUser_Autograph(wbuser.description);
@@ -523,7 +525,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         try {
             user.getUser_WbID();
         } catch (Exception e) {
-           user.setUser_WbID("");
+            user.setUser_WbID("");
         }
         UserDao mUserDao = new UserDao(LoginActivity.this);
         mUserDao.execSQL("insert into User_Profile (objectId,User_Name,User_Password,User_Autograph,User_Avatar,User_Nickname" +

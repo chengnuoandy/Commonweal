@@ -288,6 +288,18 @@
                 android:orientation="vertical">
 
                 <com.goldenratio.commonweal.util.NormalFontTextView
+                    android:id="@+id/tv_my_bid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/my_set_selector"
+                    android:drawableLeft="@drawable/ic_gavel_black_24dp"
+                    android:drawablePadding="@dimen/little_space"
+                    android:drawableRight="@mipmap/news_cate_arr"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/normal_space"
+                    android:text="出价记录" />
+
+                <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_my_order"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

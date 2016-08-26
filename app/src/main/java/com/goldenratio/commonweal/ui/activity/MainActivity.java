@@ -27,8 +27,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobPushManager;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.update.BmobUpdateAgent;
+
+import static cn.bmob.v3.BmobRealTimeData.TAG;
 
 /**
  * Created by Kiuber on 2016/6/6.
@@ -108,6 +112,15 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         mVpContent.setCurrentItem(0);
         mVpContent.addOnPageChangeListener(this);
         mVpContent.setOffscreenPageLimit(4);  //设置是适配器缓存fragment数
+
+
+//        String installationId = mGood.getGood_User().getUser_DeviceInfo();  //在用户表-->User_DeviceInfo
+        Log.d(TAG, "pushMessage: " + "064DF5E88E4D8B6AE41E83214A28DCCB");
+        BmobPushManager bmobPush = new BmobPushManager();
+        BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
+        query.addWhereEqualTo("installationId", "064DF5E88E4D8B6AE41E83214A28DCCB");
+        bmobPush.setQuery(query);
+        bmobPush.pushMessage("消息内容");
     }
 
     @Override

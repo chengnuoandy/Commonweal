@@ -82,7 +82,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                             }
                         }
                         if (list.size() == 0) {
-                            mTvLoading.setText("暂无关于您的订单！");
+                            mTvLoading.setText("暂无关于您的订单！！");
                         } else if (list.size() != 0) {
                             mLvOrder.setVisibility(View.VISIBLE);
                             mTvLoading.setVisibility(View.GONE);
@@ -214,7 +214,6 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
         }
 
         class ViewHolder {
-
             private TextView mTvName;
             private TextView mTvCoin;
 

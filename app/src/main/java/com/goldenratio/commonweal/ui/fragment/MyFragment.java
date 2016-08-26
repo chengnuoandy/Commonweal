@@ -25,8 +25,11 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Bid;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.BidRecordActivity;
+import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.WalletActivity;
@@ -50,6 +53,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -100,6 +104,7 @@ public class MyFragment extends Fragment {
     private TextView mTvFans;
     public static String userWBid;
     private String mUserCoin;
+    private TextView mBidRecord;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -147,7 +152,7 @@ public class MyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intentW = new Intent(getContext(), WalletActivity.class);
-                intentW.putExtra("coin",mUserCoin);
+                intentW.putExtra("coin", mUserCoin);
                 startActivity(intentW);
             }
         });
@@ -166,6 +171,15 @@ public class MyFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent3 = new Intent(getActivity(), AttentionStarActivity.class);
                 startActivity(intent3);
+            }
+        });
+        mBidRecord = (TextView) view.findViewById(R.id.tv_my_bid);
+        mBidRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getContext(), BidRecordActivity.class);
+                intent1.putExtra("flag", 1);
+                startActivity(intent1);
             }
         });
     }

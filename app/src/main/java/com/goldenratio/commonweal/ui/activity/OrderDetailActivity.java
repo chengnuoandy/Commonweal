@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
@@ -52,8 +53,8 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
 
     private Button mBtnPay;
     private TextView mTvName;
-    private MySqlOrder mySqlOrder;
     private Button mBtnExpress;
+    private Good mGood;
     private TextView mTvCoin;
     private String user_coin;
     private MySqlManagerImpl mySqlManager;
@@ -70,9 +71,9 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     }
 
     private void initData() {
-        mySqlOrder = (MySqlOrder) getIntent().getSerializableExtra("orderList");
-        mTvName.setText(mySqlOrder.getOrder_Name());
-        mTvCoin.setText(mySqlOrder.getOrder_Coin());
+        mGood = (Good) getIntent().getSerializableExtra("orderList");
+        mTvName.setText(mGood.getGood_Name());
+        mTvCoin.setText(mGood.getGood_NowCoin());
         mySqlManager = new MySqlManagerImpl(this, this);
         mUserId = ((MyApplication) getApplication()).getObjectID();
     }
@@ -102,11 +103,11 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
 
         progressDialog.dismiss();
 
-        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "物品支付", order_coin, "支付订单", mUserId, mySqlOrder.getObject_Id(), userCoin);
+//        PopEnterPassword popEnterPassword = new PopEnterPassword(this, "物品支付", order_coin, "支付订单", mUserId, mySqlOrder.getObject_Id(), userCoin);
 
         // 显示窗口
-        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
-                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
+//        popEnterPassword.showAtLocation(this.findViewById(R.id.layoutContent),
+//                Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
     }
 
     @Override
@@ -117,7 +118,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     @Override
     public void showSixPwdOnFinishInput(String sixPwd, int event) {
         if (event == 1) {
-            payOrder(mySqlOrder.getObject_Id(), mUserId, mySqlOrder.getOrder_Coin());
+            payOrder(mGood.getObjectId(), mUserId, mGood.getGood_NowCoin());
         } else {
             Toast.makeText(this, "密码错误", Toast.LENGTH_SHORT).show();
         }
@@ -132,12 +133,12 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
         mUserCoin = mStrUserCoin;
         mSixPwd = sixPwd;
-        double payPoorCoin = Double.valueOf(mStrUserCoin) - Double.valueOf(mySqlOrder.getOrder_Coin());
+        double payPoorCoin = Double.valueOf(mStrUserCoin) - Double.valueOf(mGood.getGood_NowCoin());
         double payPoorMoney = (-payPoorCoin) / 10;
         if (payPoorCoin < 0) {
             mySqlManager.pay(false, payPoorMoney + payPoorCoin * 0.05, payPoorMoney * 10 + Double.valueOf(mStrUserCoin), payPoorMoney + "");
         } else {
-            mySqlManager = new MySqlManagerImpl(this, this, "支付物品订单", mySqlOrder.getOrder_Coin() + "", "订单支付");
+            mySqlManager = new MySqlManagerImpl(this, this, "支付物品订单", mGood.getGood_NowCoin() + "", "订单支付");
             mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
         }
         return false;
@@ -148,11 +149,11 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         return false;
     }
 
-    private void payOrder(String order, String user, String userCoin) {
+    private void payOrder(String good, String user, String userCoin) {
         String url = "http://123.206.89.67/WebService1.asmx/PayOrder";
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
-                .add("ObjectId", order)
+                .add("GoodId", good)
                 .add("UseId", user)
                 .add("UserCoin", userCoin)
                 .build();
@@ -194,11 +195,5 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     }
 
     private void pushMessage() {
-        String installationId = "客户端installationId";  //在用户表-->User_DeviceInfo
-        BmobPushManager bmobPush = new BmobPushManager();
-        BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
-        query.addWhereEqualTo("installationId", installationId);
-        bmobPush.setQuery(query);
-        bmobPush.pushMessage("消息内容");
     }
 }

@@ -45,7 +45,6 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     private View mTopView;
     private List<Help_Top> mList = null;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -16,6 +16,12 @@
             android:scaleType="centerCrop"
             android:src="@drawable/iv_unregister_head" />
 
+        <ImageView
+            android:id="@+id/iv_good_avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop" />
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"

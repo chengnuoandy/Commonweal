@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Bid;
 
@@ -26,11 +29,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Kiuber on 2016/8/22.
  */
 
-public class BidRecordActivity extends Activity {
+public class BidRecordActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private List<Bid> list;
     private ListView mLv;
     private TextView mTvLoading;
+    private int flag;//0 GoodDetailActivity 1 MyFragment
 
 
     @Override
@@ -44,9 +48,22 @@ public class BidRecordActivity extends Activity {
     private void initView() {
         mLv = (ListView) findViewById(R.id.lv_bid_record);
         mTvLoading = (TextView) findViewById(R.id.tv_loading);
+        mLv.setOnItemClickListener(this);
     }
 
     private void initData() {
+        Intent intent = getIntent();
+        flag = intent.getIntExtra("flag", -1);
+        if (flag == 0) {
+            queryByGoodId();
+        } else if (flag == 1) {
+            queryByUserId();
+        } else {
+            mTvLoading.setText("加载失败");
+        }
+    }
+
+    private void queryByGoodId() {
         Intent intent = getIntent();
         String goodId = intent.getStringExtra("goodId");
         BmobQuery<Bid> bidBmobQuery = new BmobQuery<>();
@@ -65,6 +82,29 @@ public class BidRecordActivity extends Activity {
                     }
                 } else {
                     Toast.makeText(BidRecordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void queryByUserId() {
+        String mUserId = ((MyApplication) getApplication()).getObjectID();
+        BmobQuery<Bid> bidBmobQuery = new BmobQuery<Bid>();
+        bidBmobQuery.addWhereEqualTo("Bid_User", mUserId);
+        bidBmobQuery.include("Bid_Good");
+        bidBmobQuery.findObjects(new FindListener<Bid>() {
+            @Override
+            public void done(List<Bid> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() != 0) {
+                        mTvLoading.setVisibility(View.GONE);
+                        BidRecordActivity.this.list = list;
+                        setListViewAdapter();
+                    } else if (list.size() == 0) {
+                        mTvLoading.setText("暂无出价记录");
+                    }
+                } else {
+                    mTvLoading.setText(e.getMessage());
                 }
             }
         });
@@ -106,20 +146,42 @@ public class BidRecordActivity extends Activity {
                 private CircleImageView mCivAvatar;
                 private TextView mTvName;
                 private TextView mTvCoin;
+                private ImageView mIvGoodAvatar;
 
                 private void initView(View convertView) {
                     mCivAvatar = (CircleImageView) convertView.findViewById(R.id.civ_avatar);
                     mTvName = (TextView) convertView.findViewById(R.id.tv_name);
                     mTvCoin = (TextView) convertView.findViewById(R.id.tv_coin);
+                    mIvGoodAvatar = (ImageView) convertView.findViewById(R.id.iv_good_avatar);
                 }
 
                 private void initData(int position) {
                     Bid bid = list.get(position);
-                    Glide.with(BidRecordActivity.this).load(bid.getBid_User().getUser_image_hd()).into(mCivAvatar);
-                    mTvName.setText(bid.getBid_User().getUser_Nickname());
                     mTvCoin.setText("出价公益币：" + bid.getBid_Coin());
+                    if (flag == 0) {
+                        Glide.with(BidRecordActivity.this).load(bid.getBid_User().getUser_image_hd()).into(mCivAvatar);
+                        mTvName.setText(bid.getBid_User().getUser_Nickname());
+                    } else if (flag == 1) {
+                        mCivAvatar.setVisibility(View.GONE);
+                        Glide.with(BidRecordActivity.this).load(bid.getBid_Good().getGood_Photos().get(0)).into(mIvGoodAvatar);
+                        mTvName.setText(bid.getBid_Good().getGood_Name());
+                    } else {
+                    }
                 }
             }
         });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (flag == 0) {
+        } else if (flag == 1) {
+            Intent intent = new Intent(BidRecordActivity.this, GoodDetailActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Bmob_Good", list.get(position).getBid_Good());
+            intent.putExtras(bundle);
+            startActivity(intent);
+        } else {
+        }
     }
 }

@@ -12,6 +12,8 @@ import android.widget.ImageView;
 
 import com.goldenratio.commonweal.R;
 
+import cn.bmob.v3.BmobPushManager;
+
 /**
  * Created by wenmingvs on 16/5/2.
  */
@@ -56,6 +58,8 @@ public class PostActivity extends Activity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, GoodActivity.class);
                 startActivity(intent);
+                BmobPushManager bmobPush = new BmobPushManager();
+                bmobPush.pushMessage("p-我买了您的物品-么么哒");
                 finish();
             }
         });

@@ -239,6 +239,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             case R.id.tv_bid_record:
                 Intent intent1 = new Intent(GoodDetailActivity.this, BidRecordActivity.class);
                 intent1.putExtra("goodId", mGood.getObjectId());
+                intent1.putExtra("flag", 0);
                 startActivity(intent1);
                 break;
         }

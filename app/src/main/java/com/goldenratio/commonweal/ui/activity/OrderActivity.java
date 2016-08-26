@@ -1,31 +1,34 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
+import com.goldenratio.commonweal.bean.User_Profile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -39,11 +42,9 @@ import okhttp3.Response;
 public class OrderActivity extends Activity implements AdapterView.OnItemClickListener {
 
     private ListView mLvOrder;
-    private List<MySqlOrder> mySqlOrders = new ArrayList<>();
-    private Context mContext;
-    private LinearLayout mLlItem;
-    private TextView mTvNoOrder;
-
+    private List<Good> mGood;
+    private TextView mTvLoading;
+    private String mUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +55,48 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
     }
 
     private void initView() {
-        mContext = OrderActivity.this;
         mLvOrder = (ListView) findViewById(R.id.lv_order);
-        mTvNoOrder = (TextView) findViewById(R.id.tv_no_order);
+        mTvLoading = (TextView) findViewById(R.id.tv_loading);
         mLvOrder.setOnItemClickListener(this);
     }
 
     private void initData() {
-        queryOrderById();
+//        queryOrderById();
+        mUserId = ((MyApplication) (getApplication())).getObjectID();
+        if (TextUtils.isEmpty(mUserId)) {
+            mTvLoading.setText("请先登录");
+        } else {
+            User_Profile user_profile = new User_Profile();
+            user_profile.setObjectId(mUserId);
+            BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
+            goodBmobQuery.addWhereEqualTo("Good_NowBidUser", mUserId);
+            goodBmobQuery.findObjects(new FindListener<Good>() {
+                @Override
+                public void done(List<Good> list, BmobException e) {
+                    if (list.size() != 0) {
+                        for (int i = 0; i < list.size(); i++) {
+                            Good good = list.get(i);
+                            Log.d("Kiuber_LOG", "done: " + good.getGood_UpDateM() + "-->" + System.currentTimeMillis());
+                            if (good.getGood_UpDateM() > System.currentTimeMillis()) {
+                                list.remove(i);
+                            }
+                        }
+                        if (list.size() == 0) {
+                            mTvLoading.setText("暂无关于您的订单！");
+                        } else if (list.size() != 0) {
+                            mLvOrder.setVisibility(View.VISIBLE);
+                            mTvLoading.setVisibility(View.GONE);
+                            mGood = list;
+                            mLvOrder.setAdapter(new MyOrderAdapter());
+                        } else {
+                            mTvLoading.setText("未知错误，请稍后再试！");
+                        }
+                    } else {
+                        mTvLoading.setText("暂无关于您的订单！");
+                    }
+                }
+            });
+        }
     }
 
     private void queryOrderById() {
@@ -87,6 +122,9 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            if (e1.contains("connect")) {
+                                mTvLoading.setText("连接服务器错误");
+                            }
                             Toast.makeText(OrderActivity.this, e1, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -102,11 +140,11 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                             MySqlOrder mySqlOrder = new MySqlOrder();
                             try {
                                 jsonArray = new JSONArray(result);
-
                                 if (jsonArray.length() == 0) {
+                                    mTvLoading.setText("暂无订单");
                                 } else {
                                     mLvOrder.setVisibility(View.VISIBLE);
-                                    mTvNoOrder.setVisibility(View.GONE);
+                                    mTvLoading.setVisibility(View.GONE);
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                                         mySqlOrder.setOrder_Name(jsonObject.getString("Order_Name"));
@@ -115,16 +153,15 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                                         mySqlOrder.setOrder_Status(jsonObject.getString("Order_Status"));
                                         mySqlOrder.setOrder_PicURL(jsonObject.getString("Order_PicURL"));
                                         mySqlOrder.setOrder_Good(jsonObject.getString("Order_Good"));
-                                        mySqlOrders.add(i, mySqlOrder);
+//                                        mySqlOrders.add(i, mySqlOrder);
                                     }
+
                                     mLvOrder.setAdapter(new MyOrderAdapter());
                                 }
                                 Log.d("Kiuber_LOG", "run: " + result);
                             } catch (JSONException e) {
-                                Log.d("Kiuber_LOG", e.getMessage() + request);
+                                Toast.makeText(OrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                            Log.d("Kiuber_LOG",
-                                    result);
                         }
                     });
                 }
@@ -134,9 +171,9 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(mContext, OrderDetailActivity.class);
+        Intent intent = new Intent(OrderActivity.this, OrderDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("orderList", mySqlOrders.get(position));
+        bundle.putSerializable("orderList", mGood.get(position));
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -147,12 +184,12 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
 
         @Override
         public int getCount() {
-            return mySqlOrders.size();
+            return mGood.size();
         }
 
         @Override
-        public MySqlOrder getItem(int position) {
-            return mySqlOrders.get(position);
+        public Good getItem(int position) {
+            return mGood.get(position);
         }
 
         @Override
@@ -165,7 +202,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
             ViewHolder viewHolder = null;
             if (viewHolder == null) {
                 viewHolder = new ViewHolder();
-                view = View.inflate(mContext, R.layout.item_listview_order, null);
+                view = View.inflate(OrderActivity.this, R.layout.item_listview_order, null);
                 convertView = view;
                 viewHolder.initView(convertView);
                 convertView.setTag(viewHolder);
@@ -187,8 +224,8 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
             }
 
             private void initData(int position) {
-                mTvName.setText(getItem(position).getOrder_Name());
-                mTvCoin.setText(getItem(position).getOrder_Coin());
+                mTvName.setText(getItem(position).getGood_Name());
+                mTvCoin.setText(getItem(position).getGood_NowCoin());
             }
         }
     }

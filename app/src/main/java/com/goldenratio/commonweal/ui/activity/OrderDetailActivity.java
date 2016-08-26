@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.MySqlOrder;
+import com.goldenratio.commonweal.iview.IMySqlManager;
+import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 import com.goldenratio.commonweal.widget.PopEnterPassword;
 
 import org.json.JSONArray;
@@ -31,6 +33,9 @@ import java.io.InputStream;
 
 import c.b.BP;
 import c.b.PListener;
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobPushManager;
+import cn.bmob.v3.BmobQuery;
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -43,7 +48,7 @@ import static cn.bmob.v3.BmobRealTimeData.TAG;
 /**
  * Created by Kiuber on 2016/8/17.
  */
-public class OrderDetailActivity extends Activity implements View.OnClickListener {
+public class OrderDetailActivity extends Activity implements View.OnClickListener, IMySqlManager {
 
     private Button mBtnPay;
     private TextView mTvName;
@@ -51,6 +56,10 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     private Button mBtnExpress;
     private TextView mTvCoin;
     private String user_coin;
+    private MySqlManagerImpl mySqlManager;
+    private String mUserId;
+    private String mUserCoin;
+    private String mSixPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,8 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         mySqlOrder = (MySqlOrder) getIntent().getSerializableExtra("orderList");
         mTvName.setText(mySqlOrder.getOrder_Name());
         mTvCoin.setText(mySqlOrder.getOrder_Coin());
+        mySqlManager = new MySqlManagerImpl(this, this);
+        mUserId = ((MyApplication) getApplication()).getObjectID();
     }
 
     private void initView() {
@@ -78,80 +89,11 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_pay:
-                queryUserCoinByObjectId();
+//                queryUserCoinByObjectId();
+                mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
                 break;
             case R.id.btn_express:
-
                 break;
-        }
-    }
-
-    private void queryUserCoinByObjectId() {
-        final ProgressDialog progressDialog = ProgressDialog.show(this, null, "正在加载", false);
-        String url = "http://123.206.89.67/WebService1.asmx/QueryUserCoinByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
-        if (mStrObjectId != null) {
-            RequestBody body = new FormBody.Builder()
-                    .add("ObjectId", mStrObjectId)
-                    .build();
-
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new okhttp3.Callback() {
-                @Override
-                public void onFailure(Call call, final IOException e) {
-                    final String e1 = e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(OrderDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    final String result = response.body().string();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            JSONArray jsonArray = null;
-                            try {
-                                jsonArray = new JSONArray(result);
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                    user_coin = jsonObject.getString("User_Coin");
-                                }
-                                final double poor = Double.valueOf(mySqlOrder.getOrder_Coin()) - Double.valueOf(user_coin);
-                                if (poor > 0) {
-                                    progressDialog.dismiss();
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailActivity.this);
-                                    builder.setMessage("您的账号不足" + mySqlOrder.getOrder_Coin() + "，是否立即充值？");
-                                    builder.setPositiveButton("去充值", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            pay(false, poor, progressDialog);
-                                        }
-                                    });
-                                    builder.setNegativeButton("取消", null);
-                                    builder.show();
-                                } else {
-                                    Log.d(TAG, "run: " + result);
-                                    //poor1 用户支付完成剩下的公益币
-                                    double poor1 = Double.valueOf(user_coin) - Double.valueOf(mySqlOrder.getOrder_Coin());
-                                    showPayKeyBoard(mySqlOrder.getOrder_Coin(), progressDialog, poor1 + "");
-                                }
-                            } catch (JSONException e) {
-                                Log.d("Kiuber_LOG", e.getMessage() + request);
-                            }
-                        }
-                    });
-                }
-            });
         }
     }
 
@@ -167,77 +109,96 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
                 Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0); // 设置layout在PopupWindow中显示的位置
     }
 
-    private void pay(final boolean alipayOrWechatPay, double price, final ProgressDialog progressDialog) {
+    @Override
+    public void pay(boolean alipayOrWechatPay, double price, double allCoin, String changeCoin) {
 
-        BP.pay("名称", "描述", price, alipayOrWechatPay, new PListener() {
+    }
 
+    @Override
+    public void showSixPwdOnFinishInput(String sixPwd, int event) {
+        if (event == 1) {
+            payOrder(mySqlOrder.getObject_Id(), mUserId, mySqlOrder.getOrder_Coin());
+        } else {
+            Toast.makeText(this, "密码错误", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-            // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
+    @Override
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
+        return false;
+    }
+
+    @Override
+    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+        mUserCoin = mStrUserCoin;
+        mSixPwd = sixPwd;
+        double payPoorCoin = Double.valueOf(mStrUserCoin) - Double.valueOf(mySqlOrder.getOrder_Coin());
+        double payPoorMoney = (-payPoorCoin) / 10;
+        if (payPoorCoin < 0) {
+            mySqlManager.pay(false, payPoorMoney + payPoorCoin * 0.05, payPoorMoney * 10 + Double.valueOf(mStrUserCoin), payPoorMoney + "");
+        } else {
+            mySqlManager = new MySqlManagerImpl(this, this, "支付物品订单", mySqlOrder.getOrder_Coin() + "", "订单支付");
+            mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateUserSixPwdByObjectId(String sixPwd) {
+        return false;
+    }
+
+    private void payOrder(String order, String user, String userCoin) {
+        String url = "http://123.206.89.67/WebService1.asmx/PayOrder";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("ObjectId", order)
+                .add("UseId", user)
+                .add("UserCoin", userCoin)
+                .build();
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new okhttp3.Callback() {
             @Override
-            public void unknow() {
-                Toast.makeText(OrderDetailActivity.this, "支付结果未知,请稍后手动查询", Toast.LENGTH_SHORT)
-                        .show();
-                progressDialog.dismiss();
+            public void onFailure(Call call, final IOException e) {
+                final String e1 = e.getMessage();
+                OrderDetailActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(OrderDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
-            // 支付成功,如果金额较大请手动查询确认
             @Override
-            public void succeed() {
-                Toast.makeText(OrderDetailActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-            }
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                OrderDetailActivity.this.runOnUiThread(new Runnable() {
 
-            // 无论成功与否,返回订单号
-            @Override
-            public void orderId(String orderId) {
-                // 此处应该保存订单号,比如保存进数据库等,以便以后查询
-                progressDialog.dismiss();
-            }
-
-            // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
-            @Override
-            public void fail(int code, String reason) {
-
-                // 当code为-2,意味着用户中断了操作
-                // code为-3意味着没有安装BmobPlugin插件
-                if (code == -3) {
-                    Toast.makeText(
-                            OrderDetailActivity.this,
-                            "监测到你尚未安装支付插件,无法进行支付,请先安装插件(已打包在本地,无流量消耗),安装结束后重新支付",
-                            Toast.LENGTH_SHORT).show();
-                    installBmobPayPlugin("bp.db");
-                } else {
-                    Toast.makeText(OrderDetailActivity.this, "支付中断!" + reason, Toast.LENGTH_SHORT)
-                            .show();
-                }
-                progressDialog.dismiss();
+                    @Override
+                    public void run() {
+                        if (result.equals("success")) {
+                            Toast.makeText(OrderDetailActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                            pushMessage();
+                        } else {
+                            Toast.makeText(OrderDetailActivity.this, "支付失败" + result, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
     }
 
-    void installBmobPayPlugin(String fileName) {
-        try {
-            InputStream is = getAssets().open(fileName);
-            File file = new File(Environment.getExternalStorageDirectory()
-                    + File.separator + fileName + ".apk");
-            if (file.exists())
-                file.delete();
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] temp = new byte[1024];
-            int i = 0;
-            while ((i = is.read(temp)) > 0) {
-                fos.write(temp, 0, i);
-            }
-            fos.close();
-            is.close();
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(Uri.parse("file://" + file),
-                    "application/vnd.android.package-archive");
-            startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void pushMessage() {
+        String installationId = "客户端installationId";  //在用户表-->User_DeviceInfo
+        BmobPushManager bmobPush = new BmobPushManager();
+        BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
+        query.addWhereEqualTo("installationId", installationId);
+        bmobPush.setQuery(query);
+        bmobPush.pushMessage("消息内容");
     }
 }

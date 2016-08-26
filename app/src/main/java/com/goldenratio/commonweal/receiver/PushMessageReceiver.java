@@ -52,7 +52,7 @@ public class PushMessageReceiver extends BroadcastReceiver {
             Log.i("拆分后的推送数据", "onReceive: " + sPushData + sPushData.length);
             PendingIntent pi = PendingIntent.getActivity(context, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             Notification.Builder builder = new Notification.Builder(context);
-            Notification notification = builder.setSmallIcon(R.drawable.icon_personnal_comment)
+            Notification notification = builder.setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle(sPushData[1])
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setContentIntent(pi)

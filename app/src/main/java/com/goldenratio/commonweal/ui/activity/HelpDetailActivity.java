@@ -16,6 +16,8 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.util.ShareUtils;
 
+import cn.bmob.v3.datatype.BmobDate;
+
 /**
  * Created by Kiuber on 2016/6/22.
  */
@@ -121,9 +123,15 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
                 if (mUserId.equals("")) {
                     Toast.makeText(this, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
-                    i.putExtra("help_id", mHelp.getObjectId());
-                    startActivity(i);
+                    long endTime = BmobDate.getTimeStamp(mHelp.getHelp_EndDate().getDate());
+                    long leftTime = (endTime - System.currentTimeMillis()) / (86400000);
+                    if (leftTime > 0) {
+                        Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
+                        i.putExtra("help_id", mHelp.getObjectId());
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(this, "项目已经结束", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             //发起方详情界面

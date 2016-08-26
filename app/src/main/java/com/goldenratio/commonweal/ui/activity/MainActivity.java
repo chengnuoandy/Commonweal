@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.update.BmobUpdateAgent;
 
 /**
@@ -179,15 +180,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
-    /*  String installationId = "客户端installationId";  //在用户表-->User_DeviceInfo
-      BmobPushManager bmobPush = new BmobPushManager(this);
-      BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
-      query.addWhereEqualTo("installationId", installationId);
-      bmobPush.setQuery(query);
-      bmobPush.pushMessage("消息内容");*/
-
 
     @Override
     protected void onDestroy() {

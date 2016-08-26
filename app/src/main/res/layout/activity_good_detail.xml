@@ -123,6 +123,12 @@
                         android:gravity="center" />
 
                     <com.goldenratio.commonweal.util.NormalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/little_space"
+                        android:text="起步价" />
+
+                    <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -152,6 +158,12 @@
                         android:gravity="center" />
 
                     <com.goldenratio.commonweal.util.NormalFontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/little_space"
+                        android:text="当前出价" />
+
+                    <com.goldenratio.commonweal.util.NormalFontTextView
                         android:id="@+id/tv_last_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -167,7 +179,6 @@
                 android:background="@color/stress"
                 android:gravity="center"
                 android:padding="@dimen/normal_space">
-
 
                 <cn.iwgang.countdownview.CountdownView
                     android:id="@+id/cv_endtime"
@@ -365,12 +376,9 @@
         </LinearLayout>
     </LinearLayout>
 
-
     <FrameLayout
         android:id="@+id/id_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
-
-    </FrameLayout>
+        android:visibility="gone" />
 </LinearLayout>

@@ -231,7 +231,6 @@
             android:theme="@style/MyDialogStyle" />
         <activity android:name=".ui.activity.my.LogisticsInformation" />
         <activity android:name=".ui.activity.HelpInitiatorDetailActivity" />
-        android:theme="@style/MyDialogStyle"/>
         <activity android:name=".ui.activity.HelpTopDetailActivity" />
         <activity android:name=".ui.fragment.DycHelpContentActivity" />
         <activity android:name=".ui.activity.StarInfoActivity" />
@@ -260,5 +259,4 @@
         <activity android:name=".ui.activity.PayRecordDetailActivity" />
         <activity android:name=".ui.activity.my.DynamicActivity"/>
     </application>
-
 </manifest>

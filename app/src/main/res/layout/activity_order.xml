@@ -31,17 +31,16 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/tv_no_order"
+        android:id="@+id/tv_loading"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="暂无订单..." />
+        android:text="正在查询订单..." />
 
     <ListView
         android:id="@+id/lv_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
-
 </LinearLayout>

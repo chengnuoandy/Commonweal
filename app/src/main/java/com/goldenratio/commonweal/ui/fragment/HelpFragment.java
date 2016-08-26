@@ -43,7 +43,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     private View view;
     private BGARefreshLayout mBGARefreshLayout;
     private View mTopView;
-    private List<Help_Top> mList;
+    private List<Help_Top> mList = null;
 
 
     @Nullable
@@ -79,7 +79,9 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         mList = (List<Help_Top>) intent.getSerializableExtra("top");
         if (mHelp != null && mList != null) {
             mTopView = View.inflate(getContext(), R.layout.item_help_listview_top, null);
-            initSliderLayout(mTopView, mList);
+            if (mList.size() != 0) {
+                initSliderLayout(mTopView, mList);
+            }
             mLv.setAdapter(new HelpListViewAdapter(getContext(), mHelp));
             hideLinearLayout();
         } else if (mList == null && mHelp != null) {
@@ -120,7 +122,8 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
 
     /**
      * 初始化数据
-     * @param flag  true-加载全部数据  false-加载列表数据
+     *
+     * @param flag true-加载全部数据  false-加载列表数据
      */
     private void queryHelpData(boolean flag) {
         if (flag) {
@@ -148,9 +151,11 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                     if (e == null) {
                         mHelp = list;
                         mTopView = View.inflate(getContext(), R.layout.item_help_listview_top, null);
-                        initSliderLayout(mTopView, mList);
                         mLv.setAdapter(new HelpListViewAdapter(getContext(), mHelp));
                         hideLinearLayout();
+                        if (mList.size() != 0) {
+                            initSliderLayout(mTopView, mList);
+                        }
                     } else {
                         //收起刷新
                         mBGARefreshLayout.endRefreshing();
@@ -193,7 +198,12 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getContext(), HelpDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("HelpList", mHelp.get(position - 1));
+        if (mList == null) {
+            bundle.putSerializable("HelpList", mHelp.get(position));
+        } else if (mList.size() != 0) {
+            bundle.putSerializable("HelpList", mHelp.get(position - 1));
+        }
+        bundle.putSerializable("HelpList", mHelp.get(position));
         intent.putExtras(bundle);
         startActivity(intent);
     }

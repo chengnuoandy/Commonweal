@@ -170,7 +170,7 @@
                     android:drawableTop="@mipmap/ic_global_user_recommend"
                     android:gravity="center"
                     android:padding="@dimen/little_space"
-                    android:text="关注"
+                    android:text="我的关注"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -183,7 +183,7 @@
                     android:drawableTop="@drawable/icon_personnal_collection"
                     android:gravity="center"
                     android:padding="@dimen/little_space"
-                    android:text="粉丝"
+                    android:text="我的粉丝"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -196,7 +196,8 @@
                     android:drawableTop="@drawable/icon_personnal_comment"
                     android:gravity="center"
                     android:padding="@dimen/little_space"
-                    android:text="物品" />
+                    android:text="我的物品"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_my_dynamic"
@@ -208,7 +209,8 @@
                     android:drawableTop="@drawable/icon_personnal_coupon"
                     android:gravity="center"
                     android:padding="@dimen/little_space"
-                    android:text="动态" />
+                    android:text="我的动态"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"

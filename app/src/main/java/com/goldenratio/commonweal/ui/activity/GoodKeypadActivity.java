@@ -107,9 +107,17 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                 /**
                  * 限制捐款输入范围 0 - 100
                  */
-
                 if (s != null && !s.toString().equals("")) {
                     float temp1;
+                    if (s.length() > 1){
+                        String str = String.valueOf(s.charAt(0));
+                        if(s.toString().equals("00")){
+                            mEditText2.setText("0");
+                        }else if (str.equals("0")){
+                            mEditText2.setText(s.subSequence(1,s.length()));
+                        }
+                    }
+
                     if (mEditText1.getText().toString().equals("")) {
                         temp1 = 0;
                     } else

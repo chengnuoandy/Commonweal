@@ -33,6 +33,7 @@
             <com.goldenratio.commonweal.ui.lib.GoodEditText
                 android:id="@+id/release1"
                 android:layout_width="0dp"
+                android:inputType="numberDecimal"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:hint="0.00"/>
@@ -64,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:maxLength="3"
+                android:inputType="numberDecimal"
                 android:hint="0"/>
 
             <TextView

@@ -21,7 +21,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:background="@color/color_FMy_Context"
-                android:padding="@dimen/normal_space">
+                android:paddingLeft="@dimen/normal_space"
+                android:paddingRight="@dimen/normal_space"
+                android:paddingTop="@dimen/normal_space">
 
                 <ImageView
                     android:id="@+id/iv_my_message"
@@ -64,199 +66,146 @@
                     android:textSize="@dimen/text_size_default" />
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/main_bg" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/normal_space">
+                android:orientation="vertical">
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <com.goldenratio.commonweal.util.NormalFontTextView
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="10032"
-                        android:textSize="@dimen/text_size_big" />
-
-                    <com.goldenratio.commonweal.util.NormalFontTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/big_space"
                         android:layout_marginTop="@dimen/little_space"
-                        android:text="爱心值"
-                        android:textSize="@dimen/text_size_default" />
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:background="@color/normal_bg_color" />
 
-                <TextView
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/big_space"
-                    android:background="@color/normal_bg_color" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/little_space"
+                        android:src="@drawable/ic_favorite_border_black_24dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginRight="@dimen/big_space"
+                        android:layout_marginTop="@dimen/little_space"
+                        android:layout_weight="1"
+                        android:background="@color/normal_bg_color" />
+                </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <com.goldenratio.commonweal.util.NormalFontTextView
-                        android:id="@+id/ntv_my_coin"
+
+                    <TextView
+                        android:id="@+id/tv_my_attention"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="10032"
-                        android:textSize="@dimen/text_size_big" />
+                        android:layout_weight="1"
+                        android:background="@drawable/my_set_selector"
+                        android:drawablePadding="@dimen/little_space"
+                        android:drawableTop="@mipmap/ic_global_user_recommend"
+                        android:gravity="center"
+                        android:padding="@dimen/little_space"
+                        android:text="我的关注"
+                        android:textColor="@color/black" />
 
-                    <com.goldenratio.commonweal.util.NormalFontTextView
+                    <TextView
+                        android:id="@+id/tv_my_fans"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/little_space"
-                        android:text="公益币"
-                        android:textSize="@dimen/text_size_default" />
+                        android:layout_weight="1"
+                        android:background="@drawable/my_set_selector"
+                        android:drawablePadding="@dimen/little_space"
+                        android:drawableTop="@drawable/icon_personnal_collection"
+                        android:gravity="center"
+                        android:padding="@dimen/little_space"
+                        android:text="我的粉丝"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_my_good"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_set_selector"
+                        android:drawablePadding="@dimen/little_space"
+                        android:drawableTop="@drawable/icon_personnal_comment"
+                        android:gravity="center"
+                        android:padding="@dimen/little_space"
+                        android:text="我的物品"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_my_dynamic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/my_set_selector"
+                        android:drawablePadding="@dimen/little_space"
+                        android:drawableTop="@drawable/icon_personnal_coupon"
+                        android:gravity="center"
+                        android:padding="@dimen/little_space"
+                        android:text="我的动态"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="@dimen/little_space"
+                        android:drawableTop="@mipmap/ic_global_user_voucher"
+                        android:gravity="center"
+                        android:padding="@dimen/little_space"
+                        android:text="订单"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/main_bg" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="@dimen/little_space"
+                        android:drawableTop="@mipmap/ic_global_user_wallet"
+                        android:gravity="center"
+                        android:padding="@dimen/little_space"
+                        android:text="钱包"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/main_bg" />
+
+                    <TextView
+                        android:id="@+id/tv_share_form"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="@dimen/little_space"
+                        android:drawableTop="@drawable/icon_personnal_comment"
+                        android:gravity="center"
+                        android:padding="@dimen/little_space"
+                        android:text="晒单"
+                        android:textColor="@color/black"
+                        android:visibility="gone" />
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/normal_space"
-                    android:layout_weight="1"
-                    android:background="@color/main_bg" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/little_space"
-                    android:src="@drawable/ic_favorite_border_black_24dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginRight="@dimen/normal_space"
-                    android:layout_weight="1"
-                    android:background="@color/main_bg" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
-
-                <TextView
-                    android:id="@+id/tv_my_attention"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/my_set_selector"
-                    android:drawablePadding="@dimen/little_space"
-                    android:drawableTop="@mipmap/ic_global_user_recommend"
-                    android:gravity="center"
-                    android:padding="@dimen/little_space"
-                    android:text="我的关注"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/tv_my_fans"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/my_set_selector"
-                    android:drawablePadding="@dimen/little_space"
-                    android:drawableTop="@drawable/icon_personnal_collection"
-                    android:gravity="center"
-                    android:padding="@dimen/little_space"
-                    android:text="我的粉丝"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/tv_my_good"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/my_set_selector"
-                    android:drawablePadding="@dimen/little_space"
-                    android:drawableTop="@drawable/icon_personnal_comment"
-                    android:gravity="center"
-                    android:padding="@dimen/little_space"
-                    android:text="我的物品"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/tv_my_dynamic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/my_set_selector"
-                    android:drawablePadding="@dimen/little_space"
-                    android:drawableTop="@drawable/icon_personnal_coupon"
-                    android:gravity="center"
-                    android:padding="@dimen/little_space"
-                    android:text="我的动态"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawablePadding="@dimen/little_space"
-                    android:drawableTop="@mipmap/ic_global_user_voucher"
-                    android:gravity="center"
-                    android:padding="@dimen/little_space"
-                    android:text="订单"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/main_bg" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawablePadding="@dimen/little_space"
-                    android:drawableTop="@mipmap/ic_global_user_wallet"
-                    android:gravity="center"
-                    android:padding="@dimen/little_space"
-                    android:text="钱包"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/main_bg" />
-
-                <TextView
-                    android:id="@+id/tv_share_form"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:drawablePadding="@dimen/little_space"
-                    android:drawableTop="@drawable/icon_personnal_comment"
-                    android:gravity="center"
-                    android:padding="@dimen/little_space"
-                    android:text="晒单"
-                    android:textColor="@color/black"
-                    android:visibility="gone" />
             </LinearLayout>
 
 

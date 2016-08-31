@@ -82,11 +82,8 @@ public class MyFragment extends Fragment {
     RelativeLayout mRlBackground;
     @BindView(R.id.tv_my_attention)
     TextView mTvMyAttention;
-    @BindView(R.id.ntv_my_coin)
-    NormalFontTextView mNtvMyCoin;
 
     private boolean isLogin = false;
-
     private String userSex;
     private String userNickname;//用户昵称
     private String autograph; //个性签名
@@ -116,7 +113,6 @@ public class MyFragment extends Fragment {
         if (isUserTableExist()) {
             getUserData();
             isLogin = true;
-            queryUserCoinByObjectId();
         }
 
         view.findViewById(R.id.tv_my_good).setOnClickListener(new View.OnClickListener() {
@@ -229,60 +225,6 @@ public class MyFragment extends Fragment {
         }
     }
 
-
-    private void queryUserCoinByObjectId() {
-        String rootCatalog = "http://123.206.89.67/WebService1.asmx/";
-        String method = "QueryUserCoinByObjectId";
-        String url = rootCatalog + method;
-        OkHttpClient okHttpClient = new OkHttpClient();
-        if (mUserID != null) {
-            RequestBody body = new FormBody.Builder()
-                    .add("ObjectId", mUserID)
-                    .build();
-
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, final IOException e) {
-                    final String e1 = e.getMessage();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), e1, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    final String result = response.body().string();
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            JSONArray jsonArray;
-                            try {
-                                jsonArray = new JSONArray(result);
-                                Log.i("返回json的长度", "run: " + jsonArray.length());
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                    mUserCoin = jsonObject.getString("User_Coin");
-                                    mNtvMyCoin.setText(mUserCoin);
-                                }
-                            } catch (JSONException e) {
-                                Log.d("Kiuber_LOG", e.getMessage() + request);
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -292,7 +234,6 @@ public class MyFragment extends Fragment {
                     mUserID = data.getStringExtra("objectId");
                     isLogin = true;
                     getUserData();
-                    queryUserCoinByObjectId();
                     ((MyApplication) getActivity().getApplication()).setObjectID(mUserID);
                     Log.i("lxc", "onActivityResult: " + mUserID);
                 }

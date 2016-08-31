@@ -8,6 +8,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 
@@ -22,6 +23,8 @@ public class HelpTopDetailActivity extends Activity {
     ImageView mIvHelpTopBack;
     @BindView(R.id.wv_helptop)
     WebView mWvHelptop;
+    @BindView(R.id.tv_top_title)
+    TextView mTvTopTitle;
 
     private ProgressDialog mPd;
 
@@ -31,6 +34,9 @@ public class HelpTopDetailActivity extends Activity {
         setContentView(R.layout.activity_help_top_detail);
         ButterKnife.bind(this);
 
+        if (getIntent().getBooleanExtra("flag", false)) {
+            mTvTopTitle.setText("活动详情");
+        }
         String helpTopUrl = getIntent().getStringExtra("TopUrl");
 
         mWvHelptop.getSettings().setJavaScriptEnabled(true);    //设置使用够执行JS脚本

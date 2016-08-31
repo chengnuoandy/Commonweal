@@ -134,6 +134,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                     Toast.makeText(mContext, "支付中断!" + reason, Toast.LENGTH_SHORT)
                             .show();
                 }
+                Log.i("Fail", reason + code + "支付失败");
                 closeProgressDialog();
             }
         });
@@ -272,6 +273,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                         closeProgressDialog();
                     }
                 });
+
             }
 
             @Override

@@ -28,7 +28,6 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
-import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 
 import java.util.List;
 import java.util.Timer;
@@ -300,6 +299,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                             isHas = attenList.indexOf(mGoodList.get(position).getGood_User().getObjectId());
                         Intent intent = new Intent(mContext, StarInfoActivity.class);
                         intent.putExtra("ishas", isHas != -1);
+                        intent.putExtra("isv", mGoodList.get(position).getGood_User().isUser_IsV());
                         intent.putExtra("id", mGoodList.get(position).getGood_User().getObjectId());
                         intent.putExtra("nickName", mGoodList.get(position).getGood_User().getUser_Nickname());
                         intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());

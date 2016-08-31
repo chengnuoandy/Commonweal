@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,8 @@ public class StarInfoActivity extends Activity {
     @BindView(R.id.tv_attention)
 
     TextView mTvAttention;
+    @BindView(R.id.iv_star_flag)
+    ImageView mIvStarFlag;
 
     private String userID;
     private String attentionID;
@@ -49,6 +52,8 @@ public class StarInfoActivity extends Activity {
         ButterKnife.bind(this);
 
         isHasAttention = getIntent().getBooleanExtra("ishas", false);
+        if (getIntent().getBooleanExtra("isv", false))
+            mIvStarFlag.setVisibility(View.VISIBLE);
         userID = getIntent().getStringExtra("id");
         String nickName = getIntent().getStringExtra("nickName");
         String avatar = getIntent().getStringExtra("Avatar");

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -69,19 +70,25 @@ public class AttentionStarListAdapter extends BaseAdapter {
                 mInfoList.get(position).getUser_Info());
         Picasso.with(mContext).load(starOrUserInfo.getUser_image_hd()).into(viewHolder.mCivAttentionAvatar);
         viewHolder.mTvAttentionName.setText(starOrUserInfo.getUser_Nickname());
+        if (starOrUserInfo.isUser_IsV())
+            viewHolder.mIvStarFlag.setVisibility(View.VISIBLE);
         return convertView;
     }
 
-    class ViewHolder {
+    static class ViewHolder {
         @BindView(R.id.civ_attention_avatar)
         CircleImageView mCivAttentionAvatar;
         @BindView(R.id.tv_attention_name)
         TextView mTvAttentionName;
         @BindView(R.id.rl_attention)
         RelativeLayout mRlAttention;
+        @BindView(R.id.iv_star_flag)
+        ImageView mIvStarFlag;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
+
 }

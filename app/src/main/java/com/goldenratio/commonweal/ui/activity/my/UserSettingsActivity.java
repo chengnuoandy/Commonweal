@@ -55,6 +55,7 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
@@ -591,7 +592,8 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 // 调用 User_Profile#parse 将JSON串解析成User对象
                 upUser = User.parse(response);
                 if (upUser != null) {
-                    updateDB(upUser);
+                    //判断用户是否已绑定
+                    isBind(upUser);
                 } else {
                     closeProgressDialog();
                     Toast.makeText(UserSettingsActivity.this, response,
@@ -628,6 +630,30 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                     Toast.makeText(UserSettingsActivity.this, "绑定成功！", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UserSettingsActivity.this, "绑定失败！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * 判断是否已经绑定
+     * @param upUser 用户实体
+     */
+    public void isBind(final User upUser) {
+        BmobQuery<User_Profile> query = new BmobQuery<>();
+        query.addWhereEqualTo("User_weiboID",upUser.id);
+        query.findObjects(new FindListener<User_Profile>() {
+            @Override
+            public void done(List<User_Profile> list, BmobException e) {
+                if (e == null){
+                    if (list.size() > 0){
+                        updateDB(upUser);
+                    }else {
+                        closeProgressDialog();
+                        Toast.makeText(UserSettingsActivity.this, "该用户已绑定其他账号！", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(UserSettingsActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -11,7 +11,6 @@ import com.goldenratio.commonweal.bean.Help_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.CommentBase;
 import com.goldenratio.commonweal.iview.IComment;
-import com.goldenratio.commonweal.util.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,22 +100,8 @@ public class HelpCommentActivity extends CommentBase implements IComment {
             @Override
             public void done(List<Help_Comment> list, BmobException e) {
                 if (e == null) {
-                    for (Help_Comment comment : list) {
-                        Comment utils = new Comment();
-                        //                    评论内容
-                        utils.setUserID(comment.getComment_user().getObjectId());
-                        utils.comment = comment.getComment();
-                        //评论用户
-                        utils.UserName = comment.getComment_user().getUser_Nickname();
-                        //评论用户头像地址
-                        utils.icom = comment.getComment_user().getUser_image_hd();
-                        utils.reply = comment.getReply();
-                        //封装到list集合中
-
-                        arrayList.add(utils);
-                        CommentAdatper commentAdatper = new CommentAdatper(mHelp, HelpCommentActivity.this, arrayList);
-                        mListView.setAdapter(commentAdatper);
-                    }
+                    CommentAdatper commentAdatper = new CommentAdatper(mHelp, HelpCommentActivity.this, list);
+                    mListView.setAdapter(commentAdatper);
                     //结束刷新
                     refreshLayout.endRefreshing();
                     mListView.setEmptyView(findViewById(R.id.tv_emty));

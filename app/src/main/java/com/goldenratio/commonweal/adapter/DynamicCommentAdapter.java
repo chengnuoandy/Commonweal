@@ -22,10 +22,8 @@ import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.Dynamic_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
-import com.goldenratio.commonweal.util.Comment;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -40,13 +38,14 @@ import cn.bmob.v3.listener.SaveListener;
 public class DynamicCommentAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList mArrayListOne;
+    private List<Dynamic_Comment> mArrayListOne;
+    private User_Profile mUserProfile;
     private EditText edt_reply;
     private Button btn_reply;
     private String mStrObjectId;
     private Dynamic mDynamic;
 
-    public DynamicCommentAdapter(ArrayList arrayListOne, Context context, Dynamic dynamic) {
+    public DynamicCommentAdapter(List<Dynamic_Comment> arrayListOne, Context context, Dynamic dynamic) {
         mArrayListOne = arrayListOne;
         mContext = context;
         mDynamic = dynamic;
@@ -72,6 +71,7 @@ public class DynamicCommentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
+        mUserProfile = mArrayListOne.get(position).getComment_user();
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_comment_one, null);
@@ -117,29 +117,28 @@ public class DynamicCommentAdapter extends BaseAdapter {
 
         public void initData(int position) {
             pos = position;
-            final Comment utils = (Comment) mArrayListOne.get(position);
-            tv_comment.setText(utils.comment);
-            tv_name.setText(utils.UserName);
-            tv_reply.setText("回复：" + utils.reply);
+//            final Comment utils = (Comment) mArrayListOne.get(position);
+            tv_comment.setText(mArrayListOne.get(position).getComment());
+            tv_name.setText(mUserProfile.getUser_Name());
+            tv_reply.setText("回复：" + mArrayListOne.get(position).getReply());
 
-            if (utils.icom != null) {
-                Picasso.with(mContext).load(utils.icom).into(icom);
+            if (mUserProfile.getUser_image_hd() != null) {
+                Picasso.with(mContext).load(mUserProfile.getUser_image_hd()).into(icom);
+
             }
             icom.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            if (!utils.getUserID().equals(mStrObjectId)) {
-                                                Log.i("55555", "onClick: " + "0.0.00.0执行");
-                                                Intent intent = new Intent(mContext, StarInfoActivity.class);
-                                                intent.putExtra("id", utils.getUserID());
-                                                intent.putExtra("nickName", utils.getUserName());
-                                                intent.putExtra("Avatar", utils.getIcom());
-                                                mContext.startActivity(intent);
-                                            } else
-                                                Toast.makeText(mContext, "哈哈哈哈" + "这里还没写", Toast.LENGTH_SHORT).show();
-
-                                        }
-                                    }
+                    if (!mUserProfile.getObjectId().equals(mStrObjectId)) {
+                        Log.i("55555", "onClick: " + "0.0.00.0执行");
+                        Intent intent = new Intent(mContext, StarInfoActivity.class);
+                        intent.putExtra("id", mUserProfile.getObjectId());
+                        intent.putExtra("nickName", mUserProfile.getUser_Nickname());
+                        intent.putExtra("Avatar", mUserProfile.getUser_image_hd());
+                        mContext.startActivity(intent);
+                    } else Toast.makeText(mContext, "哈哈哈哈" + "这里还没写", Toast.LENGTH_SHORT).show();
+                }
+            }
 
             );
         }
@@ -203,13 +202,13 @@ public class DynamicCommentAdapter extends BaseAdapter {
     //参一  楼层Id   参二 回复内容
     private void up(int id, String ss) {
         int p = id - 1;
-        Comment comment = (Comment) mArrayListOne.get(p);
+//        Comment comment = (Comment) mArrayListOne.get(p);
         User_Profile u_famousP = new User_Profile();
         Dynamic_Comment dynamic_comment = new Dynamic_Comment();
         //获得内容
         dynamic_comment.setComment(ss);
         dynamic_comment.setObjcetid(mDynamic.getObjectId());
-        dynamic_comment.setReply(comment.getUserName());
+        dynamic_comment.setReply(mArrayListOne.get(p).getComment_user().getUser_Nickname());
         u_famousP.setObjectId(mStrObjectId);
         dynamic_comment.setComment_user(u_famousP);
         //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();

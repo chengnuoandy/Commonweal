@@ -12,9 +12,7 @@ import com.goldenratio.commonweal.bean.Dynamic_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.CommentBase;
 import com.goldenratio.commonweal.iview.IComment;
-import com.goldenratio.commonweal.util.Comment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
@@ -32,7 +30,7 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
     private ListView mListView;
     private Dynamic mDynamic;
     private String mStrObjectId;
-    private ArrayList arrayList = new ArrayList();
+//    private ArrayList arrayList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +86,6 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
     @Override
     public void Show(ListView listView, final BGARefreshLayout refreshLayout) {
         mListView = listView;
-        if (arrayList.size() > 0 || arrayList != null)
-            arrayList.clear();
 
 //        //从服务器端获取评论内容
         final String title = mDynamic.getObjectId();
@@ -100,22 +96,10 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
             @Override
             public void done(List<Dynamic_Comment> list, BmobException e) {
                 if (e == null) {
-                    for (Dynamic_Comment comment : list) {
-                        Comment utils = new Comment();
-                        //                    评论内容
-                        utils.setUserID(comment.getComment_user().getObjectId());
-                        utils.comment = comment.getComment();
-                        //评论用户
-                        utils.UserName = comment.getComment_user().getUser_Nickname();
-                        //评论用户头像地址
-                        utils.icom = comment.getComment_user().getUser_image_hd();
-                        utils.reply = comment.getReply();
-                        //封装到list集合中
 
-                        arrayList.add(utils);
-                        DynamicCommentAdapter commentAdatper = new DynamicCommentAdapter(arrayList, MyDynamicCommentActivity.this, mDynamic);
-                        mListView.setAdapter(commentAdatper);
-                    }
+                    DynamicCommentAdapter commentAdatper = new DynamicCommentAdapter(list, MyDynamicCommentActivity.this, mDynamic);
+                    mListView.setAdapter(commentAdatper);
+
                     //结束刷新
                     refreshLayout.endRefreshing();
                     mListView.setEmptyView(findViewById(R.id.tv_emty));

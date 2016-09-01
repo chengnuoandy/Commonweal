@@ -24,10 +24,8 @@ import com.goldenratio.commonweal.bean.Help_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
-import com.goldenratio.commonweal.util.Comment;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -43,7 +41,9 @@ import cn.bmob.v3.listener.SaveListener;
 public class CommentAdatper extends BaseAdapter {
     private static final String TAG = "lxc";
     private Context mContext;
-    private ArrayList mArrayListOne;
+//    private ArrayList mArrayListOne;
+    private List<Help_Comment> mList;
+    private User_Profile mUserProfile;
     private EditText edt_reply;
     private Button btn_reply;
     private String mStrObjectId;
@@ -51,23 +51,23 @@ public class CommentAdatper extends BaseAdapter {
 
     private int post;
 
-    public CommentAdatper(Help help, Context context, ArrayList arrayList) {
+    public CommentAdatper(Help help, Context context, List<Help_Comment> arrayList) {
         this.mContext = context;
-        this.mArrayListOne = arrayList;
+//        this.mArrayListOne = arrayList;
         MyApplication myApplication = (MyApplication) ((Activity) context).getApplication();
         mStrObjectId = myApplication.getObjectID();
         this.mHelp = help;
-
+        mList = arrayList;
     }
 
     @Override
     public int getCount() {
-        return mArrayListOne.size();
+        return mList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mArrayListOne.get(position);
+        return mList.get(position);
     }
 
     @Override
@@ -79,6 +79,7 @@ public class CommentAdatper extends BaseAdapter {
     public View getView(final int position, final View convertView, ViewGroup parent) {
         post = position;
         View view = null;
+        mUserProfile = mList.get(position).getComment_user();
         if (convertView != null) {
             view = convertView;
         } else {
@@ -88,23 +89,23 @@ public class CommentAdatper extends BaseAdapter {
         TextView tv_comment = (TextView) view.findViewById(R.id.tv_user_comment);
         TextView tv_name = (TextView) view.findViewById(R.id.tv_user_name);
         TextView tv_reply = (TextView) view.findViewById(R.id.tv_reply);
-        final Comment utils = (Comment) mArrayListOne.get(position);
-        tv_comment.setText(utils.comment);
-        tv_name.setText(utils.UserName);
-        tv_reply.setText("回复：" + utils.reply);
-        Picasso.with(mContext).load(utils.icom).into(icom);
+
+//        final Comment utils = (Comment) mArrayListOne.get(position);
+        tv_comment.setText(mList.get(position).getComment());
+        tv_name.setText(mUserProfile.getUser_Name());
+        tv_reply.setText("回复：" + mList.get(position).getReply());
+        Picasso.with(mContext).load(mUserProfile.getUser_image_hd()).into(icom);
         icom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!utils.getUserID().equals(mStrObjectId)) {
+                if (!mUserProfile.getObjectId().equals(mStrObjectId)) {
                     Log.i("55555", "onClick: " + "0.0.00.0执行");
                     Intent intent = new Intent(mContext, StarInfoActivity.class);
-                    intent.putExtra("id", utils.getUserID());
-                    intent.putExtra("nickName", utils.getUserName());
-                    intent.putExtra("Avatar", utils.getIcom());
+                    intent.putExtra("id", mUserProfile.getObjectId());
+                    intent.putExtra("nickName", mUserProfile.getUser_Nickname());
+                    intent.putExtra("Avatar", mUserProfile.getUser_image_hd());
                     mContext.startActivity(intent);
                 } else Toast.makeText(mContext, "哈哈哈哈" + "这里还没写", Toast.LENGTH_SHORT).show();
-
             }
         });
         //回复的点击事件
@@ -183,13 +184,12 @@ public class CommentAdatper extends BaseAdapter {
     //参一  楼层Id   参二 回复内容
     private void up(int id, String ss) {
         int p = id - 1;
-        Comment comment = (Comment) mArrayListOne.get(p);
         User_Profile u_famousP = new User_Profile();
         Help_Comment help_comment = new Help_Comment();
         //获得内容
         help_comment.setComment(ss);
         help_comment.setObjcetid(mHelp.getObjectId());
-        help_comment.setReply(comment.getUserName());
+        help_comment.setReply(mList.get(p).getComment_user().getUser_Nickname());
         u_famousP.setObjectId(mStrObjectId);
         help_comment.setComment_user(u_famousP);
         //   Toast.makeText(getApplicationContext(),""+help_comment.getComment_user(),Toast.LENGTH_SHORT).show();

@@ -12,9 +12,7 @@ import com.goldenratio.commonweal.bean.Good_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.CommentBase;
 import com.goldenratio.commonweal.iview.IComment;
-import com.goldenratio.commonweal.util.Comment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
@@ -31,7 +29,7 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
     private ListView mListView;
     private Good mGood;
     private String mStrObjectId;
-    private ArrayList arrayList = new ArrayList();
+//    private ArrayList arrayList = new ArrayList();
 
 
     @Override
@@ -99,8 +97,6 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
     @Override
     public void Show(ListView listView, final BGARefreshLayout refreshLayout) {
         mListView = listView;
-        if (arrayList.size() > 0 || arrayList != null)
-            arrayList.clear();
         //从服务器端获取评论内容
         final String title = mGood.getObjectId();
         BmobQuery<Good_Comment> bmobQuery = new BmobQuery<>();
@@ -110,21 +106,8 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
             @Override
             public void done(List<Good_Comment> list, BmobException e) {
                 if (e == null) {
-                    for (Good_Comment comment : list) {
-                        Comment utils = new Comment();
-                        //                    评论内容
-                        utils.setUserID(comment.getComment_user().getObjectId());
-                        utils.comment = comment.getComment();
-                        //评论用户
-                        utils.UserName = comment.getComment_user().getUser_Nickname();
-                        //评论用户头像地址
-                        utils.icom = comment.getComment_user().getUser_image_hd();
-                        utils.reply = comment.getReply();
-                        //封装到list集合中
-                        arrayList.add(utils);
-                        GoodCommentAdapter commentAdatper = new GoodCommentAdapter(mGood, GoodDetailCommentActivity.this, arrayList);
-                        mListView.setAdapter(commentAdatper);
-                    }
+                    GoodCommentAdapter commentAdatper = new GoodCommentAdapter(mGood, GoodDetailCommentActivity.this, list);
+                    mListView.setAdapter(commentAdatper);
                     //结束刷新
                     refreshLayout.endRefreshing();
                     mListView.setEmptyView(findViewById(R.id.tv_emty));

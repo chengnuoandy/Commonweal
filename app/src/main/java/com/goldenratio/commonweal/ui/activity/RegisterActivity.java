@@ -419,8 +419,6 @@ public class RegisterActivity extends Activity {
         AlertDialog.Builder builder = null;
 
         builder = new AlertDialog.Builder(this);
-        builder.setTitle("昵称");
-
         /**
          * 设置内容区域为自定义View
          */

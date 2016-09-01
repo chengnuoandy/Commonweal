@@ -36,7 +36,7 @@ public class StarInfoActivity extends Activity {
     @BindView(R.id.tv_attention)
 
     TextView mTvAttention;
-    @BindView(R.id.iv_star_flag)
+    @BindView(R.id.iv_starinfo_flag)
     ImageView mIvStarFlag;
 
     private String userID;

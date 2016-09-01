@@ -29,7 +29,7 @@
                 android:src="@drawable/iv_unregister_head"/>
 
             <ImageView
-                android:id="@+id/iv_star_flag"
+                android:id="@+id/iv_starinfo_flag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/civ_star_avatar"

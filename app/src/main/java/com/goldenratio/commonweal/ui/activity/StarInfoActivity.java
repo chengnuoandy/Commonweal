@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +35,11 @@ public class StarInfoActivity extends Activity {
     @BindView(R.id.tv_star_name)
     TextView mTvStarName;
     @BindView(R.id.tv_attention)
-
     TextView mTvAttention;
     @BindView(R.id.iv_starinfo_flag)
     ImageView mIvStarFlag;
+    @BindView(R.id.ll_attention)
+    LinearLayout mLlAttention;
 
     private String userID;
     private String attentionID;
@@ -62,13 +64,13 @@ public class StarInfoActivity extends Activity {
         Picasso.with(this).load(avatar).into(mCivStarAvatar);
     }
 
-    @OnClick({R.id.civ_star_avatar, R.id.tv_attention})
+    @OnClick({R.id.civ_star_avatar, R.id.ll_attention})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.civ_star_avatar:
                 break;
-            case R.id.tv_attention:
-                mTvAttention.setClickable(false);
+            case R.id.ll_attention:
+                mLlAttention.setClickable(false);
                 if (isHasAttention) {
                     removeDataToBmob();
                 } else
@@ -171,4 +173,5 @@ public class StarInfoActivity extends Activity {
             mPd.show();
         }
     }
+
 }

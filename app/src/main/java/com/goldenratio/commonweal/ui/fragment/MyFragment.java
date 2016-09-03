@@ -40,6 +40,7 @@ import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.goldenratio.commonweal.util.BitmapUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.NormalFontTextView;
 import com.squareup.picasso.Picasso;
 

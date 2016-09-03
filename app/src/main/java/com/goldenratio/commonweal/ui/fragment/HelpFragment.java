@@ -24,6 +24,7 @@ import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.activity.HelpDetailActivity;
 import com.goldenratio.commonweal.ui.activity.HelpTopDetailActivity;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -51,6 +52,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         view = inflater.inflate(R.layout.fragment_help, null);
         initView();
         initData();
+        new ImmersiveUtil(getActivity(), R.color.colorPrimary);
         return view;
     }
 

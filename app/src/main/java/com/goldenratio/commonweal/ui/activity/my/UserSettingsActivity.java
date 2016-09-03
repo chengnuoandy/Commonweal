@@ -222,6 +222,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 break;
             case R.id.rl_set_weibo:
                 if (TextUtils.isEmpty(wbID)){
+                    startActivity(new Intent(UserSettingsActivity.this,AuthActivity.class));
                     wbAuthorize();
                 }else {
                     Toast.makeText(UserSettingsActivity.this, "你已经绑定了！", Toast.LENGTH_SHORT).show();

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layoutContent"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:id="@+id/layoutContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back"/>
+            android:src="@mipmap/ic_back" />
 
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:text="个人信息"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
+            android:textSize="@dimen/title_text_size" />
 
     </RelativeLayout>
 
@@ -39,7 +39,7 @@
         android:gravity="center"
         android:text="常规设置"
         android:textColor="@color/colorAccent"
-        android:textSize="13sp"/>
+        android:textSize="13sp" />
 
     <RelativeLayout
         android:id="@+id/rl_set_avatar"
@@ -56,7 +56,7 @@
             android:drawableRight="@mipmap/news_cate_arr"
             android:text="头像"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_set_avatar"
@@ -65,14 +65,14 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:src="@drawable/iv_unregister_head"
-            android:tag="1"/>
+            android:tag="1" />
 
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <RelativeLayout
         android:id="@+id/rl_set_userName"
@@ -88,7 +88,7 @@
             android:gravity="left"
             android:text="用户名"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_user_name"
@@ -96,14 +96,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:text="只能设置一次"/>
+            android:text="只能设置一次" />
 
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <RelativeLayout
         android:id="@+id/rl_set_userNickName"
@@ -119,7 +119,7 @@
             android:gravity="left"
             android:text="昵称"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_user_nickname"
@@ -127,13 +127,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:text="哈哈"/>
+            android:text="哈哈" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <RelativeLayout
         android:id="@+id/rl_set_userSex"
@@ -149,7 +149,7 @@
             android:gravity="left"
             android:text="性别"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_user_sex"
@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:text="女"/>
+            android:text="女" />
 
 
     </RelativeLayout>
@@ -165,7 +165,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <RelativeLayout
         android:id="@+id/rl_set_autograph"
@@ -181,7 +181,7 @@
             android:gravity="left"
             android:text="个性签名"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_user_autograph"
@@ -196,13 +196,13 @@
             android:gravity="right"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:text="人一生要去做有意义的事，我认为我找到了，那就是做公益。"/>
+            android:text="人一生要去做有意义的事，我认为我找到了，那就是做公益。" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <RelativeLayout
         android:id="@+id/rl_set_weibo"
@@ -216,16 +216,16 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/news_cate_arr"
             android:gravity="left"
-            android:text="绑定微博"
+            android:text="名人认证"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_setweibo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp" />
 
 
     </RelativeLayout>
@@ -237,12 +237,12 @@
         android:gravity="center"
         android:text="安全设置"
         android:textColor="@color/colorAccent"
-        android:textSize="13sp"/>
+        android:textSize="13sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <TextView
         android:id="@+id/alter_login_pwd"
@@ -254,12 +254,12 @@
         android:padding="@dimen/normal_space"
         android:text="修改登陆密码"
         android:textColor="@color/black"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <TextView
         android:id="@+id/alter_pay_pwd"
@@ -271,12 +271,12 @@
         android:padding="@dimen/normal_space"
         android:text="修改支付密码"
         android:textColor="@color/black"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg"/>
+        android:background="@color/main_bg" />
 
     <RelativeLayout
         android:id="@+id/rl_set_address"
@@ -293,7 +293,7 @@
             android:gravity="left"
             android:text="收货地址"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
     </RelativeLayout>
 </LinearLayout>

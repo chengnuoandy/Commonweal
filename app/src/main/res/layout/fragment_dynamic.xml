@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal"
         android:padding="@dimen/normal_space">
 
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="动态"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 

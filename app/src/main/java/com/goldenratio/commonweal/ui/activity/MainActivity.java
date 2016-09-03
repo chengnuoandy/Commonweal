@@ -1,12 +1,16 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -20,6 +24,7 @@ import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.goldenratio.commonweal.util.SystemBarTintManagerUtil;
 
 import java.util.ArrayList;
 import java.util.List;

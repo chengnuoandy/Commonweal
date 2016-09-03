@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 

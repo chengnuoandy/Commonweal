@@ -134,6 +134,7 @@ public class DynamicCommentAdapter extends BaseAdapter {
                                                 Log.i("55555", "onClick: " + "0.0.00.0执行");
                                                 Intent intent = new Intent(mContext, StarInfoActivity.class);
                                                 intent.putExtra("id", mUserProfile.getObjectId());
+                                                intent.putExtra("isv",mUserProfile.isUser_IsV());
                                                 intent.putExtra("nickName", mUserProfile.getUser_Nickname());
                                                 intent.putExtra("Avatar", mUserProfile.getUser_image_hd());
                                                 mContext.startActivity(intent);

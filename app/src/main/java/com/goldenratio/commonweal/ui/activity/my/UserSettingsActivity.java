@@ -473,11 +473,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
             USERROW = "User_Nickname";
             X = 1;
         } else {
-            ETUSER.setMaxLines(3);
             dialogTitle = "修改签名";
             ETUSER.setHint("请输入个性签名");
-            ETUSER.setFilters(new InputFilter[]{new InputFilter.LengthFilter(26)});
             ETUSER.setMaxLines(3);
+            ETUSER.setFilters(new InputFilter[]{new InputFilter.LengthFilter(40)});
             ETUSER.setText(mTvUserAutograph.getText());
             USERROW = "User_Autograph";
             X = 2;

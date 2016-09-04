@@ -233,7 +233,8 @@
         <activity android:name=".ui.activity.HelpInitiatorDetailActivity" />
         <activity android:name=".ui.activity.HelpTopDetailActivity" />
         <activity android:name=".ui.fragment.DycHelpContentActivity" />
-        <activity android:name=".ui.activity.StarInfoActivity" />
+        <activity android:name=".ui.activity.StarInfoActivity"
+            android:theme="@style/attention_theme"/>
         <activity android:name=".ui.activity.my.UserFeedbackActivity" />
         <activity android:name=".ui.activity.my.AttentionStarActivity" />
         <activity android:name=".ui.activity.OrderActivity" />
@@ -242,7 +243,7 @@
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+=
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

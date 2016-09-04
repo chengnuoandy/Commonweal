@@ -64,14 +64,19 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="attention_theme" parent="android:Theme.Dialog">
+        <item name="android:windowBackground">@drawable/bg_attention</item>
+        <item name="android:windowAnimationStyle">@style/AnimBottom</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="my_dialog">
         <item name="android:windowNoTitle">true</item>

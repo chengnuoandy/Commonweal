@@ -302,6 +302,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         Intent intent = new Intent(mContext, StarInfoActivity.class);
                         intent.putExtra("ishas", isHas != -1);
                         intent.putExtra("id", mGoodList.get(position).getGood_User().getObjectId());
+                        intent.putExtra("autograph",mGoodList.get(position).getGood_User().getUser_Autograph());
                         intent.putExtra("nickName", mGoodList.get(position).getGood_User().getUser_Nickname());
                         intent.putExtra("isv", mGoodList.get(position).getGood_User().isUser_IsV());
                         intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());

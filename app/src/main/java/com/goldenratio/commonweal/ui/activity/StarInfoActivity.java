@@ -7,7 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
@@ -40,6 +41,8 @@ public class StarInfoActivity extends Activity {
     ImageView mIvStarFlag;
     @BindView(R.id.ll_attention)
     LinearLayout mLlAttention;
+    @BindView(R.id.tv_info_autograph)
+    TextView mTvInfoAutograph;
 
     private String userID;
     private String attentionID;
@@ -61,6 +64,7 @@ public class StarInfoActivity extends Activity {
         String avatar = getIntent().getStringExtra("Avatar");
         getData();
         mTvStarName.setText(nickName);
+        mTvInfoAutograph.setText(getIntent().getStringExtra("autograph"));
         Picasso.with(this).load(avatar).into(mCivStarAvatar);
     }
 
@@ -90,21 +94,25 @@ public class StarInfoActivity extends Activity {
         query.addQueryKeys("U_ID");
         query.findObjects(new FindListener<U_Attention>() {
 
-            @Override
-            public void done(List<U_Attention> object, BmobException e) {
-                if (e == null && object.size() >= 1) {
-                    isHasAttention = true;
-                    attentionID = object.get(0).getObjectId();
-                    mTvAttention.setText("已关注");
-                    Log.i("bmob", "查询成功：共" + object + object.size() + "条数据。");
-                } else {
+                              @Override
+                              public void done(List<U_Attention> object, BmobException e) {
+                                  if (e == null) {
+                                      if (object.size() >= 1) {
+                                          isHasAttention = true;
+                                          attentionID = object.get(0).getObjectId();
+                                          mTvAttention.setText("已关注");
+                                          Log.i("bmob", "查询成功：共" + object + object.size() + "条数据。");
+                                      }
+                                  } else {
 //                    Log.i("bmob", "失败：" + e.getMessage());
-                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
-                }
-                closeProgressDialog();
-            }
+                                      ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                                  }
+                                  closeProgressDialog();
+                              }
 
-        });
+                          }
+
+        );
     }
 
 
@@ -132,7 +140,7 @@ public class StarInfoActivity extends Activity {
 //                    Toast.makeText(StarInfoActivity.this, "关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 closeProgressDialog();
-                mTvAttention.setClickable(true);
+                mLlAttention.setClickable(true);
             }
         });
     }
@@ -154,7 +162,7 @@ public class StarInfoActivity extends Activity {
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 closeProgressDialog();
-                mTvAttention.setClickable(true);
+                mLlAttention.setClickable(true);
             }
         });
     }

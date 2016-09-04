@@ -8,15 +8,31 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Kiuber on 2016/8/23.
@@ -38,9 +54,7 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
         initListtener();
 
         mUserId = ((MyApplication) getApplication()).getObjectID();
-        mUserCoin = getIntent().getStringExtra("coin");
-        mTvCoin.setText(mUserCoin);
-        // queryUserCoinByObjectId();
+        queryUserCoinByObjectId();
     }
 
     private void initView() {
@@ -116,7 +130,7 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
 
     }
 
-   /* private void queryUserCoinByObjectId() {
+    private void queryUserCoinByObjectId() {
         showProgressDialog();
         String rootCatalog = "http://123.206.89.67/WebService1.asmx/";
         String method = "QueryUserCoinByObjectId";
@@ -159,6 +173,7 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                                     mUserCoin = jsonObject.getString("User_Coin");
+                                    mTvCoin.setText(mUserCoin);
                                 }
                             } catch (JSONException e) {
                                 Log.d("Kiuber_LOG", e.getMessage() + request);
@@ -169,7 +184,7 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
                 }
             });
         }
-    }*/
+    }
 
 
     private void closeProgressDialog() {

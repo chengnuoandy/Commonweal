@@ -24,6 +24,7 @@ import com.goldenratio.commonweal.bean.Good_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -159,6 +160,8 @@ public class GoodCommentAdapter extends BaseAdapter {
                                     up(s, edt_reply.getText().toString());
                                     edt_reply.setText("");
                                     customDialog.dismiss();
+                                }      else {
+                                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                                 }
                             }
                         });
@@ -212,7 +215,8 @@ public class GoodCommentAdapter extends BaseAdapter {
                 if (e == null) {
 
                 } else {
-                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+//                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                 }
             }
         });

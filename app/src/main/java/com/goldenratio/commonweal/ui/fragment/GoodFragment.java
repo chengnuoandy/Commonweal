@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
@@ -91,7 +92,7 @@ public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefres
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
                     mLlNoNet.setVisibility(View.VISIBLE);
-
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
 
@@ -135,7 +136,8 @@ public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefres
                     if (t > (w + 180000) || t < (w - 180000))
                         Toast.makeText(getContext(), "检测到您的时钟与网络时间不符，可能会影响您的购买！", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.i("lxc", "获取服务器时间失败:" + e.getMessage() + e.getErrorCode());
+//                    Log.i("lxc", "获取服务器时间失败:" + e.getMessage() + e.getErrorCode());
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -215,7 +217,8 @@ public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefres
                 } else {
                     // 加载完毕后在UI线程结束加载更多
                     mBGARefreshLayout.endLoadingMore();
-                    Toast.makeText(getContext(), "刷新失败！" + e, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "刷新失败！" + e, Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
         });

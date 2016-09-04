@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.lljjcoder.citypickerview.widget.CityPickerView;
 
 import java.util.ArrayList;
@@ -150,7 +151,8 @@ public class EditAddressActivity extends Activity {
                     closeProgressDialog();
                     Log.i("why", e.getMessage());
                     address = tempAddress;
-                    Toast.makeText(EditAddressActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(EditAddressActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 

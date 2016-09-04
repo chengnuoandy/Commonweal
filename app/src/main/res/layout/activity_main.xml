@@ -64,7 +64,7 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/fl_post"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -73,11 +73,13 @@
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/rect_orgin_auto"
+                android:scaleType="centerCrop"
                 android:scaleX="0.8"
                 android:scaleY="0.8"
                 android:src="@drawable/ic_add_black_24dp" />
 
         </RelativeLayout>
+
         <RadioButton
             android:id="@+id/rb_dynamic"
             android:layout_width="0dp"

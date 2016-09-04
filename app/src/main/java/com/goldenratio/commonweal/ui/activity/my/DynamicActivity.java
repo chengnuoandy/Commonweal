@@ -11,6 +11,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyDynamicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -77,7 +78,8 @@ public class DynamicActivity extends Activity implements BGARefreshLayout.BGARef
                 } else {
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
-                    Toast.makeText(DynamicActivity.this, "未知错误" + e, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DynamicActivity.this, "未知错误" + e, Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -154,7 +156,8 @@ public class DynamicActivity extends Activity implements BGARefreshLayout.BGARef
                     // 加载完毕后在UI线程结束加载更多
                     mBGARefreshLayout.endLoadingMore();
                 } else {
-                    Toast.makeText(DynamicActivity.this, "刷新失败！" + e, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DynamicActivity.this, "刷新失败！" + e, Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

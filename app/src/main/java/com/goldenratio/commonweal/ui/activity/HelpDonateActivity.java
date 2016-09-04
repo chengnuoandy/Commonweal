@@ -19,6 +19,7 @@ import com.goldenratio.commonweal.bean.Donate_Info;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -103,6 +104,8 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
                         isHasDonate = true;
                         Log.i("lxt", "done: " + DonateInfoID + "00000" + DonateCoin);
                     }
+                }        else {
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -117,7 +120,8 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
                 if (e == null) {
                     Toast.makeText(HelpDonateActivity.this, "更新捐赠记录成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(HelpDonateActivity.this, "更新捐赠记录失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(HelpDonateActivity.this, "更新捐赠记录失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -140,7 +144,8 @@ public class HelpDonateActivity extends Activity implements IMySqlManager {
                     isHasDonate = true;
                     Toast.makeText(HelpDonateActivity.this, "捐赠记录保存成功", Toast.LENGTH_SHORT).show();
                 } else
-                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存失败", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(HelpDonateActivity.this, "捐赠记录保存失败", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
             }
         });
     }

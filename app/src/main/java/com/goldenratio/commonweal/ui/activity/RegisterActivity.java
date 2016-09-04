@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
@@ -482,7 +483,8 @@ public class RegisterActivity extends Activity {
                 } else {
                     mBtnRegister.setClickable(true);
                     closeProgressDialog();
-                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 
@@ -503,8 +505,8 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(RegisterActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
                     returnUInfoToMyFra();
                 } else {
-                    Toast.makeText(RegisterActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-
+//                    Toast.makeText(RegisterActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -573,8 +575,9 @@ public class RegisterActivity extends Activity {
                     }
                 } else {
                     closeProgressDialog();
-                    Log.d("query", "查询失败");
-                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Log.d("query", "查询失败");
+//                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 
@@ -610,7 +613,8 @@ public class RegisterActivity extends Activity {
                     }
                     Log.d("data", data);
                 } else {
-                    Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

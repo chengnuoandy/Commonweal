@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Bid;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class BidRecordActivity extends Activity implements AdapterView.OnItemCli
                         setListViewAdapter();
                     }
                 } else {
-                    Toast.makeText(BidRecordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -105,6 +106,7 @@ public class BidRecordActivity extends Activity implements AdapterView.OnItemCli
                     }
                 } else {
                     mTvLoading.setText(e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

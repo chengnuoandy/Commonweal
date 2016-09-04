@@ -20,6 +20,7 @@ import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
 import com.goldenratio.commonweal.ui.activity.MyDynamicCommentActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
@@ -169,7 +170,8 @@ public class MyDynamicAdapter extends BaseAdapter {
                                         mList.remove(pos);
                                         notifyDataSetChanged();
                                     } else {
-                                        Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+                                        ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                                     }
                                 }
                             });

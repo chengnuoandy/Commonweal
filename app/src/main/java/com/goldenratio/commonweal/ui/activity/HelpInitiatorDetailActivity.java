@@ -17,6 +17,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.HelpInitiatorListAdapter;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Initiator;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -78,7 +79,8 @@ public class HelpInitiatorDetailActivity extends Activity implements AdapterView
                     //解决冲突问题
                     setListViewHeightBasedOnChildren(mLvHelplist);
                 } else {
-                    Toast.makeText(HelpInitiatorDetailActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(HelpInitiatorDetailActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

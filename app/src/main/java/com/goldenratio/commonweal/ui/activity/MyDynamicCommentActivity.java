@@ -12,6 +12,7 @@ import com.goldenratio.commonweal.bean.Dynamic_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.CommentBase;
 import com.goldenratio.commonweal.iview.IComment;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -55,8 +56,9 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
                 if (e == null) {
                     Toast.makeText(MyDynamicCommentActivity.this, "发送成功！", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(MyDynamicCommentActivity.this, "发送失败！", Toast.LENGTH_SHORT).show();
-                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+//                    Toast.makeText(MyDynamicCommentActivity.this, "发送失败！", Toast.LENGTH_SHORT).show();
+//                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -77,7 +79,8 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
                         up(str);
                     }
                 } else {
-                    Toast.makeText(MyDynamicCommentActivity.this, "发送失败！", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MyDynamicCommentActivity.this, "发送失败！", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -106,7 +109,8 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
                 } else {
                     //结束刷新
                     refreshLayout.endRefreshing();
-                    Log.d("错误", "done: " + e);
+//                    Log.d("错误", "done: " + e);
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

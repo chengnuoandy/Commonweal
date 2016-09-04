@@ -24,6 +24,7 @@ import com.goldenratio.commonweal.bean.Help_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -154,6 +155,8 @@ public class CommentAdatper extends BaseAdapter {
                                         edt_reply.setText("");
                                         customDialog.dismiss();
                                     }
+                                }    else {
+                                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                                 }
                             }
                         });
@@ -199,7 +202,8 @@ public class CommentAdatper extends BaseAdapter {
                 if (e == null) {
 
                 } else {
-                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+//                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                 }
             }
         });

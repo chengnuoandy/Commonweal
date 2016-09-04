@@ -257,6 +257,7 @@
         <activity android:name=".ui.activity.BidRecordActivity" />
         <activity android:name=".ui.activity.DonateInfoActivity" />
         <activity android:name=".ui.activity.PayRecordDetailActivity" />
-        <activity android:name=".ui.activity.my.DynamicActivity"/>
+        <activity android:name=".ui.activity.my.DynamicActivity" />
+        <activity android:name=".ui.activity.my.VerifyActivity" />
     </application>
 </manifest>

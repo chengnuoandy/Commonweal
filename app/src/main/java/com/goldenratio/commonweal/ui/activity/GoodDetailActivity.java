@@ -30,6 +30,7 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -307,7 +308,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                         getBmobServerTime(list.get(0).getCreatedAt());
                     }
                 } else {
-                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -340,7 +342,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                         });
                     }
                 } else {
-                    Log.d("Kiuber_LOG", "fail: " + e.getMessage());
+//                    Log.d("Kiuber_LOG", "fail: " + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     changeTextViewVisibitity(3);
                 }
             }
@@ -380,8 +383,9 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                         Toast.makeText(mContext, "未知状态", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.d("Kiuber_LOG", "done: " + mUserId + "~" + mGood.getObjectId());
+//                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Log.d("Kiuber_LOG", "done: " + mUserId + "~" + mGood.getObjectId());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -403,7 +407,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     mTvDeposit.setVisibility(View.GONE);
                     mTvBid.setVisibility(View.VISIBLE);
                 } else {
-                    Toast.makeText(mContext, "保证金支付失败", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "保证金支付失败", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -567,7 +572,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                 if (e == null) {
                     updateGood2Bmob(goodId, objectId);
                 } else {
-                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+//                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -598,7 +604,8 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
                     mTvLastTime.setText(date);
                     mTvLastTime.setVisibility(View.VISIBLE);
                 } else {
-                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+//                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

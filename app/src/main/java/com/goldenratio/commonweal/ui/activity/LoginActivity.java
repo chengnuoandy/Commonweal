@@ -24,6 +24,7 @@ import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -228,7 +229,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     } else {
                         //查询失败
                         Completed();
-                        Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     }
                 }
             });
@@ -262,7 +264,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                     } else {
                         //查询失败
                         Completed();
-                        Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     }
                 }
             });
@@ -298,7 +301,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 } else {
                     //查询失败
                     Completed();
-                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -503,7 +507,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                             saveDB(user);
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     }
                 }
             });

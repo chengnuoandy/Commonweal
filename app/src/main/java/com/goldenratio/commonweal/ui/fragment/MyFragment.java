@@ -25,11 +25,9 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.Bid;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.BidRecordActivity;
-import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.WalletActivity;
@@ -39,33 +37,20 @@ import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
+import com.goldenratio.commonweal.ui.activity.my.VerifyActivity;
 import com.goldenratio.commonweal.util.BitmapUtil;
-import com.goldenratio.commonweal.util.ImmersiveUtil;
-import com.goldenratio.commonweal.util.NormalFontTextView;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * 作者：Created by 龙啸天 on 2016/6/29 0025.
@@ -100,9 +85,10 @@ public class MyFragment extends Fragment {
     private View mTvSetting;
     private ImageView mIvIsV;
     private TextView mTvFans;
-    public static String userWBid;
+    public static String userWBid = "";
     private String mUserCoin;
     private TextView mBidRecord;
+    private TextView mTvVerify;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -177,6 +163,17 @@ public class MyFragment extends Fragment {
                 Intent intent1 = new Intent(getContext(), BidRecordActivity.class);
                 intent1.putExtra("flag", 1);
                 startActivity(intent1);
+            }
+        });
+        mTvVerify = (TextView) view.findViewById(R.id.tv_my_verify);
+        mTvVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userWBid != null) {
+                    Toast.makeText(getContext(), "您已经绑定微博", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(getContext(), VerifyActivity.class));
+                }
             }
         });
     }
@@ -333,7 +330,8 @@ public class MyFragment extends Fragment {
                             Log.d("Kiuber_LOG", "done: " + list.size());
                         }
                     } else {
-                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+//                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                        ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                     }
                 }
             });

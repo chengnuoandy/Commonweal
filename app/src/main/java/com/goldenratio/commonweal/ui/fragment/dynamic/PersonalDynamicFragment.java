@@ -13,6 +13,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyDynamicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -78,7 +79,8 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
                 } else {
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
-                    Toast.makeText(getContext(), "未知错误" + e, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "未知错误" + e, Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -165,7 +167,8 @@ public class PersonalDynamicFragment extends Fragment implements BGARefreshLayou
                     // 加载完毕后在UI线程结束加载更多
                     mBGARefreshLayout.endLoadingMore();
                 } else {
-                    Toast.makeText(getContext(), "刷新失败！" + e, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "刷新失败！" + e, Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
         });

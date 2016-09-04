@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -135,7 +136,8 @@ public class MySellGoodAdapter extends BaseAdapter {
                                             mList.remove(mPos);
                                             notifyDataSetChanged();
                                         } else {
-                                            Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+                                            ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                                         }
                                     }
                                 });
@@ -207,7 +209,8 @@ public class MySellGoodAdapter extends BaseAdapter {
                                 if (e == null){
                                     Toast.makeText(mContext, "数据更新完毕", Toast.LENGTH_SHORT).show();
                                 }else {
-                                    Toast.makeText(mContext, "更新数据失败", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(mContext, "更新数据失败", Toast.LENGTH_SHORT).show();
+                                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                                 }
                             }
                         });

@@ -28,6 +28,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 import java.util.Timer;
@@ -282,7 +283,8 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                                 Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
 
                             } else {
-                                Toast.makeText(mContext, "点赞失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(mContext, "点赞失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                                ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                             }
                         }
 
@@ -334,11 +336,11 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         mContext.startActivity(intent);
                         progressDialog.dismiss();
                     } else {
-                        Log.d("lxc", "获取服务器时间失败:" + e.getMessage());
-                        Toast.makeText(mContext, "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                        Log.d("lxc", "获取服务器时间失败:" + e.getMessage());
+//                        Toast.makeText(mContext, "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                     }
                 }
-
             });
         }
     }

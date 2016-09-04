@@ -14,6 +14,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.U_Attention;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -98,7 +99,8 @@ public class StarInfoActivity extends Activity {
                     mTvAttention.setText("已关注");
                     Log.i("bmob", "查询成功：共" + object + object.size() + "条数据。");
                 } else {
-                    Log.i("bmob", "失败：" + e.getMessage());
+//                    Log.i("bmob", "失败：" + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 closeProgressDialog();
             }
@@ -128,7 +130,8 @@ public class StarInfoActivity extends Activity {
                     mTvAttention.setText("已关注");
                     isHasAttention = true;
                 } else
-                    Toast.makeText(StarInfoActivity.this, "关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(StarInfoActivity.this, "关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 closeProgressDialog();
                 mTvAttention.setClickable(true);
             }
@@ -148,7 +151,8 @@ public class StarInfoActivity extends Activity {
                     isHasAttention = false;
                     mTvAttention.setText("关注");
                 } else {
-                    Toast.makeText(StarInfoActivity.this, "取消关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(StarInfoActivity.this, "取消关注失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 closeProgressDialog();
                 mTvAttention.setClickable(true);

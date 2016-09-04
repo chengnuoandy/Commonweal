@@ -11,6 +11,7 @@ import com.goldenratio.commonweal.bean.Help_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.CommentBase;
 import com.goldenratio.commonweal.iview.IComment;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,8 @@ public class HelpCommentActivity extends CommentBase implements IComment {
                 if (e == null) {
 
                 } else {
-                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+//                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -78,8 +80,12 @@ public class HelpCommentActivity extends CommentBase implements IComment {
         bmobQuery.findObjects(new FindListener<Help_Comment>() {
             @Override
             public void done(List<Help_Comment> list, BmobException e) {
-                if (!(str.trim().isEmpty())) {
-                    up(str);
+                if (e==null) {
+                    if (!(str.trim().isEmpty())) {
+                        up(str);
+                    }
+                } else {
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -108,7 +114,8 @@ public class HelpCommentActivity extends CommentBase implements IComment {
                 } else {
                     //结束刷新
                     refreshLayout.endRefreshing();
-                    Log.d("错误", "done: " + e);
+//                    Log.d("错误", "done: " + e);
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

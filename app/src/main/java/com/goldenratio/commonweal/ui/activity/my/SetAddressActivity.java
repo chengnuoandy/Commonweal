@@ -19,6 +19,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -171,7 +172,7 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                     }
                 } else {
                     Log.i("获取地址失败", e.getMessage());
-                    Toast.makeText(SetAddressActivity.this, "获取地址失败" + e.getErrorCode() + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 closeProgressDialog();
             }
@@ -199,10 +200,11 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                     Toast.makeText(SetAddressActivity.this, "设置默认地址成功", Toast.LENGTH_SHORT).show();
                     closeProgressDialog();
                 } else {
-                    Toast.makeText(SetAddressActivity.this, "设置失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SetAddressActivity.this, "设置失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                     clickPosition = Integer.parseInt(address.get(0));
                     closeProgressDialog();
-                    Log.i("更新地址", e.getMessage());
+//                    Log.i("更新地址", e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 ((BaseAdapter) mLvAddressDetails.getAdapter()).notifyDataSetChanged();
                 closeProgressDialog();
@@ -248,9 +250,10 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
                     closeProgressDialog();
                 } else {
                     address = tempAddress;
-                    Toast.makeText(SetAddressActivity.this, "删除失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                    closeProgressDialog();
-                    Log.i("删除失败", e.getMessage());
+//                    Toast.makeText(SetAddressActivity.this, "删除失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    closeProgressDialog();
+//                    Log.i("删除失败", e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 
@@ -272,8 +275,6 @@ public class SetAddressActivity extends Activity implements SetAddressListAdapte
             }
         }
     }
-
-
 
 
     private void showProgressDialog() {

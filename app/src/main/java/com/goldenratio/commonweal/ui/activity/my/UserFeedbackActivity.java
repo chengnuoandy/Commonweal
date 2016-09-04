@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.UserFeedback;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
@@ -120,7 +121,8 @@ public class UserFeedbackActivity extends Activity implements AdapterView.OnItem
                         finish();
                     } else {
                         Completed();
-                        Toast.makeText(UserFeedbackActivity.this, "未知错误" + e, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(UserFeedbackActivity.this, "未知错误" + e, Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     }
                 }
             });
@@ -162,7 +164,8 @@ public class UserFeedbackActivity extends Activity implements AdapterView.OnItem
                                         finish();
                                     }else {
                                         Completed();
-                                        Toast.makeText(UserFeedbackActivity.this, "未知错误-" + e, Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(UserFeedbackActivity.this, "未知错误-" + e, Toast.LENGTH_SHORT).show();
+                                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                                     }
                                 }
                             });

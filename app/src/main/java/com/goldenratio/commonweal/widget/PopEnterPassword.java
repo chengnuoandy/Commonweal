@@ -17,6 +17,7 @@ import com.goldenratio.commonweal.bean.Bid;
 import com.goldenratio.commonweal.bean.Deposit;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
@@ -167,7 +168,8 @@ public class PopEnterPassword extends PopupWindow {
                             if (e == null) {
                                 updateUserCoin(userCoin, "保证金收取成功");
                             } else {
-                                Toast.makeText(mContext, "保证金支付失败", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(mContext, "保证金支付失败", Toast.LENGTH_SHORT).show();
+                                ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                             }
                         }
                     });
@@ -219,7 +221,8 @@ public class PopEnterPassword extends PopupWindow {
                 if (e == null) {
                     updateGood2Bmob(goodId, objectId, bidCoin);
                 } else {
-                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+//                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                 }
             }
         });
@@ -242,7 +245,8 @@ public class PopEnterPassword extends PopupWindow {
                 if (e == null) {
                     updateGood2MySql(good_id);
                 } else {
-                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+//                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                 }
             }
         });

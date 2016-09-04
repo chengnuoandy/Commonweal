@@ -20,6 +20,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.PayRecord;
 import com.goldenratio.commonweal.iview.IMySqlManager;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.goldenratio.commonweal.widget.OnPasswordInputFinish;
 import com.goldenratio.commonweal.widget.PasswordView;
@@ -161,8 +162,10 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             public void done(String s, BmobException e) {
                 if (e == null) {
                     Toast.makeText(mContext, "本次交易记录已保存", Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(mContext, "交易记录保存失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+//                    Toast.makeText(mContext, "交易记录保存失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
+                }
             }
         });
     }

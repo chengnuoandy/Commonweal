@@ -17,6 +17,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -91,8 +92,9 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
                     }
                 } else {
                     closeProgressDialog();
-                    Log.d("query", "查询失败");
-                    Toast.makeText(SetUserNameActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Log.d("query", "查询失败");
+//                    Toast.makeText(SetUserNameActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 
@@ -127,8 +129,9 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
                     Toast.makeText(SetUserNameActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                     returnDataToUserSet();
                 } else {
-                    Log.i("why", e.getMessage());
-                    Toast.makeText(SetUserNameActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Log.i("why", e.getMessage());
+//                    Toast.makeText(SetUserNameActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 

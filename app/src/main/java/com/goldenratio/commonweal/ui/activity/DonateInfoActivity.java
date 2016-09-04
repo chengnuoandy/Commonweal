@@ -14,6 +14,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.DonateInfoListAdapter;
 import com.goldenratio.commonweal.bean.Donate_Info;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -89,9 +90,9 @@ public class DonateInfoActivity extends Activity {
                         mNoRanking.setVisibility(View.VISIBLE);
                     }
                 } else
-                    Toast.makeText(DonateInfoActivity.this, "获取捐赠信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DonateInfoActivity.this, "获取捐赠信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 closeProgressDialog();
-
+                ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
             }
         });
     }

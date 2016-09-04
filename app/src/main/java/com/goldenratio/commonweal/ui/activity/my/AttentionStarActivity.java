@@ -14,6 +14,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.AttentionStarListAdapter;
 import com.goldenratio.commonweal.bean.U_Attention;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,8 @@ public class AttentionStarActivity extends Activity {
                     Log.i("查询信息成功", "done: " + list);
                 } else {
                     mTvNoData.setVisibility(View.VISIBLE);
-                    Toast.makeText(AttentionStarActivity.this, "获取信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(AttentionStarActivity.this, "获取信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 closeProgressDialog();
             }

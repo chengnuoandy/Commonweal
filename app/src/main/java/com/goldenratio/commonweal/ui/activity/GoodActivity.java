@@ -24,6 +24,7 @@ import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
@@ -156,9 +157,10 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                 if (e == null) {
                     Toast.makeText(GoodActivity.this, "上传数据成功！", Toast.LENGTH_SHORT).show();
 
-                } else
-                    Toast.makeText(GoodActivity.this, "上传数据失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-
+                } else {
+//                    Toast.makeText(GoodActivity.this, "上传数据失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
             }
 
 
@@ -292,7 +294,8 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                                     if (e == null) {
                                         createAEvent(s, hours);
                                     } else {
-                                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+//                                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                                     }
                                 }
 

@@ -16,6 +16,7 @@ import com.goldenratio.commonweal.adapter.MySellGoodAdapter;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -76,7 +77,8 @@ public class SellGoodActivity extends Activity implements AdapterView.OnItemClic
                     }
                 } else {
                     mTvNoOrder.setVisibility(View.VISIBLE);
-                    Toast.makeText(SellGoodActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SellGoodActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -112,7 +114,8 @@ public class SellGoodActivity extends Activity implements AdapterView.OnItemClic
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(SellGoodActivity.this, "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SellGoodActivity.this, "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 

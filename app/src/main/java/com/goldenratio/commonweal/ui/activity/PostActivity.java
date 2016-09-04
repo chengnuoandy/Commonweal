@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -66,23 +68,27 @@ public class PostActivity extends Activity {
             public void onClick(View v) {
                 BmobQuery<User_Profile> user_profileBmobQuery = new BmobQuery<User_Profile>();
                 String objectID = ((MyApplication) (getApplication())).getObjectID();
-                user_profileBmobQuery.addWhereEqualTo("User_IsV", objectID);
+                user_profileBmobQuery.addWhereEqualTo("objectId", objectID);
                 user_profileBmobQuery.addQueryKeys("User_IsV");
                 user_profileBmobQuery.findObjects(new FindListener<User_Profile>() {
                     @Override
                     public void done(List<User_Profile> list, BmobException e) {
-                        if (list.size() == 0) {
-                            Toast.makeText(mContext, "未找到当前用户信息", Toast.LENGTH_SHORT).show();
-                        } else if (list.size() == 1) {
-                            if (list.get(0).isUser_IsV()) {
-                                Intent intent = new Intent(mContext, GoodActivity.class);
-                                startActivity(intent);
-                                BmobPushManager bmobPush = new BmobPushManager();
-                                bmobPush.pushMessage("p-我买了您的物品-么么哒");
-                                finish();
-                            } else {
-                                Toast.makeText(mContext, "请先进行名人认证吧！", Toast.LENGTH_SHORT).show();
+                        if (e==null) {
+                            if (list.size() == 0) {
+                                Toast.makeText(mContext, "未找到当前用户信息", Toast.LENGTH_SHORT).show();
+                            } else if (list.size() == 1) {
+                                if (list.get(0).isUser_IsV()) {
+                                    Intent intent = new Intent(mContext, GoodActivity.class);
+                                    startActivity(intent);
+                                    BmobPushManager bmobPush = new BmobPushManager();
+                                    bmobPush.pushMessage("p-我买了您的物品-么么哒");
+                                    finish();
+                                } else {
+                                    Toast.makeText(mContext, "请先进行名人认证吧！", Toast.LENGTH_SHORT).show();
+                                }
                             }
+                        } else {
+                            ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                         }
                     }
                 });

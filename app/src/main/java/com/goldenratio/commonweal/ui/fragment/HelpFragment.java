@@ -24,6 +24,7 @@ import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.activity.HelpDetailActivity;
 import com.goldenratio.commonweal.ui.activity.HelpTopDetailActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
@@ -114,8 +115,9 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                 } else {
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
-                    Log.d("Kiuber_LOG", "done: " + e.getMessage() + e.getErrorCode());
-                    Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Log.d("Kiuber_LOG", "done: " + e.getMessage() + e.getErrorCode());
+//                    Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -139,7 +141,8 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                     } else {
                         //收起刷新
                         mBGARefreshLayout.endRefreshing();
-                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                     }
                 }
             });
@@ -160,7 +163,8 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                     } else {
                         //收起刷新
                         mBGARefreshLayout.endRefreshing();
-                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                     }
                 }
             });

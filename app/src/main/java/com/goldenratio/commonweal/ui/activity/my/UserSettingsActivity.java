@@ -32,6 +32,7 @@ import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
 import com.goldenratio.commonweal.ui.activity.RegisterActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -55,7 +56,6 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
@@ -221,10 +221,9 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 showPayPwdDialog();
                 break;
             case R.id.rl_set_weibo:
-                if (TextUtils.isEmpty(wbID)){
-                    startActivity(new Intent(UserSettingsActivity.this,AuthActivity.class));
+                if (TextUtils.isEmpty(wbID)) {
                     wbAuthorize();
-                }else {
+                } else {
                     Toast.makeText(UserSettingsActivity.this, "你已经绑定了！", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -244,7 +243,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                         mSsoHandler.authorize(new AuthListener());
                     }
                 })
-                .setNegativeButton("取消",null)
+                .setNegativeButton("取消", null)
                 .create()
                 .show();
     }
@@ -306,7 +305,8 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                                         Toast.makeText(UserSettingsActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(UserSettingsActivity.this, "修改失败！", Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(UserSettingsActivity.this, "修改失败！", Toast.LENGTH_SHORT).show();
+                                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                                 }
                             }
                         });
@@ -415,9 +415,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                     closeProgressDialog();
                     Toast.makeText(UserSettingsActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.i("why", e.getMessage());
+//                    Log.i("why", e.getMessage());
                     closeProgressDialog();
-                    Toast.makeText(getApplication(), "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplication(), "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
@@ -435,11 +436,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                     String avatarURL = bmobFile.getFileUrl();    //返回的上传文件的完整地址
                     updateDataToBmob(avatarURL, 3, "User_Avatar");
                 } else {
-                    Toast.makeText(UserSettingsActivity.this, "上传头像失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-
+//                    Toast.makeText(UserSettingsActivity.this, "上传头像失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
-
         });
     }
 
@@ -555,7 +555,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin,int flag) {
+    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
         return false;
     }
 
@@ -593,8 +593,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 // 调用 User_Profile#parse 将JSON串解析成User对象
                 upUser = User.parse(response);
                 if (upUser != null) {
-                    //判断用户是否已绑定
-                    isBind(upUser);
+                    updateDB(upUser);
                 } else {
                     closeProgressDialog();
                     Toast.makeText(UserSettingsActivity.this, response,
@@ -626,35 +625,12 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                     wbID = upUser.id;
                     MyFragment.userWBid = upUser.id;
                     UserDao mUserDao = new UserDao(UserSettingsActivity.this);
-                    mUserDao.execSQL("update User_Profile set User_weiboID = ? where objectId = ?", new String[]{upUser.id,id});
+                    mUserDao.execSQL("update User_Profile set User_weiboID = ? where objectId = ?", new String[]{upUser.id, id});
                     closeProgressDialog();
                     Toast.makeText(UserSettingsActivity.this, "绑定成功！", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(UserSettingsActivity.this, "绑定失败！", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    /**
-     * 判断是否已经绑定
-     * @param upUser 用户实体
-     */
-    public void isBind(final User upUser) {
-        BmobQuery<User_Profile> query = new BmobQuery<>();
-        query.addWhereEqualTo("User_weiboID",upUser.id);
-        query.findObjects(new FindListener<User_Profile>() {
-            @Override
-            public void done(List<User_Profile> list, BmobException e) {
-                if (e == null){
-                    if (list.size() > 0){
-                        updateDB(upUser);
-                    }else {
-                        closeProgressDialog();
-                        Toast.makeText(UserSettingsActivity.this, "该用户已绑定其他账号！", Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    Toast.makeText(UserSettingsActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(UserSettingsActivity.this, "绑定失败！", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

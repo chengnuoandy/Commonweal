@@ -22,6 +22,7 @@ import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.Dynamic_Comment;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -129,16 +130,16 @@ public class DynamicCommentAdapter extends BaseAdapter {
             icom.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                    if (!mUserProfile.getObjectId().equals(mStrObjectId)) {
-                        Log.i("55555", "onClick: " + "0.0.00.0执行");
-                        Intent intent = new Intent(mContext, StarInfoActivity.class);
-                        intent.putExtra("id", mUserProfile.getObjectId());
-                        intent.putExtra("nickName", mUserProfile.getUser_Nickname());
-                        intent.putExtra("Avatar", mUserProfile.getUser_image_hd());
-                        mContext.startActivity(intent);
-                    } else Toast.makeText(mContext, "哈哈哈哈" + "这里还没写", Toast.LENGTH_SHORT).show();
-                }
-            }
+                                            if (!mUserProfile.getObjectId().equals(mStrObjectId)) {
+                                                Log.i("55555", "onClick: " + "0.0.00.0执行");
+                                                Intent intent = new Intent(mContext, StarInfoActivity.class);
+                                                intent.putExtra("id", mUserProfile.getObjectId());
+                                                intent.putExtra("nickName", mUserProfile.getUser_Nickname());
+                                                intent.putExtra("Avatar", mUserProfile.getUser_image_hd());
+                                                mContext.startActivity(intent);
+                                            } else Toast.makeText(mContext, "哈哈哈哈" + "这里还没写", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
 
             );
         }
@@ -179,6 +180,8 @@ public class DynamicCommentAdapter extends BaseAdapter {
                                     up(s, edt_reply.getText().toString());
                                     edt_reply.setText("");
                                     customDialog.dismiss();
+                                } else {
+                                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                                 }
                             }
                         });
@@ -218,7 +221,8 @@ public class DynamicCommentAdapter extends BaseAdapter {
                 if (e == null) {
                     Toast.makeText(mContext, "发送成功！", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+//                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
+                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                 }
             }
         });

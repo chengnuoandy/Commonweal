@@ -23,6 +23,7 @@ import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
@@ -179,7 +180,8 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                     finish();
                 }else {
                     //保存失败
-                    Log.d(TAG, "done: ex==" + s);
+//                    Log.d(TAG, "done: ex==" + s);
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

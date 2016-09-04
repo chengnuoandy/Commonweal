@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.PayRecord;
+import com.goldenratio.commonweal.ui.activity.my.SetAddressActivity;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
                         mTvLoading.setText("暂无交易记录");
                     }
                 } else {
-                    Toast.makeText(PayRecordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 

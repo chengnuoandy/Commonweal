@@ -18,6 +18,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,26 +74,30 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
             goodBmobQuery.findObjects(new FindListener<Good>() {
                 @Override
                 public void done(List<Good> list, BmobException e) {
-                    if (list.size() != 0) {
-                        for (int i = 0; i < list.size(); i++) {
-                            Good good = list.get(i);
-                            Log.d("Kiuber_LOG", "done: " + good.getGood_UpDateM() + "-->" + System.currentTimeMillis());
-                            if (good.getGood_UpDateM() > System.currentTimeMillis()) {
-                                list.remove(i);
+                    if (e==null) {
+                        if (list.size() != 0) {
+                            for (int i = 0; i < list.size(); i++) {
+                                Good good = list.get(i);
+                                Log.d("Kiuber_LOG", "done: " + good.getGood_UpDateM() + "-->" + System.currentTimeMillis());
+                                if (good.getGood_UpDateM() > System.currentTimeMillis()) {
+                                    list.remove(i);
+                                }
                             }
-                        }
-                        if (list.size() == 0) {
-                            mTvLoading.setText("暂无关于您的订单！！");
-                        } else if (list.size() != 0) {
-                            mLvOrder.setVisibility(View.VISIBLE);
-                            mTvLoading.setVisibility(View.GONE);
-                            mGood = list;
-                            mLvOrder.setAdapter(new MyOrderAdapter());
+                            if (list.size() == 0) {
+                                mTvLoading.setText("暂无关于您的订单！！");
+                            } else if (list.size() != 0) {
+                                mLvOrder.setVisibility(View.VISIBLE);
+                                mTvLoading.setVisibility(View.GONE);
+                                mGood = list;
+                                mLvOrder.setAdapter(new MyOrderAdapter());
+                            } else {
+                                mTvLoading.setText("未知错误，请稍后再试！");
+                            }
                         } else {
-                            mTvLoading.setText("未知错误，请稍后再试！");
+                            mTvLoading.setText("暂无关于您的订单！");
                         }
                     } else {
-                        mTvLoading.setText("暂无关于您的订单！");
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     }
                 }
             });

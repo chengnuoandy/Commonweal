@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -151,6 +153,17 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 }
                 break;
             case 3:
+                if (resultCode == RESULT_OK){
+                    int flagR = data.getIntExtra("type",-1);
+                    if (flagR == 1){
+                        //隐藏键盘
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                        flag = true;
+                        mManager2 = new MySqlManagerImpl(this, this, "设置新密码", "", "请输入新的支付密码");
+                        mManager2.queryUserCoinAndSixPwdByObjectId(null, null);
+                    }
+                }
                 break;
         }
         //图片选择器返回数据
@@ -260,7 +273,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                     mySqlManager = new MySqlManagerImpl(UserSettingsActivity.this, UserSettingsActivity.this, "设置新密码", "", "请输入旧支付密码");
                     mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
                 } else {
-                    Toast.makeText(UserSettingsActivity.this, "待添加", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(UserSettingsActivity.this,RegisterActivity.class);
+                    intent.putExtra("type",3);
+//                    intent.putExtra("phone",);
+                    startActivityForResult(intent,3);
                 }
             }
         });

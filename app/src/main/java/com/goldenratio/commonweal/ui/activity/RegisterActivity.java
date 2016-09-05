@@ -108,6 +108,7 @@ public class RegisterActivity extends Activity {
     private EditText mEtUserNickname;
     private String mObjectId;
     private boolean isClickRegisterBtn = false;
+    private boolean isResetPayPwd = false;
 
     ListView mListView;
 
@@ -139,8 +140,11 @@ public class RegisterActivity extends Activity {
     private void isClickRegister() {
         Intent intent = getIntent();
         int code = intent.getIntExtra("type", 1);
-        if (code == 0)
+        if (code == 0){
             isClickRegisterBtn = true;
+        }else if (code == 3){
+            isResetPayPwd = true;
+        }
     }
 
     @Override
@@ -294,6 +298,13 @@ public class RegisterActivity extends Activity {
                     changeStepTextColor(R.color.ordinary, R.color.colorPrimary, R.color.ordinary);
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
+                    //如果是来自重置支付密码的回调
+                    if (isResetPayPwd){
+                        Intent intent = new Intent();
+                        intent.putExtra("type",1);
+                        setResult(RESULT_OK,intent);
+                        finish();
+                    }
                     closeProgressDialog();
                     showWhichStep(View.GONE, View.GONE, View.VISIBLE);
                     changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.colorPrimary);

@@ -104,6 +104,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
     private MySqlManagerImpl mManager2;
     private boolean flag;
     private String wbID;
+    private String phone;
 
 
     @Override
@@ -275,7 +276,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 } else {
                     Intent intent = new Intent(UserSettingsActivity.this,RegisterActivity.class);
                     intent.putExtra("type",3);
-//                    intent.putExtra("phone",);
+                    intent.putExtra("phone",phone);
                     startActivityForResult(intent,3);
                 }
             }
@@ -543,6 +544,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         autograph = intent.getStringExtra("autograph");
         avaUrl = intent.getStringExtra("avaUrl");
         wbID = intent.getStringExtra("wbid");
+        phone = intent.getStringExtra("phone");
     }
 
     @Override

@@ -534,9 +534,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         }
         UserDao mUserDao = new UserDao(LoginActivity.this);
         mUserDao.execSQL("insert into User_Profile (objectId,User_Name,User_Password,User_Autograph,User_Avatar,User_Nickname" +
-                        ",User_Address,User_sex,User_image_min,User_image_max,User_weiboID) values(?,?,?,?,?,?,?,?,?,?,?)",
+                        ",User_Address,User_sex,User_image_min,User_image_max,User_weiboID,User_phone) values(?,?,?,?,?,?,?,?,?,?,?,?)",
                 new String[]{userID, user.getUser_Name(), user.getUser_Password(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
-                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max(), user.getUser_WbID()});
+                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max(), user.getUser_WbID(), user.getUser_Phone()});
         Completed();
         finish();
     }

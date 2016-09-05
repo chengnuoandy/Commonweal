@@ -111,6 +111,7 @@ public class RegisterActivity extends Activity {
     private boolean isResetPayPwd = false;
 
     ListView mListView;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +132,11 @@ public class RegisterActivity extends Activity {
         addTextChangeEvent(mEtPhone);
         addTextChangeEvent(mEtCode);
 
+        if (isResetPayPwd){
+            mEtPhone.setText(phone);
+            mEtPhone.setFocusable(false);
+        }
+
     }
 
     /**
@@ -144,6 +150,7 @@ public class RegisterActivity extends Activity {
             isClickRegisterBtn = true;
         }else if (code == 3){
             isResetPayPwd = true;
+            phone = intent.getStringExtra("phone");
         }
     }
 

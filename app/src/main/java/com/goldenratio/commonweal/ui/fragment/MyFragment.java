@@ -76,6 +76,7 @@ public class MyFragment extends Fragment {
     private String userName;  //用户名
     private String avaUrl;  //用户高清头像
     private String avaMinUrl;//用户小头像
+    private String userPhone;
     public static String mUserID; //用户objectid
 
 
@@ -191,6 +192,7 @@ public class MyFragment extends Fragment {
                     intent.putExtra("autograph", autograph);
                     intent.putExtra("avaUrl", avaUrl);
                     intent.putExtra("wbid", userWBid);
+                    intent.putExtra("phone", userPhone);
                     intent.putExtra("avaMinUrl", avaMinUrl);
                     startActivityForResult(intent, 3);
                     break;
@@ -293,6 +295,7 @@ public class MyFragment extends Fragment {
             avaUrl = cursor.getString(cursor.getColumnIndex("User_Avatar"));
             avaMinUrl = cursor.getString(cursor.getColumnIndex("User_image_min"));
             userWBid = cursor.getString(cursor.getColumnIndex("User_weiboID"));
+            userPhone = cursor.getString(cursor.getColumnIndex("User_phone"));
             //   Log.i("ud", avaUrl);
         }
         cursor.close();

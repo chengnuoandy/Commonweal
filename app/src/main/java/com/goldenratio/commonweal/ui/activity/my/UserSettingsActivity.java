@@ -387,7 +387,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 // 开启拍照功能 （默认关闭）
                 .showCamera()
                 // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
-                .filePath("/ImageSelector/Pictures")
+                .filePath("/GR_commonweal/avatarCache")
                 .build();
     }
 

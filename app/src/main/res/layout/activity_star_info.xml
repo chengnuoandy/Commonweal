@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:padding="@dimen/little_space"
         android:text="龙啸天"
         android:textSize="18sp"
@@ -43,10 +43,12 @@
 
     <TextView
         android:id="@+id/tv_info_autograph"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:textColor="@color/assist"
+        android:lineSpacingExtra="2dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/dark_gray"
         android:text="个性签名"/>
 
     <LinearLayout

@@ -5,6 +5,28 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
+
+        <ImageView
+            android:id="@+id/iv_my_message"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/message" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="我的"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_default" />
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,12 +47,6 @@
                 android:paddingRight="@dimen/normal_space"
                 android:paddingTop="@dimen/normal_space">
 
-                <ImageView
-                    android:id="@+id/iv_my_message"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_alignParentLeft="true"
-                    android:src="@drawable/message" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civ_avatar"

@@ -21,6 +21,7 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -57,6 +58,7 @@ public class VerifyActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_auth);
         initView();
         initData();
+        new ImmersiveUtil(this, R.color.white,true);
     }
 
     private void initData() {

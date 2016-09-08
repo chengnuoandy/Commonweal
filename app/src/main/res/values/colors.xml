@@ -27,4 +27,5 @@
     <color name="keypad_white_press">#e4e4e4</color>
 
     <color name="color_black_trans_40">#66000000</color>
+    <color name="test_color">#333333</color>
 </resources>

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.ShareUtils;
 
 import cn.bmob.v3.datatype.BmobDate;
@@ -36,8 +37,9 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help);
+        setContentView(R.layout.activity_detail_help);
 
         mHelp = (Help) getIntent().getSerializableExtra("HelpList");
         initView();
@@ -48,6 +50,7 @@ public class HelpDetailActivity extends Activity implements View.OnClickListener
         mTvSmile.setText(mHelp.getHelp_Smile());
         mTvContent.setText(mHelp.getHelp_Content());
         Close();
+        new ImmersiveUtil(this, R.color.white,true);
     }
 
 

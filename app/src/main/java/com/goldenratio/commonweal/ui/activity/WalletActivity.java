@@ -19,6 +19,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +56,7 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
 
         mUserId = ((MyApplication) getApplication()).getObjectID();
         queryUserCoinByObjectId();
+        new ImmersiveUtil(this, R.color.white, false);
     }
 
     private void initView() {

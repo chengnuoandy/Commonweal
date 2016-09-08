@@ -1,12 +1,16 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -20,6 +24,8 @@ import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
+import com.goldenratio.commonweal.util.SystemBarTintManagerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +81,25 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
         mFragmentList = new ArrayList<Fragment>();
 
+
+/*
+
+        Dynamic_Official dyc = new Dynamic_Official();
+        dyc.setDyc_Image("http://img0.imgtn.bdimg.com/it/u=1428667673,1929297421&fm=21&gp=0.jpg");
+        dyc.setDyc_Content("杀一个程序员不需要用枪，改三次需求就可以了。");
+        dyc.setDyc_Title("GoldenRatio总部发来的贺电");
+        List<String> list = new ArrayList<>();
+        list.add("http://img1.mydrivers.com/img/20150329/06e8f6b985744b43a53aa052dbbaf31f.jpg");
+        list.add("http://img1.mydrivers.com/img/20150329/6b5d5710d39d467583db6f2309fd434b.jpg");
+        dyc.setDyc_Pic(list);
+        dyc.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                Toast.makeText(MainActivity.this, "official成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+*/
+
         mFragmentList.add(new HelpFragment());
         mFragmentList.add(new GoodFragment());
         mFragmentList.add(new DynamicFragment());
@@ -88,6 +113,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         mVpContent.setCurrentItem(0);
         mVpContent.addOnPageChangeListener(this);
         mVpContent.setOffscreenPageLimit(4);  //设置是适配器缓存fragment数
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     @Override

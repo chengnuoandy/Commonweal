@@ -19,6 +19,7 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +54,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
         setContentView(R.layout.activity_order);
         initView();
         initData();
+        new ImmersiveUtil(this, R.color.white,true);
     }
 
     private void initView() {
@@ -74,7 +76,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
             goodBmobQuery.findObjects(new FindListener<Good>() {
                 @Override
                 public void done(List<Good> list, BmobException e) {
-                    if (e==null) {
+                    if (e == null) {
                         if (list.size() != 0) {
                             for (int i = 0; i < list.size(); i++) {
                                 Good good = list.get(i);

@@ -32,21 +32,8 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
-        String libName = "bmob"; // 库名, 注意没有前缀lib和后缀.so
-        System.loadLibrary(libName);
-
-        //初始化Bmob
-        Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
-        // 使用推送服务时的初始化操作
-        BmobInstallation.getCurrentInstallation().save1();
-        // 启动推送服务
-        BmobPush.startWork(this);
-        BP.init(this, "727a409235aab18ae7b1e1f3933c9a64");
-
         initData();
         isFirst();
-
 //        startMain();
     }
 

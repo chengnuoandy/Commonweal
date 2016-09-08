@@ -25,6 +25,7 @@ import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -33,6 +34,7 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -45,6 +47,12 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by lvxue on 2016/6/7 0007.
@@ -65,7 +73,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     ImageButton mIbSina;
     @BindView(R.id.tv_sina)
     TextView mTvSina;
-    @BindView(R.id.iv_return)
+    @BindView(R.id.iv_back)
     ImageView mReturn;
     @BindView(R.id.forgetPWD)
     TextView mForgetPWD;
@@ -116,6 +124,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         mForgetPWD.setOnClickListener(this);
         mLoginPassword.setOnFocusChangeListener(this);
         mLoginPhone.setOnFocusChangeListener(this);
+        new ImmersiveUtil(this, R.color.white,true);
     }
 
     @Override
@@ -150,7 +159,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 Intent intentFp = new Intent(this, RegisterActivity.class);
                 startActivityForResult(intentFp, 2);
                 break;
-            case R.id.iv_return:
+            case R.id.iv_back:
                 finish();
                 break;
             default:
@@ -501,10 +510,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                         if (TextUtils.isEmpty(s)) {
                             Toast.makeText(LoginActivity.this, "提交数据失败", Toast.LENGTH_SHORT).show();
                         } else {
-                            userID = s;
-                            Toast.makeText(LoginActivity.this, "成功提交数据", Toast.LENGTH_SHORT).show();
-                            returnData();
-                            saveDB(user);
+                            saveUser2Mysql(s, user);
                         }
                     } else {
 //                        Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
@@ -539,6 +545,50 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                         user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max(), user.getUser_WbID(), user.getUser_Phone()});
         Completed();
         finish();
+    }
+
+    private void saveUser2Mysql(final String objectId, final User_Profile user) {
+        String url = "http://123.206.89.67/WebService1.asmx/AddNewUser";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("Object_Id", objectId)
+                .build();
+
+        final Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, final IOException e) {
+                final String e1 = e.getMessage();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(LoginActivity.this, e1, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.contains("success")) {
+                            userID = objectId;
+                            Toast.makeText(LoginActivity.this, "成功提交数据", Toast.LENGTH_SHORT).show();
+                            returnData();
+                            saveDB(user);
+                        } else {
+                            Log.d("Kiuber_LOG", "fail: " + result);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /**

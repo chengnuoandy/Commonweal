@@ -19,6 +19,7 @@ import com.goldenratio.commonweal.ui.activity.DynamicReleaseActivity;
 import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.ArrayList;
 import java.util.List;

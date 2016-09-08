@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -25,7 +23,6 @@ import com.goldenratio.commonweal.bean.Help_Top;
 import com.goldenratio.commonweal.ui.activity.HelpDetailActivity;
 import com.goldenratio.commonweal.ui.activity.HelpTopDetailActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
-import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -53,7 +50,6 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         view = inflater.inflate(R.layout.fragment_help, null);
         initView();
         initData();
-        new ImmersiveUtil(getActivity(), R.color.colorPrimary);
         return view;
     }
 

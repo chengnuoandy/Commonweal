@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.ShareUtils;
 
 import java.io.File;
@@ -72,6 +73,7 @@ public class MySetActivity extends Activity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
 

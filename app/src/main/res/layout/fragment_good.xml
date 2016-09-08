@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorContext"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/normal_space">
 
@@ -17,14 +18,13 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="物品"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
     <include layout="@layout/view_no_net" />
 
-    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rl_BGA_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -33,6 +33,6 @@
             android:id="@+id/lv_good_all"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 </LinearLayout>

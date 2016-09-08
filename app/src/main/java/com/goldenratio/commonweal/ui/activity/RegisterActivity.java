@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
@@ -132,11 +133,11 @@ public class RegisterActivity extends Activity {
         addTextChangeEvent(mEtPhone);
         addTextChangeEvent(mEtCode);
 
-        if (isResetPayPwd){
+        if (isResetPayPwd) {
             mEtPhone.setText(phone);
             mEtPhone.setFocusable(false);
         }
-
+        new ImmersiveUtil(this, R.color.white,true);
     }
 
     /**
@@ -146,9 +147,9 @@ public class RegisterActivity extends Activity {
     private void isClickRegister() {
         Intent intent = getIntent();
         int code = intent.getIntExtra("type", 1);
-        if (code == 0){
+        if (code == 0) {
             isClickRegisterBtn = true;
-        }else if (code == 3){
+        } else if (code == 3) {
             isResetPayPwd = true;
             phone = intent.getStringExtra("phone");
         }
@@ -306,10 +307,10 @@ public class RegisterActivity extends Activity {
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
                     //如果是来自重置支付密码的回调
-                    if (isResetPayPwd){
+                    if (isResetPayPwd) {
                         Intent intent = new Intent();
-                        intent.putExtra("type",1);
-                        setResult(RESULT_OK,intent);
+                        intent.putExtra("type", 1);
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
                     closeProgressDialog();

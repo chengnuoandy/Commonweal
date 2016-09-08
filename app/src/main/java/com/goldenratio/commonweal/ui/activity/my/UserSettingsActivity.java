@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
@@ -36,6 +37,7 @@ import com.goldenratio.commonweal.ui.activity.RegisterActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -125,8 +127,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         mTvUserName.setText(userName);
         mTvUserNickname.setText(userNickname);
         mTvUserAutograph.setText(autograph);
-        if (!TextUtils.isEmpty(wbID))
+        if (!TextUtils.isEmpty(wbID)) {
             mTvSetweibo.setText("已绑定");
+        }
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     /**
@@ -154,9 +158,9 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 }
                 break;
             case 3:
-                if (resultCode == RESULT_OK){
-                    int flagR = data.getIntExtra("type",-1);
-                    if (flagR == 1){
+                if (resultCode == RESULT_OK) {
+                    int flagR = data.getIntExtra("type", -1);
+                    if (flagR == 1) {
                         //隐藏键盘
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
@@ -235,7 +239,8 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 showPayPwdDialog();
                 break;
             case R.id.rl_set_weibo:
-                if (TextUtils.isEmpty(wbID)) {
+                String WbID = ((MyApplication) (getApplicationContext())).getWbId();
+                if (TextUtils.isEmpty(WbID)) {
                     wbAuthorize();
                 } else {
                     Toast.makeText(UserSettingsActivity.this, "你已经绑定了！", Toast.LENGTH_SHORT).show();
@@ -274,10 +279,10 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                     mySqlManager = new MySqlManagerImpl(UserSettingsActivity.this, UserSettingsActivity.this, "设置新密码", "", "请输入旧支付密码");
                     mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
                 } else {
-                    Intent intent = new Intent(UserSettingsActivity.this,RegisterActivity.class);
-                    intent.putExtra("type",3);
-                    intent.putExtra("phone",phone);
-                    startActivityForResult(intent,3);
+                    Intent intent = new Intent(UserSettingsActivity.this, RegisterActivity.class);
+                    intent.putExtra("type", 3);
+                    intent.putExtra("phone", phone);
+                    startActivityForResult(intent, 3);
                 }
             }
         });
@@ -493,7 +498,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
             dialogTitle = "修改签名";
             ETUSER.setHint("请输入个性签名");
             ETUSER.setMaxLines(3);
-            ETUSER.setFilters(new InputFilter[]{new InputFilter.LengthFilter(40)});
+            ETUSER.setFilters(new InputFilter[]{new InputFilter.LengthFilter(100)});
             ETUSER.setText(mTvUserAutograph.getText());
             USERROW = "User_Autograph";
             X = 2;

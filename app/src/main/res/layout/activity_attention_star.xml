@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/snow"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow">
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
 
         <ImageView
-            android:id="@+id/iv_donate_back"
+            android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back"/>
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/tv_attentionTitle"
@@ -26,7 +34,7 @@
             android:layout_centerInParent="true"
             android:text="关注详情"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
+            android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
 
@@ -35,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_title"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:id="@+id/tv_no_data"
@@ -44,7 +52,5 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="暂无数据"
-        android:visibility="gone"/>
-
-
+        android:visibility="gone" />
 </RelativeLayout>

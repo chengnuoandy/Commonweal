@@ -2,9 +2,11 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +33,9 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -45,6 +49,12 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -60,7 +70,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private int picSize;
     private GoodDetailActivity mContext;
     private String mUserId;
-    private double depositCoin;
+    private int depositCoin;
     private SliderLayout mDemoSlider;
     private MySqlManagerImpl mySqlManager;
     private String sixPwd;
@@ -83,6 +93,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         initSliderLayout();
         mUserId = ((MyApplication) getApplication()).getObjectID();
         mySqlManager = new MySqlManagerImpl(this, this);
+        new ImmersiveUtil(this, R.color.white,true);
     }
 
     private void initSliderLayout() {
@@ -265,7 +276,7 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mTvStartCoin.setText(mGood.getGood_StartCoin());
         picSize = mGood.getGood_Photos().size();
         //保证金为公益币的30%
-        depositCoin = (Double.valueOf(mGood.getGood_StartCoin()) * 0.3);
+        depositCoin = (int) (Integer.parseInt(mGood.getGood_StartCoin()) * 0.3);
 
         mTvStartTime.setText(mGood.getCreatedAt());
         String good_startCoin = mGood.getGood_StartCoin();
@@ -403,13 +414,59 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-                    Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
-                    mTvDeposit.setVisibility(View.GONE);
-                    mTvBid.setVisibility(View.VISIBLE);
+                    addDeposit(depositCoin, mGood.getObjectId(), mUserId);
                 } else {
 //                    Toast.makeText(mContext, "保证金支付失败", Toast.LENGTH_SHORT).show();
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
+            }
+        });
+    }
+
+    private void addDeposit(int depositCoin, String objectId, String mUserId) {
+        String URL = "http://123.206.89.67/WebService1.asmx/AddDeposit";
+        OkHttpClient okHttpClient = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("D_Coin", String.valueOf(depositCoin))
+                .add("D_Good", objectId)
+                .add("D_User", mUserId)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(URL)
+                .post(body)
+                .build();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, final IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "fail: " + e.getMessage());
+                        Toast.makeText(GoodDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String result = response.body().string();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.equals("success")) {
+                            Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
+                            mTvDeposit.setVisibility(View.GONE);
+                            mTvDeposit.setVisibility(View.GONE);
+                            mTvBid.setVisibility(View.VISIBLE);
+                        } else {
+                            Log.d(TAG, "run: " + result);
+                            Toast.makeText(GoodDetailActivity.this, result, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
     }
@@ -488,8 +545,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
 
     @Override
     public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
-        Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
-        mTvDeposit.setVisibility(View.GONE);
         return false;
     }
 

@@ -21,6 +21,7 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.widget.PopEnterPassword;
 
 import org.json.JSONArray;
@@ -68,6 +69,7 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
         setContentView(R.layout.activity_order_detail);
         initView();
         initData();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initData() {

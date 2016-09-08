@@ -2,9 +2,11 @@ package com.goldenratio.commonweal.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 /**
  * Created by Administrator on 2016/9/1.
@@ -14,15 +16,19 @@ public class ImmersiveUtil {
 
     private SystemBarTintManagerUtil mTintManager;
 
-    public ImmersiveUtil(Activity activity, int color) {
+    public ImmersiveUtil(Activity activity, int color, boolean mode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true, activity);
         }
-
         mTintManager = new SystemBarTintManagerUtil(activity);
-        //设置状态栏颜色
-        mTintManager.setStatusBarTintEnabled(true);
-        mTintManager.setStatusBarTintResource(color);
+        if (mode) {
+            //设置状态栏背景色颜色
+            mTintManager.setStatusBarTintEnabled(true);
+            mTintManager.setStatusBarTintResource(color);
+        } else {
+            mTintManager.setStatusBarTintEnabled(false);
+        }
+        Toast.makeText(activity, mode + "", Toast.LENGTH_SHORT).show();
     }
 
     @TargetApi(19)

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,7 +95,7 @@ public class CommentAdatper extends BaseAdapter {
 //        final Comment utils = (Comment) mArrayListOne.get(position);
         tv_comment.setText(mList.get(position).getComment());
         tv_name.setText(mUserProfile.getUser_Name());
-        tv_reply.setText("回复：" + mList.get(position).getReply());
+        tv_reply.setText("回复：" + Html.fromHtml("<font color='#0000FF'>" + mList.get(position).getReply()+ "</font> "));
         Picasso.with(mContext).load(mUserProfile.getUser_image_hd()).into(icom);
         icom.setOnClickListener(new View.OnClickListener() {
             @Override

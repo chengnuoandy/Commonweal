@@ -12,6 +12,7 @@ import com.goldenratio.commonweal.adapter.MyDynamicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class DynamicActivity extends Activity implements BGARefreshLayout.BGARefreshLayoutDelegate{
+public class DynamicActivity extends Activity implements BGARefreshLayout.BGARefreshLayoutDelegate {
 
     private List<Dynamic> mDynamicList;
     private ListView mListView;
@@ -41,13 +42,14 @@ public class DynamicActivity extends Activity implements BGARefreshLayout.BGARef
         setContentView(R.layout.activity_dynamic);
 
         initView();
-        mObj = ((MyApplication)getApplication()).getObjectID();
-        if (mObj != null){
+        mObj = ((MyApplication) getApplication()).getObjectID();
+        if (mObj != null) {
             initData();
-        }else {
+        } else {
 //            mNoTextView.setVisibility(View.VISIBLE);
             Toast.makeText(DynamicActivity.this, "请先登陆！", Toast.LENGTH_SHORT).show();
         }
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     /**
@@ -58,7 +60,7 @@ public class DynamicActivity extends Activity implements BGARefreshLayout.BGARef
         user.setObjectId(mObj);
         BmobQuery<Dynamic> data = new BmobQuery<>();
         data.order("-createdAt");
-        data.addWhereEqualTo("Dynamics_user",user);
+        data.addWhereEqualTo("Dynamics_user", user);
         //限制返回的数据量
         data.setLimit(mMAXItem);
         data.include("Dynamics_user");
@@ -113,7 +115,7 @@ public class DynamicActivity extends Activity implements BGARefreshLayout.BGARef
         if (mDynamicList != null) {
             mDynamicList.clear();
             initData();
-        }else {
+        } else {
             initData();
         }
     }
@@ -123,12 +125,11 @@ public class DynamicActivity extends Activity implements BGARefreshLayout.BGARef
      *
      * @param refreshLayout 刷新布局控件
      * @return true:显示正在刷新  false:不显示刷新
-     *
      */
     @Override
     public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
 
-        if (!dataDone){
+        if (!dataDone) {
             Toast.makeText(DynamicActivity.this, "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -144,7 +145,7 @@ public class DynamicActivity extends Activity implements BGARefreshLayout.BGARef
             public void done(List<Dynamic> list, BmobException e) {
                 if (e == null) {
                     //如果数据已经不足，设置上拉加载标志位
-                    if (list.size() < mMAXItem){
+                    if (list.size() < mMAXItem) {
                         Toast.makeText(DynamicActivity.this, "数据已全部加载完毕！", Toast.LENGTH_SHORT).show();
                         dataDone = false;
                     }

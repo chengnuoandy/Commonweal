@@ -40,6 +40,7 @@ import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.goldenratio.commonweal.ui.activity.my.VerifyActivity;
 import com.goldenratio.commonweal.util.BitmapUtil;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -122,7 +123,6 @@ public class MyFragment extends Fragment {
         return view;
     }
 
-
     private void initView(View view) {
         mTvOrder = (TextView) view.findViewById(R.id.tv_my_order);
         mTvOrder.setOnClickListener(new View.OnClickListener() {
@@ -170,8 +170,9 @@ public class MyFragment extends Fragment {
         mTvVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userWBid != null) {
-                    Toast.makeText(getContext(), "您已经绑定微博", Toast.LENGTH_SHORT).show();
+                String WbVerReason = ((MyApplication) (getContext().getApplicationContext())).getWbVerReason();
+                if (WbVerReason != null) {
+                    Toast.makeText(getContext(), "您已认证！", Toast.LENGTH_SHORT).show();
                 } else {
                     startActivity(new Intent(getContext(), VerifyActivity.class));
                 }
@@ -303,18 +304,20 @@ public class MyFragment extends Fragment {
         mTvName.setBackground(null);
         mTvName.setText(userNickname);
         Picasso.with(getActivity()).load(avaUrl).into(mAvatar);
+        //根据Bmob默认头像文件名判断
+        if (!avaUrl.contains("2016/06/15")) {
+            //将头像进行高斯模糊
+            Glide.with(getContext()).load(avaUrl).asBitmap().into(new SimpleTarget<Bitmap>() {
+                @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 
-        //将头像进行高斯模糊
-        Glide.with(getContext()).load(avaUrl).asBitmap().into(new SimpleTarget<Bitmap>() {
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-
-                Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
-                Drawable drawable = new BitmapDrawable(blurBitmap);
-                mRlBackground.setBackground(drawable);
-            }
-        });
+                    Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
+                    Drawable drawable = new BitmapDrawable(blurBitmap);
+                    mRlBackground.setBackground(drawable);
+                }
+            });
+        }
         Log.d("Kiuber_LOG", "getUserData: " + mUserID);
         if (!TextUtils.isEmpty(mUserID)) {
             BmobQuery<User_Profile> user_profileBmobQuery = new BmobQuery<>();

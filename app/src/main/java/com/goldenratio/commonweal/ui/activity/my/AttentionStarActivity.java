@@ -15,6 +15,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.AttentionStarListAdapter;
 import com.goldenratio.commonweal.bean.U_Attention;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class AttentionStarActivity extends Activity {
         if (!isAttention)
             mTvAttentionTitle.setText("我的粉丝");
         getAttentionInfoFromBmob(isAttention);
-
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void getAttentionInfoFromBmob(final boolean isAttention) {

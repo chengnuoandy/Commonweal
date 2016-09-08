@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.ArrayList;
 
@@ -51,6 +52,7 @@ public class CommentBase extends Activity implements View.OnClickListener, BGARe
         setContentView(R.layout.activity_comment);
         initView();
         show();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initView() {
@@ -128,7 +130,7 @@ public class CommentBase extends Activity implements View.OnClickListener, BGARe
 
     private void show() {
         //回调方法----拉取评论
-        mIComment.Show(mListView , mBGARefreshLayout);
+        mIComment.Show(mListView, mBGARefreshLayout);
     }
 
     /**

@@ -17,6 +17,7 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class SellGoodActivity extends Activity implements AdapterView.OnItemClic
 
         initData();
         mLvSellGood.setOnItemClickListener(this);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initData() {

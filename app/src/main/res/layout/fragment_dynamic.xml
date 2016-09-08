@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/normal_space">
 
@@ -17,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="动态"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 

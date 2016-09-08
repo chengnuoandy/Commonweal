@@ -18,6 +18,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Bid;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class BidRecordActivity extends Activity implements AdapterView.OnItemCli
         setContentView(R.layout.activity_bid_record);
         initView();
         initData();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initView() {

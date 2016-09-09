@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +35,7 @@ import cn.bmob.v3.update.UpdateStatus;
 /**
  * 作者：Created by 龙啸天 on 2016/6/27 0025.
  * 邮箱：jxfengmtx@163.com ---17718
- * <p>
+ * <p/>
  * 整个app的设置---
  */
 public class MySetActivity extends Activity {
@@ -47,6 +50,22 @@ public class MySetActivity extends Activity {
     private TextView mTvNowVer;
     private TextView mTvShare;
 
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    Toast.makeText(getApplicationContext(), "无缓存", Toast.LENGTH_SHORT).show();
+                    break;
+                case 1:
+                    mCacheSize.setText("0B");
+                    Toast.makeText(getApplicationContext(), "删除成功！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +74,16 @@ public class MySetActivity extends Activity {
 
         isLogin = getIntent().getExtras().getBoolean("islogin");
 
-        cachePath = "/GR_commonweal/avatarCache";
-        String fileSize = getFileOrFilesSize(cachePath);
-        mCacheSize.setText(fileSize);
+        if (Environment.getExternalStorageState().equals(
+
+                Environment.MEDIA_MOUNTED)) {
+            File skRoot = Environment.getExternalStorageDirectory();
+            cachePath = skRoot.getPath() + "/GR_commonweal/avatarCache";
+            String fileSize = getFileOrFilesSize(cachePath);
+            mCacheSize.setText(String.valueOf(fileSize));
+
+        }
+
         mTvNowVer = (TextView) findViewById(R.id.tv_now_ver);
         mTvShare = (TextView) findViewById(R.id.tv_share);
         mTvShare.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +118,7 @@ public class MySetActivity extends Activity {
      *
      * @param view
      */
-    @OnClick({R.id.tv_exit, R.id.iv_set_back, R.id.tv_feedback, R.id.tv_about, R.id.tv_update, R.id.clear_cache})
+    @OnClick({R.id.tv_exit, R.id.iv_back, R.id.tv_feedback, R.id.tv_about, R.id.tv_update, R.id.clear_cache})
     public void onClick(View view) {
         switch (view.getId()) {
             //退出登陆
@@ -107,11 +133,11 @@ public class MySetActivity extends Activity {
                 }
                 break;
             case R.id.clear_cache:
-                if (deleteDirectory(cachePath))
-                    Toast.makeText(MySetActivity.this, "清除成功", Toast.LENGTH_SHORT).show();
+                File file = new File(cachePath);
+                DeleteFile(file);
                 break;
             //返回主界面
-            case R.id.iv_set_back:
+            case R.id.iv_back:
                 finish();
                 break;
             case R.id.tv_feedback:
@@ -127,7 +153,7 @@ public class MySetActivity extends Activity {
     }
 
 
-    public String getFileOrFilesSize(String filePath) {
+    private String getFileOrFilesSize(String filePath) {
         File file = new File(filePath);
         long blockSize = 0;
         try {
@@ -206,39 +232,34 @@ public class MySetActivity extends Activity {
         return fileSizeString;
     }
 
+
     /**
-     * 删除文件夹以及目录下的文件
+     * 递归删除文件和文件夹
      *
-     * @param filePath 被删除目录的文件路径
-     * @return 目录删除成功返回true，否则返回false
+     * @param file 要删除的根目录
      */
-    private boolean deleteDirectory(String filePath) {
-        boolean flag = false;
-        //如果filePath不以文件分隔符结尾，自动添加文件分隔符
-        if (!filePath.endsWith(File.separator)) {
-            filePath = filePath + File.separator;
-        }
-        File dirFile = new File(filePath);
-        if (!dirFile.exists() || !dirFile.isDirectory()) {
-            return false;
-        }
-        flag = true;
-        File[] files = dirFile.listFiles();
-        //遍历删除文件夹下的所有文件(包括子目录)
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].isFile()) {
-                //删除子文件r
-                flag = deleteFile(files[i].getAbsolutePath());
-                if (!flag) break;
-            } else {
-                //删除子目录
-                flag = deleteDirectory(files[i].getAbsolutePath());
-                if (!flag) break;
+    public void DeleteFile(File file) {
+        if (file.exists() == false) {
+            mHandler.sendEmptyMessage(0);
+            return;
+        } else {
+            if (file.isFile()) {
+                file.delete();
+                return;
+            }
+            if (file.isDirectory()) {
+                File[] childFile = file.listFiles();
+                if (childFile == null || childFile.length == 0) {
+                    file.delete();
+                    return;
+                }
+                for (File f : childFile) {
+                    DeleteFile(f);
+                }
+                file.delete();
             }
         }
-        if (!flag) return false;
-        //删除当前空目录
-        return dirFile.delete();
+        mHandler.sendEmptyMessage(1);
     }
 
     private void updateApp() {

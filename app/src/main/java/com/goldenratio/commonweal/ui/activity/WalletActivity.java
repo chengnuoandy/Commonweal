@@ -66,6 +66,7 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
     }
 
     private void initListtener() {
+        findViewById(R.id.iv_back).setOnClickListener(this);
         mTvPayRecord.setOnClickListener(this);
         TopUP.setOnClickListener(this);
     }
@@ -73,6 +74,9 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
             case R.id.ll_pay_record:
                 startActivity(new Intent(this, PayRecordActivity.class));
                 break;

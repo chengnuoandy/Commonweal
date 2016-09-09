@@ -182,7 +182,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                 // 已选择的图片路径
                 // .pathList(path)
                 // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
-                .filePath("/ImageSelector/Pictures")
+                .filePath("/GR_commonweal/avatarCache")
                 .build();
     }
 

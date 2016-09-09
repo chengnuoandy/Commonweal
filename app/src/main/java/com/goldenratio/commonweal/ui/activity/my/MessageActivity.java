@@ -62,13 +62,16 @@ public class MessageActivity extends FragmentActivity implements ViewPager.OnPag
         mFragmentList.add(new PrivateLetterFragment());
 
         mFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragmentList);
-
+        String d = getIntent().getStringExtra("dyc");
         initTabLineWidth();
         mVpMessage.setAdapter(mFragmentPagerAdapter);
         mVpMessage.addOnPageChangeListener(this);
-        String d = getIntent().getStringExtra("dyc");
-        if (d != null && d.equals("p"))
+        if (d != null && d.equals("p")) {
             mVpMessage.setCurrentItem(1);
+            LinearLayout.LayoutParams mLp = (LinearLayout.LayoutParams) mIvMessageTab
+                    .getLayoutParams();
+            mLp.leftMargin = (screenWidth / 2) + (screenWidth / 6);
+        }
         Log.i("message", "onCreate: " + getIntent().getStringExtra("dyc"));
     }
 

@@ -115,6 +115,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
         setContentView(R.layout.activity_user_settings);
         ButterKnife.bind(this);
         mUserID = MyFragment.mUserID;
+        wbID = ((MyApplication) (getApplicationContext())).getWbId();
 
         // 创建微博实例
         // 快速授权时，不要传入 SCOPE，否则可能会授权不成功
@@ -239,8 +240,7 @@ public class UserSettingsActivity extends Activity implements IMySqlManager {
                 showPayPwdDialog();
                 break;
             case R.id.rl_set_weibo:
-                String WbID = ((MyApplication) (getApplicationContext())).getWbId();
-                if (TextUtils.isEmpty(WbID)) {
+                if (TextUtils.isEmpty(wbID)) {
                     wbAuthorize();
                 } else {
                     Toast.makeText(UserSettingsActivity.this, "你已经绑定了！", Toast.LENGTH_SHORT).show();

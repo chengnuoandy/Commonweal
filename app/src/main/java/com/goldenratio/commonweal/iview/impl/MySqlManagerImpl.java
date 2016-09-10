@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ import java.util.Random;
 
 import c.b.BP;
 import c.b.PListener;
+import c.b.QListener;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import okhttp3.Call;
@@ -97,6 +99,8 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     public void pay(final boolean alipayOrWechatPay, final double price, final double allCoin, final String changeCoin) {
 
+        final String[] orderID = new String[1];
+
         BP.pay("公益币充值", "描述", price, alipayOrWechatPay, new PListener() {
 
             // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
@@ -104,6 +108,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             public void unknow() {
                 Toast.makeText(mContext, "支付结果未知,请稍后手动查询", Toast.LENGTH_SHORT)
                         .show();
+                isPay(orderID[0],allCoin,changeCoin);
                 dismiss();
             }
 
@@ -111,13 +116,15 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             @Override
             public void succeed() {
                 money = price;
-                updateUserCoinByObjectId("+" + allCoin, changeCoin, -1);
+                isPay(orderID[0],allCoin,changeCoin);
+//                updateUserCoinByObjectId("+" + allCoin, changeCoin, -1);
             }
 
             // 无论成功与否,返回订单号
             @Override
             public void orderId(String orderI) {
                 // 此处应该保存订单号,比如保存进数据库等,以便以后查询
+                orderID[0] = orderI;
                 closeProgressDialog();
             }
 
@@ -137,6 +144,35 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                 }
                 Log.i("Fail", reason + code + "支付失败");
                 closeProgressDialog();
+            }
+        });
+    }
+
+    /**
+     * 确认支付是否成功
+     */
+    public void isPay(String orderID, final double allCoin, final String changeCoin){
+
+        if (TextUtils.isEmpty(orderID)){
+            closeProgressDialog();
+            return;
+        }
+        BP.query(orderID, new QListener() {
+
+            @Override
+            public void succeed(String status) {
+                Log.d("lxc", "succeed: " + status);
+                if (status.equals("SUCCESS")){
+                    updateUserCoinByObjectId("+" + allCoin, changeCoin, -1);
+                }
+            }
+
+            @Override
+            public void fail(int code, String reason) {
+                Toast.makeText(mContext, "确认支付失败！", Toast.LENGTH_SHORT).show();
+                Log.d("lxc", "fail: "+ code + ":" + reason);
+                closeProgressDialog();
+
             }
         });
     }

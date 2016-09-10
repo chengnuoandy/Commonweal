@@ -31,7 +31,6 @@ import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.WalletActivity;
 import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
 import com.goldenratio.commonweal.ui.activity.my.DynamicActivity;
-import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
@@ -44,6 +43,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobInstallation;
+import cn.bmob.v3.BmobPushManager;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -205,8 +206,15 @@ public class MyFragment extends Fragment {
                 }
                 break;
             case R.id.iv_my_message:
-                Intent intent = new Intent(getActivity(), MessageActivity.class);
-                startActivity(intent);
+                String installationId = "E0DE66DCBCC5547BA1AB5C022D5C3703";  //在用户表-->User_DeviceInfo
+                BmobPushManager bmobPush = new BmobPushManager();
+                BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
+                query.addWhereEqualTo("installationId", installationId);
+                bmobPush.setQuery(query);
+                bmobPush.pushMessage("p-231-heheh");
+
+              /*  Intent intent = new Intent(getActivity(), MessageActivity.class);
+                startActivity(intent);*/
                 break;
             case R.id.tv_my_attention:
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
@@ -308,7 +316,7 @@ public class MyFragment extends Fragment {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 
-      /*              Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
+      /*            Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
                     Drawable drawable = new BitmapDrawable(blurBitmap);
                     mRlBackground.setBackground(drawable);*/
                 }

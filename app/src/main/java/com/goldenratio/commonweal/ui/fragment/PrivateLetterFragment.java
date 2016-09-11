@@ -45,6 +45,7 @@ public class PrivateLetterFragment extends Fragment {
         return view;
     }
 
+
     private void getMessageFromBmob() {
         BmobQuery<Message> user_profileBmobQuery = new BmobQuery<>();
         user_profileBmobQuery.findObjects(new FindListener<Message>() {

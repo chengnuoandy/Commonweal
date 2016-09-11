@@ -218,9 +218,9 @@ public class MyFragment extends Fragment {
                 query.addWhereEqualTo("installationId", installationId);
                 bmobPush.setQuery(query);
                 bmobPush.pushMessage("p-231-heheh");*/
-
+                mIvNotify.setVisibility(View.GONE);
                 Intent intent = new Intent(getActivity(), MessageActivity.class);
-                startActivityForResult(intent, 4);
+                startActivity(intent);
                 break;
             case R.id.tv_my_attention:
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
@@ -261,11 +261,6 @@ public class MyFragment extends Fragment {
             case 3:
                 getUserData();
                 break;
-            case 4:
-                if (resultCode == Activity.RESULT_OK) {
-                    mIvNotify.setVisibility(View.GONE);
-                }
-                break;
         }
     }
 
@@ -290,7 +285,7 @@ public class MyFragment extends Fragment {
 
     private void getBmobMesageCount() {
         BmobQuery<Message> user_profileBmobQuery = new BmobQuery<>();
-        user_profileBmobQuery.addWhereEqualTo("objectId", mUserID);
+        user_profileBmobQuery.addWhereEqualTo("userID", mUserID);
         user_profileBmobQuery.findObjects(new FindListener<Message>() {
             @Override
             public void done(List<Message> list, BmobException e) {
@@ -313,8 +308,8 @@ public class MyFragment extends Fragment {
             public void done(List<NotificationManager> list, BmobException e) {
                 if (e == null) {
                     if (notifyCount == list.size()) {
-                        mIvNotify.setVisibility(View.VISIBLE);
-                    } else mIvNotify.setVisibility(View.GONE);
+                        mIvNotify.setVisibility(View.GONE);
+                    } else mIvNotify.setVisibility(View.VISIBLE);
                 } else {
 //                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
                     ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
@@ -325,7 +320,7 @@ public class MyFragment extends Fragment {
 
     /**
      * 读取本地数据库数据 （用户默认头像和签名）
-     * <p>
+     * <p/>
      * 用户唯一id（objectid）
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.bean.Message;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.BidRecordActivity;
@@ -31,6 +33,7 @@ import com.goldenratio.commonweal.ui.activity.OrderActivity;
 import com.goldenratio.commonweal.ui.activity.WalletActivity;
 import com.goldenratio.commonweal.ui.activity.my.AttentionStarActivity;
 import com.goldenratio.commonweal.ui.activity.my.DynamicActivity;
+import com.goldenratio.commonweal.ui.activity.my.MessageActivity;
 import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
@@ -43,8 +46,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobInstallation;
-import cn.bmob.v3.BmobPushManager;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -66,6 +67,8 @@ public class MyFragment extends Fragment {
     RelativeLayout mRlBackground;
     @BindView(R.id.tv_my_attention)
     TextView mTvMyAttention;
+    @BindView(R.id.iv_notify)
+    ImageView mIvNotify;
 
     private boolean isLogin = false;
     private String userSex;
@@ -88,6 +91,8 @@ public class MyFragment extends Fragment {
     private String mUserCoin;
     private TextView mBidRecord;
     private TextView mTvVerify;
+
+    private int notifyCount;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -206,15 +211,16 @@ public class MyFragment extends Fragment {
                 }
                 break;
             case R.id.iv_my_message:
-                String installationId = "E0DE66DCBCC5547BA1AB5C022D5C3703";  //在用户表-->User_DeviceInfo
+
+             /*   String installationId = "E0DE66DCBCC5547BA1AB5C022D5C3703";  //在用户表-->User_DeviceInfo
                 BmobPushManager bmobPush = new BmobPushManager();
                 BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
                 query.addWhereEqualTo("installationId", installationId);
                 bmobPush.setQuery(query);
-                bmobPush.pushMessage("p-231-heheh");
+                bmobPush.pushMessage("p-231-heheh");*/
 
-              /*  Intent intent = new Intent(getActivity(), MessageActivity.class);
-                startActivity(intent);*/
+                Intent intent = new Intent(getActivity(), MessageActivity.class);
+                startActivityForResult(intent, 4);
                 break;
             case R.id.tv_my_attention:
                 Intent intent2 = new Intent(getActivity(), AttentionStarActivity.class);
@@ -255,6 +261,11 @@ public class MyFragment extends Fragment {
             case 3:
                 getUserData();
                 break;
+            case 4:
+                if (resultCode == Activity.RESULT_OK) {
+                    mIvNotify.setVisibility(View.GONE);
+                }
+                break;
         }
     }
 
@@ -277,9 +288,44 @@ public class MyFragment extends Fragment {
         return isTableExist;
     }
 
+    private void getBmobMesageCount() {
+        BmobQuery<Message> user_profileBmobQuery = new BmobQuery<>();
+        user_profileBmobQuery.addWhereEqualTo("objectId", mUserID);
+        user_profileBmobQuery.findObjects(new FindListener<Message>() {
+            @Override
+            public void done(List<Message> list, BmobException e) {
+                if (e == null) {
+                    notifyCount = list.size();
+                    getBmobNotifyManager();
+                } else {
+//                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
+                }
+            }
+        });
+    }
+
+    private void getBmobNotifyManager() {
+        BmobQuery<NotificationManager> user_profileBmobQuery = new BmobQuery<>();
+        user_profileBmobQuery.addWhereEqualTo("objectId", mUserID);
+        user_profileBmobQuery.findObjects(new FindListener<NotificationManager>() {
+            @Override
+            public void done(List<NotificationManager> list, BmobException e) {
+                if (e == null) {
+                    if (notifyCount == list.size()) {
+                        mIvNotify.setVisibility(View.VISIBLE);
+                    } else mIvNotify.setVisibility(View.GONE);
+                } else {
+//                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
+                }
+            }
+        });
+    }
+
     /**
      * 读取本地数据库数据 （用户默认头像和签名）
-     * <p/>
+     * <p>
      * 用户唯一id（objectid）
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -322,6 +368,7 @@ public class MyFragment extends Fragment {
                 }
             });
         }
+        getBmobMesageCount();
         Log.d("Kiuber_LOG", "getUserData: " + mUserID);
         if (!TextUtils.isEmpty(mUserID)) {
             BmobQuery<User_Profile> user_profileBmobQuery = new BmobQuery<>();

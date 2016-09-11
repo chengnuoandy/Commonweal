@@ -104,7 +104,7 @@ public class StarInfoActivity extends Activity {
                                           Log.i("bmob", "查询成功：共" + object + object.size() + "条数据。");
                                       }
                                   } else {
-//                    Log.i("bmob", "失败：" + e.getMessage());
+        //                    Log.i("bmob", "失败：" + e.getMessage());
                                       ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                                   }
                                   closeProgressDialog();

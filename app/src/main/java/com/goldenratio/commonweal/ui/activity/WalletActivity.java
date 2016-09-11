@@ -103,13 +103,13 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (!TextUtils.isEmpty(ETUSER.getText().toString())) {
-                            final double inputCoin = Double.valueOf(ETUSER.getText().toString());
+                            final int inputCoin = Integer.valueOf(ETUSER.getText().toString());
                             final double sumCoin = Double.valueOf(mUserCoin) + inputCoin;
                             final double money = (inputCoin / 10) * (1.05);
                             AlertDialog.Builder builder =
                                     new AlertDialog.Builder(WalletActivity.this);
                             builder.setMessage("您将花费" + money + "元（由于个人开发团队限制，" +
-                                    "平台收取5%的手续费），充值" + mUserCoin + "公益币");
+                                    "平台收取5%的手续费），充值" + inputCoin + "公益币");
                             builder.setPositiveButton("充值", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

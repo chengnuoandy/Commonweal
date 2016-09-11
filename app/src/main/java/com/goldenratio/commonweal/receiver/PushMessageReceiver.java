@@ -46,7 +46,7 @@ public class PushMessageReceiver extends BroadcastReceiver {
             assert pushData != null;
             String[] sPushData = pushData.split("-");
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            Intent intent1 = new Intent(context, (sPushData[0].equals("p") || sPushData[0].equals("d")) ?
+            Intent intent1 = new Intent(context, (sPushData[0].equals("m")) ?
                     MessageActivity.class : MainActivity.class);
             intent1.putExtra("dyc", sPushData[0]);
             Log.i("拆分后的推送数据", "onReceive: " + sPushData + sPushData.length);

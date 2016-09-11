@@ -8,9 +8,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/normal_space">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_selector"/>
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/colorPrimary"/>
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -19,6 +34,7 @@
             android:text="消息"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size"/>
+
     </RelativeLayout>
 
     <View
@@ -26,56 +42,20 @@
         android:layout_height="1dp"
         android:background="@color/default_circle_indicator_stroke_color"/>
 
-    <LinearLayout
+    <ListView
+        android:id="@+id/lv_attention"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_below="@+id/rl_title"
+        android:layout_marginTop="5dp"/>
 
-        <TextView
-            android:id="@+id/tv_dynamicMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="@dimen/little_space"
-            android:text="动态"
-            android:textColor="@color/ordinary"
-            android:textSize="15sp"/>
-
-
-        <TextView
-            android:id="@+id/tv_privateLetter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="@dimen/little_space"
-            android:text="私信"
-            android:textColor="@color/ordinary"
-            android:textSize="15sp"/>
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/iv_message_tab"
-        android:layout_width="90dp"
-        android:layout_height="2dp"
-        android:background="@drawable/tab_dynamic_selected_pressed"
-        android:contentDescription="tab">
-
-    </ImageView>
-
-    <View
+    <TextView
+        android:id="@+id/tv_no_data"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/default_circle_indicator_stroke_color"/>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_my_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    </android.support.v4.view.ViewPager>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="暂无数据"
+        android:visibility="gone"/>
 
 </LinearLayout>

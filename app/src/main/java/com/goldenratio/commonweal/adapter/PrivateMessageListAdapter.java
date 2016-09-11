@@ -70,62 +70,22 @@ public class PrivateMessageListAdapter extends BaseAdapter {
         }
 
         final Message message = mMessageList.get(position);
+        viewHolder.queryNotifyFromBmob(position);
 //        Picasso.with(mContext).load(user_profile.getUser_image_hd()).into(viewHolder.mCivDonateAvatar);
         viewHolder.mTvName.setText(message.getTitle());
         viewHolder.mTvMessage.setText(message.getContent());
         viewHolder.mTvDate.setText(message.getUpdatedAt());
-
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.mRlNotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                queryNotifyFromBmob(position);
+                finalViewHolder.queryNotifyFromBmob(position);
                 showNotify(message.getContent());
             }
         });
         return convertView;
     }
 
-    private void queryNotifyFromBmob(final int position) {
-        BmobQuery<NotifyManager> user_profileBmobQuery = new BmobQuery<>();
-        Message message = mMessageList.get(position);
-        final String mUserID = ((MyApplication) ((Activity) mContext).getApplication()).getObjectID();
-        user_profileBmobQuery.addWhereEqualTo("userID", mUserID);
-        user_profileBmobQuery.addWhereEqualTo("notifyID", message.getObjectId());
-        user_profileBmobQuery.findObjects(new FindListener<NotifyManager>() {
-            @Override
-            public void done(List<NotifyManager> list, BmobException e) {
-                if (e == null) {
-                    if (list.size() == 0) {
-                        addNotifyToManager(position);
-                    } else {
-                    }
-                } else {
-//                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
-                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
-                }
-            }
-        });
-    }
-
-    private void addNotifyToManager(int position) {
-        final NotifyManager notifyManager = new NotifyManager();
-        Message message = mMessageList.get(position);
-        String mUserID = ((MyApplication) ((Activity) mContext).getApplication()).getObjectID();
-        notifyManager.setNotifyID(message.getObjectId());
-        notifyManager.setUserID(mUserID);
-        notifyManager.save(new SaveListener<String>() {
-            @Override
-            public void done(String s, BmobException e) {
-                if (e == null) {
-                    Log.i("保存成功", "done: " + s);
-                } else {
-
-                }
-
-            }
-        });
-    }
 
     private void showNotify(String notifyDetail) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -142,8 +102,8 @@ public class PrivateMessageListAdapter extends BaseAdapter {
                 CircleImageView mCivDonateAvatar;*/
         @BindView(R.id.rl_notify)
         RelativeLayout mRlNotify;
-        /*    @BindView(R.id.iv_notify)
-            TextView mIvNotify;*/
+        @BindView(R.id.iv_notify)
+        TextView mIvNotify;
         @BindView(R.id.tv_name)
         TextView mTvName;
         @BindView(R.id.tv_message)
@@ -154,5 +114,48 @@ public class PrivateMessageListAdapter extends BaseAdapter {
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
+        private void queryNotifyFromBmob(final int position) {
+            BmobQuery<NotifyManager> user_profileBmobQuery = new BmobQuery<>();
+            Message message = mMessageList.get(position);
+            final String mUserID = ((MyApplication) ((Activity) mContext).getApplication()).getObjectID();
+            user_profileBmobQuery.addWhereEqualTo("userID", mUserID);
+            user_profileBmobQuery.addWhereEqualTo("notifyID", message.getObjectId());
+            user_profileBmobQuery.findObjects(new FindListener<NotifyManager>() {
+                @Override
+                public void done(List<NotifyManager> list, BmobException e) {
+                    if (e == null) {
+                        if (list.size() == 0) {
+                            addNotifyToManager(position);
+                        } else {
+                            mIvNotify.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+//                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                        ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
+                    }
+                }
+            });
+        }
+
+        private void addNotifyToManager(final int position) {
+            final NotifyManager notifyManager = new NotifyManager();
+            Message message = mMessageList.get(position);
+            String mUserID = ((MyApplication) ((Activity) mContext).getApplication()).getObjectID();
+            notifyManager.setNotifyID(message.getObjectId());
+            notifyManager.setUserID(mUserID);
+            notifyManager.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        Log.i("保存成功", "done: " + s);
+                    } else {
+                    }
+
+                }
+            });
+        }
     }
+
+
 }

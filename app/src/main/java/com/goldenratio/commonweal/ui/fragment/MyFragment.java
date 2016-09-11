@@ -302,7 +302,7 @@ public class MyFragment extends Fragment {
 
     private void getBmobNotifyManager() {
         BmobQuery<NotificationManager> user_profileBmobQuery = new BmobQuery<>();
-        user_profileBmobQuery.addWhereEqualTo("objectId", mUserID);
+        user_profileBmobQuery.addWhereEqualTo("userID", mUserID);
         user_profileBmobQuery.findObjects(new FindListener<NotificationManager>() {
             @Override
             public void done(List<NotificationManager> list, BmobException e) {

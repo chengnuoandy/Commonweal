@@ -52,7 +52,7 @@ public class MessageActivity extends Activity {
                     if (list.size() == 0) {
                         mTvNoData.setVisibility(View.VISIBLE);
                     } else
-                        mLvAttention.setAdapter(new PrivateMessageListAdapter(list, getApplication()));
+                        mLvAttention.setAdapter(new PrivateMessageListAdapter(list, MessageActivity.this));
                 } else {
 //                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
                     ErrorCodeUtil.switchErrorCode(getApplication(), e.getErrorCode() + "");

@@ -22,7 +22,8 @@
             android:id="@+id/iv_notify"
             android:layout_width="10dp"
             android:layout_height="10dp"
-            android:src="@mipmap/ic_new_notify"/>
+            android:src="@mipmap/ic_new_notify"
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="wrap_content"

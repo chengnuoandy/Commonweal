@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,7 @@ import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.ui.activity.my.SellGoodActivity;
 import com.goldenratio.commonweal.ui.activity.my.UserSettingsActivity;
 import com.goldenratio.commonweal.ui.activity.my.VerifyActivity;
+import com.goldenratio.commonweal.util.BitmapUtil;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.squareup.picasso.Picasso;
 
@@ -357,9 +360,9 @@ public class MyFragment extends Fragment {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 
-      /*            Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
+                    Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
                     Drawable drawable = new BitmapDrawable(blurBitmap);
-                    mRlBackground.setBackground(drawable);*/
+                    mRlBackground.setBackground(drawable);
                 }
             });
         }

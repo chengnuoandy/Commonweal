@@ -70,8 +70,7 @@ public class PrivateMessageListAdapter extends BaseAdapter {
         }
 
         final Message message = mMessageList.get(position);
-        viewHolder.queryNotifyFromBmob(position);
-//        Picasso.with(mContext).load(user_profile.getUser_image_hd()).into(viewHolder.mCivDonateAvatar);
+    //        Picasso.with(mContext).load(user_profile.getUser_image_hd()).into(viewHolder.mCivDonateAvatar);
         viewHolder.mTvName.setText(message.getTitle());
         viewHolder.mTvMessage.setText(message.getContent());
         viewHolder.mTvDate.setText(message.getUpdatedAt());
@@ -102,8 +101,8 @@ public class PrivateMessageListAdapter extends BaseAdapter {
                 CircleImageView mCivDonateAvatar;*/
         @BindView(R.id.rl_notify)
         RelativeLayout mRlNotify;
-        @BindView(R.id.iv_notify)
-        TextView mIvNotify;
+  /*      @BindView(R.id.iv_notify)
+        ImageView mIvNotify;*/
         @BindView(R.id.tv_name)
         TextView mTvName;
         @BindView(R.id.tv_message)
@@ -115,7 +114,7 @@ public class PrivateMessageListAdapter extends BaseAdapter {
             ButterKnife.bind(this, view);
         }
 
-        private void queryNotifyFromBmob(final int position) {
+        public void queryNotifyFromBmob(final int position) {
             BmobQuery<NotifyManager> user_profileBmobQuery = new BmobQuery<>();
             Message message = mMessageList.get(position);
             final String mUserID = ((MyApplication) ((Activity) mContext).getApplication()).getObjectID();
@@ -126,9 +125,10 @@ public class PrivateMessageListAdapter extends BaseAdapter {
                 public void done(List<NotifyManager> list, BmobException e) {
                     if (e == null) {
                         if (list.size() == 0) {
+//                            mIvNotify.setVisibility(View.VISIBLE);
                             addNotifyToManager(position);
                         } else {
-                            mIvNotify.setVisibility(View.VISIBLE);
+//                            mIvNotify.setVisibility(View.GONE);
                         }
                     } else {
 //                        Log.d("Kiuber_LOG", "done: " + e.getMessage());

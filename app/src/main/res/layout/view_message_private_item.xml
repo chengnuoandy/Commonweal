@@ -16,6 +16,15 @@
         android:src="@mipmap/ic_launcher"
         android:tag="1"/>
 
+    <ImageView
+        android:id="@+id/iv_notify"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_alignBottom="@+id/civ_donate_avatar"
+        android:layout_alignRight="@+id/civ_donate_avatar"
+        android:src="@mipmap/ic_new_notify"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
@@ -24,7 +33,7 @@
         android:layout_centerInParent="true"
         android:layout_toRightOf="@+id/civ_donate_avatar"
         android:text="爱点"
-        android:textColor="@color/black"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"/>
 
     <TextView
@@ -33,10 +42,10 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_name"
         android:layout_below="@+id/tv_name"
-        android:textColor="@color/colorAccent"
         android:layout_marginTop="5dp"
         android:lines="1"
-        android:text="消息"/>
+        android:text="消息"
+        android:textColor="@color/dark_gray"/>
 
     <TextView
         android:id="@+id/tv_date"

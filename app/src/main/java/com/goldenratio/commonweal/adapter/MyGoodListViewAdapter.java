@@ -302,7 +302,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         Intent intent = new Intent(mContext, StarInfoActivity.class);
                         intent.putExtra("ishas", isHas != -1);
                         intent.putExtra("id", mGoodList.get(position).getGood_User().getObjectId());
-                        intent.putExtra("autograph",mGoodList.get(position).getGood_User().getUser_Autograph());
+                        intent.putExtra("autograph", mGoodList.get(position).getGood_User().getUser_Autograph());
                         intent.putExtra("nickName", mGoodList.get(position).getGood_User().getUser_Nickname());
                         intent.putExtra("isv", mGoodList.get(position).getGood_User().isUser_IsV());
                         intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());
@@ -310,39 +310,11 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                     }
                     break;
                 case R.id.cv_good_item:
-                    ProgressDialog progressDialog = ProgressDialog.show(mContext, null, "正在安全获取", true, false);
-                    //获取当前条目的截止时间
-                    long endTime = mGoodList.get(position).getGood_UpDateM();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Bmob_Good", mGoodList.get(position));
-                    StartAct(bundle, endTime, progressDialog);
+                    Intent intent = new Intent(mContext, GoodDetailActivity.class);
+                    intent.putExtra("objectId", mGoodList.get(position).getObjectId());
+                    mContext.startActivity(intent);
                     break;
             }
-        }
-
-        /**
-         * 跳转activity逻辑代码
-         * 获取现在时间与截止时间的差值 传给activity
-         * 由于bmob获取时间方法限制，故提取方法作
-         */
-        private void StartAct(final Bundle bundle, final long endTime, final ProgressDialog progressDialog) {
-            Bmob.getServerTime(new QueryListener<Long>() {
-                @Override
-                public void done(Long aLong, BmobException e) {
-                    if (e == null) {
-                        Long TimeLeft = endTime - (aLong * 1000L);
-                        Intent intent = new Intent(mContext, GoodDetailActivity.class);
-                        intent.putExtra("EndTime", TimeLeft);
-                        intent.putExtras(bundle);
-                        mContext.startActivity(intent);
-                        progressDialog.dismiss();
-                    } else {
-//                        Log.d("lxc", "获取服务器时间失败:" + e.getMessage());
-//                        Toast.makeText(mContext, "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                        ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
-                    }
-                }
-            });
         }
     }
 }

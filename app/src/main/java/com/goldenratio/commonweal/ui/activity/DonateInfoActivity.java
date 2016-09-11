@@ -15,6 +15,7 @@ import com.goldenratio.commonweal.adapter.DonateInfoListAdapter;
 import com.goldenratio.commonweal.bean.Donate_Info;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class DonateInfoActivity extends Activity {
 
         String helpID = getIntent().getStringExtra("help_id");
         getDonateInfoFromBmob(helpID);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void getDonateInfoFromBmob(String helpID) {
@@ -91,7 +93,7 @@ public class DonateInfoActivity extends Activity {
                     }
                 } else
 //                    Toast.makeText(DonateInfoActivity.this, "获取捐赠信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
+                    closeProgressDialog();
                 ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
             }
         });

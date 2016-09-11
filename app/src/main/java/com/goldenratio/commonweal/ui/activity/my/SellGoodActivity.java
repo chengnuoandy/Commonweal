@@ -93,34 +93,8 @@ public class SellGoodActivity extends Activity implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //获取当前条目的截止时间
-        endTime = mGoodList.get(position).getGood_UpDateM();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("Bmob_Good", mGoodList.get(position));
-        StartAct(bundle);
-    }
-
-    /**
-     * 跳转activity逻辑代码
-     * 获取现在时间与截止时间的差值 传给activity
-     * 由于bmob获取时间方法限制，故提取方法作
-     */
-    private void StartAct(final Bundle bundle) {
-        Bmob.getServerTime(new QueryListener<Long>() {
-            @Override
-            public void done(Long aLong, BmobException e) {
-                if (e == null) {
-                    Long TimeLeft = endTime - (aLong * 1000L);
-                    Intent intent = new Intent(SellGoodActivity.this, GoodDetailActivity.class);
-                    intent.putExtra("EndTime", TimeLeft);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } else {
-//                    Toast.makeText(SellGoodActivity.this, "获取服务器时间失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
-                }
-            }
-
-        });
+        Intent intent = new Intent(SellGoodActivity.this, GoodDetailActivity.class);
+        intent.putExtra("objectId", mGoodList.get(position));
+        startActivity(intent);
     }
 }

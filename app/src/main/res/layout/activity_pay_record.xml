@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:padding="@dimen/normal_space"
-            android:src="@drawable/ic_arrow_back_black_24dp" />
+            android:src="@drawable/ic_back_selector" />
 
         <TextView
             android:id="@+id/textView"

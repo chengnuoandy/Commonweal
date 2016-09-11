@@ -82,18 +82,48 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     private double bidCoin;
     private TextView mTvBidRecord;
     private CountdownView mCountdownView1;
-    private FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_good_detail);
         initView();
-        initData();
-        initSliderLayout();
+        queryGoodData();
         mUserId = ((MyApplication) getApplication()).getObjectID();
         mySqlManager = new MySqlManagerImpl(this, this);
-        new ImmersiveUtil(this, R.color.white,true);
+        new ImmersiveUtil(this, R.color.white, true);
+    }
+
+    private void queryGoodData() {
+        final String objectId = getIntent().getStringExtra("objectId");
+        BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
+        goodBmobQuery.addWhereEqualTo("objectId", objectId);
+        goodBmobQuery.include("Good_User");
+        goodBmobQuery.findObjects(new FindListener<Good>() {
+            @Override
+            public void done(final List<Good> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() == 1) {
+                        Bmob.getServerTime(new QueryListener<Long>() {
+                            @Override
+                            public void done(Long aLong, BmobException e) {
+                                mGood = list.get(0);
+                                long endTimeM = mGood.getGood_UpDateM();
+                                endTime = endTimeM - (aLong * 1000L);
+                                initIsGoodStatus();
+                                initViewData();
+                                initSliderLayout();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(mContext, "未找到当前物品信息", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                } else {
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
+            }
+        });
     }
 
     private void initSliderLayout() {
@@ -128,12 +158,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mDemoSlider.addOnPageChangeListener(this);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        initIsGoodStatus();
-    }
-
     /**
      * 初始化布局
      */
@@ -162,8 +186,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
         mIvShowMore.setOnClickListener(this);
         mTvBidRecord = (TextView) findViewById(R.id.tv_bid_record);
         mTvBidRecord.setOnClickListener(this);
-        mFrameLayout = (FrameLayout) findViewById(R.id.id_content);
-
     }
 
     @Override
@@ -245,7 +267,6 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
             case R.id.iv_show_more:
                 mCountdownView.setVisibility(View.GONE);
                 mCountdownView1.setVisibility(View.VISIBLE);
-                mCountdownView1.start(endTime);
                 mIvShowMore.setVisibility(View.GONE);
                 break;
             case R.id.tv_bid_record:
@@ -264,13 +285,9 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
      * 设置相应控件的数据显示
      */
 
-    private void initData() {
-        Intent intent = getIntent();
-        endTime = intent.getLongExtra("EndTime", 0);
-        mGood = (Good) intent.getSerializableExtra("Bmob_Good");
-        Log.d("lxc", "initData: ----> " + mGood.getObjectId() + "endtime-->" + endTime);
+    private void initViewData() {
+        mCountdownView1.start(endTime);
         mCountdownView.start(endTime);
-
         mTvGoodName.setText(mGood.getGood_Name());
         mTvGoodDescription.setText(mGood.getGood_Description());
         mTvStartCoin.setText(mGood.getGood_StartCoin());

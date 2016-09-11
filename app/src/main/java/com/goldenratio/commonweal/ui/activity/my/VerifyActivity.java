@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
@@ -58,7 +59,7 @@ public class VerifyActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_auth);
         initView();
         initData();
-        new ImmersiveUtil(this, R.color.white,true);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initData() {
@@ -164,6 +165,7 @@ public class VerifyActivity extends Activity implements View.OnClickListener {
                 mUsersAPI.show(uid, mListener);
                 Toast.makeText(VerifyActivity.this,
                         "授权成功", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             } else {
                 // 以下几种情况，您会收到 Code：
                 // 1. 当您未在平台上注册的应用程序的包名与签名时；
@@ -176,6 +178,7 @@ public class VerifyActivity extends Activity implements View.OnClickListener {
                 }
                 closeProgressDialog();
                 Toast.makeText(VerifyActivity.this, message, Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
             }
         }
 

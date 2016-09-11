@@ -17,14 +17,14 @@
             android:id="@+id/iv_donate_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_back_black_24dp" />
+            android:src="@drawable/ic_back_selector" />
 
         <TextView
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
-            android:layout_toRightOf="@+id/iv_back"
+            android:layout_toRightOf="@+id/iv_donate_back"
             android:background="@color/colorPrimary" />
 
         <TextView

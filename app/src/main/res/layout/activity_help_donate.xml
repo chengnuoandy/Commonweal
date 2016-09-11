@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layoutContent"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:id="@+id/layoutContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@color/snow"
-        android:orientation="horizontal">
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
 
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/normal_space"
-            android:src="@mipmap/back_ic"/>
+            android:src="@drawable/ic_back_selector" />
 
         <TextView
-            android:id="@+id/textView"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/colorPrimary" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="捐赠详情"
+            android:layout_centerInParent="true"
+            android:text="开始捐赠"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
-
-
+            android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
     <LinearLayout
@@ -44,7 +45,7 @@
             android:layout_marginLeft="5dp"
             android:paddingTop="20dp"
             android:text="可用公益币："
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/avail"
@@ -53,7 +54,7 @@
             android:paddingTop="20dp"
             android:text="0"
             android:textColor="@color/red"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
     </LinearLayout>
 
     <RadioGroup
@@ -69,7 +70,7 @@
             android:layout_marginTop="10dp"
             android:checked="true"
             android:text="10"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
 
         <RadioButton
@@ -78,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="50"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/checkBox3"
@@ -86,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="100"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/checkBox4"
@@ -94,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="200"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/checkBox5"
@@ -102,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="500"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
 
         <RadioButton
@@ -111,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="其他"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
 
     </RadioGroup>
 
@@ -122,7 +123,7 @@
         android:hint="请输入公益币金额"
         android:maxLength="10"
         android:maxLines="1"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
     <TextView
@@ -136,5 +137,5 @@
         android:padding="@dimen/normal_space"
         android:text="立即捐赠"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_default"/>
+        android:textSize="@dimen/text_size_default" />
 </LinearLayout>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical"
-              android:padding="@dimen/normal_space">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/normal_space">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/iv_user_avatar"
             android:layout_width="35dp"
-            android:layout_height="35dp"/>
+            android:layout_height="35dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:gravity="center"
                 android:text="昵称"
                 android:textColor="@color/colorPrimary"
-                android:textSize="13sp"/>
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/tv_time"
@@ -40,20 +40,20 @@
                 android:layout_marginLeft="@dimen/little_space"
                 android:layout_marginStart="@dimen/little_space"
                 android:text="发布时间"
-                android:textSize="11sp"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tv_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:background="@drawable/ic_dele_24dp"/>
+            android:background="@drawable/ic_delete_black_24dp"
+            android:visibility="gone" />
     </LinearLayout>
 
 
@@ -65,10 +65,9 @@
         android:lineSpacingExtra="2dp"
         android:text="内容"
         android:textColor="@color/dark_gray"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
-    <com.jaeger.ninegridimageview.NineGridImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.jaeger.ninegridimageview.NineGridImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/iv_pic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,7 +75,7 @@
         app:imgGap="4dp"
         app:maxSize="9"
         app:showStyle="fill"
-        app:singleImgSize="200dp"/>
+        app:singleImgSize="200dp" />
 
     <TextView
         android:id="@+id/tv_location"
@@ -85,12 +84,12 @@
         android:drawablePadding="@dimen/little_space"
         android:gravity="center"
         android:text="位置"
-        android:textSize="12sp"/>
+        android:textSize="12sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/normal_bg_color"/>
+        android:background="@color/normal_bg_color" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -105,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:drawableLeft="@drawable/ic_thumb_up_black_24dp"
-            android:padding="5dp"/>
+            android:padding="5dp" />
 
 
         <TextView
@@ -113,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
-            android:padding="5dp"/>
+            android:padding="5dp" />
 
 
         <TextView
@@ -121,7 +120,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_share_black_24dp"
-            android:padding="5dp"/>
-
+            android:padding="5dp" />
     </LinearLayout>
 </LinearLayout>

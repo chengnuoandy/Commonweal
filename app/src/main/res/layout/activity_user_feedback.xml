@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".ui.activity.my.UserFeedbackActivity">
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow"
-        android:orientation="horizontal">
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
 
         <ImageView
             android:id="@+id/iv_set_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back"/>
+            android:src="@drawable/ic_back_selector" />
 
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,22 +34,22 @@
             android:layout_centerInParent="true"
             android:text="反馈"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
+            android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
     <EditText
         android:id="@+id/et_contacts"
         android:layout_width="match_parent"
-        android:hint="输入联系方式"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="输入联系方式" />
 
     <EditText
         android:id="@+id/et_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="5"
         android:gravity="top"
-        android:hint="输入您在使用过程中出现的问题"/>
+        android:hint="输入您在使用过程中出现的问题"
+        android:minLines="5" />
 
     <GridView
         android:id="@+id/gv_show_photos"
@@ -55,7 +62,8 @@
         android:horizontalSpacing="5dp"
         android:numColumns="4"
         android:verticalSpacing="5dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -85,12 +93,13 @@
                 android:layout_height="wrap_content"
                 android:text="添加照片" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom"
             android:layout_marginLeft="5dp"
-            android:text="如果能提供相关页面的截图，将更有利于我们解决问题！"/>
+            android:gravity="bottom"
+            android:text="如果能提供相关页面的截图，将更有利于我们解决问题！" />
     </LinearLayout>
 
     <Button

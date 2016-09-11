@@ -1,41 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context="com.goldenratio.commonweal.ui.activity.DonateInfoActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow">
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
 
         <ImageView
             android:id="@+id/iv_donate_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_selector" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back"/>
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="捐赠信息"
+            android:text="捐赠详情"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
+            android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_donate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="@drawable/item_tv_selector"
-        android:padding="@dimen/normal_space">
+        android:padding="@dimen/normal_space"
+        android:visibility="gone">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civ_donate_avatar"
@@ -44,7 +51,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginRight="20dp"
             android:src="@drawable/iv_unregister_head"
-            android:tag="1"/>
+            android:tag="1" />
 
         <TextView
             android:id="@+id/tv_donate_name"
@@ -54,7 +61,7 @@
             android:layout_toRightOf="@+id/civ_donate_avatar"
             android:text="昵称"
             android:textColor="@color/black"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_donate_coin"
@@ -63,7 +70,7 @@
             android:layout_alignLeft="@+id/tv_donate_name"
             android:layout_below="@+id/tv_donate_name"
             android:layout_marginTop="5dp"
-            android:text="已捐公益币"/>
+            android:text="已捐公益币" />
 
         <TextView
             android:id="@+id/tv_my_ranking"
@@ -74,15 +81,14 @@
             android:layout_marginRight="10dp"
             android:text="我的排名"
             android:textColor="@color/colorAccent"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <ListView
         android:id="@+id/lv_donate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-    </ListView>
+        android:layout_marginTop="10dp"></ListView>
 
     <TextView
         android:id="@+id/no_ranking"
@@ -92,6 +98,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="暂无排名"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </LinearLayout>

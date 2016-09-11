@@ -181,9 +181,7 @@ public class BidRecordActivity extends Activity implements AdapterView.OnItemCli
         if (flag == 0) {
         } else if (flag == 1) {
             Intent intent = new Intent(BidRecordActivity.this, GoodDetailActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("Bmob_Good", list.get(position).getBid_Good());
-            intent.putExtras(bundle);
+            intent.putExtra("objectId", list.get(position).getBid_Good().getObjectId());
             startActivity(intent);
         } else {
         }

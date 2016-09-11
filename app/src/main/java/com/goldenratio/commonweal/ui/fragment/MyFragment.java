@@ -168,7 +168,7 @@ public class MyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String WbVerReason = ((MyApplication) (getContext().getApplicationContext())).getWbVerReason();
-                if (WbVerReason != null) {
+                if (!WbVerReason.equals("")) {
                     Toast.makeText(getContext(), "您已认证！", Toast.LENGTH_SHORT).show();
                 } else {
                     startActivity(new Intent(getContext(), VerifyActivity.class));

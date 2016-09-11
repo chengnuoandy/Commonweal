@@ -45,7 +45,7 @@ public class MyApplication extends Application {
 
     private String ObjectID;   //bmob objectID
     private String WbId;    //微博ID
-    private String WbVerReason;    //微博认证理由
+    private String WbVerReason = "";    //微博认证理由
 
     @Override
     public void onCreate() {
@@ -164,7 +164,7 @@ public class MyApplication extends Application {
     }
 
 
-   private void initBmob(){
+    private void initBmob() {
         String libName = "bmob"; // 库名, 注意没有前缀lib和后缀.so
         System.loadLibrary(libName);
 

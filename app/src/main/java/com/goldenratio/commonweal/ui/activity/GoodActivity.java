@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Good;
@@ -318,48 +319,54 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
     }
 
     private void createAEvent(String objectId, int hours) {
-        String URL = "http://123.206.89.67/WebService1.asmx/CreateAEvent";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", objectId)
-                .add("AfterHouer", String.valueOf(hours))
-                .build();
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
 
-        Request request = new Request.Builder()
-                .url(URL)
-                .post(body)
-                .build();
+        if (!(webServiceIp == null)) {
+            String URL = webServiceIp + "CreateAEvent";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", objectId)
+                    .add("AfterHouer", String.valueOf(hours))
+                    .build();
 
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "fail: " + e.getMessage());
-                        Toast.makeText(GoodActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.equals("success")) {
-                            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                            vibrator.vibrate(500);
-                            Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d(TAG, "run: " + result);
-                            Toast.makeText(GoodActivity.this, result, Toast.LENGTH_SHORT).show();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "fail: " + e.getMessage());
+                            Toast.makeText(GoodActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.equals("success")) {
+                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                vibrator.vibrate(500);
+                                Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d(TAG, "run: " + result);
+                                Toast.makeText(GoodActivity.this, result, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(GoodActivity.this, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 }

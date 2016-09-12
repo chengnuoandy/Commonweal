@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
@@ -174,7 +175,7 @@ public class MySellGoodAdapter extends BaseAdapter {
             }
             mTvTitle.setText(mList.get(pos).getGood_Name() + "\n" + mList.get(pos).getGood_Description());
             mTvStatus.setText("状态：" + str + "(现在价格:" + mList.get(pos).getGood_NowCoin() + ")");
-            if (!mList.get(pos).getIsFirstDeposit()){
+            if (!mList.get(pos).getIsFirstDeposit()) {
                 mBtnShip.setText("删除物品");
                 isDel = true;
                 mBtnShip.setVisibility(View.VISIBLE);
@@ -192,46 +193,52 @@ public class MySellGoodAdapter extends BaseAdapter {
          * 上传发货信息
          */
         private void saveData() {
-            if (shipperCode != null && !mText.getText().toString().isEmpty()){
-                //更新mysql数据库逻辑
-                RequestParams params = new RequestParams("http://123.206.89.67/WebService1.asmx?op=UploadLogisticCode");
-                params.addBodyParameter("OrderGood", mList.get(mPos).getObjectId());
-                params.addBodyParameter("Code", mText.getText().toString());
-                params.addBodyParameter("Company", shipperCode);
-                x.http().post(params, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onSuccess(String result) {
-                        //更新bmob的逻辑
-                        Good good = new Good();
-                        good.setGood_Status(3);
-                        good.update(mList.get(mPos).getObjectId(),new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null){
-                                    Toast.makeText(mContext, "数据更新完毕", Toast.LENGTH_SHORT).show();
-                                }else {
-//                                    Toast.makeText(mContext, "更新数据失败", Toast.LENGTH_SHORT).show();
-                                    ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
+            if (shipperCode != null && !mText.getText().toString().isEmpty()) {
+                String webServiceIp = ((MyApplication) (mContext.getApplicationContext())).getWebServiceIp();
+                if (!(webServiceIp == null)) {
+                    String URL = webServiceIp + "UploadLogisticCode";
+                    //更新mysql数据库逻辑
+                    RequestParams params = new RequestParams(URL);
+                    params.addBodyParameter("OrderGood", mList.get(mPos).getObjectId());
+                    params.addBodyParameter("Code", mText.getText().toString());
+                    params.addBodyParameter("Company", shipperCode);
+                    x.http().post(params, new Callback.CommonCallback<String>() {
+                        @Override
+                        public void onSuccess(String result) {
+                            //更新bmob的逻辑
+                            Good good = new Good();
+                            good.setGood_Status(3);
+                            good.update(mList.get(mPos).getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        Toast.makeText(mContext, "数据更新完毕", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        //                                    Toast.makeText(mContext, "更新数据失败", Toast.LENGTH_SHORT).show();
+                                        ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
+                                    }
                                 }
-                            }
-                        });
-                    }
+                            });
+                        }
 
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-                        Toast.makeText(mContext, "数据更新失败", Toast.LENGTH_SHORT).show();
-                    }
+                        @Override
+                        public void onError(Throwable ex, boolean isOnCallback) {
+                            Toast.makeText(mContext, "数据更新失败", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-                        Toast.makeText(mContext, "数据更新失败", Toast.LENGTH_SHORT).show();
-                    }
+                        @Override
+                        public void onCancelled(CancelledException cex) {
+                            Toast.makeText(mContext, "数据更新失败", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void onFinished() {
+                        @Override
+                        public void onFinished() {
 
-                    }
-                });
+                        }
+                    });
+                } else {
+                    Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -245,10 +252,10 @@ public class MySellGoodAdapter extends BaseAdapter {
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ((ViewGroup)mView.getParent()).removeView(mView);
-                    if (mText.getText().toString().isEmpty()){
+                    ((ViewGroup) mView.getParent()).removeView(mView);
+                    if (mText.getText().toString().isEmpty()) {
                         Toast.makeText(mContext, "运单编号不能为空！", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         saveData();
                     }
                 }
@@ -257,7 +264,7 @@ public class MySellGoodAdapter extends BaseAdapter {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //防止父布局冲突，移除子view
-                    ((ViewGroup)mView.getParent()).removeView(mView);
+                    ((ViewGroup) mView.getParent()).removeView(mView);
                 }
             });
             builder.setCancelable(false);
@@ -265,7 +272,6 @@ public class MySellGoodAdapter extends BaseAdapter {
             alertDialog.show();
         }
     }
-
 
 
     /**

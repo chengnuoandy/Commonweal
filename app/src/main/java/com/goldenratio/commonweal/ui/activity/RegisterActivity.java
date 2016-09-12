@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
@@ -137,7 +138,7 @@ public class RegisterActivity extends Activity {
             mEtPhone.setText(phone);
             mEtPhone.setFocusable(false);
         }
-        new ImmersiveUtil(this, R.color.white,true);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     /**
@@ -695,45 +696,50 @@ public class RegisterActivity extends Activity {
 
 
     private void saveUser2Mysql(String objectId) {
-        String url = "http://123.206.89.67/WebService1.asmx/AddNewUser";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("Object_Id", objectId)
-                .build();
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String url = webServiceIp + "AddNewUser";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("Object_Id", objectId)
+                    .build();
 
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(RegisterActivity.this, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.contains("success")) {
-                            Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
-                            closeProgressDialog();
-                            returnUInfoToMyFra();
-                        } else {
-                            Log.d("Kiuber_LOG", "fail: " + result);
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(RegisterActivity.this, e1, Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.contains("success")) {
+                                Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                                closeProgressDialog();
+                                returnUInfoToMyFra();
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(RegisterActivity.this, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 }

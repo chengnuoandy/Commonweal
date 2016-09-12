@@ -441,51 +441,56 @@ public class GoodDetailActivity extends Activity implements View.OnClickListener
     }
 
     private void addDeposit(int depositCoin, String objectId, String mUserId) {
-        String URL = "http://123.206.89.67/WebService1.asmx/AddDeposit";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("D_Coin", String.valueOf(depositCoin))
-                .add("D_Good", objectId)
-                .add("D_User", mUserId)
-                .build();
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String URL = webServiceIp + "AddDeposit";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("D_Coin", String.valueOf(depositCoin))
+                    .add("D_Good", objectId)
+                    .add("D_User", mUserId)
+                    .build();
 
-        Request request = new Request.Builder()
-                .url(URL)
-                .post(body)
-                .build();
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
 
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "fail: " + e.getMessage());
-                        Toast.makeText(GoodDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.equals("success")) {
-                            Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
-                            mTvDeposit.setVisibility(View.GONE);
-                            mTvDeposit.setVisibility(View.GONE);
-                            mTvBid.setVisibility(View.VISIBLE);
-                        } else {
-                            Log.d(TAG, "run: " + result);
-                            Toast.makeText(GoodDetailActivity.this, result, Toast.LENGTH_SHORT).show();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "fail: " + e.getMessage());
+                            Toast.makeText(GoodDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.equals("success")) {
+                                Toast.makeText(mContext, "保证金支付成功", Toast.LENGTH_SHORT).show();
+                                mTvDeposit.setVisibility(View.GONE);
+                                mTvDeposit.setVisibility(View.GONE);
+                                mTvBid.setVisibility(View.VISIBLE);
+                            } else {
+                                Log.d(TAG, "run: " + result);
+                                Toast.makeText(GoodDetailActivity.this, result, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void changeTextViewVisibitity(int flag) {

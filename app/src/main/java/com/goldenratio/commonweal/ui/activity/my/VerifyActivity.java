@@ -19,6 +19,7 @@ import com.goldenratio.commonweal.api.ErrorInfo;
 import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.bean.VerifyRecord;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
@@ -35,6 +36,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import static com.goldenratio.commonweal.ui.fragment.MyFragment.mUserID;
@@ -225,7 +227,7 @@ public class VerifyActivity extends Activity implements View.OnClickListener {
             public void done(List<User_Profile> list, BmobException e) {
                 if (e == null) {
                     if (list.size() == 0) {
-                        updateDB(upUser);
+                        addVerRecord(upUser);
                     } else {
                         closeProgressDialog();
                         Toast.makeText(VerifyActivity.this, "该用户已绑定其他账号！", Toast.LENGTH_SHORT).show();
@@ -238,7 +240,37 @@ public class VerifyActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    private void updateDB(final User upUser) {
+    private void addVerRecord(final User upUser) {
+        User_Profile user_profile = new User_Profile();
+        user_profile.setObjectId(mUserID);
+
+        VerifyRecord verifyRecord = new VerifyRecord();
+        verifyRecord.setVer_User(user_profile);
+        verifyRecord.setWbID(upUser.id);
+        verifyRecord.setWBReson(upUser.verified_reason);
+        verifyRecord.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    User_Profile user_profile1 = new User_Profile();
+                    user_profile1.update(mUserID, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                Toast.makeText(VerifyActivity.this, "名人认证上传成功！很快就会出审核结果哦~", Toast.LENGTH_SHORT).show();
+                            } else {
+                                ErrorCodeUtil.switchErrorCode(VerifyActivity.this, e.getErrorCode() + "");
+                            }
+                        }
+                    });
+                } else {
+                    ErrorCodeUtil.switchErrorCode(VerifyActivity.this, e.getErrorCode() + "");
+                }
+            }
+        });
+    }
+
+    private void updateDB() {
         User_Profile userProfile = new User_Profile();
         userProfile.setUser_WbID(upUser.id);
         userProfile.setUser_IsV(upUser.verified);

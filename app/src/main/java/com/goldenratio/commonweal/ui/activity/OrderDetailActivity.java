@@ -152,48 +152,52 @@ public class OrderDetailActivity extends Activity implements View.OnClickListene
     }
 
     private void payOrder(String good, String user, String userCoin) {
-        String url = "http://123.206.89.67/WebService1.asmx/PayOrder";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("GoodId", good)
-                .add("UseId", user)
-                .add("UserCoin", userCoin)
-                .build();
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String URL = webServiceIp + "PayOrder";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("GoodId", good)
+                    .add("UseId", user)
+                    .add("UserCoin", userCoin)
+                    .build();
 
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                OrderDetailActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(OrderDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                OrderDetailActivity.this.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (result.equals("success")) {
-                            Toast.makeText(OrderDetailActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-                            pushMessage();
-                        } else {
-                            Toast.makeText(OrderDetailActivity.this, "支付失败" + result, Toast.LENGTH_SHORT).show();
+            final Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    OrderDetailActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(OrderDetailActivity.this, e1, Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    OrderDetailActivity.this.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            if (result.equals("success")) {
+                                Toast.makeText(OrderDetailActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                                pushMessage();
+                            } else {
+                                Toast.makeText(OrderDetailActivity.this, "支付失败" + result, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+        }
     }
 
     private void pushMessage() {

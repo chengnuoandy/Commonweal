@@ -107,72 +107,77 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
     }
 
     private void queryOrderById() {
-        String root = "http://123.206.89.67/WebService1.asmx/";
-        String method = "QueryOrderByObjectId";
-        String URL = root + method;
-        OkHttpClient okHttpClient = new OkHttpClient();
-        String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
-        if (mStrObjectId != null) {
-            RequestBody body = new FormBody.Builder()
-                    .add("UserId", mStrObjectId)
-                    .build();
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
 
-            final Request request = new Request.Builder()
-                    .url(URL)
-                    .post(body)
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new okhttp3.Callback() {
-                @Override
-                public void onFailure(Call call, final IOException e) {
-                    final String e1 = e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (e1.contains("connect")) {
-                                mTvLoading.setText("连接服务器错误");
-                            }
-                            Toast.makeText(OrderActivity.this, e1, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+        if (!(webServiceIp ==null)) {
+            String method = "QueryOrderByObjectId";
+            String URL = webServiceIp + method;
+            OkHttpClient okHttpClient = new OkHttpClient();
+            String mStrObjectId = ((MyApplication) getApplication()).getObjectID();
+            if (mStrObjectId != null) {
+                RequestBody body = new FormBody.Builder()
+                        .add("UserId", mStrObjectId)
+                        .build();
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    final String result = response.body().string();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            JSONArray jsonArray = null;
-                            MySqlOrder mySqlOrder = new MySqlOrder();
-                            try {
-                                jsonArray = new JSONArray(result);
-                                if (jsonArray.length() == 0) {
-                                    mTvLoading.setText("暂无订单");
-                                } else {
-                                    mLvOrder.setVisibility(View.VISIBLE);
-                                    mTvLoading.setVisibility(View.GONE);
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                        mySqlOrder.setOrder_Name(jsonObject.getString("Order_Name"));
-                                        mySqlOrder.setOrder_Coin(jsonObject.getString("Order_Coin"));
-                                        mySqlOrder.setObject_Id(jsonObject.getString("Object_Id"));
-                                        mySqlOrder.setOrder_Status(jsonObject.getString("Order_Status"));
-                                        mySqlOrder.setOrder_PicURL(jsonObject.getString("Order_PicURL"));
-                                        mySqlOrder.setOrder_Good(jsonObject.getString("Order_Good"));
-//                                        mySqlOrders.add(i, mySqlOrder);
-                                    }
-
-                                    mLvOrder.setAdapter(new MyOrderAdapter());
+                final Request request = new Request.Builder()
+                        .url(URL)
+                        .post(body)
+                        .build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new okhttp3.Callback() {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+                        final String e1 = e.getMessage();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (e1.contains("connect")) {
+                                    mTvLoading.setText("连接服务器错误");
                                 }
-                                Log.d("Kiuber_LOG", "run: " + result);
-                            } catch (JSONException e) {
-                                Toast.makeText(OrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(OrderActivity.this, e1, Toast.LENGTH_SHORT).show();
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        final String result = response.body().string();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONArray jsonArray = null;
+                                MySqlOrder mySqlOrder = new MySqlOrder();
+                                try {
+                                    jsonArray = new JSONArray(result);
+                                    if (jsonArray.length() == 0) {
+                                        mTvLoading.setText("暂无订单");
+                                    } else {
+                                        mLvOrder.setVisibility(View.VISIBLE);
+                                        mTvLoading.setVisibility(View.GONE);
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                            mySqlOrder.setOrder_Name(jsonObject.getString("Order_Name"));
+                                            mySqlOrder.setOrder_Coin(jsonObject.getString("Order_Coin"));
+                                            mySqlOrder.setObject_Id(jsonObject.getString("Object_Id"));
+                                            mySqlOrder.setOrder_Status(jsonObject.getString("Order_Status"));
+                                            mySqlOrder.setOrder_PicURL(jsonObject.getString("Order_PicURL"));
+                                            mySqlOrder.setOrder_Good(jsonObject.getString("Order_Good"));
+    //                                        mySqlOrders.add(i, mySqlOrder);
+                                        }
+
+                                        mLvOrder.setAdapter(new MyOrderAdapter());
+                                    }
+                                    Log.d("Kiuber_LOG", "run: " + result);
+                                } catch (JSONException e) {
+                                    Toast.makeText(OrderActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        } else {
+            Toast.makeText(this, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
     }
 

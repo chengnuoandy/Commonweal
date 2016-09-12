@@ -98,46 +98,53 @@ public class PopEnterPassword extends PopupWindow {
 
 
     private void updateUserSixPwd2MySql(String md5Pwd) {
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateUserSixPwdByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", mUserId)
-                .add("SixPwd", md5Pwd)
-                .build();
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
 
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, "密码设置失败", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+            String method = "UpdateUserSixPwdByObjectId";
+            String URL = webServiceIp + method;
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", mUserId)
+                    .add("SixPwd", md5Pwd)
+                    .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.contains("success")) {
-                            dismiss();
-                            Toast.makeText(mContext, "密码设置成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("Kiuber_LOG", "fail: " + result);
+            final Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, "密码设置失败", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.contains("success")) {
+                                dismiss();
+                                Toast.makeText(mContext, "密码设置成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public PopEnterPassword(final Activity context, final String userCoin, final String userPwd, String type
@@ -253,50 +260,54 @@ public class PopEnterPassword extends PopupWindow {
     }
 
     private void updateGood2MySql(String goodId) {
-        String root = "http://123.206.89.67/WebService1.asmx/";
-        String method = "BidGood";
-        String URL = root + method;
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("GoodObjectId", goodId)
-                .add("UserObjectId", mUserId)
-                .build();
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String method = "BidGood";
+            String URL = webServiceIp + method;
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("GoodObjectId", goodId)
+                    .add("UserObjectId", mUserId)
+                    .build();
 
-        final Request request = new Request.Builder()
-                .url(URL)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.contains("success")) {
-                            dismiss();
-                            mContext.finish();
-                            mContext.startActivity(mContext.getIntent());
-                            Toast.makeText(mContext, "出价成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("Kiuber_LOG", "fail: " + result);
+            final Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.contains("success")) {
+                                dismiss();
+                                mContext.finish();
+                                mContext.startActivity(mContext.getIntent());
+                                Toast.makeText(mContext, "出价成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initView() {
@@ -364,142 +375,158 @@ public class PopEnterPassword extends PopupWindow {
 
     private void querySixPwdFromMysql(final String pwd, final String user, final String
             orderId, final String userCoin) {
-        String url = "http://123.206.89.67/WebService1.asmx/QueryUserSixPwdByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", user)
-                .build();
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
 
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+        if (!(webServiceIp == null)) {
+            String URL = webServiceIp + "QueryUserSixPwdByObjectId";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", user)
+                    .build();
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                mContext.runOnUiThread(new Runnable() {
-
-                    private String sixPwd;
-
-                    @Override
-                    public void run() {
-                        JSONArray jsonArray = null;
-                        try {
-                            jsonArray = new JSONArray(result);
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                sixPwd = jsonObject.getString("User_SixPwd");
-                            }
-                            if (MD5Util.createMD5(pwd).equals(sixPwd)) {
-                                updateOrderStatus(orderId, user, userCoin);
-                            } else {
-                                Toast.makeText(mContext, "密码错误", Toast.LENGTH_SHORT).show();
-                                dismiss();
-                            }
-                        } catch (JSONException e) {
-                            Log.d("Kiuber_LOG", e.getMessage() + request);
+            final Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    mContext.runOnUiThread(new Runnable() {
+
+                        private String sixPwd;
+
+                        @Override
+                        public void run() {
+                            JSONArray jsonArray = null;
+                            try {
+                                jsonArray = new JSONArray(result);
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                    sixPwd = jsonObject.getString("User_SixPwd");
+                                }
+                                if (MD5Util.createMD5(pwd).equals(sixPwd)) {
+                                    updateOrderStatus(orderId, user, userCoin);
+                                } else {
+                                    Toast.makeText(mContext, "密码错误", Toast.LENGTH_SHORT).show();
+                                    dismiss();
+                                }
+                            } catch (JSONException e) {
+                                Log.d("Kiuber_LOG", e.getMessage() + request);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateOrderStatus(String order, String user, String userCoin) {
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateOrderStatus";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", order)
-                .add("UseId", user)
-                .add("UserCoin", userCoin)
-                .build();
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String URL = webServiceIp+"UpdateOrderStatus";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", order)
+                    .add("UseId", user)
+                    .add("UserCoin", userCoin)
+                    .build();
 
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                mContext.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        if (result.equals("success")) {
-                            Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(mContext, "支付失败", Toast.LENGTH_SHORT).show();
+            final Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
                         }
-                        dismiss();
-                    }
-                });
-            }
-        });
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    mContext.runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            if (result.equals("success")) {
+                                Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "支付失败", Toast.LENGTH_SHORT).show();
+                            }
+                            dismiss();
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateUserCoin(String sumCoin, final String toast) {
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", mUserId)
-                .add("UserCoin", sumCoin + "")
-                .build();
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String URL = webServiceIp+"UpdateUserCoinByObjectId";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", mUserId)
+                    .add("UserCoin", sumCoin + "")
+                    .build();
 
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+            final Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
-                        mContext.finish();
-                        mContext.startActivity(mContext.getIntent());
-                    }
-                });
-            }
-        });
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+                            mContext.finish();
+                            mContext.startActivity(mContext.getIntent());
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

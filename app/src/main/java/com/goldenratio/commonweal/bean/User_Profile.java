@@ -21,6 +21,7 @@ public class User_Profile extends BmobObject {
     private String User_Coin; //用户公益币
     private String User_DeviceInfo;
     private List<String> User_Attention;
+    private boolean User_VerStatus;
 
     public User_Profile() {
     }
@@ -29,11 +30,19 @@ public class User_Profile extends BmobObject {
         return User_Attention;
     }
 
+    public boolean isUser_VerStatus() {
+        return User_VerStatus;
+    }
+
+    public void setUser_VerStatus(boolean user_VerStatus) {
+        User_VerStatus = user_VerStatus;
+    }
+
     public void setUser_Attention(List<String> user_Attention) {
         User_Attention = user_Attention;
     }
 
-        /**
+    /**
      * 用户头像地址，50×50像素
      */
     private String User_image_min;

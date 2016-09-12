@@ -138,57 +138,62 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
 
     private void queryUserCoinByObjectId() {
         showProgressDialog();
-        String rootCatalog = "http://123.206.89.67/WebService1.asmx/";
-        String method = "QueryUserCoinByObjectId";
-        String url = rootCatalog + method;
-        OkHttpClient okHttpClient = new OkHttpClient();
-        if (mUserId != null) {
-            RequestBody body = new FormBody.Builder()
-                    .add("ObjectId", mUserId)
-                    .build();
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String method = "QueryUserCoinByObjectId";
+            String url = webServiceIp + method;
+            OkHttpClient okHttpClient = new OkHttpClient();
+            if (mUserId != null) {
+                RequestBody body = new FormBody.Builder()
+                        .add("ObjectId", mUserId)
+                        .build();
 
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, final IOException e) {
-                    final String e1 = e.getMessage();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(WalletActivity.this, e1, Toast.LENGTH_SHORT).show();
-                            closeProgressDialog();
-                        }
-                    });
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    final String result = response.body().string();
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            JSONArray jsonArray;
-                            try {
-                                jsonArray = new JSONArray(result);
-                                Log.i("返回json的长度", "run: " + jsonArray.length());
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                    mUserCoin = jsonObject.getString("User_Coin");
-                                    mTvCoin.setText(mUserCoin);
-                                }
-                            } catch (JSONException e) {
-                                Log.d("Kiuber_LOG", e.getMessage() + request);
+                final Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+                        final String e1 = e.getMessage();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(WalletActivity.this, e1, Toast.LENGTH_SHORT).show();
+                                closeProgressDialog();
                             }
-                            closeProgressDialog();
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        final String result = response.body().string();
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                JSONArray jsonArray;
+                                try {
+                                    jsonArray = new JSONArray(result);
+                                    Log.i("返回json的长度", "run: " + jsonArray.length());
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        mUserCoin = jsonObject.getString("User_Coin");
+                                        mTvCoin.setText(mUserCoin);
+                                    }
+                                } catch (JSONException e) {
+                                    Log.d("Kiuber_LOG", e.getMessage() + request);
+                                }
+                                closeProgressDialog();
+                            }
+                        });
+                    }
+                });
+            }
+        } else {
+            closeProgressDialog();
+            Toast.makeText(this, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
     }
 

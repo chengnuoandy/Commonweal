@@ -108,7 +108,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             public void unknow() {
                 Toast.makeText(mContext, "支付结果未知,请稍后手动查询", Toast.LENGTH_SHORT)
                         .show();
-                isPay(orderID[0],allCoin,changeCoin);
+                isPay(orderID[0], allCoin, changeCoin);
                 dismiss();
             }
 
@@ -116,7 +116,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             @Override
             public void succeed() {
                 money = price;
-                isPay(orderID[0],allCoin,changeCoin);
+                isPay(orderID[0], allCoin, changeCoin);
 //                updateUserCoinByObjectId("+" + allCoin, changeCoin, -1);
             }
 
@@ -151,9 +151,9 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     /**
      * 确认支付是否成功
      */
-    public void isPay(String orderID, final double allCoin, final String changeCoin){
+    public void isPay(String orderID, final double allCoin, final String changeCoin) {
 
-        if (TextUtils.isEmpty(orderID)){
+        if (TextUtils.isEmpty(orderID)) {
             closeProgressDialog();
             return;
         }
@@ -162,7 +162,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             @Override
             public void succeed(String status) {
                 Log.d("lxc", "succeed: " + status);
-                if (status.equals("SUCCESS")){
+                if (status.equals("SUCCESS")) {
                     updateUserCoinByObjectId("+" + allCoin, changeCoin, -1);
                 }
             }
@@ -170,7 +170,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             @Override
             public void fail(int code, String reason) {
                 Toast.makeText(mContext, "确认支付失败！", Toast.LENGTH_SHORT).show();
-                Log.d("lxc", "fail: "+ code + ":" + reason);
+                Log.d("lxc", "fail: " + code + ":" + reason);
                 closeProgressDialog();
 
             }
@@ -288,48 +288,53 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     @Override
     public boolean updateUserCoinByObjectId(final String sumCoin, final String changeCoin, final int PRName) {
         showProgressDialog();
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateUserCoinByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", mUserId)
-                .add("UserCoin", sumCoin + "")
-                .build();
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String url = webServiceIp + "UpdateUserCoinByObjectId";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", mUserId)
+                    .add("UserCoin", sumCoin + "")
+                    .build();
 
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
-                        savePayHistoryToBmob(PRName == -1, money + "", changeCoin, createRndNumber(), false, PRName == -1, PRName);
-                        closeProgressDialog();
-                    }
-                });
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                            savePayHistoryToBmob(PRName == -1, money + "", changeCoin, createRndNumber(), false, PRName == -1, PRName);
+                            closeProgressDialog();
+                        }
+                    });
 
-            }
+                }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
-                        closeProgressDialog();
-                        dismiss();
-                        savePayHistoryToBmob(PRName == -1, money + "", changeCoin, createRndNumber(), true, PRName == -1, PRName);
-                        mSqlManager.updateUserCoinByObjectId(sumCoin, changeCoin, PRName);
-                        // TODO: 2016/8/21 继续
-                    }
-                });
-            }
-        });
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, "支付成功", Toast.LENGTH_SHORT).show();
+                            closeProgressDialog();
+                            dismiss();
+                            savePayHistoryToBmob(PRName == -1, money + "", changeCoin, createRndNumber(), true, PRName == -1, PRName);
+                            mSqlManager.updateUserCoinByObjectId(sumCoin, changeCoin, PRName);
+                            // TODO: 2016/8/21 继续
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
         return false;
     }
 
@@ -370,62 +375,13 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     @Override
     public boolean updateUserSixPwdByObjectId(final String sixPwd) {
         showProgressDialog();
-        String url = "http://123.206.89.67/WebService1.asmx/UpdateUserSixPwdByObjectId";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        RequestBody body = new FormBody.Builder()
-                .add("ObjectId", mUserId)
-                .add("SixPwd", sixPwd)
-                .build();
-
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, final IOException e) {
-                final String e1 = e.getMessage();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, "密码设置失败" + e1, Toast.LENGTH_SHORT).show();
-                        closeProgressDialog();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String result = response.body().string();
-                mContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.contains("success")) {
-                            dismiss();
-                            mSqlManager.updateUserSixPwdByObjectId(sixPwd);
-                            Toast.makeText(mContext, "密码设置成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d("Kiuber_LOG", "fail: " + result);
-                        }
-                        closeProgressDialog();
-                    }
-                });
-            }
-        });
-        return false;
-    }
-
-    @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
-        showProgressDialog();
-        String rootCatalog = "http://123.206.89.67/WebService1.asmx/";
-        String method = "QueryUserCoinAndSixPwdByObjectId";
-        String url = rootCatalog + method;
-        OkHttpClient okHttpClient = new OkHttpClient();
-        if (mUserId != null) {
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String url = webServiceIp + "UpdateUserSixPwdByObjectId";
+            OkHttpClient okHttpClient = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("ObjectId", mUserId)
+                    .add("SixPwd", sixPwd)
                     .build();
 
             final Request request = new Request.Builder()
@@ -440,7 +396,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                     mContext.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "密码设置失败" + e1, Toast.LENGTH_SHORT).show();
                             closeProgressDialog();
                         }
                     });
@@ -450,29 +406,87 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                 public void onResponse(Call call, Response response) throws IOException {
                     final String result = response.body().string();
                     mContext.runOnUiThread(new Runnable() {
-
                         @Override
                         public void run() {
-                            String userCoin = null;
-                            String payPwd = null;
-                            JSONArray jsonArray;
-                            try {
-                                jsonArray = new JSONArray(result);
-                                Log.i("返回json的长度", "run: " + jsonArray.length());
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                    userCoin = jsonObject.getString("User_Coin");
-                                    payPwd = jsonObject.getString("User_SixPwd");
-                                }
-                            } catch (JSONException e) {
-                                Log.d("Kiuber_LOG", e.getMessage() + request);
+                            if (result.contains("success")) {
+                                dismiss();
+                                mSqlManager.updateUserSixPwdByObjectId(sixPwd);
+                                Toast.makeText(mContext, "密码设置成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
                             }
                             closeProgressDialog();
-                            mSqlManager.queryUserCoinAndSixPwdByObjectId(userCoin, payPwd);
                         }
                     });
                 }
             });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+        showProgressDialog();
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+
+        String URL = webServiceIp + "QueryUserCoinAndSixPwdByObjectId";
+        if (!(webServiceIp == null)) {
+            OkHttpClient okHttpClient = new OkHttpClient();
+            if (mUserId != null) {
+                RequestBody body = new FormBody.Builder()
+                        .add("ObjectId", mUserId)
+                        .build();
+
+                final Request request = new Request.Builder()
+                        .url(URL)
+                        .post(body)
+                        .build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, final IOException e) {
+                        final String e1 = e.getMessage();
+                        mContext.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                                closeProgressDialog();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        final String result = response.body().string();
+                        mContext.runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                String userCoin = null;
+                                String payPwd = null;
+                                JSONArray jsonArray;
+                                try {
+                                    jsonArray = new JSONArray(result);
+                                    Log.i("返回json的长度", "run: " + jsonArray.length());
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                        userCoin = jsonObject.getString("User_Coin");
+                                        payPwd = jsonObject.getString("User_SixPwd");
+                                    }
+                                } catch (JSONException e) {
+                                    Log.d("Kiuber_LOG", e.getMessage() + request);
+                                }
+                                closeProgressDialog();
+                                mSqlManager.queryUserCoinAndSixPwdByObjectId(userCoin, payPwd);
+                            }
+                        });
+                    }
+                });
+            }
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
         return false;
     }

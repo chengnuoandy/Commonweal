@@ -8,6 +8,7 @@ import android.os.Process;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.bean.AppConfig;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
@@ -45,7 +46,10 @@ public class MyApplication extends Application {
 
     private String ObjectID;   //bmob objectID
     private String WbId;    //微博ID
-    private String WbVerReason = "";    //微博认证理由
+    private String WbVerReason;    //微博认证理由
+    private boolean UserIsV;
+    private boolean UserVerStatus;
+    private String WebServiceIp;
 
     @Override
     public void onCreate() {
@@ -54,10 +58,9 @@ public class MyApplication extends Application {
         x.Ext.init(this);
         initBmob();
 
-// TODO: 2016/9/4 微博认证
         if (isUserTableExist()) {
             getUserData();
-//            getWbIdFromBmob();
+            getWbIdFromBmob();
         } else ObjectID = "";
 
         //初始化push推送服务
@@ -85,6 +88,7 @@ public class MyApplication extends Application {
             }
         };
         Logger.setLogger(this, newLogger);
+        getAppConfig();
     }
 
     public boolean isDynamicRefresh() {
@@ -113,6 +117,30 @@ public class MyApplication extends Application {
 
     public void setWbVerReason(String wbVerReason) {
         WbVerReason = wbVerReason;
+    }
+
+    public String getWebServiceIp() {
+        return WebServiceIp;
+    }
+
+    public void setWebServiceIp(String webServiceIp) {
+        WebServiceIp = webServiceIp;
+    }
+
+    public boolean isUserIsV() {
+        return UserIsV;
+    }
+
+    public void setUserIsV(boolean userIsV) {
+        UserIsV = userIsV;
+    }
+
+    public boolean isUserVerStatus() {
+        return UserVerStatus;
+    }
+
+    public void setUserVerStatus(boolean userVerStatus) {
+        UserVerStatus = userVerStatus;
     }
 
     public void setDynamicRefresh(boolean dynamicRefresh) {
@@ -180,7 +208,7 @@ public class MyApplication extends Application {
     private void getWbIdFromBmob() {
         BmobQuery<User_Profile> user_profileBmobQuery = new BmobQuery<>();
         user_profileBmobQuery.addWhereEqualTo("objectId", ObjectID);
-        user_profileBmobQuery.addQueryKeys("User_WbID,User_VerifiedReason");
+        user_profileBmobQuery.addQueryKeys("User_WbID,User_VerifiedReason,User_IsV,UserVerStatus");
         user_profileBmobQuery.findObjects(new FindListener<User_Profile>() {
             @Override
             public void done(List<User_Profile> list, BmobException e) {
@@ -188,8 +216,28 @@ public class MyApplication extends Application {
                     if (list.size() == 1) {
                         WbId = list.get(0).getUser_WbID();
                         WbVerReason = list.get(0).getUser_VerifiedReason();
+                        UserIsV = list.get(0).isUser_IsV();
+                        UserVerStatus = list.get(0).isUser_VerStatus();
                     } else {
                         Toast.makeText(MyApplication.this, "账号信息错误，请联系开发团队", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
+            }
+        });
+    }
+
+    private void getAppConfig() {
+        BmobQuery<AppConfig> appConfigBmobQuery = new BmobQuery<>();
+        appConfigBmobQuery.findObjects(new FindListener<AppConfig>() {
+            @Override
+            public void done(List<AppConfig> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() == 1) {
+                        WebServiceIp = list.get(0).getWebServiceIp();
+                    } else {
+                        Toast.makeText(MyApplication.this, "App Config Error", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");

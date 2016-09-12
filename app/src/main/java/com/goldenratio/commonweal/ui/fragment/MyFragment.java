@@ -94,6 +94,8 @@ public class MyFragment extends Fragment {
     private String mUserCoin;
     private TextView mBidRecord;
     private TextView mTvVerify;
+    boolean userVerStatus;
+    boolean userIsV;
 
     private int notifyCount;
 
@@ -102,6 +104,8 @@ public class MyFragment extends Fragment {
                              Bundle saveInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my, null);
 
+        userVerStatus = ((MyApplication) (getContext().getApplicationContext())).isUserVerStatus();
+        userIsV = ((MyApplication) (getContext().getApplicationContext())).isUserIsV();
         ButterKnife.bind(this, view);
 
         if (isUserTableExist()) {
@@ -125,6 +129,9 @@ public class MyFragment extends Fragment {
 //        });
         mIvIsV = (ImageView) view.findViewById(R.id.iv_v);
         initView(view);
+        if (userIsV) {
+            mIvIsV.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 
@@ -175,11 +182,14 @@ public class MyFragment extends Fragment {
         mTvVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String WbVerReason = ((MyApplication) (getContext().getApplicationContext())).getWbVerReason();
-                if (!WbVerReason.equals("")) {
-                    Toast.makeText(getContext(), "您已认证！", Toast.LENGTH_SHORT).show();
+                if (userVerStatus) {
+                    Toast.makeText(getContext(), "您的名人认证正在申请中！很快就会通过的哦！", Toast.LENGTH_SHORT).show();
                 } else {
-                    startActivity(new Intent(getContext(), VerifyActivity.class));
+                    if (userIsV) {
+                        Toast.makeText(getContext(), "您已经通过名人认证了", Toast.LENGTH_SHORT).show();
+                    } else if (!userIsV) {
+                        startActivity(new Intent(getContext(), VerifyActivity.class));
+                    }
                 }
             }
         });
@@ -366,7 +376,6 @@ public class MyFragment extends Fragment {
                 }
             });
         }
-        getBmobMesageCount();
         Log.d("Kiuber_LOG", "getUserData: " + mUserID);
         if (!TextUtils.isEmpty(mUserID)) {
             BmobQuery<User_Profile> user_profileBmobQuery = new BmobQuery<>();

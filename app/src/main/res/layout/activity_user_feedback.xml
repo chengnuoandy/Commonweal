@@ -25,8 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
-            android:layout_toRightOf="@+id/iv_back"
-            android:background="@color/colorPrimary" />
+            android:layout_toRightOf="@+id/iv_set_back"
+            android:background="@color/ordinary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,6 +36,11 @@
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/assist" />
 
     <EditText
         android:id="@+id/et_contacts"

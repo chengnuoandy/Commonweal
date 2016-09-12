@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorContext"
-            android:baselineAligned="false"
-            android:orientation="vertical"
-            android:weightSum="1">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorContext"
         android:baselineAligned="false"
         android:orientation="vertical"
         android:weightSum="1">
 
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/snow"
-            android:orientation="horizontal">
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="@dimen/normal_space">
 
             <ImageView
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_selector" />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:padding="@dimen/normal_space"
-                android:src="@mipmap/back_ic" />
+                android:layout_marginLeft="@dimen/normal_space"
+                android:layout_toRightOf="@+id/iv_back"
+                android:background="@color/ordinary" />
+
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="发布"
+                android:layout_centerInParent="true"
+                android:text="发布动态"
                 android:textColor="@color/black"
                 android:textSize="@dimen/title_text_size" />
         </RelativeLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/assist" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,7 +59,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/normal_bg_color" />
-
 
             <EditText
                 android:id="@+id/et_text"
@@ -75,7 +82,7 @@
                 android:horizontalSpacing="5dp"
                 android:numColumns="4"
                 android:verticalSpacing="5dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout

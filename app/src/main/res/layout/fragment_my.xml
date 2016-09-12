@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,14 +16,14 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/message"/>
+            android:src="@drawable/message" />
 
         <ImageView
             android:id="@+id/iv_notify"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:src="@mipmap/ic_new_notify"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:layout_centerInParent="true"
             android:text="我的"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_default"/>
+            android:textSize="@dimen/text_size_default" />
     </RelativeLayout>
 
     <ScrollView
@@ -62,7 +62,7 @@
                     android:layout_centerInParent="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/iv_unregister_head"
-                    android:tag="1"/>
+                    android:tag="1" />
 
                 <ImageView
                     android:id="@+id/iv_v"
@@ -71,7 +71,7 @@
                     android:layout_alignBottom="@+id/civ_avatar"
                     android:layout_alignRight="@+id/civ_avatar"
                     android:src="@mipmap/v_yellow"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_name"
@@ -85,7 +85,7 @@
                     android:padding="@dimen/little_space"
                     android:text="登陆/注册"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_default"/>
+                    android:textSize="@dimen/text_size_default" />
             </RelativeLayout>
 
             <LinearLayout
@@ -107,13 +107,13 @@
                         android:layout_marginLeft="@dimen/big_space"
                         android:layout_marginTop="@dimen/little_space"
                         android:layout_weight="1"
-                        android:background="@color/normal_bg_color"/>
+                        android:background="@color/normal_bg_color" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/little_space"
-                        android:src="@drawable/ic_favorite_border_black_24dp"/>
+                        android:src="@drawable/ic_favorite_border_black_24dp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -121,7 +121,7 @@
                         android:layout_marginRight="@dimen/big_space"
                         android:layout_marginTop="@dimen/little_space"
                         android:layout_weight="1"
-                        android:background="@color/normal_bg_color"/>
+                        android:background="@color/normal_bg_color" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -141,7 +141,7 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="我的关注"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tv_my_fans"
@@ -154,7 +154,7 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="我的粉丝"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tv_my_good"
@@ -167,7 +167,7 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="我的物品"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:id="@+id/tv_my_dynamic"
@@ -180,7 +180,7 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="我的动态"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -191,12 +191,12 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="订单"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <ImageView
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/main_bg"/>
+                        android:background="@color/main_bg" />
 
 
                     <TextView
@@ -208,12 +208,12 @@
                         android:gravity="center"
                         android:padding="@dimen/little_space"
                         android:text="钱包"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <ImageView
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@color/main_bg"/>
+                        android:background="@color/main_bg" />
 
                     <TextView
                         android:id="@+id/tv_share_form"
@@ -226,7 +226,7 @@
                         android:padding="@dimen/little_space"
                         android:text="晒单"
                         android:textColor="@color/black"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -234,7 +234,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/main_bg"/>
+                android:background="@color/main_bg" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -245,12 +245,12 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/main_bg"/>
+                    android:background="@color/main_bg" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/main_bg"/>
+                    android:background="@color/main_bg" />
             </LinearLayout>
 
             <LinearLayout
@@ -269,7 +269,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/normal_space"
                     android:text="出价记录"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_my_order"
@@ -282,7 +282,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/normal_space"
                     android:text="订单"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_my_wallet"
@@ -295,7 +295,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/normal_space"
                     android:text="钱包"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_my_verify"
@@ -308,7 +308,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/normal_space"
                     android:text="名人认证"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
 
                 <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_settings"
@@ -321,7 +321,7 @@
                     android:gravity="center_vertical"
                     android:padding="@dimen/normal_space"
                     android:text="设置"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

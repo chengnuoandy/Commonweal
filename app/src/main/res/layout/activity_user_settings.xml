@@ -27,8 +27,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
             android:layout_toRightOf="@+id/iv_us_back"
-            android:background="@color/colorPrimary" />
-
+            android:background="@color/ordinary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,8 +36,12 @@
             android:text="个人信息"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
-
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/assist" />
 
     <TextView
         android:layout_width="wrap_content"

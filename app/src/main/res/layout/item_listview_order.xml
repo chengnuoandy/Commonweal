@@ -31,7 +31,6 @@
             android:text="物品标题" />
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/tv_coin"
         android:layout_width="wrap_content"

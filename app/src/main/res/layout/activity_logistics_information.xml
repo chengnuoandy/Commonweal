@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.goldenratio.commonweal.ui.activity.my.LogisticsInformation"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.goldenratio.commonweal.ui.activity.my.LogisticsInformation">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow"
-        android:orientation="horizontal"
+        android:background="@color/white"
         android:padding="@dimen/normal_space">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_selector" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/ordinary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,42 +35,50 @@
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/assist" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/tv_status"
-            android:text="物流状态："
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="物流状态：" />
+
         <TextView
             android:id="@+id/tv_name"
-            android:text="承运来源："
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="承运来源：" />
+
         <TextView
             android:id="@+id/tv_no"
-            android:text="运单编号："
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="运单编号：" />
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray"/>
+        android:background="@color/gray" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp">
+
         <com.baoyachi.stepview.VerticalStepView
-            android:layout_margin="10dp"
             android:id="@+id/step_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_margin="10dp" />
     </ScrollView>
 </LinearLayout>

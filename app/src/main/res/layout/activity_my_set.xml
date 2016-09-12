@@ -28,7 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
             android:layout_toRightOf="@+id/iv_back"
-            android:background="@color/colorPrimary" />
+            android:background="@color/ordinary" />
 
 
         <TextView
@@ -38,8 +38,12 @@
             android:text="设置"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
-
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/assist" />
 
     <RelativeLayout
         android:id="@+id/clear_cache"

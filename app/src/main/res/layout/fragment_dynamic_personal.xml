@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/colorContext"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorContext"
+    android:orientation="vertical">
 
-    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/rl_BGA_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,9 +13,9 @@
         <ListView
             android:id="@+id/lv_dynamic_all"
             android:layout_width="match_parent"
-            android:divider="@color/ordinary"
-            android:dividerHeight="1dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:divider="@color/ordinary"
+            android:dividerHeight="1dp" />
     </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 </LinearLayout>

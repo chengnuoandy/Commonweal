@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/snow"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -25,7 +24,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
             android:layout_toRightOf="@+id/iv_donate_back"
-            android:background="@color/colorPrimary" />
+            android:background="@color/ordinary" />
 
         <TextView
             android:id="@+id/tv_attentionTitle"
@@ -36,6 +35,12 @@
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/rl_title"
+        android:background="@color/assist" />
 
 
     <ListView

@@ -110,11 +110,11 @@
 
             <View style="@style/Widget_MoneySK_Line" />
 
-                <ImageView
-                    android:id="@+id/billSK_hide"
-                    android:padding="@dimen/little_space"
-                    style="@style/Widget_SKItem"
-                    android:src="@drawable/money_hide"/>
+            <ImageView
+                android:id="@+id/billSK_hide"
+                style="@style/Widget_SKItem"
+                android:padding="@dimen/little_space"
+                android:src="@drawable/money_hide" />
         </LinearLayout>
 
         <View style="@style/Widget_MoneySK_VLine" />

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rl_notify"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/normal_space"
-                android:background="@drawable/item_tv_selector"
-                android:padding="@dimen/normal_space">
+    android:id="@+id/rl_notify"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/normal_space"
+    android:background="@drawable/item_tv_selector"
+    android:padding="@dimen/normal_space">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_donate_avatar"
@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="20dp"
         android:src="@mipmap/ic_launcher"
-        android:tag="1"/>
+        android:tag="1" />
 
     <ImageView
         android:id="@+id/iv_notify"
@@ -23,7 +23,7 @@
         android:layout_alignBottom="@+id/civ_donate_avatar"
         android:layout_alignRight="@+id/civ_donate_avatar"
         android:src="@mipmap/ic_new_notify"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -34,7 +34,7 @@
         android:layout_toRightOf="@+id/civ_donate_avatar"
         android:text="爱点"
         android:textColor="@color/colorAccent"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_message"
@@ -45,7 +45,7 @@
         android:layout_marginTop="5dp"
         android:lines="1"
         android:text="消息"
-        android:textColor="@color/dark_gray"/>
+        android:textColor="@color/dark_gray" />
 
     <TextView
         android:id="@+id/tv_date"
@@ -56,5 +56,5 @@
         android:layout_marginTop="10dp"
         android:text="日期"
         android:textColor="@color/colorAccent"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 </RelativeLayout>

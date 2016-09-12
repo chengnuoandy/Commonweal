@@ -38,10 +38,10 @@
                 android:id="@+id/tv_user_name"
                 style="@style/SmallTitleString"
                 android:layout_width="wrap_content"
-                android:textColor="@color/blue"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="作者" />
+                android:text="作者"
+                android:textColor="@color/blue" />
 
             <TextView
                 android:id="@+id/tv_user_comment"

@@ -14,6 +14,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.AttentionStarListAdapter;
 import com.goldenratio.commonweal.bean.U_Attention;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
@@ -27,7 +28,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class AttentionStarActivity extends Activity {
+public class AttentionStarActivity extends BaseActivity {
 
     @BindView(R.id.iv_donate_back)
     ImageView mIvAttentionBack;

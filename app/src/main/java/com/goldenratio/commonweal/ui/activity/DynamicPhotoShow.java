@@ -17,7 +17,7 @@ import com.goldenratio.commonweal.R;
 
 import java.util.List;
 
-public class DynamicPhotoShow extends Activity {
+public class DynamicPhotoShow extends BaseActivity {
 
     private ViewPager mPager;
     private TextView mText;

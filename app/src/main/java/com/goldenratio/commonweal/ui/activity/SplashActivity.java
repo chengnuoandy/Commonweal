@@ -21,7 +21,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 
     private List<Help> mHelpLlist;
     private List<Help_Top> mHelpTopList;

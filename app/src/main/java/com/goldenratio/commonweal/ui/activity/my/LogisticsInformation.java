@@ -11,13 +11,14 @@ import com.baoyachi.stepview.VerticalStepView;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.KdniaoTrackQueryAPI;
 import com.goldenratio.commonweal.bean.LogisticsBird;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class LogisticsInformation extends Activity {
+public class LogisticsInformation extends BaseActivity {
 
     private VerticalStepView mStepView;
     private List<String> mList = new ArrayList<>();

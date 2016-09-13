@@ -38,7 +38,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
-public class DynamicReleaseActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class DynamicReleaseActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "lxc";
 

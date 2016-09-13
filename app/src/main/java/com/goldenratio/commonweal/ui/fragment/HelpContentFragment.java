@@ -13,7 +13,6 @@ import com.goldenratio.commonweal.R;
 
 public class HelpContentFragment extends Activity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

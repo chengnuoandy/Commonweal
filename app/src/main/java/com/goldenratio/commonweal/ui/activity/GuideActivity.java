@@ -15,7 +15,7 @@ import com.nineoldandroids.view.ViewHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuideActivity extends Activity {
+public class GuideActivity extends BaseActivity {
 
     /**
      * ViewPager中ImageView的容器

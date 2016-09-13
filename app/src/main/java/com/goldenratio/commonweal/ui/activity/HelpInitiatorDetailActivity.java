@@ -28,7 +28,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class HelpInitiatorDetailActivity extends Activity implements AdapterView.OnItemClickListener{
+public class HelpInitiatorDetailActivity extends BaseActivity implements AdapterView.OnItemClickListener{
 
     private List<Help> mHelpList;
 

@@ -15,6 +15,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MySellGoodAdapter;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
@@ -30,7 +31,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 
-public class SellGoodActivity extends Activity implements AdapterView.OnItemClickListener {
+public class SellGoodActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.iv_back)
     ImageView mIvBack;

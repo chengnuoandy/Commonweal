@@ -16,6 +16,7 @@ import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
+import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
 import org.xutils.x;
 
@@ -28,6 +29,8 @@ import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+
+import static com.xiaomi.mistatistic.sdk.MiStatInterface.UPLOAD_POLICY_REALTIME;
 
 /**
  * Created by Kiuber on 2016/6/20.
@@ -89,6 +92,12 @@ public class MyApplication extends Application {
         };
         Logger.setLogger(this, newLogger);
         getAppConfig();
+        //开启统计
+        MiStatInterface.initialize(this, "2882303761517501484", "5521750163484", "Default");
+        //设置上传策略
+        MiStatInterface.setUploadPolicy(UPLOAD_POLICY_REALTIME, 0);
+        //手机错误日志
+        MiStatInterface.enableExceptionCatcher(true);
     }
 
     public boolean isDynamicRefresh() {

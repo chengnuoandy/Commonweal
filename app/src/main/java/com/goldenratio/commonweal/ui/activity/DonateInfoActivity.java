@@ -28,7 +28,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DonateInfoActivity extends Activity {
+public class DonateInfoActivity extends BaseActivity {
 
 
     @BindView(R.id.civ_donate_avatar)

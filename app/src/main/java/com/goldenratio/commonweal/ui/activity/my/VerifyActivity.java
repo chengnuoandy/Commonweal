@@ -21,6 +21,7 @@ import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.bean.VerifyRecord;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
@@ -44,7 +45,7 @@ import static com.goldenratio.commonweal.ui.fragment.MyFragment.mUserID;
 /**
  * Created by Kiuber on 2016/8/31.
  */
-public class VerifyActivity extends Activity implements View.OnClickListener {
+public class VerifyActivity extends BaseActivity implements View.OnClickListener {
     private TextView mTvVer;
     private SsoHandler mSsoHandler;
     private UsersAPI mUsersAPI;

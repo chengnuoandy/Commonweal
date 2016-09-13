@@ -59,7 +59,7 @@ import okhttp3.Response;
  * Created by lvxue on 2016/6/7 0007.
  * 登陆的相关功能
  */
-public class LoginActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "lxc";
     @BindView(R.id.login_phone)
@@ -71,7 +71,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     @BindView(R.id.login_btn)
     Button mLoginBtn;
     @BindView(R.id.ib_sina)
-    ImageButton mIbSina;
+    ImageView mIbSina;
     @BindView(R.id.tv_sina)
     TextView mTvSina;
     @BindView(R.id.iv_back)

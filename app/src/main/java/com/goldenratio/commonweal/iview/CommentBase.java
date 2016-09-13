@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
  * Created by Administrator on 2016/8/17.
  */
 
-public class CommentBase extends Activity implements View.OnClickListener, BGARefreshLayout.BGARefreshLayoutDelegate {
+public class CommentBase extends BaseActivity implements View.OnClickListener, BGARefreshLayout.BGARefreshLayoutDelegate {
 
     private ListView mListView;
     private EditText edt_reply;

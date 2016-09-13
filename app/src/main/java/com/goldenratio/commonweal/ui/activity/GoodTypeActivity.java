@@ -13,7 +13,7 @@ import com.goldenratio.commonweal.R;
 /**
  * Created by Kiuber on 2016/6/24.
  */
-public class GoodTypeActivity extends Activity {
+public class GoodTypeActivity extends BaseActivity {
 
     private ListView mLv;
     private String[] mGoodType =

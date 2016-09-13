@@ -32,6 +32,7 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
 import com.goldenratio.commonweal.ui.activity.RegisterActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
@@ -68,7 +69,7 @@ import cn.bmob.v3.listener.UploadFileListener;
  * 作者：Created by 龙啸天 on 2016/7/01 0025.
  * 邮箱：jxfengmtx@163.com ---17718
  */
-public class UserSettingsActivity extends Activity implements IMySqlManager {
+public class UserSettingsActivity extends BaseActivity implements IMySqlManager {
 
 
     @BindView(R.id.tv_user_name)

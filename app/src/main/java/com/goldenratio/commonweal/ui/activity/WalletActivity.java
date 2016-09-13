@@ -38,7 +38,7 @@ import okhttp3.Response;
 /**
  * Created by Kiuber on 2016/8/23.
  */
-public class WalletActivity extends Activity implements View.OnClickListener, IMySqlManager {
+public class WalletActivity extends BaseActivity implements View.OnClickListener, IMySqlManager {
     private View mTvPayRecord;
     private LinearLayout TopUP;
     private ProgressDialog mPd;

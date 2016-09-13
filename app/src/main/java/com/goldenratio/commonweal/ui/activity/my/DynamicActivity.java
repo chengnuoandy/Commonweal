@@ -11,6 +11,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyDynamicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
@@ -22,7 +23,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class DynamicActivity extends Activity implements BGARefreshLayout.BGARefreshLayoutDelegate {
+public class DynamicActivity extends BaseActivity implements BGARefreshLayout.BGARefreshLayoutDelegate {
 
     private List<Dynamic> mDynamicList;
     private ListView mListView;

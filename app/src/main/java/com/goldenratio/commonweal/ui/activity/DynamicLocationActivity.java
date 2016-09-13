@@ -31,7 +31,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class DynamicLocationActivity extends Activity implements LocationSource,
+public class DynamicLocationActivity extends BaseActivity implements LocationSource,
         AMapLocationListener, AMap.OnCameraChangeListener, PoiSearch.OnPoiSearchListener {
 
     private static final String TAG = "lxc";

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.UserFeedback;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
 import com.yancy.imageselector.ImageConfig;
@@ -32,7 +33,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
-public class UserFeedbackActivity extends Activity implements AdapterView.OnItemClickListener {
+public class UserFeedbackActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private ImageConfig imageConfig;
     private ArrayList<String> pathList;

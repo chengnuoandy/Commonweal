@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.PrivateMessageListAdapter;
 import com.goldenratio.commonweal.bean.Message;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class MessageActivity extends Activity {
+public class MessageActivity extends BaseActivity {
 
     @BindView(R.id.lv_attention)
     ListView mLvAttention;

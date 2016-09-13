@@ -9,15 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
-import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -41,12 +43,12 @@ import okhttp3.Response;
 /**
  * Created by Kiuber on 2016/8/17.
  */
-public class OrderActivity extends Activity implements AdapterView.OnItemClickListener {
+public class OrderActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private ListView mLvOrder;
-    private List<Good> mGood;
     private TextView mTvLoading;
     private String mUserId;
+    List<MySqlOrder> mySqlOrders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
         setContentView(R.layout.activity_order);
         initView();
         initData();
-        new ImmersiveUtil(this, R.color.white,true);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initView() {
@@ -64,52 +66,18 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
     }
 
     private void initData() {
-//        queryOrderById();
         mUserId = ((MyApplication) (getApplication())).getObjectID();
         if (TextUtils.isEmpty(mUserId)) {
             mTvLoading.setText("请先登录");
         } else {
-            User_Profile user_profile = new User_Profile();
-            user_profile.setObjectId(mUserId);
-            BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
-            goodBmobQuery.addWhereEqualTo("Good_NowBidUser", mUserId);
-            goodBmobQuery.findObjects(new FindListener<Good>() {
-                @Override
-                public void done(List<Good> list, BmobException e) {
-                    if (e == null) {
-                        if (list.size() != 0) {
-                            for (int i = 0; i < list.size(); i++) {
-                                Good good = list.get(i);
-                                Log.d("Kiuber_LOG", "done: " + good.getGood_UpDateM() + "-->" + System.currentTimeMillis());
-                                if (good.getGood_UpDateM() > System.currentTimeMillis()) {
-                                    list.remove(i);
-                                }
-                            }
-                            if (list.size() == 0) {
-                                mTvLoading.setText("暂无关于您的订单！！");
-                            } else if (list.size() != 0) {
-                                mLvOrder.setVisibility(View.VISIBLE);
-                                mTvLoading.setVisibility(View.GONE);
-                                mGood = list;
-                                mLvOrder.setAdapter(new MyOrderAdapter());
-                            } else {
-                                mTvLoading.setText("未知错误，请稍后再试！");
-                            }
-                        } else {
-                            mTvLoading.setText("暂无关于您的订单！");
-                        }
-                    } else {
-                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
-                    }
-                }
-            });
+            queryOrderById();
         }
     }
 
     private void queryOrderById() {
         String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
 
-        if (!(webServiceIp ==null)) {
+        if (!(webServiceIp == null)) {
             String method = "QueryOrderByObjectId";
             String URL = webServiceIp + method;
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -145,8 +113,8 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                mySqlOrders = new ArrayList<>();
                                 JSONArray jsonArray = null;
-                                MySqlOrder mySqlOrder = new MySqlOrder();
                                 try {
                                     jsonArray = new JSONArray(result);
                                     if (jsonArray.length() == 0) {
@@ -155,17 +123,33 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
                                         mLvOrder.setVisibility(View.VISIBLE);
                                         mTvLoading.setVisibility(View.GONE);
                                         for (int i = 0; i < jsonArray.length(); i++) {
+                                            final MySqlOrder mySqlOrder = new MySqlOrder();
                                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                            mySqlOrder.setOrder_Name(jsonObject.getString("Order_Name"));
-                                            mySqlOrder.setOrder_Coin(jsonObject.getString("Order_Coin"));
-                                            mySqlOrder.setObject_Id(jsonObject.getString("Object_Id"));
-                                            mySqlOrder.setOrder_Status(jsonObject.getString("Order_Status"));
-                                            mySqlOrder.setOrder_PicURL(jsonObject.getString("Order_PicURL"));
-                                            mySqlOrder.setOrder_Good(jsonObject.getString("Order_Good"));
-    //                                        mySqlOrders.add(i, mySqlOrder);
-                                        }
+                                            mySqlOrder.setObject_Id(jsonObject.getString("O_ID"));
+                                            mySqlOrder.setOrder_Status(jsonObject.getString("O_Status"));
+                                            mySqlOrder.setOrder_Good(jsonObject.getString("O_Good"));
+                                            mySqlOrders.add(i, mySqlOrder);
 
-                                        mLvOrder.setAdapter(new MyOrderAdapter());
+                                            BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
+                                            goodBmobQuery.addWhereEqualTo("objectId", mySqlOrder.getOrder_Good());
+                                            goodBmobQuery.findObjects(new FindListener<Good>() {
+                                                @Override
+                                                public void done(List<Good> list, BmobException e) {
+                                                    if (e == null) {
+                                                        if (list.size() == 0) {
+                                                            Toast.makeText(OrderActivity.this, "未找到物品信息", Toast.LENGTH_SHORT).show();
+                                                        } else if (list.size() == 1) {
+                                                            mySqlOrder.setOrder_Coin(list.get(0).getGood_NowCoin());
+                                                            mySqlOrder.setOrder_PicURL(list.get(0).getGood_Photos());
+                                                            mySqlOrder.setOrder_Name(list.get(0).getGood_Name());
+                                                            mLvOrder.setAdapter(new MyOrderAdapter());
+                                                        }
+                                                    } else {
+                                                        ErrorCodeUtil.switchErrorCode(OrderActivity.this, e.getErrorCode() + "");
+                                                    }
+                                                }
+                                            });
+                                        }
                                     }
                                     Log.d("Kiuber_LOG", "run: " + result);
                                 } catch (JSONException e) {
@@ -185,7 +169,7 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(OrderActivity.this, OrderDetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("orderList", mGood.get(position));
+        bundle.putSerializable("orderList", mySqlOrders.get(position));
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -196,12 +180,12 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
 
         @Override
         public int getCount() {
-            return mGood.size();
+            return mySqlOrders.size();
         }
 
         @Override
-        public Good getItem(int position) {
-            return mGood.get(position);
+        public MySqlOrder getItem(int position) {
+            return mySqlOrders.get(position);
         }
 
         @Override
@@ -226,17 +210,20 @@ public class OrderActivity extends Activity implements AdapterView.OnItemClickLi
         }
 
         class ViewHolder {
+            private ImageView mIvGood;
             private TextView mTvName;
             private TextView mTvCoin;
 
             private void initView(View view) {
+                mIvGood = (ImageView) view.findViewById(R.id.iv_good);
                 mTvName = (TextView) view.findViewById(R.id.tv_name);
                 mTvCoin = (TextView) view.findViewById(R.id.tv_coin);
             }
 
             private void initData(int position) {
-                mTvName.setText(getItem(position).getGood_Name());
-                mTvCoin.setText(getItem(position).getGood_NowCoin());
+                Glide.with(OrderActivity.this).load(mySqlOrders.get(position).getOrder_PicURL().get(0)).into(mIvGood);
+                mTvName.setText(getItem(position).getOrder_Name());
+                mTvCoin.setText(getItem(position).getOrder_Coin());
             }
         }
     }

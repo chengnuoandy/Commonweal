@@ -58,7 +58,7 @@ import okhttp3.Response;
 
 import static android.content.ContentValues.TAG;
 
-public class GoodDetailActivity extends Activity implements View.OnClickListener
+public class GoodDetailActivity extends BaseActivity implements View.OnClickListener
         , BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener, IMySqlManager {
 
     private CountdownView mCountdownView, mCountdownFive;

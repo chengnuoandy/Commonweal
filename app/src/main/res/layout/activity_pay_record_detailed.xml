@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <ScrollView
@@ -17,7 +18,6 @@
                 android:id="@+id/rl_top"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/snow"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -48,7 +48,6 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/title_text_size" />
             </RelativeLayout>
-
 
             <TextView
                 android:layout_width="match_parent"
@@ -96,7 +95,6 @@
                         android:textColor="@color/black"
                         android:textSize="28sp" />
                 </RelativeLayout>
-
 
                 <TextView
                     android:layout_width="match_parent"
@@ -246,5 +244,4 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

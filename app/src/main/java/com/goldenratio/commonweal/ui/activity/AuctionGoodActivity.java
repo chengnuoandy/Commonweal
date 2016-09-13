@@ -9,7 +9,7 @@ import com.goldenratio.commonweal.R;
  * Created by Kiuber on 2016/8/9.
  */
 
-public class AuctionGoodActivity extends Activity {
+public class AuctionGoodActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

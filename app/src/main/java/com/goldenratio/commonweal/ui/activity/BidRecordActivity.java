@@ -31,7 +31,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Kiuber on 2016/8/22.
  */
 
-public class BidRecordActivity extends Activity implements AdapterView.OnItemClickListener {
+public class BidRecordActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private List<Bid> list;
     private ListView mLv;

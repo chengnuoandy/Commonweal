@@ -27,7 +27,7 @@ import cn.bmob.v3.listener.FindListener;
 /**
  * Created by wenmingvs on 16/5/2.
  */
-public class PostActivity extends Activity {
+public class PostActivity extends BaseActivity {
 
     private Context mContext;
     private ImageView composeDy;

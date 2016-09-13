@@ -53,7 +53,7 @@ import okhttp3.Response;
  * Created by Kiuber on 2016/6/11.
  */
 
-public class GoodActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class GoodActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "lxc";
     private static final int REQUEST_IMAGE = 2;

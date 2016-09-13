@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
@@ -35,7 +36,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * 作者：Created by 龙啸天 on 2016/7/02 0025.
  * 邮箱：jxfengmtx@163.com ---17718
  */
-public class SetUserNameActivity extends Activity implements TextWatcher {
+public class SetUserNameActivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.et_set_username)
     EditText mEtSetUsername;

@@ -10,13 +10,14 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.PayRecord;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.io.Serializable;
 
 /**
  * Created by Kiuber on 2016/8/23.
  */
-public class PayRecordDetailActivity extends Activity {
+public class PayRecordDetailActivity extends BaseActivity {
 
     private TextView mTvMoney;
     private TextView mTvCoin;
@@ -35,6 +36,7 @@ public class PayRecordDetailActivity extends Activity {
         initView();
         initData();
         setTextViewText();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initView() {

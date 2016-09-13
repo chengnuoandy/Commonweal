@@ -23,7 +23,7 @@ import cn.bmob.v3.datatype.BmobDate;
  * Created by Kiuber on 2016/6/22.
  */
 
-public class HelpDetailActivity extends Activity implements View.OnClickListener {
+public class HelpDetailActivity extends BaseActivity implements View.OnClickListener {
 
 
     private Help mHelp;

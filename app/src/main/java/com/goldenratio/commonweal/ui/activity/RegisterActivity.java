@@ -66,7 +66,7 @@ import okhttp3.Response;
  * 承担注册与找回密码的功能
  */
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.et_phone)
     EditText mEtPhone;

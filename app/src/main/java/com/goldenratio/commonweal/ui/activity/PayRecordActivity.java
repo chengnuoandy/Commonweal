@@ -16,6 +16,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.PayRecord;
 import com.goldenratio.commonweal.ui.activity.my.SetAddressActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ import cn.bmob.v3.listener.FindListener;
  */
 
 
-public class PayRecordActivity extends Activity implements AdapterView.OnItemClickListener {
+public class PayRecordActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     private ListView mLv;
     private List<PayRecord> mPayRecord;
@@ -40,6 +41,7 @@ public class PayRecordActivity extends Activity implements AdapterView.OnItemCli
         setContentView(R.layout.activity_pay_record);
         initView();
         initData();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initData() {

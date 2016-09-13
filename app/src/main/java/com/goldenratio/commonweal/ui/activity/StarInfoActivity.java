@@ -29,7 +29,7 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class StarInfoActivity extends Activity {
+public class StarInfoActivity extends BaseActivity {
 
     @BindView(R.id.civ_star_avatar)
     CircleImageView mCivStarAvatar;

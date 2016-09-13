@@ -19,6 +19,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class SetAddressActivity extends Activity implements SetAddressListAdapter.Callback {
+public class SetAddressActivity extends BaseActivity implements SetAddressListAdapter.Callback {
 
     @BindView(R.id.iv_address_back)
     ImageView mIvBack;

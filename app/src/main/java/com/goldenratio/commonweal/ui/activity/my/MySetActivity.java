@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.ShareUtils;
 
@@ -38,7 +39,7 @@ import cn.bmob.v3.update.UpdateStatus;
  * <p/>
  * 整个app的设置---
  */
-public class MySetActivity extends Activity {
+public class MySetActivity extends BaseActivity {
     @BindView(R.id.tv_exit)
     TextView mTvExit;
     @BindView(R.id.cache_size)

@@ -25,7 +25,7 @@ import java.math.BigDecimal;
  * Created by lvxue on 2016/6/20 0020.
  * 自定义键盘相关
  */
-public class GoodKeypadActivity extends Activity implements View.OnFocusChangeListener, View.OnClickListener {
+public class GoodKeypadActivity extends BaseActivity implements View.OnFocusChangeListener, View.OnClickListener {
     private static final String TAG = "lxc";
     private static final int MAX_MARK = 100;
     private static final int MIN_MARK = 0;

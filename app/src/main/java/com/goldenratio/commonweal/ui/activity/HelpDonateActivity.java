@@ -37,7 +37,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * 捐赠时弹出的页面
  */
 
-public class HelpDonateActivity extends Activity implements IMySqlManager {
+public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
 
     @BindView(R.id.checkBox6)
     RadioButton mCheckBox6;

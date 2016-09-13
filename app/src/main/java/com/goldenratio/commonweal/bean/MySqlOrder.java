@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Kiuber on 2016/8/17.
@@ -11,7 +12,7 @@ public class MySqlOrder implements Serializable {
     private String Object_Id;
     private String Order_Name;
     private String Order_Coin;
-    private String Order_PicURL;
+    private List<String> Order_PicURL;
     private String Order_Status;
     private String Order_Good;
 
@@ -39,11 +40,11 @@ public class MySqlOrder implements Serializable {
         Order_Coin = order_Coin;
     }
 
-    public String getOrder_PicURL() {
+    public List<String> getOrder_PicURL() {
         return Order_PicURL;
     }
 
-    public void setOrder_PicURL(String order_PicURL) {
+    public void setOrder_PicURL(List<String> order_PicURL) {
         Order_PicURL = order_PicURL;
     }
 

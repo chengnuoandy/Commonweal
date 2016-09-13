@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class HelpTopDetailActivity extends Activity {
+public class HelpTopDetailActivity extends BaseActivity {
 
     @BindView(R.id.iv_helpTop_back)
     ImageView mIvHelpTopBack;

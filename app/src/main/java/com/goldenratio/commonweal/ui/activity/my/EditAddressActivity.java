@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.lljjcoder.citypickerview.widget.CityPickerView;
@@ -35,7 +36,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * 编辑收货地址,重点---默认地址可变，加入双保险，本地---网络都可以
  */
 
-public class EditAddressActivity extends Activity {
+public class EditAddressActivity extends BaseActivity {
 
     @BindView(R.id.et_edit_consignee)
     EditText mEtConsignee;

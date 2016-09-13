@@ -45,7 +45,7 @@ public class WalletActivity extends Activity implements View.OnClickListener, IM
     private TextView mTvCoin;
 
     private String mUserId;
-    private String mUserCoin;
+    private String mUserCoin = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

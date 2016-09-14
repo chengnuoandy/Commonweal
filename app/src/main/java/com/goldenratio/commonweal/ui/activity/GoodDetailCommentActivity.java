@@ -2,7 +2,6 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.goldenratio.commonweal.R;
@@ -35,7 +34,7 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       Intent intent = this.getIntent();
+        Intent intent = this.getIntent();
         mGood = (Good) intent.getSerializableExtra("Good");
 //        mGood = (Good) getIntent().getSerializableExtra("Good");
         setData(this);
@@ -86,7 +85,7 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
         bmobQuery.findObjects(new FindListener<Good_Comment>() {
             @Override
             public void done(List<Good_Comment> list, BmobException e) {
-                if (e==null) {
+                if (e == null) {
                     if (!(str.trim().isEmpty())) {
                         up(str);
                     }

@@ -224,13 +224,6 @@ public class MyFragment extends Fragment {
                 }
                 break;
             case R.id.iv_my_message:
-
-             /*   String installationId = "E0DE66DCBCC5547BA1AB5C022D5C3703";  //在用户表-->User_DeviceInfo
-                BmobPushManager bmobPush = new BmobPushManager();
-                BmobQuery<BmobInstallation> query = BmobInstallation.getQuery();
-                query.addWhereEqualTo("installationId", installationId);
-                bmobPush.setQuery(query);
-                bmobPush.pushMessage("p-231-heheh");*/
                 mIvNotify.setVisibility(View.GONE);
                 Intent intent = new Intent(getActivity(), MessageActivity.class);
                 startActivity(intent);
@@ -298,7 +291,6 @@ public class MyFragment extends Fragment {
 
     private void getBmobMesageCount() {
         BmobQuery<Message> user_profileBmobQuery = new BmobQuery<>();
-        user_profileBmobQuery.addWhereEqualTo("userID", mUserID);
         user_profileBmobQuery.findObjects(new FindListener<Message>() {
             @Override
             public void done(List<Message> list, BmobException e) {
@@ -306,7 +298,7 @@ public class MyFragment extends Fragment {
                     notifyCount = list.size();
                     getBmobNotifyManager();
                 } else {
-//                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
                     ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
@@ -338,6 +330,7 @@ public class MyFragment extends Fragment {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void getUserData() {
+        getBmobMesageCount();
         String sqlCmd = "SELECT * FROM User_Profile ";
         UserDao ud = new UserDao(getActivity());
         Cursor cursor = ud.query(sqlCmd);

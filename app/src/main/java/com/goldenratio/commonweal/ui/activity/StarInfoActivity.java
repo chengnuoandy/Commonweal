@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -104,7 +103,7 @@ public class StarInfoActivity extends BaseActivity {
                                           Log.i("bmob", "查询成功：共" + object + object.size() + "条数据。");
                                       }
                                   } else {
-        //                    Log.i("bmob", "失败：" + e.getMessage());
+                                      //                    Log.i("bmob", "失败：" + e.getMessage());
                                       ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                                   }
                                   closeProgressDialog();

@@ -106,9 +106,10 @@ public class CommentAdatper extends BaseAdapter {
                     intent.putExtra("id", mUserProfile.getObjectId());
                     intent.putExtra("isv",mUserProfile.isUser_IsV());
                     intent.putExtra("nickName", mUserProfile.getUser_Nickname());
+                    intent.putExtra("autograph",mUserProfile.getUser_Autograph());
                     intent.putExtra("Avatar", mUserProfile.getUser_image_hd());
                     mContext.startActivity(intent);
-                } else Toast.makeText(mContext, "哈哈哈哈" + "这里还没写", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         //回复的点击事件

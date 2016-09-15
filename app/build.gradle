@@ -74,4 +74,5 @@ dependencies {
     compile files('libs/MobCommons-2016.0714.1402.jar')
     compile files('libs/MobTools-2016.0714.1402.jar')
     compile files('libs/MiStats_SDK_Client_1_8_0.jar')
+    compile 'com.umeng.analytics:analytics:latest.integration'
 }

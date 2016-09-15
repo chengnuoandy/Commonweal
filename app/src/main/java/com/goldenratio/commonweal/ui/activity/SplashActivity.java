@@ -9,14 +9,11 @@ import android.os.Handler;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Top;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.Serializable;
 import java.util.List;
 
-import c.b.BP;
-import cn.bmob.push.BmobPush;
-import cn.bmob.v3.Bmob;
-import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -32,6 +29,7 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        MobclickAgent. startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this,"57da0a3267e58e5847000c6e","wandoujia"));
         initData();
         isFirst();
 //        startMain();

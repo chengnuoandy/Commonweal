@@ -260,5 +260,8 @@
         <activity android:name=".ui.activity.PayRecordDetailActivity" />
         <activity android:name=".ui.activity.my.DynamicActivity" />
         <activity android:name=".ui.activity.my.VerifyActivity" />
+
+        <meta-data android:value="57da0a3267e58e5847000c6e" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="Wandoujia" android:name="UMENG_CHANNEL"/>
     </application>
 </manifest>

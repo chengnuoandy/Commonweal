@@ -3,6 +3,7 @@ package com.goldenratio.commonweal.ui.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.umeng.analytics.MobclickAgent;
 import com.xiaomi.mistatistic.sdk.MiStatInterface;
 
 /**
@@ -19,6 +20,7 @@ public class BaseActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         MiStatInterface.recordPageStart(this, "");
     }
 
@@ -26,5 +28,6 @@ public class BaseActivity extends Activity {
     protected void onPause() {
         super.onPause();
         MiStatInterface.recordPageEnd();
+        MobclickAgent.onPause(this);
     }
 }

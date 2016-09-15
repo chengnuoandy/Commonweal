@@ -127,12 +127,13 @@ public class MySellGoodAdapter extends BaseAdapter {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //删除此物品
-                                Good good = new Good();
+                                final Good good = new Good();
                                 good.setObjectId(mList.get(mPos).getObjectId());
                                 good.delete(new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if (e == null) {
+                                            rwMySql(good.getObjectId());
                                             Toast.makeText(mContext, "删除成功！", Toast.LENGTH_SHORT).show();
                                             mList.remove(mPos);
                                             notifyDataSetChanged();
@@ -150,6 +151,32 @@ public class MySellGoodAdapter extends BaseAdapter {
                     } else {
                         ship();
                     }
+                }
+            });
+        }
+
+        private void rwMySql(String objectId) {
+            RequestParams params = new RequestParams("http://119.29.21.253/WebService1.asmx?op=DelGood");
+            params.addBodyParameter("objectId", objectId);
+            x.http().get(params, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    Toast.makeText(x.app(), "更新数据成功！", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    Toast.makeText(x.app(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+                    Toast.makeText(x.app(), "cancelled", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFinished() {
+
                 }
             });
         }

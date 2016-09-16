@@ -2,7 +2,6 @@ package com.goldenratio.commonweal.ui.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -27,6 +26,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Message;
+import com.goldenratio.commonweal.bean.NotifyManager;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.BidRecordActivity;
@@ -109,6 +109,7 @@ public class MyFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         if (isUserTableExist()) {
+            getBmobMesageCount();
             getUserData();
             isLogin = true;
         }
@@ -306,11 +307,11 @@ public class MyFragment extends Fragment {
     }
 
     private void getBmobNotifyManager() {
-        BmobQuery<NotificationManager> user_profileBmobQuery = new BmobQuery<>();
+        BmobQuery<NotifyManager> user_profileBmobQuery = new BmobQuery<>();
         user_profileBmobQuery.addWhereEqualTo("userID", mUserID);
-        user_profileBmobQuery.findObjects(new FindListener<NotificationManager>() {
+        user_profileBmobQuery.findObjects(new FindListener<NotifyManager>() {
             @Override
-            public void done(List<NotificationManager> list, BmobException e) {
+            public void done(List<NotifyManager> list, BmobException e) {
                 if (e == null) {
                     if (notifyCount == list.size()) {
                         mIvNotify.setVisibility(View.GONE);
@@ -330,7 +331,6 @@ public class MyFragment extends Fragment {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void getUserData() {
-        getBmobMesageCount();
         String sqlCmd = "SELECT * FROM User_Profile ";
         UserDao ud = new UserDao(getActivity());
         Cursor cursor = ud.query(sqlCmd);

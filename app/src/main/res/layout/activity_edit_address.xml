@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
-            android:layout_toRightOf="@+id/iv_back"
+            android:layout_toRightOf="@+id/iv_edit_address_back"
             android:background="@color/ordinary" />
 
 

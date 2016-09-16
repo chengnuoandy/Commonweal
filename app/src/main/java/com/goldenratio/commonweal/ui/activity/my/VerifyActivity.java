@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
@@ -74,6 +72,12 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
 
     private void initView() {
         mTvVer = (TextView) findViewById(R.id.goto_verify_button);
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mTvVer.setOnClickListener(this);
     }
 

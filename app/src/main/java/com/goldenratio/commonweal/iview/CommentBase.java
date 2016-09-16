@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.iview;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -59,6 +58,12 @@ public class CommentBase extends BaseActivity implements View.OnClickListener, B
     private void initView() {
         findViewById(R.id.ibtn_send).setOnClickListener(this);
         mListView = (ListView) findViewById(R.id.lv_comment_one);
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         View view = View.inflate(getApplicationContext(), R.layout.item_comment_one, null);
         view.findViewById(R.id.tv_user_reply).setOnClickListener(this);
 
@@ -91,7 +96,6 @@ public class CommentBase extends BaseActivity implements View.OnClickListener, B
         customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         customDialog.setContentView(mView);
         customDialog.show();
-
         btn_reply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

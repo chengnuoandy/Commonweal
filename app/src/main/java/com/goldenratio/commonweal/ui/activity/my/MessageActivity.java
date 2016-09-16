@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -45,21 +44,22 @@ public class MessageActivity extends BaseActivity {
     }
 
     private void getMessageFromBmob() {
-        BmobQuery<Message> user_profileBmobQuery = new BmobQuery<>();
-        user_profileBmobQuery.findObjects(new FindListener<Message>() {
-            @Override
-            public void done(List<Message> list, BmobException e) {
-                if (e == null) {
-                    if (list.size() == 0) {
-                        mTvNoData.setVisibility(View.VISIBLE);
-                    } else
-                        mLvAttention.setAdapter(new PrivateMessageListAdapter(list, MessageActivity.this));
-                } else {
+        BmobQuery<Message> BmobQuery = new BmobQuery<>();
+        BmobQuery.order("createdAt");
+                BmobQuery.findObjects(new FindListener<Message>() {
+                    @Override
+                    public void done(List<Message> list, BmobException e) {
+                        if (e == null) {
+                            if (list.size() == 0) {
+                                mTvNoData.setVisibility(View.VISIBLE);
+                            } else
+                                mLvAttention.setAdapter(new PrivateMessageListAdapter(list, MessageActivity.this));
+                        } else {
 //                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
-                    ErrorCodeUtil.switchErrorCode(getApplication(), e.getErrorCode() + "");
-                }
-            }
-        });
+                            ErrorCodeUtil.switchErrorCode(getApplication(), e.getErrorCode() + "");
+                        }
+                    }
+                });
     }
 
     @OnClick(R.id.iv_back)

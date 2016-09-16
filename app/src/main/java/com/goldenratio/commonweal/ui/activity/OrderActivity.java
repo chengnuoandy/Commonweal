@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,10 +29,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -54,6 +56,7 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+        ButterKnife.bind(this);
         initView();
         initData();
         new ImmersiveUtil(this, R.color.white, true);
@@ -92,7 +95,7 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                         .post(body)
                         .build();
                 Call call = okHttpClient.newCall(request);
-                call.enqueue(new okhttp3.Callback() {
+                call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, final IOException e) {
                         final String e1 = e.getMessage();
@@ -172,6 +175,11 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
         bundle.putSerializable("orderList", mySqlOrders.get(position));
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onClick() {
+        finish();
     }
 
     class MyOrderAdapter extends BaseAdapter {

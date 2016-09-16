@@ -259,7 +259,6 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
             } else {
                 Toast.makeText(GoodActivity.this, "正在发布", Toast.LENGTH_SHORT).show();
                 doInBackground(filePaths, mStrName, mStrDescription, mLgTime, hours[mSrTime.getSelectedItemPosition()]);
-                finish();
             }
         }
     }
@@ -290,6 +289,7 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
                                 @Override
                                 public void done(String s, BmobException e) {
                                     if (e == null) {
+                                        finish();
                                         createAEvent(s, hours);
                                     } else {
 //                                        Log.d("Kiuber_LOG", "done: " + e.getMessage());

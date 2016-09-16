@@ -51,7 +51,6 @@ public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefres
         view = inflater.inflate(R.layout.fragment_good, null);
         initView();
         ifTime();
-        findDataFromBmob();
         return view;
     }
 

@@ -125,9 +125,6 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    private void showTypeView() {
-    }
-
     private void showPriceView() {
         Intent mIntent = new Intent(this, GoodKeypadActivity.class);
         mIntent.putExtra("price", price);

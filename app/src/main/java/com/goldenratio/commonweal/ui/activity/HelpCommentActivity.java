@@ -1,7 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.goldenratio.commonweal.R;
@@ -61,7 +60,7 @@ public class HelpCommentActivity extends CommentBase implements IComment {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-
+                    show();
                 } else {
 //                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
@@ -80,7 +79,7 @@ public class HelpCommentActivity extends CommentBase implements IComment {
         bmobQuery.findObjects(new FindListener<Help_Comment>() {
             @Override
             public void done(List<Help_Comment> list, BmobException e) {
-                if (e==null) {
+                if (e == null) {
                     if (!(str.trim().isEmpty())) {
                         up(str);
                     }

@@ -133,7 +133,7 @@ public class CommentBase extends BaseActivity implements View.OnClickListener, B
         return customDialog;
     }
 
-    private void show() {
+    protected void show() {
         //回调方法----拉取评论
         mIComment.Show(mListView, mBGARefreshLayout);
     }

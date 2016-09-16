@@ -1,7 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -55,6 +54,7 @@ public class MyDynamicCommentActivity extends CommentBase implements IComment {
             public void done(String s, BmobException e) {
                 if (e == null) {
                     Toast.makeText(MyDynamicCommentActivity.this, "发送成功！", Toast.LENGTH_SHORT).show();
+                    show();
                 } else {
 //                    Toast.makeText(MyDynamicCommentActivity.this, "发送失败！", Toast.LENGTH_SHORT).show();
 //                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());

@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodListViewAdapter;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
-import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -53,6 +51,7 @@ public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefres
         view = inflater.inflate(R.layout.fragment_good, null);
         initView();
         ifTime();
+        findDataFromBmob();
         return view;
     }
 

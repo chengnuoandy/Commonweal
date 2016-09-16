@@ -1,19 +1,15 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -186,6 +182,12 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
         mIvShowMore.setOnClickListener(this);
         mTvBidRecord = (TextView) findViewById(R.id.tv_bid_record);
         mTvBidRecord.setOnClickListener(this);
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

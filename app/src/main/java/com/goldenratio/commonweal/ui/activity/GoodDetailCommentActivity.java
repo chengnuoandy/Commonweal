@@ -65,7 +65,7 @@ public class GoodDetailCommentActivity extends CommentBase implements IComment {
             @Override
             public void done(String s, BmobException e) {
                 if (e == null) {
-
+                    show();
                 } else {
 //                    Log.d("CN", "onFailure: " + e.getMessage() + e.getErrorCode());
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");

@@ -46,12 +46,19 @@ public class PostActivity extends BaseActivity {
         composeGood = (ImageView) findViewById(R.id.compose_good);
         composeClose = (ImageView) findViewById(R.id.compose_close);
 
+        MyApplication myApplication = (MyApplication) this.getApplication();
+        final String uID = myApplication.getObjectID();
+
         composeDy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, DynamicReleaseActivity.class);
-                startActivity(intent);
-                finish();
+                if (uID.isEmpty()) {
+                    Toast.makeText(PostActivity.this, "请先登录！", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(mContext, DynamicReleaseActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
         composeGood.setOnClickListener(new View.OnClickListener() {

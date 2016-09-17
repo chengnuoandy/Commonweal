@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -294,12 +293,11 @@ public class MySetActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("关于");
         try {
-            builder.setMessage("XXX\n" +
+            builder.setMessage("爱点\n" +
                     "版本：" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "\n" +
-                    "这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍" +
-                    "这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍" +
-                    "这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍" +
-                    "这里写详细介绍这里写详细介绍这里写详细介绍这里写详细介绍");
+                    "爱点---结合拍卖实现年轻化公益" + "\n" +
+                    "本产品由0P618团队开发" + "\n" +
+                    "版权所有©伪版必究");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

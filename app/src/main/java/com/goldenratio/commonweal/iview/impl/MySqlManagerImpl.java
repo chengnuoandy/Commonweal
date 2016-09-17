@@ -177,6 +177,16 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         });
     }
 
+    /**
+     * 保存支付记录
+     * @param PR_Type
+     * @param PR_Money
+     * @param PR_Coin
+     * @param PR_Number
+     * @param PR_Status
+     * @param PayType
+     * @param PR_Name
+     */
     public void savePayHistoryToBmob(boolean PR_Type,
                                      String PR_Money,
                                      String PR_Coin,
@@ -206,6 +216,10 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         });
     }
 
+    /**
+     * 创建唯一的随机订单号
+     * @return
+     */
     private String createRndNumber() {
         Random rad = new Random();
         String result = rad.nextInt(9) + "";
@@ -218,6 +232,10 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         return orderId;
     }
 
+    /**
+     * 安装bmob安全支付控件
+     * @param fileName
+     */
     private void installBmobPayPlugin(String fileName) {
         try {
             InputStream is = mContext.getAssets().open(fileName);
@@ -245,6 +263,9 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         }
     }
 
+    /**
+     * 初始化视图，设置支付验证框相关属性
+     */
     private void initView() {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View mMenuView = inflater.inflate(R.layout.pop_enter_password, null);
@@ -285,6 +306,13 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
     }
 
 
+    /**
+     * 更新用户公益币
+     * @param sumCoin  要更新的公益币--即用户现有公益币数量
+     * @param changeCoin 变化的公益币--用户充值或花费的公益币
+     * @param PRName 订单名称
+     * @return
+     */
     @Override
     public boolean updateUserCoinByObjectId(final String sumCoin, final String changeCoin, final int PRName) {
         showProgressDialog();
@@ -426,6 +454,12 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         return false;
     }
 
+    /**
+     * 查询用户公益币
+     * @param mStrUserCoin
+     * @param sixPwd
+     * @return
+     */
     @Override
     public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
         showProgressDialog();

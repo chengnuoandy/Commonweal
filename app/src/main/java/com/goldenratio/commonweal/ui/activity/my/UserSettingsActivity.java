@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,6 +53,8 @@ import com.yancy.imageselector.ImageSelectorActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -313,29 +314,34 @@ public class UserSettingsActivity extends BaseActivity implements IMySqlManager 
                 if (TextUtils.isEmpty(editText.getText()) || TextUtils.isEmpty(editText1.getText()) || TextUtils.isEmpty(editText2.getText())) {
                     Toast.makeText(UserSettingsActivity.this, "请填写所有数据！", Toast.LENGTH_SHORT).show();
                 } else {
-
-                    if (editText1.getText().toString().equals(editText2.getText().toString())) {
-                        BmobQuery<User_Profile> query = new BmobQuery<User_Profile>();
-                        query.getObject(mUserID, new QueryListener<User_Profile>() {
-                            @Override
-                            public void done(User_Profile user_profile, BmobException e) {
-                                if (e == null) {
-                                    if (user_profile.getUser_Password().equals(MD5Util.createMD5(editText.getText().toString()))) {
-                                        showProgressDialog();
-                                        updateDataToBmob(MD5Util.createMD5(editText1.getText().toString()), 4, null);
-                                        alertDialog.dismiss();
-                                    } else {
-                                        Toast.makeText(UserSettingsActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
+                    if (editText1.getText().toString().length() >= 8) {
+                        if (checkPassword(editText1.getText().toString())) {
+                            if (editText1.getText().toString().equals(editText2.getText().toString())) {
+                                BmobQuery<User_Profile> query = new BmobQuery<User_Profile>();
+                                query.getObject(mUserID, new QueryListener<User_Profile>() {
+                                    @Override
+                                    public void done(User_Profile user_profile, BmobException e) {
+                                        if (e == null) {
+                                            if (user_profile.getUser_Password().equals(MD5Util.createMD5(editText.getText().toString()))) {
+                                                showProgressDialog();
+                                                updateDataToBmob(MD5Util.createMD5(editText1.getText().toString()), 4, null);
+                                                alertDialog.dismiss();
+                                            } else {
+                                                Toast.makeText(UserSettingsActivity.this, "密码错误！", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
 //                                    Toast.makeText(UserSettingsActivity.this, "修改失败！", Toast.LENGTH_SHORT).show();
-                                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
-                                }
+                                            ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                                        }
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(UserSettingsActivity.this, "两次输入的密码不同！", Toast.LENGTH_SHORT).show();
                             }
-                        });
-                    } else {
-                        Toast.makeText(UserSettingsActivity.this, "两次输入的密码不同！", Toast.LENGTH_SHORT).show();
-                    }
+                        } else
+                            Toast.makeText(UserSettingsActivity.this, "密码强度过低,请输入8~16位数字加字母组合", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(getApplicationContext(), "密码不能低于8位", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -353,6 +359,14 @@ public class UserSettingsActivity extends BaseActivity implements IMySqlManager 
                 alertDialog.dismiss();
             }
         });
+    }
+
+    private boolean checkPassword(String pw) {
+        String regPw = "^[\\da-zA-Z]*((\\d+[\\da-zA-Z]*[a-zA-Z]+)|" +
+                "([a-zA-Z]+[\\da-zA-Z]*\\d+))[\\da-zA-Z]*$";
+        Pattern p = Pattern.compile(regPw);
+        Matcher m = p.matcher(pw);
+        return m.matches();
     }
 
     private void showChoiceDialog() {

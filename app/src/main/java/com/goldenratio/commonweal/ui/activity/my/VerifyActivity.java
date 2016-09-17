@@ -18,9 +18,7 @@ import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.bean.VerifyRecord;
-import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
-import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -85,7 +83,6 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.goto_verify_button:
-                progressDialog = ProgressDialog.show(VerifyActivity.this, null, "正在进行微博认证", false);
                 wbAuthorize();
                 break;
         }
@@ -97,11 +94,12 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
      */
     private void wbAuthorize() {
         new AlertDialog.Builder(this)
-                .setTitle("警告")
-                .setMessage("微博只能绑定一次，由于特殊原因，解绑需要联系官方，绑定之前请慎重考虑，你确定要绑定吗？")
+                .setTitle("提示")
+                .setMessage("名人认证只支持微博大V用户，请确保你已经是大V用户，你确定要进行认证吗？")
                 .setPositiveButton("朕知道了", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        progressDialog = ProgressDialog.show(VerifyActivity.this, null, "正在进行微博认证", false);
                         mSsoHandler.authorize(new AuthListener());
                     }
                 })
@@ -131,7 +129,7 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
                 upUser = User.parse(response);
                 if (upUser != null) {
                     if (upUser.verified_reason.isEmpty()) {
-                        progressDialog.dismiss();
+                        closeProgressDialog();
                         new AlertDialog.Builder(VerifyActivity.this)
                                 .setMessage("您的微博账号没有通过V认证,不能进行微博用户认证")
                                 .setPositiveButton("我知道了", null)
@@ -191,6 +189,7 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onCancel() {
+            closeProgressDialog();
             Toast.makeText(VerifyActivity.this,
                     "取消授权", Toast.LENGTH_LONG).show();
         }
@@ -270,32 +269,6 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
                     });
                 } else {
                     ErrorCodeUtil.switchErrorCode(VerifyActivity.this, e.getErrorCode() + "");
-                }
-            }
-        });
-    }
-
-    private void updateDB() {
-        User_Profile userProfile = new User_Profile();
-        userProfile.setUser_WbID(upUser.id);
-        userProfile.setUser_IsV(upUser.verified);
-        userProfile.setUser_VerifiedReason(upUser.verified_reason); //认证原因
-        final String id = mUserID;
-        userProfile.update(mUserID, new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    Toast.makeText(VerifyActivity.this, "已绑定", Toast.LENGTH_SHORT).show();
-                    MyFragment.userWBid = upUser.id;
-                    UserDao mUserDao = new UserDao(VerifyActivity.this);
-                    mUserDao.execSQL("update User_Profile set User_weiboID = ? where objectId = ?", new String[]{upUser.id, id});
-                    closeProgressDialog();
-                    Toast.makeText(VerifyActivity.this, "绑定成功！", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
-                    finish();
-                } else {
-//                    Toast.makeText(VerifyActivity.this, "绑定失败！" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });

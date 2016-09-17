@@ -51,10 +51,10 @@ public class GuideActivity extends BaseActivity {
 
         imageViewContainer = new ArrayList<ImageView>();
         int[] imageIDs = new int[]{
-                R.mipmap.hander_one,
-                R.mipmap.hander_two,
-                R.mipmap.hander_three,
-                R.mipmap.tab_my_test_wangwang,
+                R.mipmap.guide_1,
+                R.mipmap.guide_2,
+                R.mipmap.guide_3,
+                R.mipmap.guide_4,
         };
 
         ImageView imageView = null;

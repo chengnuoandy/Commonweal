@@ -91,7 +91,6 @@ public class MyFragment extends Fragment {
     private ImageView mIvIsV;
     private TextView mTvFans;
     public static String userWBid = "";
-    private String mUserCoin;
     private TextView mBidRecord;
     private TextView mTvVerify;
     boolean userVerStatus;
@@ -149,11 +148,12 @@ public class MyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String objectID = ((MyApplication) getActivity().getApplication()).getObjectID();
-                if (objectID == "") {
+                if (objectID.equals("")) {
+                    Toast.makeText(getContext(), "请登陆后再试", Toast.LENGTH_SHORT).show();
+                } else {
                     Intent intentW = new Intent(getContext(), WalletActivity.class);
-                    intentW.putExtra("coin", mUserCoin);
                     startActivity(intentW);
-                }else Toast.makeText(getContext(), "请登陆后再试", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         mTvSetting = view.findViewById(R.id.tv_settings);

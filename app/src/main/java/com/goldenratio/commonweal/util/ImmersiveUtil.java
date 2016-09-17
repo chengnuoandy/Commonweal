@@ -28,7 +28,6 @@ public class ImmersiveUtil {
         } else {
             mTintManager.setStatusBarTintEnabled(false);
         }
-        Toast.makeText(activity, mode + "", Toast.LENGTH_SHORT).show();
     }
 
     @TargetApi(19)

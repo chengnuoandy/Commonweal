@@ -234,6 +234,7 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
     @Override
     public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
         mStrUserCoin = sumCoin;
+        mAvail.setText(sumCoin);
         double coin = Double.valueOf(changeCoin);
         if (coin < 0 || coin == 0) {
             if (isHasDonate) {

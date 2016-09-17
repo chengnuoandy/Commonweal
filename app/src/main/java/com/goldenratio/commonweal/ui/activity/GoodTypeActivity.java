@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 /**
  * Created by Kiuber on 2016/6/24.
@@ -38,5 +39,6 @@ public class GoodTypeActivity extends BaseActivity {
                 finish();
             }
         });
+        new ImmersiveUtil(this, R.color.white, true);
     }
 }

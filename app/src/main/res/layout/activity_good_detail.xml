@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/default_frame"
                     android:padding="@dimen/little_space"
-                    android:text="黄晓明"
+                    android:text="                    "
                     android:textColor="@color/colorPrimary" />
 
                 <TextView
@@ -291,8 +291,16 @@
                     android:layout_height="1dp"
                     android:layout_weight="1"
                     android:background="@color/normal_bg_color" />
-
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="@dimen/little_space"
+                android:text="'     物品详情     '"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size_small" />
 
             <TextView
                 android:id="@+id/tv_good_description"

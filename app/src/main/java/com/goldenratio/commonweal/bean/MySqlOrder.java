@@ -10,11 +10,10 @@ import java.util.List;
 public class MySqlOrder implements Serializable {
 
     private String Object_Id;
-    private String Order_Name;
-    private String Order_Coin;
-    private List<String> Order_PicURL;
-    private String Order_Status;
-    private String Order_Good;
+    private Good Order_Good;
+    private User_Profile Order_User;
+    private String Order_Code;
+    private String Order_Company;
 
     public String getObject_Id() {
         return Object_Id;
@@ -24,43 +23,35 @@ public class MySqlOrder implements Serializable {
         Object_Id = object_Id;
     }
 
-    public String getOrder_Name() {
-        return Order_Name;
-    }
-
-    public void setOrder_Name(String order_Name) {
-        Order_Name = order_Name;
-    }
-
-    public String getOrder_Coin() {
-        return Order_Coin;
-    }
-
-    public void setOrder_Coin(String order_Coin) {
-        Order_Coin = order_Coin;
-    }
-
-    public List<String> getOrder_PicURL() {
-        return Order_PicURL;
-    }
-
-    public void setOrder_PicURL(List<String> order_PicURL) {
-        Order_PicURL = order_PicURL;
-    }
-
-    public String getOrder_Status() {
-        return Order_Status;
-    }
-
-    public void setOrder_Status(String order_Status) {
-        Order_Status = order_Status;
-    }
-
-    public String getOrder_Good() {
+    public Good getOrder_Good() {
         return Order_Good;
     }
 
-    public void setOrder_Good(String order_Good) {
+    public void setOrder_Good(Good order_Good) {
         Order_Good = order_Good;
+    }
+
+    public User_Profile getOrder_User() {
+        return Order_User;
+    }
+
+    public void setOrder_User(User_Profile order_User) {
+        Order_User = order_User;
+    }
+
+    public String getOrder_Code() {
+        return Order_Code;
+    }
+
+    public void setOrder_Code(String order_Code) {
+        Order_Code = order_Code;
+    }
+
+    public String getOrder_Company() {
+        return Order_Company;
+    }
+
+    public void setOrder_Company(String order_Company) {
+        Order_Company = order_Company;
     }
 }

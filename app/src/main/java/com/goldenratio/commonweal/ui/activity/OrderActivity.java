@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +19,8 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
+import com.goldenratio.commonweal.iview.IMySqlManager;
+import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
@@ -34,6 +37,7 @@ import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -51,6 +55,7 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
     private TextView mTvLoading;
     private String mUserId;
     List<MySqlOrder> mySqlOrders;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,7 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
     }
 
     private void initData() {
+        mContext = OrderActivity.this;
         mUserId = ((MyApplication) (getApplication())).getObjectID();
         if (TextUtils.isEmpty(mUserId)) {
             mTvLoading.setText("请先登录");
@@ -129,12 +135,16 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                                             final MySqlOrder mySqlOrder = new MySqlOrder();
                                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                                             mySqlOrder.setObject_Id(jsonObject.getString("O_ID"));
-                                            mySqlOrder.setOrder_Status(jsonObject.getString("O_Status"));
-                                            mySqlOrder.setOrder_Good(jsonObject.getString("O_Good"));
+
+                                            String id = jsonObject.getString("O_Good");
+
+                                            mySqlOrder.setOrder_Code(jsonObject.getString("O_Code"));
+                                            mySqlOrder.setOrder_Company(jsonObject.getString("O_Company"));
                                             mySqlOrders.add(i, mySqlOrder);
 
                                             BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
-                                            goodBmobQuery.addWhereEqualTo("objectId", mySqlOrder.getOrder_Good());
+                                            goodBmobQuery.addWhereEqualTo("objectId", id);
+                                            goodBmobQuery.include("Good_NowBidUser");
                                             goodBmobQuery.findObjects(new FindListener<Good>() {
                                                 @Override
                                                 public void done(List<Good> list, BmobException e) {
@@ -142,9 +152,8 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                                                         if (list.size() == 0) {
                                                             Toast.makeText(OrderActivity.this, "未找到物品信息", Toast.LENGTH_SHORT).show();
                                                         } else if (list.size() == 1) {
-                                                            mySqlOrder.setOrder_Coin(list.get(0).getGood_NowCoin());
-                                                            mySqlOrder.setOrder_PicURL(list.get(0).getGood_Photos());
-                                                            mySqlOrder.setOrder_Name(list.get(0).getGood_Name());
+                                                            mySqlOrder.setOrder_Good(list.get(0));
+                                                            mySqlOrder.setOrder_User(list.get(0).getGood_NowBidUser());
                                                             mLvOrder.setAdapter(new MyOrderAdapter());
                                                         }
                                                     } else {
@@ -214,24 +223,147 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             viewHolder.initData(position);
+
             return convertView;
         }
 
-        class ViewHolder {
-            private ImageView mIvGood;
+        class ViewHolder implements IMySqlManager {
             private TextView mTvName;
             private TextView mTvCoin;
+            private TextView mTvReceive;
+            private ImageView mIvGood;
+            private int flag;
+            private MySqlManagerImpl mySqlManager;
 
             private void initView(View view) {
                 mIvGood = (ImageView) view.findViewById(R.id.iv_good);
                 mTvName = (TextView) view.findViewById(R.id.tv_name);
                 mTvCoin = (TextView) view.findViewById(R.id.tv_coin);
+                mTvReceive = (TextView) view.findViewById(R.id.tv_receive);
             }
 
             private void initData(int position) {
-                Glide.with(OrderActivity.this).load(mySqlOrders.get(position).getOrder_PicURL().get(0)).into(mIvGood);
-                mTvName.setText(getItem(position).getOrder_Name());
-                mTvCoin.setText(getItem(position).getOrder_Coin());
+                Good good = getItem(position).getOrder_Good();
+                Glide.with(OrderActivity.this).load(good.getGood_Photos().get(0)).into(mIvGood);
+                mTvName.setText(good.getGood_Name());
+                mTvCoin.setText(good.getGood_NowCoin());
+                if (good.getGood_Status().equals(3)) {
+                    mTvReceive.setVisibility(View.VISIBLE);
+                }
+                setOnClickListener(position);
+            }
+
+            private void setOnClickListener(final int position) {
+                mTvReceive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        flag = position;
+                        mySqlManager = new MySqlManagerImpl(OrderActivity.this, ViewHolder.this);
+                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                    }
+                });
+                mIvGood.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent1 = new Intent(OrderActivity.this, GoodDetailActivity.class);
+                        intent1.putExtra("objectId", mySqlOrders.get(position).getOrder_Good().getObjectId());
+                        startActivity(intent1);
+                    }
+                });
+            }
+
+
+            @Override
+            public void pay(boolean alipayOrWechatPay, double price, double allCoin, String changeCoin) {
+            }
+
+            @Override
+            public void showSixPwdOnFinishInput(String sixPwd, int event) {
+                if (event == 1) {
+                    confirmReceive();
+                }
+            }
+
+            private void confirmReceive() {
+                String webServiceIp = ((MyApplication) (mContext.getApplicationContext())).getWebServiceIp();
+                if (!(webServiceIp == null)) {
+                    String url = webServiceIp + "ConfirmReceive";
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    final MySqlOrder mySqlOrder = mySqlOrders.get(flag);
+                    int nowCoin = Integer.parseInt(mySqlOrder.getOrder_Good().getGood_NowCoin());
+                    int donateCoin = (int) (nowCoin * mySqlOrder.getOrder_Good().getGood_DonationRate() * 0.01);
+                    Toast.makeText(mContext, donateCoin + "", Toast.LENGTH_SHORT).show();
+                    int userCoin = nowCoin - donateCoin;
+                    RequestBody body = new FormBody.Builder()
+                            .add("userId", mySqlOrder.getOrder_Good().getGood_User().getObjectId())
+                            .add("goodId", mySqlOrder.getOrder_Good().getObjectId())
+                            .add("userCoin", userCoin + "")
+                            .add("donateCoin", donateCoin + "")
+                            .build();
+
+                    final Request request = new Request.Builder()
+                            .url(url)
+                            .post(body)
+                            .build();
+                    Call call = okHttpClient.newCall(request);
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, final IOException e) {
+                            final String e1 = e.getMessage();
+                            OrderActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            final String result = response.body().string();
+                            OrderActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //更新bmob的逻辑
+                                    Good good = new Good();
+                                    good.setGood_Status(4);
+                                    good.update(mySqlOrder.getOrder_Good().getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                Toast.makeText(mContext, "确认收货成功", Toast.LENGTH_SHORT).show();
+                                                mTvReceive.setVisibility(View.GONE);
+                                            } else {
+                                                //                                    Toast.makeText(mContext, "更新数据失败", Toast.LENGTH_SHORT).show();
+                                                ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
+                return false;
+            }
+
+            @Override
+            public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+                mySqlManager = new MySqlManagerImpl(OrderActivity.this, ViewHolder.this, "确认收货", "", "收货");
+                mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
+                return false;
+            }
+
+            @Override
+            public boolean updateUserSixPwdByObjectId(String sixPwd) {
+                return false;
             }
         }
     }

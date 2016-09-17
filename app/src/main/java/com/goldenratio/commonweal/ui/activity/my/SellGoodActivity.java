@@ -95,7 +95,7 @@ public class SellGoodActivity extends BaseActivity implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(SellGoodActivity.this, GoodDetailActivity.class);
-        intent.putExtra("objectId", mGoodList.get(position));
+        intent.putExtra("objectId", mGoodList.get(position).getObjectId()  );
         startActivity(intent);
     }
 }

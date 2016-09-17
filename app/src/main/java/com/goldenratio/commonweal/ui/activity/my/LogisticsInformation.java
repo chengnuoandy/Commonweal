@@ -1,6 +1,7 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +13,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.KdniaoTrackQueryAPI;
 import com.goldenratio.commonweal.bean.LogisticsBird;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -37,10 +39,19 @@ public class LogisticsInformation extends BaseActivity {
         mTvNo = (TextView) findViewById(R.id.tv_no);
 
         initData();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initData() {
-        new GetJson().execute("SF", "973134410593");
+        Intent intent = getIntent();
+        String company = intent.getStringExtra("company");
+        String code = intent.getStringExtra("code");
+        if (company != null && code != null) {
+            new GetJson().execute(company, code);
+        } else {
+            Toast.makeText(this, "订单信息查询失败 " + "company:" + company + " code" + code, Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     /**
@@ -51,7 +62,7 @@ public class LogisticsInformation extends BaseActivity {
      */
     private void JavaBean2List(LogisticsBird kdn) {
         List<LogisticsBird.Traces> data = kdn.getTraces();
-        Map<String,String> map = kdn.getMap();
+        Map<String, String> map = kdn.getMap();
         //转换成list<string>集合
         for (int i = 0; i < data.size(); i++) {
             mList.add(data.get(i).getAcceptStation() + "\n" + data.get(i).getAcceptTime());
@@ -59,10 +70,10 @@ public class LogisticsInformation extends BaseActivity {
 
         mTvName.setText("承运来源：" + map.get(kdn.getShipperCode()));
         mTvNo.setText("运单编号：" + kdn.getLogisticCode());
-        if (kdn.getState() == null){
+        if (kdn.getState() == null) {
             mTvStatus.setText("物流状态：未查询到结果");
             return;
-        }else {
+        } else {
             mTvStatus.setText("物流状态：" + map.get(kdn.getState()));
         }
 
@@ -86,7 +97,7 @@ public class LogisticsInformation extends BaseActivity {
         protected String doInBackground(String... params) {
             KdniaoTrackQueryAPI kd = new KdniaoTrackQueryAPI();
             try {
-                String data = kd.getOrderTracesByJson(params[0],params[1]);
+                String data = kd.getOrderTracesByJson(params[0], params[1]);
                 return data;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -98,11 +109,11 @@ public class LogisticsInformation extends BaseActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Gson gson = new Gson();
-            LogisticsBird kdn = gson.fromJson(s,LogisticsBird.class);
+            LogisticsBird kdn = gson.fromJson(s, LogisticsBird.class);
             //判断是否查询成功
-            if (kdn.isSuccess()){
+            if (kdn.isSuccess()) {
                 JavaBean2List(kdn);
-            }else {
+            } else {
                 Toast.makeText(LogisticsInformation.this, "查询失败，请稍后再试！", Toast.LENGTH_SHORT).show();
             }
 //            Log.d("lxc", "onPostExecute: " + s);

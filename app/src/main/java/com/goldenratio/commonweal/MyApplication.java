@@ -12,7 +12,6 @@ import com.goldenratio.commonweal.bean.AppConfig;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
-import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;

@@ -245,7 +245,7 @@ public class PopEnterPassword extends PopupWindow {
         good.setGood_NowCoin(coin);
         good.setGood_NowBidUser(user_profile);
         good.setGood_Bid(bid);
-        good.setIsFirstDeposit(false);
+        good.setFirstDeposit(false);
         good.update(good_id, new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -438,7 +438,7 @@ public class PopEnterPassword extends PopupWindow {
     private void updateOrderStatus(String order, String user, String userCoin) {
         String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
         if (!(webServiceIp == null)) {
-            String URL = webServiceIp+"UpdateOrderStatus";
+            String URL = webServiceIp + "UpdateOrderStatus";
             OkHttpClient okHttpClient = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("ObjectId", order)
@@ -488,7 +488,7 @@ public class PopEnterPassword extends PopupWindow {
     private void updateUserCoin(String sumCoin, final String toast) {
         String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
         if (!(webServiceIp == null)) {
-            String URL = webServiceIp+"UpdateUserCoinByObjectId";
+            String URL = webServiceIp + "UpdateUserCoinByObjectId";
             OkHttpClient okHttpClient = new OkHttpClient();
             RequestBody body = new FormBody.Builder()
                     .add("ObjectId", mUserId)

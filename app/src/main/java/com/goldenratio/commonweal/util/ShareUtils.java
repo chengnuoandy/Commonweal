@@ -44,14 +44,13 @@ public class ShareUtils {
     }
 
     /**
-     *
      * @param context 上下文
      * @param url     分享页面的url
      * @param title   分享的标题
      * @param content 分享文本
      * @param comment 评论 仅在人人网和QQ空间使用
      */
-    public void showShare(Context context,String url,String title,String content,String comment ) {
+    public void showShare(Context context, String url, String title, String content, String comment) {
         ShareSDK.initSDK(context);
         OnekeyShare oks = new OnekeyShare();
         //关闭sso授权

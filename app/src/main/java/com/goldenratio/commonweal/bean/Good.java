@@ -4,6 +4,7 @@ import java.util.List;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
  * Created by Kiuber on 2016/6/10.
@@ -28,6 +29,7 @@ public class Good extends BmobObject {
     private Integer Good_Status;
     private Boolean isFirstDeposit;
     private Bid Good_Bid;
+    private BmobFile Good_FirstPic;
 
     public User_Profile getGood_User() {
         return Good_User;
@@ -157,12 +159,12 @@ public class Good extends BmobObject {
         Good_Status = good_Status;
     }
 
-    public Boolean getIsFirstDeposit() {
+    public Boolean getFirstDeposit() {
         return isFirstDeposit;
     }
 
-    public void setIsFirstDeposit(Boolean isFirstDeposit) {
-        this.isFirstDeposit = isFirstDeposit;
+    public void setFirstDeposit(Boolean firstDeposit) {
+        isFirstDeposit = firstDeposit;
     }
 
     public Bid getGood_Bid() {
@@ -171,5 +173,13 @@ public class Good extends BmobObject {
 
     public void setGood_Bid(Bid good_Bid) {
         Good_Bid = good_Bid;
+    }
+
+    public BmobFile getGood_FirstPic() {
+        return Good_FirstPic;
+    }
+
+    public void setGood_FirstPic(BmobFile good_FirstPic) {
+        Good_FirstPic = good_FirstPic;
     }
 }

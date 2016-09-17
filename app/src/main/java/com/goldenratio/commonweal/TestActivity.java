@@ -1,7 +1,5 @@
 package com.goldenratio.commonweal;
 
-import android.app.Activity;
-
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
 
 /**

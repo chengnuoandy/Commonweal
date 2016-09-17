@@ -27,6 +27,7 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
@@ -83,6 +84,7 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
         initView();
         imageSelectConfig();
 //        UploadData(1, 1);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
 
@@ -284,7 +286,8 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
                             good.setGood_DonationRate(Integer.parseInt(prop));
                             good.setGood_UpDateM(mLgTime);
                             good.setGood_Status(1);
-                            good.setIsFirstDeposit(true);
+                            good.setFirstDeposit(false);
+                            good.setGood_FirstPic(list.get(0));
                             good.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String s, BmobException e) {

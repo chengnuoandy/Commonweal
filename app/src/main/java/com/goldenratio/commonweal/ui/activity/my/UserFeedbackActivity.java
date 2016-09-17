@@ -18,6 +18,7 @@ import com.goldenratio.commonweal.bean.UserFeedback;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
@@ -59,6 +60,7 @@ public class UserFeedbackActivity extends BaseActivity implements AdapterView.On
         ButterKnife.bind(this);
 
         initData();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initData() {
@@ -91,9 +93,9 @@ public class UserFeedbackActivity extends BaseActivity implements AdapterView.On
                 ImageSelector.open(this, imageConfig);   // 开启图片选择器
                 break;
             case R.id.btn_send:
-                if (mEtFeedback.getText().toString().isEmpty()){
+                if (mEtFeedback.getText().toString().isEmpty()) {
                     Toast.makeText(UserFeedbackActivity.this, "请填写反馈内容", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     SendM();
                     up2Bmob();
                 }
@@ -159,11 +161,11 @@ public class UserFeedbackActivity extends BaseActivity implements AdapterView.On
                             uf.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String s, BmobException e) {
-                                    if (e == null){
+                                    if (e == null) {
                                         Completed();
                                         Toast.makeText(UserFeedbackActivity.this, "发送成功！", Toast.LENGTH_SHORT).show();
                                         finish();
-                                    }else {
+                                    } else {
                                         Completed();
 //                                        Toast.makeText(UserFeedbackActivity.this, "未知错误-" + e, Toast.LENGTH_SHORT).show();
                                         ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");

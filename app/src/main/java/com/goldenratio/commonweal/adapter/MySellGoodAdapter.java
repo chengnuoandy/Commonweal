@@ -43,6 +43,7 @@ public class MySellGoodAdapter extends BaseAdapter {
     private EditText mText; //单号
     private List<String> mStrings;
     private boolean isDel;
+    private String shipperCode;
 
     public MySellGoodAdapter(Context context, List<Good> list) {
         mContext = context;
@@ -91,7 +92,6 @@ public class MySellGoodAdapter extends BaseAdapter {
         private TextView mTvTitle;
         private TextView mTvStatus;
         private TextView mBtnShip;
-        private String shipperCode;
         private int mPos;
 
         private void initView(View view) {
@@ -195,6 +195,7 @@ public class MySellGoodAdapter extends BaseAdapter {
                 mBtnShip.setVisibility(View.VISIBLE);
             } else if (flag == 3) {
                 str = "已发货，等待签收";
+                addStrings();
                 mBtnShip.setText("修改物流信息");
                 mBtnShip.setVisibility(View.VISIBLE);
             } else if (flag == 4) {
@@ -202,7 +203,7 @@ public class MySellGoodAdapter extends BaseAdapter {
             }
             mTvTitle.setText(mList.get(pos).getGood_Name() + "\n" + mList.get(pos).getGood_Description());
             mTvStatus.setText("状态：" + str + "(现在价格:" + mList.get(pos).getGood_NowCoin() + ")");
-            if (!mList.get(pos).getIsFirstDeposit()) {
+            if (!mList.get(pos).getFirstDeposit()) {
                 mBtnShip.setText("删除物品");
                 isDel = true;
                 mBtnShip.setVisibility(View.VISIBLE);
@@ -240,6 +241,7 @@ public class MySellGoodAdapter extends BaseAdapter {
                                 public void done(BmobException e) {
                                     if (e == null) {
                                         Toast.makeText(mContext, "数据更新完毕", Toast.LENGTH_SHORT).show();
+                                        mBtnShip.setVisibility(View.GONE);
                                     } else {
                                         //                                    Toast.makeText(mContext, "更新数据失败", Toast.LENGTH_SHORT).show();
                                         ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");

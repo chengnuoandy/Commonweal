@@ -91,16 +91,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         mVpContent.addOnPageChangeListener(this);
         mVpContent.setOffscreenPageLimit(4);  //设置是适配器缓存fragment数
         new ImmersiveUtil(this, R.color.white, true);
-        test1();
-    }
-
-    private void test1() {
-        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
-        if (webServiceIp == null) {
-            Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
-        } else {
-
-        }
     }
 
     @Override

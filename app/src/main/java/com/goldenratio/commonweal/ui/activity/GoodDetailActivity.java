@@ -75,7 +75,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
     private ImageView mIvComment, mIvShowMore;
     private double bidPoorMoney;
     private double dePoorMoney;
-    private double bidCoin;
+    private int bidCoin;
     private TextView mTvBidRecord;
     private CountdownView mCountdownView1;
 
@@ -218,7 +218,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                         Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
                                     } else {
                                         dialog.dismiss();
-                                        bidCoin = Double.valueOf(mStrCoin);
+                                        bidCoin = Integer.parseInt(mStrCoin);
                                         mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
                                         flag = 2;
                                     }
@@ -227,7 +227,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                         Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
                                     } else {
                                         dialog.dismiss();
-                                        bidCoin = Double.valueOf(mStrCoin);
+                                        bidCoin = Integer.parseInt(mStrCoin);
                                         mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
                                         flag = 2;
                                     }
@@ -269,7 +269,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
             case R.id.iv_show_more:
                 mCountdownView.setVisibility(View.GONE);
                 mCountdownView1.setVisibility(View.VISIBLE);
-                mIvShowMore.setVisibility(View.GONE);
+                mIvShowMore.setVisibility(View.INVISIBLE);
                 break;
             case R.id.tv_bid_record:
                 Intent intent1 = new Intent(GoodDetailActivity.this, BidRecordActivity.class);
@@ -557,7 +557,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
         } else if (event == 1) {
             if (flag == 1) {
                 //保证金
-                saveDeposit2Bmob();
+                updateGoodDeposit();
                 mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - depositCoin) + "", depositCoin + "", 1);
             } else if (flag == 2) {
                 //出价
@@ -565,6 +565,23 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                 mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "", bidCoin + "", -2);
             }
         }
+    }
+
+    private void updateGoodDeposit() {
+        Good good = new Good();
+        good.setFirstDeposit(true);
+        good.update(mGood.getObjectId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(mContext, "sssssssssssssss", Toast.LENGTH_SHORT).show();
+                    saveDeposit2Bmob();
+
+                } else {
+                    ErrorCodeUtil.switchErrorCode(GoodDetailActivity.this, e.getErrorCode() + "");
+                }
+            }
+        });
     }
 
     @Override
@@ -668,25 +685,73 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
         good.setGood_NowCoin(bidCoin + "");
         good.setGood_NowBidUser(user_profile);
         good.setGood_Bid(bid);
-        good.setIsFirstDeposit(false);
+        good.setFirstDeposit(true);
         good.update(good_id, new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(mContext, "出价成功" + mUserId, Toast.LENGTH_SHORT).show();
-                    getLastBidUpdatedAt();
-                    mTvBid.setVisibility(View.GONE);
-                    mLlCv.setVisibility(View.VISIBLE);
-                    mTvNowCoin.setText(bidCoin + "");
-                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd    hh:mm:ss");
-                    String date = sDateFormat.format(new java.util.Date());
-                    mTvLastTime.setText(date);
-                    mTvLastTime.setVisibility(View.VISIBLE);
+                    updateGood2MySql(good_id);
                 } else {
 //                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
         });
+    }
+
+    private void updateGood2MySql(String goodId) {
+        String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String method = "BidGood";
+            String URL = webServiceIp + method;
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("GoodObjectId", goodId)
+                    .add("UserObjectId", mUserId)
+                    .build();
+
+            final Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, e1, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    mContext.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.contains("success")) {
+                                Toast.makeText(mContext, "出价成功" + mUserId, Toast.LENGTH_SHORT).show();
+                                getLastBidUpdatedAt();
+                                mTvBid.setVisibility(View.GONE);
+                                mLlCv.setVisibility(View.VISIBLE);
+                                mTvNowCoin.setText(bidCoin + "");
+                                SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd    hh:mm:ss");
+                                String date = sDateFormat.format(new java.util.Date());
+                                mTvLastTime.setText(date);
+                                mTvLastTime.setVisibility(View.VISIBLE);
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 }

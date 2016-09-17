@@ -142,4 +142,10 @@
             android:layout_marginRight="5dp"
             />
     </RelativeLayout>-->
+    <style name="cashier__dotted_line">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@drawable/cashier__dotted_line</item>
+        <item name="android:scaleType">matrix</item>
+    </style>
 </resources>

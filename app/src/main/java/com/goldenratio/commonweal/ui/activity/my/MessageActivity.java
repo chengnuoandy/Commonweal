@@ -12,6 +12,7 @@ import com.goldenratio.commonweal.adapter.PrivateMessageListAdapter;
 import com.goldenratio.commonweal.bean.Message;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class MessageActivity extends BaseActivity {
         manager.cancel(1);
 
         getMessageFromBmob();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void getMessageFromBmob() {

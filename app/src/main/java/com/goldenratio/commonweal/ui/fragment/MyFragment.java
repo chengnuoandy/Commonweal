@@ -148,9 +148,12 @@ public class MyFragment extends Fragment {
         mTvWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentW = new Intent(getContext(), WalletActivity.class);
-                intentW.putExtra("coin", mUserCoin);
-                startActivity(intentW);
+                String objectID = ((MyApplication) getActivity().getApplication()).getObjectID();
+                if (objectID == "") {
+                    Intent intentW = new Intent(getContext(), WalletActivity.class);
+                    intentW.putExtra("coin", mUserCoin);
+                    startActivity(intentW);
+                }else Toast.makeText(getContext(), "请登陆后再试", Toast.LENGTH_SHORT).show();
             }
         });
         mTvSetting = view.findViewById(R.id.tv_settings);
@@ -299,7 +302,7 @@ public class MyFragment extends Fragment {
                     notifyCount = list.size();
                     getBmobNotifyManager();
                 } else {
-                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                    Log.d("Kiuber_LOG", "done: " + e.getMessage());
                     ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }

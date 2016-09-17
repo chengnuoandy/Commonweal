@@ -9,7 +9,7 @@ import cn.bmob.v3.datatype.BmobDate;
  * Created by CharmNight on 2016/6/10.
  */
 
-public class Help extends BmobObject implements Serializable{
+public class Help extends BmobObject implements Serializable {
 
     private String Help_Type; // 项目类型
     private String Help_Coin;//项目申请金额
@@ -30,6 +30,16 @@ public class Help extends BmobObject implements Serializable{
     private String Help_Result; //项目结果
 
     private Help_Initiator InitiatorInfo; //发起方详细信息
+    private Integer Help_Now_Coin;
+
+
+    public Integer getHelp_Now_Coin() {
+        return Help_Now_Coin;
+    }
+
+    public void setHelp_Now_Coin(Integer help_Now_Coin) {
+        Help_Now_Coin = help_Now_Coin;
+    }
 
     public com.goldenratio.commonweal.bean.Help_Initiator getInitiatorInfo() {
         return InitiatorInfo;
@@ -46,7 +56,6 @@ public class Help extends BmobObject implements Serializable{
     public void setHelp_Execute(String help_Execute) {
         Help_Execute = help_Execute;
     }
-
 
 
     public String getHelp_Type() {
@@ -120,7 +129,6 @@ public class Help extends BmobObject implements Serializable{
     public void setHelp_Initiator(String help_Initiator) {
         Help_Initiator = help_Initiator;
     }
-
 
 
     public String getHelp_Smile() {

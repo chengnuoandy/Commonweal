@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -50,7 +49,7 @@ public class HelpDetailActivity extends BaseActivity implements View.OnClickList
         mTvSmile.setText(mHelp.getHelp_Smile());
         mTvContent.setText(mHelp.getHelp_Content());
         Close();
-        new ImmersiveUtil(this, R.color.white,true);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
 
@@ -130,6 +129,7 @@ public class HelpDetailActivity extends BaseActivity implements View.OnClickList
                     long leftTime = (endTime - System.currentTimeMillis()) / (86400000);
                     if (leftTime > 0) {
                         Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
+                        i.putExtra("nowCoin",mHelp.getHelp_Now_Coin());
                         i.putExtra("help_id", mHelp.getObjectId());
                         startActivity(i);
                     } else {

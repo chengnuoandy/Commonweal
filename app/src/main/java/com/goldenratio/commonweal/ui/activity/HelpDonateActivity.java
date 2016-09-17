@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Donate_Info;
+import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
@@ -60,6 +60,8 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
 
     private Double DonateCoin;
 
+    private Integer HelpNowCoin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +69,7 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
         ButterKnife.bind(this);
 
         mCoin = "10";
+        HelpNowCoin = (Integer) getIntent().getSerializableExtra("nowCoin");
         helpID = getIntent().getStringExtra("help_id");
         mySqlManager = new MySqlManagerImpl(this, this);
         mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
@@ -104,7 +107,7 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
                         isHasDonate = true;
                         Log.i("lxt", "done: " + DonateInfoID + "00000" + DonateCoin);
                     }
-                }        else {
+                } else {
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
@@ -121,6 +124,21 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
                     Toast.makeText(HelpDonateActivity.this, "更新捐赠记录成功", Toast.LENGTH_SHORT).show();
                 } else {
 //                    Toast.makeText(HelpDonateActivity.this, "更新捐赠记录失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
+            }
+        });
+    }
+
+    private void updateHelpCoin(Integer DonateCoin) {
+        Help help = new Help();
+        help.increment("Help_Now_Coin", DonateCoin);
+        help.update(helpID, new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(HelpDonateActivity.this, "更新金币成功", Toast.LENGTH_SHORT).show();
+                } else {
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
@@ -225,7 +243,8 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
             mySqlManager.updateUserSixPwdByObjectId(sixPwd);
         } else {
             double usercoin = Double.valueOf(mStrUserCoin);
-            final double choiceCoin = Double.valueOf(mCoin);
+            final Integer choiceCoin = Integer.valueOf(mCoin);
+            updateHelpCoin(choiceCoin);
             mySqlManager.updateUserCoinByObjectId(usercoin - choiceCoin + "", "-" + mCoin, 0);
         }
     }

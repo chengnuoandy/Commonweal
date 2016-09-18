@@ -219,7 +219,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                     } else {
                                         dialog.dismiss();
                                         bidCoin = Integer.parseInt(mStrCoin);
-                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
                                         flag = 2;
                                     }
                                 } else if (!mTvNowCoin.getText().equals("暂未出价")) {
@@ -228,7 +228,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                     } else {
                                         dialog.dismiss();
                                         bidCoin = Integer.parseInt(mStrCoin);
-                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
                                         flag = 2;
                                     }
                                     Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
@@ -250,7 +250,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                     builder.setPositiveButton("交保证金", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                            mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
                             flag = 1;
                         }
                     });
@@ -585,12 +585,11 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
-        return false;
+    public void updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
     }
 
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(final String userCoin, String sixPwd) {
+    public void queryUserCoinAndSixPwdByObjectId(final String userCoin, String sixPwd,String DonateCoin) {
         this.sixPwd = sixPwd;
         this.userCoin = userCoin;
         if (sixPwd.equals("0")) {
@@ -644,12 +643,11 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                 }
             }
         }
-        return false;
     }
 
     @Override
-    public boolean updateUserSixPwdByObjectId(String sixPwd) {
-        return false;
+    public void updateUserSixPwdByObjectId(String sixPwd) {
+
     }
 
     private void saveBid2Bmob(final String goodId, final String bidCoin) {

@@ -259,7 +259,7 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                     public void onClick(View v) {
                         flag = position;
                         mySqlManager = new MySqlManagerImpl(OrderActivity.this, ViewHolder.this);
-                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
                     }
                 });
                 mIvGood.setOnClickListener(new View.OnClickListener() {
@@ -350,20 +350,18 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
             }
 
             @Override
-            public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
-                return false;
+            public void updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
             }
 
             @Override
-            public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+            public void queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd, String DonateCoin) {
                 mySqlManager = new MySqlManagerImpl(OrderActivity.this, ViewHolder.this, "确认收货", "", "收货");
                 mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
-                return false;
             }
 
             @Override
-            public boolean updateUserSixPwdByObjectId(String sixPwd) {
-                return false;
+            public void updateUserSixPwdByObjectId(String sixPwd) {
+
             }
         }
     }

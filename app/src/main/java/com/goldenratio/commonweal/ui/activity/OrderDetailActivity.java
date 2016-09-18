@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.MySqlOrder;
 import com.goldenratio.commonweal.bean.PayCoinRecord;
@@ -125,7 +124,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_pay:
-                mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
                 break;
             case R.id.btn_express:
                 Intent intent = new Intent(this, LogisticsInformation.class);
@@ -161,12 +160,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
-        return false;
+    public void updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
     }
 
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+    public void queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd, String DonateCoin) {
         mUserCoin = mStrUserCoin;
         mSixPwd = sixPwd;
         double payPoorCoin = Double.valueOf(mStrUserCoin) - Double.valueOf(mySqlOrder.getOrder_Good().getGood_NowCoin());
@@ -177,12 +175,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
             mySqlManager = new MySqlManagerImpl(this, this, "支付物品订单", mySqlOrder.getOrder_Good().getGood_NowCoin() + "", "订单支付");
             mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
         }
-        return false;
     }
 
     @Override
-    public boolean updateUserSixPwdByObjectId(String sixPwd) {
-        return false;
+    public void updateUserSixPwdByObjectId(String sixPwd) {
+
     }
 
     private void payOrder(String good, final String user, String userCoin) {

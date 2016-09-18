@@ -72,7 +72,7 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
         HelpNowCoin = (Integer) getIntent().getSerializableExtra("nowCoin");
         helpID = getIntent().getStringExtra("help_id");
         mySqlManager = new MySqlManagerImpl(this, this);
-        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null, null);
         queryDonateInfoFromBmob();
 
         mRgMoney.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -251,7 +251,7 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
 
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
+    public void updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
         mStrUserCoin = sumCoin;
         mAvail.setText(sumCoin);
         double coin = Double.valueOf(changeCoin);
@@ -260,20 +260,17 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
                 updateDonateInfoFromBmob(DonateCoin - coin);
             } else saveDoanteInfoToBmob(-coin);
         }
-        return false;
     }
 
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String mUserCoin, String sixPwd) {
+    public void queryUserCoinAndSixPwdByObjectId(String mUserCoin, String sixPwd, String DonateCoin) {
         mStrUserCoin = mUserCoin;
         mSixPwd = sixPwd;
         mAvail.setText(mUserCoin);
-        return false;
     }
 
     @Override
-    public boolean updateUserSixPwdByObjectId(String sixPwd) {
+    public void updateUserSixPwdByObjectId(String sixPwd) {
         mSixPwd = sixPwd;
-        return false;
     }
 }

@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -225,18 +224,16 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
+    public void updateUserCoinByObjectId(String sumCoin, String changeCoin, int PRName) {
         mTvCoin.setText(sumCoin);
-        return false;
     }
 
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
-        return false;
+    public void queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd, String donateCoin) {
     }
 
     @Override
-    public boolean updateUserSixPwdByObjectId(String sixPwd) {
-        return false;
+    public void updateUserSixPwdByObjectId(String sixPwd) {
+
     }
 }

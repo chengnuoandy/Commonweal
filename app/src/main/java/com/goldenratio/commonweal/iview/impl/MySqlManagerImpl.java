@@ -179,6 +179,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     /**
      * 保存支付记录
+     *
      * @param PR_Type
      * @param PR_Money
      * @param PR_Coin
@@ -218,6 +219,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     /**
      * 创建唯一的随机订单号
+     *
      * @return
      */
     private String createRndNumber() {
@@ -234,6 +236,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     /**
      * 安装bmob安全支付控件
+     *
      * @param fileName
      */
     private void installBmobPayPlugin(String fileName) {
@@ -308,13 +311,14 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
     /**
      * 更新用户公益币
-     * @param sumCoin  要更新的公益币--即用户现有公益币数量
+     *
+     * @param sumCoin    要更新的公益币--即用户现有公益币数量
      * @param changeCoin 变化的公益币--用户充值或花费的公益币
-     * @param PRName 订单名称
+     * @param PRName     订单名称
      * @return
      */
     @Override
-    public boolean updateUserCoinByObjectId(final String sumCoin, final String changeCoin, final int PRName) {
+    public void updateUserCoinByObjectId(final String sumCoin, final String changeCoin, final int PRName) {
         showProgressDialog();
         String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
         if (!(webServiceIp == null)) {
@@ -363,7 +367,6 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         } else {
             Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
-        return false;
     }
 
     /**
@@ -401,7 +404,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
 
 
     @Override
-    public boolean updateUserSixPwdByObjectId(final String sixPwd) {
+    public void updateUserSixPwdByObjectId(final String sixPwd) {
         showProgressDialog();
         String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
         if (!(webServiceIp == null)) {
@@ -451,17 +454,17 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         } else {
             Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
-        return false;
     }
 
     /**
      * 查询用户公益币
+     *
      * @param mStrUserCoin
      * @param sixPwd
      * @return
      */
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+    public void queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd, final String DonateCoin) {
         showProgressDialog();
         String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
 
@@ -513,7 +516,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                                     Log.d("Kiuber_LOG", e.getMessage() + request);
                                 }
                                 closeProgressDialog();
-                                mSqlManager.queryUserCoinAndSixPwdByObjectId(userCoin, payPwd);
+                                mSqlManager.queryUserCoinAndSixPwdByObjectId(userCoin, payPwd, DonateCoin);
                             }
                         });
                     }
@@ -522,7 +525,6 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
         } else {
             Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
-        return false;
     }
 
 

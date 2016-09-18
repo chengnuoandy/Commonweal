@@ -169,7 +169,7 @@ public class UserSettingsActivity extends BaseActivity implements IMySqlManager 
                         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                         flag = true;
                         mManager2 = new MySqlManagerImpl(this, this, "设置新密码", "", "请输入新的支付密码");
-                        mManager2.queryUserCoinAndSixPwdByObjectId(null, null);
+                        mManager2.queryUserCoinAndSixPwdByObjectId(null,null, null);
                     }
                 }
                 break;
@@ -279,7 +279,7 @@ public class UserSettingsActivity extends BaseActivity implements IMySqlManager 
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
                     mySqlManager = new MySqlManagerImpl(UserSettingsActivity.this, UserSettingsActivity.this, "设置新密码", "", "请输入旧支付密码");
-                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null);
+                    mySqlManager.queryUserCoinAndSixPwdByObjectId(mUserID,null, null);
                 } else {
                     Intent intent = new Intent(UserSettingsActivity.this, RegisterActivity.class);
                     intent.putExtra("type", 3);
@@ -587,13 +587,12 @@ public class UserSettingsActivity extends BaseActivity implements IMySqlManager 
         } else {
             flag = true;
             mManager2 = new MySqlManagerImpl(this, this, "设置新密码", "", "请输入新的支付密码");
-            mManager2.queryUserCoinAndSixPwdByObjectId(null, null);
+            mManager2.queryUserCoinAndSixPwdByObjectId(null,null, null);
         }
     }
 
     @Override
-    public boolean updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
-        return false;
+    public void updateUserCoinByObjectId(String sumCoin, String changeCoin, int flag) {
     }
 
     /**
@@ -604,19 +603,18 @@ public class UserSettingsActivity extends BaseActivity implements IMySqlManager 
      * @return 无
      */
     @Override
-    public boolean queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd) {
+    public void queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd,String DonateCoin) {
         if (flag) {
             mManager2.showSixPwdOnFinishInput(sixPwd, 0);
         } else {
             //检测密码是否正确
             mySqlManager.showSixPwdOnFinishInput(sixPwd, 1);
         }
-        return false;
     }
 
     @Override
-    public boolean updateUserSixPwdByObjectId(String sixPwd) {
-        return false;
+    public void updateUserSixPwdByObjectId(String sixPwd) {
+
     }
 
 

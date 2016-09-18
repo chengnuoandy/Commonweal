@@ -365,6 +365,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                 }
             });
         } else {
+            closeProgressDialog();
             Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
     }
@@ -452,6 +453,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                 }
             });
         } else {
+            closeProgressDialog();
             Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
     }
@@ -523,6 +525,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                 });
             }
         } else {
+            closeProgressDialog();
             Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
         }
     }

@@ -34,6 +34,7 @@ import com.goldenratio.commonweal.util.ImmersiveUtil;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,6 +79,8 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
     private int bidCoin;
     private TextView mTvBidRecord;
     private CountdownView mCountdownView1;
+    private String mObjectId;
+    private List mPicList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +94,9 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     private void queryGoodData() {
-        final String objectId = getIntent().getStringExtra("objectId");
+        mObjectId = getIntent().getStringExtra("objectId");
         BmobQuery<Good> goodBmobQuery = new BmobQuery<>();
-        goodBmobQuery.addWhereEqualTo("objectId", objectId);
+        goodBmobQuery.addWhereEqualTo("objectId", mObjectId);
         goodBmobQuery.include("Good_User");
         goodBmobQuery.findObjects(new FindListener<Good>() {
             @Override
@@ -126,9 +129,9 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
         mDemoSlider = (SliderLayout) findViewById(R.id.slider);
         HashMap<String, String> urlMaps = new HashMap<>();
         Log.d(TAG, "initView: " + mGood.getGood_Photos().size());
-        List picList = mGood.getGood_Photos();
-        for (int i = 0; i < picList.size(); i++) {
-            urlMaps.put(i + "", picList.get(i).toString());
+        mPicList = mGood.getGood_Photos();
+        for (int i = 0; i < mPicList.size(); i++) {
+            urlMaps.put(i + "", mPicList.get(i).toString());
         }
 
         for (String name : urlMaps.keySet()) {
@@ -197,44 +200,105 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                 if (TextUtils.isEmpty(mUserId)) {
                     Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
                 } else {
-                    final View root = View.inflate(mContext, R.layout.dialog_good_bid, null);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setView(root);
-                    final Dialog dialog = builder.create();
-                    dialog.show();
-                    dialog.getWindow().setSoftInputMode(
-                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                    TextView mDialogTvBid = (TextView) root.findViewById(R.id.tv_bid);
-                    mDialogTvBid.setOnClickListener(new View.OnClickListener() {
+                    BmobQuery<Bid> bidBmobQuery = new BmobQuery<>();
+                    bidBmobQuery.addQueryKeys("Bid_Coin,createdAt");
+                    bidBmobQuery.order("-createdAt");
+                    bidBmobQuery.addWhereEqualTo("Bid_Good", mGood.getObjectId());
+                    bidBmobQuery.findObjects(new FindListener<Bid>() {
                         @Override
-                        public void onClick(View v) {
-                            EditText mEtCoin = (EditText) root.findViewById(R.id.et_coin);
-                            String mStrCoin = mEtCoin.getText().toString();
-                            if (mStrCoin.equals("")) {
-                                Toast.makeText(mContext, "请输入出价公益币", Toast.LENGTH_SHORT).show();
+                        public void done(final List<Bid> list, BmobException e) {
+                            if (e == null) {
+                                Bmob.getServerTime(new QueryListener<Long>() {
+                                    @Override
+                                    public void done(Long aLong, BmobException e) {
+                                        if (e == null) {
+                                            long createdTime = StringToLongAll(list.get(0).getCreatedAt());
+                                            long nowTime = aLong * 1000L;
+                                            //30000： 30秒内所有不能再次出价。降低服务器并发及最后一位出价者的不确定性。
+                                            long leftTime = 30000 - (nowTime - createdTime);
+                                            if (leftTime < 0) {
+                                                changeTextViewVisibitity(2);
+                                                //没有出价的情况下
+                                                final View root = View.inflate(mContext, R.layout.dialog_good_bid, null);
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                                builder.setView(root);
+                                                final Dialog dialog = builder.create();
+                                                dialog.show();
+                                                dialog.getWindow().setSoftInputMode(
+                                                        WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                                                TextView mDialogTvBid = (TextView) root.findViewById(R.id.tv_bid);
+                                                mDialogTvBid.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        EditText mEtCoin = (EditText) root.findViewById(R.id.et_coin);
+                                                        String mStrCoin = mEtCoin.getText().toString();
+                                                        if (mStrCoin.equals("")) {
+                                                            Toast.makeText(mContext, "请输入出价公益币", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            if (mTvNowCoin.getText().equals("暂未出价")) {
+                                                                if (Double.valueOf(mStrCoin) <= Double.valueOf(mGood.getGood_NowCoin())) {
+                                                                    Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
+                                                                } else {
+                                                                    dialog.dismiss();
+                                                                    bidCoin = Integer.parseInt(mStrCoin);
+                                                                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null,null);
+                                                                    flag = 2;
+                                                                }
+                                                            } else if (!mTvNowCoin.getText().equals("暂未出价")) {
+                                                                if (Double.valueOf(mStrCoin) <= Double.valueOf(mTvNowCoin.getText().toString())) {
+                                                                    Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
+                                                                } else {
+                                                                    dialog.dismiss();
+                                                                    bidCoin = Integer.parseInt(mStrCoin);
+                                                                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null,null);
+                                                                    flag = 2;
+                                                                }
+                                                            } else {
+                                                                Toast.makeText(GoodDetailActivity.this, "未知状态", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                                //30秒内无用户出价
+                                            } else {
+                                                changeTextViewVisibitity(0);
+                                                //30秒内有用户出价
+                                                mCountdownFive.start(leftTime);
+                                                mCountdownFive.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
+                                                    @Override
+                                                    public void onEnd(CountdownView cv) {
+                                                        //30秒倒计时结束，显示“出价”控件
+                                                        changeTextViewVisibitity(2);
+                                                    }
+                                                });
+//                                                BmobQuery<Good> query = new BmobQuery<Good>();
+//                                                query.addWhereEqualTo("objectId", mObjectId);
+//                                                query.findObjects(new FindListener<Good>() {
+//                                                    @Override
+//                                                    public void done(List<Good> list, BmobException e) {
+//                                                        if (e == null){
+//
+//                                                        }
+//                                                    }
+//                                                })
+                                                mTvNowCoin.setText(list.get(0).getBid_Coin());
+                                                new AlertDialog.Builder(mContext)
+                                                        .setTitle("提示")
+                                                        .setMessage("当前有出价者，倒计时已刷新，请等待倒计时结束后再试！")
+                                                        .setPositiveButton("确定", null)
+                                                        .create()
+                                                        .show();
+                                            }
+                                        } else {
+//                    Log.d("Kiuber_LOG", "fail: " + e.getMessage());
+                                            ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                                            changeTextViewVisibitity(3);
+                                        }
+                                    }
+                                });
                             } else {
-                                if (mTvNowCoin.getText().equals("暂未出价")) {
-                                    if (Double.valueOf(mStrCoin) <= Double.valueOf(mGood.getGood_NowCoin())) {
-                                        Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        dialog.dismiss();
-                                        bidCoin = Integer.parseInt(mStrCoin);
-                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
-                                        flag = 2;
-                                    }
-                                } else if (!mTvNowCoin.getText().equals("暂未出价")) {
-                                    if (Double.valueOf(mStrCoin) <= Double.valueOf(mTvNowCoin.getText().toString())) {
-                                        Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        dialog.dismiss();
-                                        bidCoin = Integer.parseInt(mStrCoin);
-                                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
-                                        flag = 2;
-                                    }
-                                    Toast.makeText(mContext, "请输入大于当前公益币", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(GoodDetailActivity.this, "未知状态", Toast.LENGTH_SHORT).show();
-                                }
+//                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                             }
                         }
                     });
@@ -332,7 +396,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
             public void done(List<Bid> list, BmobException e) {
                 if (e == null) {
                     if (list.size() == 0) {
-                        //唯有出价的
+                        //没有出价的
                         changeTextViewVisibitity(2);
                     } else {
                         getBmobServerTime(list.get(0).getCreatedAt());
@@ -526,6 +590,12 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
+        Intent intent = new Intent(mContext, DynamicPhotoShow.class);
+        intent.putExtra("index", 0);
+        intent.putStringArrayListExtra("list", (ArrayList<String>) mPicList);
+        mContext.startActivity(intent);
+        //设置切换动画
+        this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
     }
 
@@ -562,7 +632,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
             } else if (flag == 2) {
                 //出价
                 saveBid2Bmob(mGood.getObjectId(), bidCoin + "");
-                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "", bidCoin + "", -2);
+//                mySqlManager.updateUserCoinByObjectId((Double.valueOf(userCoin) - bidCoin) + "", bidCoin + "", -2);
             }
         }
     }
@@ -574,7 +644,6 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(mContext, "sssssssssssssss", Toast.LENGTH_SHORT).show();
                     saveDeposit2Bmob();
 
                 } else {

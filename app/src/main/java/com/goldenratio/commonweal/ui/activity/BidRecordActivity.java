@@ -1,7 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
@@ -51,6 +48,13 @@ public class BidRecordActivity extends BaseActivity implements AdapterView.OnIte
     private void initView() {
         mLv = (ListView) findViewById(R.id.lv_bid_record);
         mTvLoading = (TextView) findViewById(R.id.tv_loading);
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mLv.setOnItemClickListener(this);
     }
 
@@ -163,7 +167,10 @@ public class BidRecordActivity extends BaseActivity implements AdapterView.OnIte
                     Bid bid = list.get(position);
                     mTvCoin.setText("出价公益币：" + bid.getBid_Coin());
                     if (flag == 0) {
-                        Glide.with(BidRecordActivity.this).load(bid.getBid_User().getUser_image_hd()).into(mCivAvatar);
+                        Glide.with(BidRecordActivity.this)
+                                .load(bid.getBid_User().getUser_image_hd())
+                                .thumbnail(0.4f)
+                                .into(mCivAvatar);
                         mTvName.setText(bid.getBid_User().getUser_Nickname());
                     } else if (flag == 1) {
                         mCivAvatar.setVisibility(View.GONE);

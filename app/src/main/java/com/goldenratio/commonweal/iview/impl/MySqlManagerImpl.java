@@ -197,7 +197,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                                      int PR_Name) {
         PayRecord payRecord = new PayRecord();
         payRecord.setPR_Type((PR_Type ? "充值公益币" : "公益币支出"));
-        payRecord.setPR_Name(PR_Name == 0 ? "捐赠项目" : (PR_Name == 1 ? "交保证金" : (PR_Name == 2 ? "购买物品" : (PR_Name == -1 ? "" : ""))));
+        payRecord.setPR_Name(PR_Name == 0 ? " 捐赠项目" : (PR_Name == 1 ? "交保证金" : (PR_Name == 2 ? "购买物品" : (PR_Name == -1 ? "" : ""))));
         payRecord.setPR_Money(PR_Type ? "花费" + PR_Money + "元" : "0");
         payRecord.setPR_PayWay(PR_Type ? (PayType ? 1 : 2) : 3);
         payRecord.setPR_Coin(PR_Coin);

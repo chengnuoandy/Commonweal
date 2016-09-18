@@ -23,7 +23,7 @@ public class Good extends BmobObject {
     private Integer Good_DonationRate; //物品用于捐款的比例
     private String Good_NowCoin; //物品的现在价
     private String Good_StartCoin; //物品的起步价
-    private String Good_Praise;
+    private Integer Good_Praise;
     private User_Profile Good_NowBidUser;
     private Long Good_Five;//五分钟之内不可出价
     private Integer Good_Status;
@@ -127,11 +127,11 @@ public class Good extends BmobObject {
         Good_StartCoin = good_StartCoin;
     }
 
-    public String getGood_Praise() {
+    public Integer getGood_Praise() {
         return Good_Praise;
     }
 
-    public void setGood_Praise(String good_Praise) {
+    public void setGood_Praise(Integer good_Praise) {
         Good_Praise = good_Praise;
     }
 

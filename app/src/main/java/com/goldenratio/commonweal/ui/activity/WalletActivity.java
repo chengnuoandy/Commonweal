@@ -45,6 +45,8 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
 
     private String mUserId;
     private String mUserCoin = "0";
+    private LinearLayout mLlCoin;
+    private String mDonateCoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +64,14 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
         mTvPayRecord = findViewById(R.id.ll_pay_record);
         TopUP = (LinearLayout) findViewById(R.id.top_up);
         mTvCoin = (TextView) findViewById(R.id.ntv_coin);
+        mLlCoin = (LinearLayout) findViewById(R.id.ll_coin);
     }
 
     private void initListtener() {
         findViewById(R.id.iv_back).setOnClickListener(this);
         mTvPayRecord.setOnClickListener(this);
         TopUP.setOnClickListener(this);
+        mLlCoin.setOnClickListener(this);
     }
 
     @Override
@@ -81,6 +85,22 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.top_up:
                 showInputDialog();
+                break;
+            case R.id.ll_coin:
+                int mIntUserCoin = Integer.parseInt(mUserCoin);
+                int mIntDonateCoin = Integer.parseInt(mDonateCoin);
+                View view = View.inflate(this, R.layout.dialog_wallet_detail, null);
+                TextView mTvUserCoinAll = (TextView) view.findViewById(R.id.tv_user_coin_all);
+                TextView mTvUserCoin = (TextView) view.findViewById(R.id.tv_user_coin);
+                TextView mTvDonateCoin = (TextView) view.findViewById(R.id.tv_donate_coin);
+                mTvUserCoinAll.setText("用户总公益币：" + (mIntUserCoin + mIntDonateCoin));
+                mTvUserCoin.setText("账号公益币：" + mIntUserCoin);
+                mTvDonateCoin.setText("爱心公益币：" + mIntDonateCoin);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(WalletActivity.this);
+                builder.setTitle("公益币详情");
+                builder.setView(view);
+                builder.show();
                 break;
         }
     }
@@ -139,7 +159,7 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
         showProgressDialog();
         String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
         if (!(webServiceIp == null)) {
-            String method = "QueryUserCoinByObjectId";
+            String method = "QueryUserCoinAndSixPwdByObjectId";
             String url = webServiceIp + method;
             OkHttpClient okHttpClient = new OkHttpClient();
             if (mUserId != null) {
@@ -179,7 +199,8 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                                         mUserCoin = jsonObject.getString("User_Coin");
-                                        mTvCoin.setText(mUserCoin);
+                                        mDonateCoin = jsonObject.getString("User_DonateCoin");
+                                        mTvCoin.setText(Integer.parseInt(mUserCoin) + Integer.parseInt(mDonateCoin) + "");
                                     }
                                 } catch (JSONException e) {
                                     Log.d("Kiuber_LOG", e.getMessage() + request);

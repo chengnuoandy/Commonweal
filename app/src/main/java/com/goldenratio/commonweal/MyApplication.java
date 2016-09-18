@@ -93,6 +93,7 @@ public class MyApplication extends Application {
         getAppConfig();
         //开启统计
         MiStatInterface.initialize(this, "2882303761517501484", "5521750163484", "Default");
+        MiStatInterface.getDeviceID(getApplicationContext());
         //设置上传策略
         MiStatInterface.setUploadPolicy(UPLOAD_POLICY_REALTIME, 0);
         //手机错误日志

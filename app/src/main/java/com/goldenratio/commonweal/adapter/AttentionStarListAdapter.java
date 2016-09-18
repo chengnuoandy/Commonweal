@@ -1,6 +1,8 @@
 package com.goldenratio.commonweal.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +10,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.U_Attention;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,7 +61,7 @@ public class AttentionStarListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.view_attention_item, null);
@@ -72,6 +77,30 @@ public class AttentionStarListAdapter extends BaseAdapter {
         viewHolder.mTvAttentionName.setText(starOrUserInfo.getUser_Nickname());
         if (starOrUserInfo.isUser_IsV())
             viewHolder.mIvStarFlag.setVisibility(View.VISIBLE);
+        viewHolder.mCivAttentionAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyApplication myApplication = (MyApplication) ((Activity) mContext).getApplication();
+                String mStrObjectId = myApplication.getObjectID();
+                if (!mInfoList.get(position).getStar_Info().getObjectId().equals(mStrObjectId)) {
+                    List<String> attenList;
+                    attenList = mInfoList.get(position).getStar_Info().getUser_Attention();
+                    int isHas = -1;
+                    if (attenList != null)
+                        isHas = attenList.indexOf(mInfoList.get(position).getStar_Info().getObjectId());
+                    Intent intent = new Intent(mContext, StarInfoActivity.class);
+                    intent.putExtra("ishas", isHas != -1);
+                    intent.putExtra("id", mInfoList.get(position).getStar_Info().getObjectId());
+                    intent.putExtra("autograph", mInfoList.get(position).getStar_Info().getUser_Autograph());
+                    intent.putExtra("nickName", mInfoList.get(position).getStar_Info().getUser_Nickname());
+                    intent.putExtra("isv", mInfoList.get(position).getStar_Info().isUser_IsV());
+                    intent.putExtra("Avatar", mInfoList.get(position).getStar_Info().getUser_image_hd());
+                    mContext.startActivity(intent);
+                } else {
+                    Toast.makeText(myApplication, "不要再点了，这里真的什么都没有~", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return convertView;
     }
 

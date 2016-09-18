@@ -88,6 +88,30 @@ public class GoodCommentAdapter extends BaseAdapter {
             view = View.inflate(mContext, R.layout.item_comment_one, null);
         }
         ImageView icom = (ImageView) view.findViewById(R.id.iv_user_photo);
+        icom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyApplication myApplication = (MyApplication) ((Activity) mContext).getApplication();
+                String mStrObjectId = myApplication.getObjectID();
+                if (!mArrayListOne.get(position).getComment_user().getObjectId().equals(mStrObjectId)) {
+                    List<String> attenList;
+                    attenList = mArrayListOne.get(position).getComment_user().getUser_Attention();
+                    int isHas = -1;
+                    if (attenList != null)
+                        isHas = attenList.indexOf(mArrayListOne.get(position).getComment_user().getObjectId());
+                    Intent intent = new Intent(mContext, StarInfoActivity.class);
+                    intent.putExtra("ishas", isHas != -1);
+                    intent.putExtra("id", mArrayListOne.get(position).getComment_user().getObjectId());
+                    intent.putExtra("autograph", mArrayListOne.get(position).getComment_user().getUser_Autograph());
+                    intent.putExtra("nickName", mArrayListOne.get(position).getComment_user().getUser_Nickname());
+                    intent.putExtra("isv", mArrayListOne.get(position).getComment_user().isUser_IsV());
+                    intent.putExtra("Avatar", mArrayListOne.get(position).getComment_user().getUser_image_hd());
+                    mContext.startActivity(intent);
+                } else {
+                    Toast.makeText(myApplication, "不要再点了，这里真的什么都没有~", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         TextView tv_comment = (TextView) view.findViewById(R.id.tv_user_comment);
         TextView tv_name = (TextView) view.findViewById(R.id.tv_user_name);
         TextView tv_reply = (TextView) view.findViewById(R.id.tv_reply);

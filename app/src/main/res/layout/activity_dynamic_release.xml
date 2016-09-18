@@ -162,7 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/normal_space"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/default_fill"
                 android:text="确定发布"
                 android:textColor="@color/white" />
         </LinearLayout>

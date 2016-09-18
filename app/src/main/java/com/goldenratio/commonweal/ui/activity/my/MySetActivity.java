@@ -91,7 +91,7 @@ public class MySetActivity extends BaseActivity {
             public void onClick(View v) {
                 String url = "http://123.206.89.67/loadpage/index.html";
                 ShareUtils shareUtils = new ShareUtils();
-                shareUtils.showShare(MySetActivity.this, url, "爱点App", "内容", "评论");
+                shareUtils.showShare(MySetActivity.this, "爱点App", "http://www.baidu.com", "一款爱心拍卖的App", "http://bmob-cdn-2263.b0.upaiyun.com/2016/09/18/6a27a0474027948580f8bcebb78adc5d.png", "内容", "推荐给你哦", "爱点");
             }
         });
         try {

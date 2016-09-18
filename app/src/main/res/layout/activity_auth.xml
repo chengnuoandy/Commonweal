@@ -111,7 +111,7 @@
             android:layout_below="@id/goto_verify_button"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15.0dip"
-            android:text="注: 该功能仅提供给微博已通过v认证用户"
+            android:text="注: 该功能仅提供给微博已通过v认证用户\n图片来源于网络，若有侵权立即删除。"
             android:textColor="@color/color_black_trans_40"
             android:textSize="12.0sp" />
     </LinearLayout>

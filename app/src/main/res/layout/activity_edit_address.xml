@@ -156,6 +156,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/setting_btn_selector"
-        android:text="保存地址" />
+        android:text="保存地址"
+        android:textColor="@color/white" />
 
 </LinearLayout>

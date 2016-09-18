@@ -212,7 +212,6 @@ public class MySellGoodAdapter extends BaseAdapter {
             if (mList.get(pos).getGood_Photos() != null) {
                 Glide.with(mContext)
                         .load(mList.get(pos).getGood_Photos().get(0))
-                        .thumbnail(0.4f)
                         .into(mIvPic);
             }
         }

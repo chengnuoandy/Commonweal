@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
@@ -34,7 +36,6 @@ public class BidRecordActivity extends BaseActivity implements AdapterView.OnIte
     private ListView mLv;
     private TextView mTvLoading;
     private int flag;//0 GoodDetailActivity 1 MyFragment
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,7 @@ public class BidRecordActivity extends BaseActivity implements AdapterView.OnIte
                 }
                 viewHolder.initView(convertView);
                 viewHolder.initData(position);
+                viewHolder.clickListener(position);
                 return convertView;
             }
 
@@ -169,7 +171,6 @@ public class BidRecordActivity extends BaseActivity implements AdapterView.OnIte
                     if (flag == 0) {
                         Glide.with(BidRecordActivity.this)
                                 .load(bid.getBid_User().getUser_image_hd())
-                                .thumbnail(0.4f)
                                 .into(mCivAvatar);
                         mTvName.setText(bid.getBid_User().getUser_Nickname());
                     } else if (flag == 1) {
@@ -178,6 +179,33 @@ public class BidRecordActivity extends BaseActivity implements AdapterView.OnIte
                         mTvName.setText(bid.getBid_Good().getGood_Name());
                     } else {
                     }
+                }
+
+                public void clickListener(final int position) {
+                    mCivAvatar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            MyApplication myApplication = (MyApplication) getApplicationContext();
+                            String mStrObjectId = myApplication.getObjectID();
+                            if (!list.get(position).getBid_User().getObjectId().equals(mStrObjectId)) {
+                                List<String> attenList;
+                                attenList = list.get(position).getBid_User().getUser_Attention();
+                                int isHas = -1;
+                                if (attenList != null)
+                                    isHas = attenList.indexOf(getItem(position).getBid_User().getObjectId());
+                                Intent intent = new Intent(BidRecordActivity.this, StarInfoActivity.class);
+                                intent.putExtra("ishas", isHas != -1);
+                                intent.putExtra("id", list.get(position).getBid_User().getObjectId());
+                                intent.putExtra("autograph", list.get(position).getBid_User().getUser_Autograph());
+                                intent.putExtra("nickName", list.get(position).getBid_User().getUser_Nickname());
+                                intent.putExtra("isv", list.get(position).getBid_User().isUser_IsV());
+                                intent.putExtra("Avatar", list.get(position).getBid_User().getUser_image_hd());
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(myApplication, "不要再点了，这里真的什么都没有~", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             }
         });

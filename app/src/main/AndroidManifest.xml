@@ -233,8 +233,9 @@
         <activity android:name=".ui.activity.HelpInitiatorDetailActivity" />
         <activity android:name=".ui.activity.HelpTopDetailActivity" />
         <activity android:name=".ui.fragment.DycHelpContentActivity" />
-        <activity android:name=".ui.activity.StarInfoActivity"
-            android:theme="@style/attention_theme"/>
+        <activity
+            android:name=".ui.activity.StarInfoActivity"
+            android:theme="@style/attention_theme" />
         <activity android:name=".ui.activity.my.UserFeedbackActivity" />
         <activity android:name=".ui.activity.my.AttentionStarActivity" />
         <activity android:name=".ui.activity.OrderActivity" />
@@ -243,7 +244,7 @@
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-=
+                =
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -261,7 +262,11 @@
         <activity android:name=".ui.activity.my.DynamicActivity" />
         <activity android:name=".ui.activity.my.VerifyActivity" />
 
-        <meta-data android:value="57da0a3267e58e5847000c6e" android:name="UMENG_APPKEY"/>
-        <meta-data android:value="Wandoujia" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="57da0a3267e58e5847000c6e" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Wandoujia" />
     </application>
 </manifest>

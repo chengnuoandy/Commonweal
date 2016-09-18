@@ -131,6 +131,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
+                <TextView
+                    android:id="@+id/tv_up_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/little_space"
+                    android:gravity="center"
+                    android:text="88" />
+
                 <ImageView
                     android:id="@+id/iv_thumb_up"
                     android:layout_width="wrap_content"

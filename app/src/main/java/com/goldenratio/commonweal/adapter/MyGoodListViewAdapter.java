@@ -29,6 +29,7 @@ import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ShareUtils;
 
 import java.util.List;
 import java.util.Timer;
@@ -188,6 +189,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
         private Good mGood;
         private Integer position;
         private CardView mCv;
+        private TextView mTvUpNumber;
 
         public void initView(View convertView) {
             mCivAvatar = (CircleImageView) convertView.findViewById(R.id.civ_user_avatar);
@@ -201,6 +203,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             mIvThumbUp = (ImageView) convertView.findViewById(R.id.iv_thumb_up);
             mIvShare = (ImageView) convertView.findViewById(R.id.iv_share);
             mCv = (CardView) convertView.findViewById(R.id.cv_good_item);
+            mTvUpNumber = (TextView) convertView.findViewById(R.id.tv_up_number);
 
             mIvThumbUp.setOnClickListener(this);
             mIvShare.setOnClickListener(this);
@@ -268,6 +271,10 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                 mTvStatus.setTextColor(Color.RED);
                 mTvStatus.setBackground(null);
             }
+            String a = getItem(position).getGood_Praise() + "";
+            if (!a.isEmpty() || !a.equals("null")) {
+                mTvUpNumber.setText(getItem(position).getGood_Praise() + "");
+            }
         }
 
         @Override
@@ -281,7 +288,6 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         public void done(BmobException e) {
                             if (e == null) {
                                 Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
-
                             } else {
 //                                Toast.makeText(mContext, "点赞失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                                 ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
@@ -307,12 +313,19 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         intent.putExtra("isv", mGoodList.get(position).getGood_User().isUser_IsV());
                         intent.putExtra("Avatar", mGoodList.get(position).getGood_User().getUser_image_hd());
                         mContext.startActivity(intent);
+                    } else {
+                        Toast.makeText(myApplication, "不要再点了，这里真的什么都没有~", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case R.id.cv_good_item:
                     Intent intent = new Intent(mContext, GoodDetailActivity.class);
                     intent.putExtra("objectId", mGoodList.get(position).getObjectId());
                     mContext.startActivity(intent);
+                    break;
+                case R.id.iv_share:
+                    Good item = getItem(position);
+                    ShareUtils shareUtils = new ShareUtils();
+                    shareUtils.showShare(mContext, item.getGood_Name(), item.getGood_Photos().get(0).toString(), item.getGood_Description(), item.getGood_Photos().get(0).toString(), "content", "分享给你", "爱点");
                     break;
             }
         }

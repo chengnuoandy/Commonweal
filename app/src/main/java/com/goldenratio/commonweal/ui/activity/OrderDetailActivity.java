@@ -90,10 +90,11 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
 
 
         List<String> user_receive_address = mySqlOrder.getOrder_User().getUser_Receive_Address();
-        List list = checkDefaultAddress(user_receive_address);
 
         address = (ArrayList<String>) user_receive_address;
         if (address.size() != 1 && (address.size() - 1) % 3 == 0) {
+            List list = checkDefaultAddress(user_receive_address);
+
             mTvAddressName.setText(list.get(0).toString());
             mTvAddressTel.setText(list.get(1).toString());
             mTvAdress.setText(list.get(2).toString());

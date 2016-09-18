@@ -25,10 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout.LayoutParams;
 
-/**
- * Class to manage status and navigation bar tint effects when using KitKat
- * translucent system UI modes.
- */
+
 public class SystemBarTintManagerUtil {
 
     /**
@@ -62,6 +59,7 @@ public class SystemBarTintManagerUtil {
      *
      * @param activity The host activity.
      */
+    @SuppressWarnings("ResourceType")
     @TargetApi(19)
     public SystemBarTintManagerUtil(Activity activity) {
 

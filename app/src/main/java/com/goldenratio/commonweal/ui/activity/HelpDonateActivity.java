@@ -21,6 +21,7 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -95,6 +96,7 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
                 }
             }
         });
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void queryDonateInfoFromBmob() {

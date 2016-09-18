@@ -2,9 +2,11 @@ package com.goldenratio.commonweal.ui.activity.my;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.AttentionStarListAdapter;
 import com.goldenratio.commonweal.bean.U_Attention;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
+import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 
@@ -28,7 +31,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class AttentionStarActivity extends BaseActivity {
+public class AttentionStarActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.iv_donate_back)
     ImageView mIvAttentionBack;
@@ -106,6 +109,29 @@ public class AttentionStarActivity extends BaseActivity {
             mPd.setMessage("加载中");
             mPd.setCancelable(false);
             mPd.show();
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        MyApplication myApplication = (MyApplication) ((Activity) this).getApplication();
+        String mStrObjectId = myApplication.getObjectID();
+        if (!AttentionList.get(position).getStar_Info().getObjectId().equals(mStrObjectId)) {
+            List<String> attenList;
+            attenList = AttentionList.get(position).getStar_Info().getUser_Attention();
+            int isHas = -1;
+            if (attenList != null)
+                isHas = attenList.indexOf(AttentionList.get(position).getStar_Info().getObjectId());
+            Intent intent = new Intent(this, StarInfoActivity.class);
+            intent.putExtra("ishas", isHas != -1);
+            intent.putExtra("id", AttentionList.get(position).getStar_Info().getObjectId());
+            intent.putExtra("autograph", AttentionList.get(position).getStar_Info().getUser_Autograph());
+            intent.putExtra("nickName", AttentionList.get(position).getStar_Info().getUser_Nickname());
+            intent.putExtra("isv", AttentionList.get(position).getStar_Info().isUser_IsV());
+            intent.putExtra("Avatar", AttentionList.get(position).getStar_Info().getUser_image_hd());
+            this.startActivity(intent);
+        } else {
+            Toast.makeText(myApplication, "不要再点了，这里真的什么都没有~", Toast.LENGTH_SHORT).show();
         }
     }
 }

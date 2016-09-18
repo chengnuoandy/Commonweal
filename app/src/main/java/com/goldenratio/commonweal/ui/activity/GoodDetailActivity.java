@@ -241,7 +241,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                                                 } else {
                                                                     dialog.dismiss();
                                                                     bidCoin = Integer.parseInt(mStrCoin);
-                                                                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null,null);
+                                                                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null, null);
                                                                     flag = 2;
                                                                 }
                                                             } else if (!mTvNowCoin.getText().equals("暂未出价")) {
@@ -250,7 +250,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                                                 } else {
                                                                     dialog.dismiss();
                                                                     bidCoin = Integer.parseInt(mStrCoin);
-                                                                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null,null);
+                                                                    mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null, null);
                                                                     flag = 2;
                                                                 }
                                                             } else {
@@ -314,7 +314,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                     builder.setPositiveButton("交保证金", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
+                            mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null, null);
                             flag = 1;
                         }
                     });
@@ -658,7 +658,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
-    public void queryUserCoinAndSixPwdByObjectId(final String userCoin, String sixPwd,String DonateCoin) {
+    public void queryUserCoinAndSixPwdByObjectId(final String userCoin, String sixPwd, String DonateCoin) {
         this.sixPwd = sixPwd;
         this.userCoin = userCoin;
         if (sixPwd.equals("0")) {

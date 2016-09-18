@@ -43,7 +43,7 @@ import cn.bmob.v3.listener.SaveListener;
 public class CommentAdatper extends BaseAdapter {
     private static final String TAG = "lxc";
     private Context mContext;
-//    private ArrayList mArrayListOne;
+    //    private ArrayList mArrayListOne;
     private List<Help_Comment> mList;
     private User_Profile mUserProfile;
     private EditText edt_reply;
@@ -88,6 +88,30 @@ public class CommentAdatper extends BaseAdapter {
             view = View.inflate(mContext, R.layout.item_comment_one, null);
         }
         ImageView icom = (ImageView) view.findViewById(R.id.iv_user_photo);
+        icom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyApplication myApplication = (MyApplication) ((Activity) mContext).getApplication();
+                String mStrObjectId = myApplication.getObjectID();
+                if (!mList.get(position).getComment_user().getObjectId().equals(mStrObjectId)) {
+                    List<String> attenList;
+                    attenList = mList.get(position).getComment_user().getUser_Attention();
+                    int isHas = -1;
+                    if (attenList != null)
+                        isHas = attenList.indexOf(mList.get(position).getComment_user().getObjectId());
+                    Intent intent = new Intent(mContext, StarInfoActivity.class);
+                    intent.putExtra("ishas", isHas != -1);
+                    intent.putExtra("id", mList.get(position).getComment_user().getObjectId());
+                    intent.putExtra("autograph", mList.get(position).getComment_user().getUser_Autograph());
+                    intent.putExtra("nickName", mList.get(position).getComment_user().getUser_Nickname());
+                    intent.putExtra("isv", mList.get(position).getComment_user().isUser_IsV());
+                    intent.putExtra("Avatar", mList.get(position).getComment_user().getUser_image_hd());
+                    mContext.startActivity(intent);
+                } else {
+                    Toast.makeText(myApplication, "不要再点了，这里真的什么都没有~", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         TextView tv_comment = (TextView) view.findViewById(R.id.tv_user_comment);
         TextView tv_name = (TextView) view.findViewById(R.id.tv_user_name);
         TextView tv_reply = (TextView) view.findViewById(R.id.tv_reply);
@@ -95,7 +119,7 @@ public class CommentAdatper extends BaseAdapter {
 //        final Comment utils = (Comment) mArrayListOne.get(position);
         tv_comment.setText(mList.get(position).getComment());
         tv_name.setText(mUserProfile.getUser_Name());
-        tv_reply.setText("回复：" + Html.fromHtml("<font color='#0000FF'>" + mList.get(position).getReply()+ "</font> "));
+        tv_reply.setText("回复：" + Html.fromHtml("<font color='#0000FF'>" + mList.get(position).getReply() + "</font> "));
         Picasso.with(mContext).load(mUserProfile.getUser_image_hd()).into(icom);
         icom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +128,9 @@ public class CommentAdatper extends BaseAdapter {
                     Log.i("55555", "onClick: " + "0.0.00.0执行");
                     Intent intent = new Intent(mContext, StarInfoActivity.class);
                     intent.putExtra("id", mUserProfile.getObjectId());
-                    intent.putExtra("isv",mUserProfile.isUser_IsV());
+                    intent.putExtra("isv", mUserProfile.isUser_IsV());
                     intent.putExtra("nickName", mUserProfile.getUser_Nickname());
-                    intent.putExtra("autograph",mUserProfile.getUser_Autograph());
+                    intent.putExtra("autograph", mUserProfile.getUser_Autograph());
                     intent.putExtra("Avatar", mUserProfile.getUser_image_hd());
                     mContext.startActivity(intent);
                 }
@@ -158,7 +182,7 @@ public class CommentAdatper extends BaseAdapter {
                                         edt_reply.setText("");
                                         customDialog.dismiss();
                                     }
-                                }    else {
+                                } else {
                                     ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
                                 }
                             }

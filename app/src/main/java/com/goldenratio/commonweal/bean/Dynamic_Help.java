@@ -13,6 +13,15 @@ public class Dynamic_Help extends BmobObject {
     private String initiator_Image;
     private String Help_Content;
     private List<String> Help_Pic;
+    private Help_Initiator mHelp_initiator;
+
+    public Help_Initiator getHelp_initiator() {
+        return mHelp_initiator;
+    }
+
+    public void setHelp_initiator(Help_Initiator help_initiator) {
+        mHelp_initiator = help_initiator;
+    }
 
     public List<String> getHelp_Pic() {
         return Help_Pic;

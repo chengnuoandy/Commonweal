@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Dynamic_Help;
 import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
+import com.goldenratio.commonweal.ui.activity.HelpInitiatorDetailActivity;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
@@ -88,8 +89,16 @@ public class DynamicHelpAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Dynamic_Help help = mDynamic_helpList.get(position);
+        final Dynamic_Help help = mDynamic_helpList.get(position);
         holder.mTvOrganizationName.setText(help.getInitiator_Name());
+        holder.mIvOrganizationAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, HelpInitiatorDetailActivity.class);
+                intent.putExtra("name",help.getHelp_initiator());
+                mContext.startActivity(intent);
+            }
+        });
         holder.mTvReleaseTime.setText(help.getUpdatedAt());
         holder.mTvDycHelpContent.setText(help.getHelp_Content());
         holder.mIvDycHelpPic.setImagesData(help.getHelp_Pic());

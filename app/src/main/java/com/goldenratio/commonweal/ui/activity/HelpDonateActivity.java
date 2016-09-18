@@ -329,27 +329,28 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
         mStrUserCoin = mUserCoin;
         mSixPwd = sixPwd;
         mAvail.setText(mUserCoin);
-
-        if (!DonateCoin.equals("0") && !TextUtils.isEmpty(DonateCoin)) {
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle("提示");
-            dialog.setMessage("您拍卖取得公益币数量为" + DonateCoin + "，是否全部捐出？");
-            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    updateHelpCoin(Integer.valueOf(DonateCoin));
-                    if (isHasDonate) {
-                        updateDonateInfoFromBmob(Double.valueOf(DonateCoin));
-                    } else saveDoanteInfoToBmob(Double.valueOf(DonateCoin));
-                }
-            });
-            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    HelpDonateActivity.this.finish();
-                }
-            });
-            dialog.show();
+        if (!TextUtils.isEmpty(DonateCoin)) {
+            if (!DonateCoin.equals("0")) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setTitle("提示");
+                dialog.setMessage("您拍卖取得公益币数量为" + DonateCoin + "，是否全部捐出？");
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        updateHelpCoin(Integer.valueOf(DonateCoin));
+                        if (isHasDonate) {
+                            updateDonateInfoFromBmob(Double.valueOf(DonateCoin));
+                        } else saveDoanteInfoToBmob(Double.valueOf(DonateCoin));
+                    }
+                });
+                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        HelpDonateActivity.this.finish();
+                    }
+                });
+                dialog.show();
+            }
         }
     }
 

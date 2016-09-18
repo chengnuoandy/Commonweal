@@ -1,10 +1,8 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -38,7 +36,6 @@ public class HelpDetailActivity extends BaseActivity implements View.OnClickList
     private TextView mTvExecute;
     private ProgressDialog mPd;
 
-    private String userDonateCoin = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,22 +128,11 @@ public class HelpDetailActivity extends BaseActivity implements View.OnClickList
                 if (mUserId.equals("")) {
                     Toast.makeText(this, "您尚未登陆，请登陆后再试", Toast.LENGTH_SHORT).show();
                 } else {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                    dialog.setTitle("提示");
-                    dialog.setMessage("您拍卖取得公益币数量为" + userDonateCoin + "，是否全部捐出？");
-                    dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                        }
-                    });
-                    dialog.setNegativeButton("取消", null);
-                    dialog.show();
                     long endTime = BmobDate.getTimeStamp(mHelp.getHelp_EndDate().getDate());
                     long leftTime = (endTime - System.currentTimeMillis()) / (86400000);
                     if (leftTime > 0) {
                         Intent i = new Intent(HelpDetailActivity.this, HelpDonateActivity.class);
-                        i.putExtra("nowCoin", mHelp.getHelp_Now_Coin());
                         i.putExtra("help_id", mHelp.getObjectId());
                         startActivity(i);
                     } else {
@@ -170,19 +156,4 @@ public class HelpDetailActivity extends BaseActivity implements View.OnClickList
     }
 
 
-    private void closeProgressDialog() {
-        if (mPd != null && mPd.isShowing()) {
-            mPd.dismiss();
-            mPd = null;
-        }
-    }
-
-    private void showProgressDialog() {
-        if (mPd == null) {
-            mPd = new ProgressDialog(this);
-            mPd.setMessage("加载中");
-            mPd.setCancelable(false);
-            mPd.show();
-        }
-    }
 }

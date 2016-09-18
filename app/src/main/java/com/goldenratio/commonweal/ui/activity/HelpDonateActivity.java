@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +22,7 @@ import com.goldenratio.commonweal.iview.IMySqlManager;
 import com.goldenratio.commonweal.iview.impl.MySqlManagerImpl;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,6 +33,13 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2016/7/3.
@@ -59,8 +68,8 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
     private MySqlManagerImpl mySqlManager;
 
     private Double DonateCoin;
+    private ProgressDialog mPd;
 
-    private Integer HelpNowCoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +78,6 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
         ButterKnife.bind(this);
 
         mCoin = "10";
-        HelpNowCoin = (Integer) getIntent().getSerializableExtra("nowCoin");
         helpID = getIntent().getStringExtra("help_id");
         mySqlManager = new MySqlManagerImpl(this, this);
         mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null, null);
@@ -137,7 +145,8 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(HelpDonateActivity.this, "更新金币成功", Toast.LENGTH_SHORT).show();
+                    cleanUserDonateObjectId();
+                    Toast.makeText(HelpDonateActivity.this, "更新公益币成功", Toast.LENGTH_SHORT).show();
                 } else {
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
@@ -166,6 +175,57 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
             }
         });
+    }
+
+    private void cleanUserDonateObjectId() {
+        showProgressDialog();
+        String objectID = ((MyApplication) getApplication()).getObjectID();
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String url = webServiceIp + "ClearDonateCoin";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("userId", objectID)
+                    .build();
+
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i("lxt", "run: " + "清除失败");
+                            closeProgressDialog();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i("lxt", "run: " + "清除成功");
+                            if (result.contains("success")) {
+                                Log.i("lxt", "run: " + "清除成功");
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
+                            }
+                            closeProgressDialog();
+                        }
+                    });
+                }
+            });
+        } else {
+            Toast.makeText(this, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -263,14 +323,53 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
     }
 
     @Override
-    public void queryUserCoinAndSixPwdByObjectId(String mUserCoin, String sixPwd, String DonateCoin) {
+    public void queryUserCoinAndSixPwdByObjectId(String mUserCoin, String sixPwd, final String DonateCoin) {
         mStrUserCoin = mUserCoin;
         mSixPwd = sixPwd;
         mAvail.setText(mUserCoin);
+
+        if (!DonateCoin.equals("0") && !TextUtils.isEmpty(DonateCoin)) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("提示");
+            dialog.setMessage("您拍卖取得公益币数量为" + DonateCoin + "，是否全部捐出？");
+            dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    updateHelpCoin(Integer.valueOf(DonateCoin));
+                    if (isHasDonate) {
+                        updateDonateInfoFromBmob(Double.valueOf(DonateCoin));
+                    } else saveDoanteInfoToBmob(Double.valueOf(DonateCoin));
+                }
+            });
+            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    HelpDonateActivity.this.finish();
+                }
+            });
+            dialog.show();
+        }
     }
 
     @Override
     public void updateUserSixPwdByObjectId(String sixPwd) {
         mSixPwd = sixPwd;
+    }
+
+
+    private void closeProgressDialog() {
+        if (mPd != null && mPd.isShowing()) {
+            mPd.dismiss();
+            mPd = null;
+        }
+    }
+
+    private void showProgressDialog() {
+        if (mPd == null) {
+            mPd = new ProgressDialog(this);
+            mPd.setMessage("加载中");
+            mPd.setCancelable(false);
+            mPd.show();
+        }
     }
 }

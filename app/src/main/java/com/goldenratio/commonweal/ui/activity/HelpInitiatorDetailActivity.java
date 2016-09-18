@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
@@ -18,6 +16,7 @@ import com.goldenratio.commonweal.adapter.HelpInitiatorListAdapter;
 import com.goldenratio.commonweal.bean.Help;
 import com.goldenratio.commonweal.bean.Help_Initiator;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 
@@ -54,6 +53,7 @@ public class HelpInitiatorDetailActivity extends BaseActivity implements Adapter
         mLvHelplist.setOnItemClickListener(this);
 
         initData();
+        new ImmersiveUtil(this,R.color.white,true);
     }
 
     private void initData() {

@@ -466,7 +466,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
      * @return
      */
     @Override
-    public void queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd, final String DonateCoin) {
+    public void queryUserCoinAndSixPwdByObjectId(String mStrUserCoin, String sixPwd, final String donateCoin) {
         showProgressDialog();
         String webServiceIp = ((MyApplication) (mContext.getApplication())).getWebServiceIp();
 
@@ -505,6 +505,7 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                             public void run() {
                                 String userCoin = null;
                                 String payPwd = null;
+                                String userDonateCoin = null;
                                 JSONArray jsonArray;
                                 try {
                                     jsonArray = new JSONArray(result);
@@ -513,12 +514,13 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
                                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                                         userCoin = jsonObject.getString("User_Coin");
                                         payPwd = jsonObject.getString("User_SixPwd");
+                                        userDonateCoin = jsonObject.getString("User_DonateCoin");
                                     }
                                 } catch (JSONException e) {
                                     Log.d("Kiuber_LOG", e.getMessage() + request);
                                 }
                                 closeProgressDialog();
-                                mSqlManager.queryUserCoinAndSixPwdByObjectId(userCoin, payPwd, DonateCoin);
+                                mSqlManager.queryUserCoinAndSixPwdByObjectId(userCoin, payPwd, userDonateCoin);
                             }
                         });
                     }

@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,7 @@ public class GoodTypeActivity extends BaseActivity {
     private String[] mGoodType =
 
             {
-                    "演唱会物品", "日常衣服", "", "", "", "", "", "", "", "", "", ""
+                    "演唱会物品", "日常衣服", "演出道具", "珠宝黄金", "生活家电", "运动器材", "其它", "", "", "", "", ""
             };
 
 

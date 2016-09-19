@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +18,7 @@ import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -52,7 +52,7 @@ public class SetUserNameActivity extends BaseActivity implements TextWatcher {
         ButterKnife.bind(this);
 
         mEtSetUsername.addTextChangedListener(this);
-
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     @OnClick({R.id.iv_set_name_back, R.id.btn_save_username})

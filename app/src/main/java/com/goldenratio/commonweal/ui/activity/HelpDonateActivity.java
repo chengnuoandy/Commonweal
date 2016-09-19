@@ -226,7 +226,9 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
                 }
             });
         } else {
-            Toast.makeText(this, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.isLogin();
+            Toast.makeText(this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -68,6 +68,8 @@ public class MyFragment extends Fragment {
     ImageView mIvMessage;
     @BindView(R.id.rl_background)
     RelativeLayout mRlBackground;
+    @BindView(R.id.rl_background1)
+    RelativeLayout mRlBackground1;
     @BindView(R.id.tv_my_attention)
     TextView mTvMyAttention;
     @BindView(R.id.iv_notify)
@@ -369,6 +371,7 @@ public class MyFragment extends Fragment {
                     Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
                     Drawable drawable = new BitmapDrawable(blurBitmap);
                     mRlBackground.setBackground(drawable);
+                    mRlBackground1.setBackground(drawable);
                 }
             });
         }

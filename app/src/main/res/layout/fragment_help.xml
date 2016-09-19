@@ -22,6 +22,11 @@
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/default_circle_indicator_stroke_color" />
+
     <include layout="@layout/view_no_net" />
 
     <cn.bingoogolapple.refreshlayout.BGARefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"

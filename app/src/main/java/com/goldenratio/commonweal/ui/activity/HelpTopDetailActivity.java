@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +61,7 @@ public class HelpTopDetailActivity extends BaseActivity {
                 }
             }
         });
+        new ImmersiveUtil(this,R.color.white,true);
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {

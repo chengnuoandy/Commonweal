@@ -173,7 +173,9 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                 });
             }
         } else {
-            Toast.makeText(this, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.isLogin();
+            Toast.makeText(OrderActivity.this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -259,7 +261,7 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                     public void onClick(View v) {
                         flag = position;
                         mySqlManager = new MySqlManagerImpl(OrderActivity.this, ViewHolder.this);
-                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
+                        mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null, null);
                     }
                 });
                 mIvGood.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +347,9 @@ public class OrderActivity extends BaseActivity implements AdapterView.OnItemCli
                         }
                     });
                 } else {
-                    Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    MyApplication myApplication = (MyApplication) getApplication();
+                    myApplication.isLogin();
+                    Toast.makeText(OrderActivity.this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
                 }
             }
 

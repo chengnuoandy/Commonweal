@@ -17,6 +17,7 @@ import com.goldenratio.commonweal.bean.Bid;
 import com.goldenratio.commonweal.bean.Deposit;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 
@@ -143,7 +144,9 @@ public class PopEnterPassword extends PopupWindow {
                 }
             });
         } else {
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -306,7 +309,9 @@ public class PopEnterPassword extends PopupWindow {
                 }
             });
         } else {
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -431,7 +436,9 @@ public class PopEnterPassword extends PopupWindow {
                 }
             });
         } else {
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -481,7 +488,9 @@ public class PopEnterPassword extends PopupWindow {
                 }
             });
         } else {
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -525,7 +534,9 @@ public class PopEnterPassword extends PopupWindow {
                 }
             });
         } else {
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -24,13 +24,30 @@
             android:text="测试文字" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_status"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingRight="10dp"
-        android:text="状态：拍卖中(当前价格：111)" />
+        android:layout_marginTop="@dimen/normal_space"
+        android:orientation="horizontal"
+        android:padding="@dimen/little_space">
+
+        <TextView
+            android:id="@+id/tv_receive_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/default_fill"
+            android:padding="@dimen/little_space"
+            android:text="查看收件地址"
+            android:textColor="@color/white"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="状态：拍卖中(当前价格：111)" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"

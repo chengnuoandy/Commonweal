@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +82,8 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
     private CountdownView mCountdownView1;
     private String mObjectId;
     private List mPicList;
+    private TextView getmTvLoading;
+    private ScrollView mSvGood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +194,8 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                 finish();
             }
         });
+        mTvLoading = (TextView) findViewById(R.id.tv_loading);
+        mSvGood = (ScrollView) findViewById(R.id.sv_good);
     }
 
     @Override
@@ -341,6 +346,8 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
      */
 
     private void initViewData() {
+        mTvLoading.setVisibility(View.GONE);
+        mSvGood.setVisibility(View.VISIBLE);
         mCountdownView1.start(endTime);
         mCountdownView.start(endTime);
         mTvGoodName.setText(mGood.getGood_Name());
@@ -544,7 +551,9 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                 }
             });
         } else {
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.isLogin();
+            Toast.makeText(this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -807,7 +816,9 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                 }
             });
         } else {
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.isLogin();
+            Toast.makeText(this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 }

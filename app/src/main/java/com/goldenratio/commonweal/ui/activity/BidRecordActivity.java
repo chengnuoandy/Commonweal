@@ -180,8 +180,8 @@ public class BidRecordActivity extends BaseActivity implements AdapterView.OnIte
                     } else {
                     }
                 }
-
                 public void clickListener(final int position) {
+
                     mCivAvatar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

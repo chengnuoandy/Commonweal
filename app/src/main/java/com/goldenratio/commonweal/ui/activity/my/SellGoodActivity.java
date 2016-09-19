@@ -67,6 +67,7 @@ public class SellGoodActivity extends BaseActivity implements AdapterView.OnItem
         user.setObjectId(uID);
         query.addWhereEqualTo("Good_User", user);
         query.order("-updatedAt");
+        query.include("Good_User");
         query.findObjects(new FindListener<Good>() {
             @Override
             public void done(List<Good> list, BmobException e) {

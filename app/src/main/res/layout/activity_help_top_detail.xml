@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     tools:context=".ui.activity.HelpTopDetailActivity">
 
@@ -24,6 +25,14 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_helpTop_back"
+            android:background="@color/ordinary" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_space"
             android:layout_toRightOf="@+id/iv_back"
             android:background="@color/ordinary" />
 
@@ -38,6 +47,12 @@
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/assist" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -46,6 +61,5 @@
     <WebView
         android:id="@+id/wv_helptop"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </WebView>
+        android:layout_height="match_parent"></WebView>
 </LinearLayout>

@@ -48,44 +48,50 @@
             <RelativeLayout
                 android:id="@+id/rl_background"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:background="@color/color_FMy_Context"
-                android:paddingLeft="@dimen/normal_space"
-                android:paddingRight="@dimen/normal_space"
-                android:paddingTop="@dimen/normal_space">
+                android:layout_height="220dp">
+
+                <RelativeLayout
+                    android:id="@+id/rl_background1"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:background="@color/color_FMy_Context"
+                    android:paddingLeft="@dimen/normal_space"
+                    android:paddingRight="@dimen/normal_space"
+                    android:paddingTop="@dimen/normal_space">
 
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_avatar"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_centerInParent="true"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/iv_unregister_head"
-                    android:tag="1" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_avatar"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerInParent="true"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/iv_unregister_head"
+                        android:tag="1" />
 
-                <ImageView
-                    android:id="@+id/iv_v"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/civ_avatar"
-                    android:layout_alignRight="@+id/civ_avatar"
-                    android:src="@mipmap/v_yellow"
-                    android:visibility="gone" />
+                    <ImageView
+                        android:id="@+id/iv_v"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/civ_avatar"
+                        android:layout_alignRight="@+id/civ_avatar"
+                        android:src="@mipmap/v_yellow"
+                        android:visibility="gone" />
 
-                <com.goldenratio.commonweal.util.NormalFontTextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/civ_avatar"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="@dimen/normal_space"
-                    android:layout_marginTop="@dimen/normal_space"
-                    android:background="@color/red"
-                    android:padding="@dimen/little_space"
-                    android:text="登陆/注册"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_default" />
+                    <com.goldenratio.commonweal.util.NormalFontTextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/civ_avatar"
+                        android:layout_centerInParent="true"
+                        android:layout_marginBottom="@dimen/normal_space"
+                        android:layout_marginTop="@dimen/normal_space"
+                        android:background="@color/red"
+                        android:padding="@dimen/little_space"
+                        android:text="登陆/注册"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_default" />
+                </RelativeLayout>
             </RelativeLayout>
 
             <LinearLayout

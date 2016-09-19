@@ -21,6 +21,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.PayRecord;
 import com.goldenratio.commonweal.iview.IMySqlManager;
+import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.goldenratio.commonweal.widget.OnPasswordInputFinish;
@@ -366,7 +367,9 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             });
         } else {
             closeProgressDialog();
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -454,7 +457,9 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             });
         } else {
             closeProgressDialog();
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -528,7 +533,9 @@ public class MySqlManagerImpl extends PopupWindow implements IMySqlManager {
             }
         } else {
             closeProgressDialog();
-            Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+            MyApplication myApplication = (MyApplication) mContext.getApplication();
+            myApplication.isLogin();
+            Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
         }
     }
 

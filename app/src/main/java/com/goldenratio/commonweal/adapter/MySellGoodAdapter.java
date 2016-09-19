@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import org.xutils.common.Callback;
@@ -93,12 +94,14 @@ public class MySellGoodAdapter extends BaseAdapter {
         private TextView mTvStatus;
         private TextView mBtnShip;
         private int mPos;
+        private TextView mTvReceiveAddress;
 
         private void initView(View view) {
             mIvPic = (ImageView) view.findViewById(R.id.iv_pic);
             mTvTitle = (TextView) view.findViewById(R.id.tv_title);
             mTvStatus = (TextView) view.findViewById(R.id.tv_status);
             mBtnShip = (TextView) view.findViewById(R.id.btn_ship);
+            mTvReceiveAddress = (TextView) view.findViewById(R.id.tv_receive_address);
 
             //设置对话框内的列表监听事件
             mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -196,6 +199,8 @@ public class MySellGoodAdapter extends BaseAdapter {
             } else if (flag == 2) {
                 str = "拍卖成功，等待发货";
                 addStrings();
+                showAddressDialog(pos);
+                mTvReceiveAddress.setVisibility(View.VISIBLE);
                 mBtnShip.setVisibility(View.VISIBLE);
             } else if (flag == 3) {
                 str = "已发货，等待签收";
@@ -269,7 +274,9 @@ public class MySellGoodAdapter extends BaseAdapter {
                         }
                     });
                 } else {
-                    Toast.makeText(mContext, "Ip地址获取失败，请稍后重试！", Toast.LENGTH_SHORT).show();
+                    MyApplication myApplication = (MyApplication) mContext.getApplicationContext();
+                    myApplication.isLogin();
+                    Toast.makeText(mContext, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -302,6 +309,30 @@ public class MySellGoodAdapter extends BaseAdapter {
             builder.setCancelable(false);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
+        }
+
+
+        private void showAddressDialog(final int position) {
+            mTvReceiveAddress.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    List<String> user_receive_address = mList.get(position).getGood_User().getUser_Receive_Address();
+                    List list = checkDefaultAddress(user_receive_address);
+                    new AlertDialog.Builder(mContext)
+                            .setTitle("收件人地址")
+                            .setMessage("姓名：" + list.get(0) + "\n" + "地址：" + list.get(2) + "联系电话：" + list.get(1))
+                            .show();
+                }
+            });
+        }
+
+        private List checkDefaultAddress(List<String> address) {
+            List<String> dutAddress = new ArrayList<>();
+            int defaultAdrsPos = (3 * Integer.parseInt(address.get(0))) + 1;
+            dutAddress.add(address.get(defaultAdrsPos));
+            dutAddress.add(address.get(defaultAdrsPos + 1));
+            dutAddress.add(address.get(defaultAdrsPos + 2));
+            return dutAddress;
         }
     }
 

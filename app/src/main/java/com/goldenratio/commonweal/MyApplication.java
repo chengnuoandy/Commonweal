@@ -60,10 +60,7 @@ public class MyApplication extends Application {
         x.Ext.init(this);
         initBmob();
 
-        if (isUserTableExist()) {
-            getUserData();
-            getWbIdFromBmob();
-        } else ObjectID = "";
+        isLogin();
 
         //初始化push推送服务
         if (shouldInit()) {
@@ -98,6 +95,13 @@ public class MyApplication extends Application {
         MiStatInterface.setUploadPolicy(UPLOAD_POLICY_REALTIME, 0);
         //手机错误日志
         MiStatInterface.enableExceptionCatcher(true);
+    }
+
+    public void isLogin() {
+        if (isUserTableExist()) {
+            getUserData();
+            getWbIdFromBmob();
+        } else ObjectID = "";
     }
 
     public boolean isDynamicRefresh() {

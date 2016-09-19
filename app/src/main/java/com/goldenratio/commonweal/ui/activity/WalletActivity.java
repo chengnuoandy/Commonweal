@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -108,16 +109,18 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
                         alertDialog.show();
                     }
                 });
-                view.findViewById(R.id.detail_ok).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
                 AlertDialog.Builder builder = new AlertDialog.Builder(WalletActivity.this);
                 builder.setTitle("公益币详情");
                 builder.setView(view);
-                builder.show();
+                final Dialog dialog = builder.create();
+                dialog.show();
+                view.findViewById(R.id.detail_ok).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
                 break;
         }
     }

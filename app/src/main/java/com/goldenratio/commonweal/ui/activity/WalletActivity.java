@@ -96,7 +96,24 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
                 mTvUserCoinAll.setText("用户总公益币：" + (mIntUserCoin + mIntDonateCoin));
                 mTvUserCoin.setText("账号公益币：" + mIntUserCoin);
                 mTvDonateCoin.setText("爱心公益币：" + mIntDonateCoin);
-
+                view.findViewById(R.id.detail_problem).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(WalletActivity.this);
+                        builder.setTitle("联系我们");
+                        builder.setMessage("本产品由0P618团队开发\n" + "联系电话：15589618535\n" + "qq邮箱：18454837733@163.com");
+                        builder.setPositiveButton("确定", null);
+                        builder.setCancelable(false);
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+                });
+                view.findViewById(R.id.detail_ok).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
                 AlertDialog.Builder builder = new AlertDialog.Builder(WalletActivity.this);
                 builder.setTitle("公益币详情");
                 builder.setView(view);

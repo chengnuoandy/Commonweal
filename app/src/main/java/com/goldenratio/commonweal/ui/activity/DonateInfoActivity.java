@@ -1,12 +1,15 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
@@ -54,6 +57,7 @@ public class DonateInfoActivity extends BaseActivity {
 
         String helpID = getIntent().getStringExtra("help_id");
         getDonateInfoFromBmob(helpID);
+
         new ImmersiveUtil(this, R.color.white, true);
     }
 
@@ -92,11 +96,40 @@ public class DonateInfoActivity extends BaseActivity {
                     } else {
                         mNoRanking.setVisibility(View.VISIBLE);
                     }
+                    setItemClick(list);
                 } else {
                     Log.i("lxt", "done: " + e.getMessage());
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 closeProgressDialog();
+            }
+        });
+    }
+
+    private void setItemClick(final List<Donate_Info> donateinfosList) {
+        mLvDonate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User_Profile userList = donateinfosList.get(position).getUser_Info();
+                MyApplication myApplication = (MyApplication) getApplication();
+                String mStrObjectId = myApplication.getObjectID();
+                if (!userList.getObjectId().equals(mStrObjectId)) {
+                    List<String> attenList;
+                    attenList = userList.getUser_Attention();
+                    int isHas = -1;
+                    if (attenList != null)
+                        isHas = attenList.indexOf(userList.getObjectId());
+                    Intent intent = new Intent(getApplication(), StarInfoActivity.class);
+                    intent.putExtra("ishas", isHas != -1);
+                    intent.putExtra("id", userList.getObjectId());
+                    intent.putExtra("autograph", userList.getUser_Autograph());
+                    intent.putExtra("nickName", userList.getUser_Nickname());
+                    intent.putExtra("isv", userList.isUser_IsV());
+                    intent.putExtra("Avatar", userList.getUser_image_hd());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(myApplication, "不要再点了，这里真的什么都没有~", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

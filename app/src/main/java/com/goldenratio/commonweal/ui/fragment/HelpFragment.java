@@ -65,6 +65,13 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), false);
         // 设置下拉刷新和上拉加载更多的风格
         mBGARefreshLayout.setRefreshViewHolder(refreshViewHolder);
+
+        mLlNoNet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initData();
+            }
+        });
     }
 
     /**
@@ -111,6 +118,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                 } else {
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
+                    mLlNoNet.setVisibility(View.VISIBLE);
 //                    Log.d("Kiuber_LOG", "done: " + e.getMessage() + e.getErrorCode());
 //                    Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                     ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
@@ -137,6 +145,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                     } else {
                         //收起刷新
                         mBGARefreshLayout.endRefreshing();
+                        mLlNoNet.setVisibility(View.VISIBLE);
 //                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                         ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                     }
@@ -159,6 +168,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                     } else {
                         //收起刷新
                         mBGARefreshLayout.endRefreshing();
+                        mLlNoNet.setVisibility(View.VISIBLE);
 //                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
                         ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                     }

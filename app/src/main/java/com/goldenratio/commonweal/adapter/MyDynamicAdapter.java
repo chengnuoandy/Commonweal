@@ -91,6 +91,8 @@ public class MyDynamicAdapter extends BaseAdapter {
         private TextView mComment;
         private NineGridImageView mNineGridImageView;
         private int pos;
+        private ImageView mIvThumbUp;
+        private TextView mTvUpNumber;
 
         private void initView(View view) {
             mTvTime = (TextView) view.findViewById(R.id.tv_time);
@@ -101,9 +103,12 @@ public class MyDynamicAdapter extends BaseAdapter {
             mDelete = (TextView) view.findViewById(R.id.tv_delete);
             mUserPic = (ImageView) view.findViewById(R.id.iv_user_avatar);
             mComment = (TextView) view.findViewById(R.id.tv_comment);
+            mIvThumbUp = (ImageView) view.findViewById(R.id.iv_thumb_up);
+            mTvUpNumber = (TextView) view.findViewById(R.id.tv_up_number);
 
             mDelete.setOnClickListener(this);
             mComment.setOnClickListener(this);
+            mIvThumbUp.setOnClickListener(this);
 
             //九宫格加载图片
             mNineGridImageView.setAdapter(new NineGridImageViewAdapter<String>() {
@@ -147,6 +152,12 @@ public class MyDynamicAdapter extends BaseAdapter {
                     .load(user.getUser_image_hd())
                     .into(mUserPic);
 //            Log.d("lxc", "initData: "+mList.get(position).getDynamics_u_pic());
+            String a = mList.get(position).getDynamic_Praise() + "";
+            if (!a.isEmpty() && !a.equals("null")) {
+                mTvUpNumber.setText(a);
+            }else {
+                mTvUpNumber.setText("0");
+            }
         }
 
         @Override
@@ -189,6 +200,24 @@ public class MyDynamicAdapter extends BaseAdapter {
                     break;
                 case R.id.iv_user_avatar:
 
+                    break;
+                case R.id.iv_thumb_up:
+                    Dynamic dynamic = new Dynamic();
+                    dynamic.increment("Dynamic_Praise");
+                    dynamic.update(mList.get(pos).getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                int temp = Integer.parseInt(mTvUpNumber.getText().toString()) + 1;
+                                mTvUpNumber.setText(temp + "");
+                                Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
+                            } else {
+//                                Toast.makeText(mContext, "点赞失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                                ErrorCodeUtil.switchErrorCode(mContext, e.getErrorCode() + "");
+                            }
+                        }
+
+                    });
                     break;
             }
 

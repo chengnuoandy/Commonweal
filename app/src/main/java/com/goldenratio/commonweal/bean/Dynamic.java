@@ -15,7 +15,16 @@ public class Dynamic extends BmobObject implements Serializable{
     private String Dynamics_location;
     private String Dynamics_time;
     private User_Profile Dynamics_user;
+    private Integer Dynamic_Praise;
 
+
+    public Integer getDynamic_Praise() {
+        return Dynamic_Praise;
+    }
+
+    public void setDynamic_Praise(Integer dynamic_Praise) {
+        Dynamic_Praise = dynamic_Praise;
+    }
 
     public User_Profile getDynamics_user() {
         return Dynamics_user;

@@ -99,12 +99,19 @@
 
 
         <TextView
-            android:id="@+id/tv_thumb_up"
+            android:id="@+id/tv_up_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:drawableLeft="@drawable/ic_thumb_up_black_24dp"
-            android:padding="5dp" />
+            android:layout_marginRight="@dimen/little_space"
+            android:gravity="center"
+            android:text="0" />
+
+        <ImageView
+            android:id="@+id/iv_thumb_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/normal_space"
+            android:src="@drawable/ic_thumb_up_black_24dp" />
 
 
         <TextView

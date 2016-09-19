@@ -10,67 +10,25 @@ import cn.bmob.v3.BmobObject;
 
 public class User_Profile extends BmobObject {
 
-    private String User_Name;//用户名
-    private String User_Nickname;//用户昵称
-    private String User_Autograph;//用户签名
-    private String User_Phone;//用户手机号
-    private String User_Password;//用户密码
-    private String User_Address;//用户地址
-    private String User_WbID; //绑定的微博ID
-    private String User_Sex; //用户性别
-    private String User_Coin; //用户公益币
+    private String User_Name;
+    private String User_Nickname;
+    private String User_Autograph;
+    private String User_Phone;
+    private String User_Password;
+    private String User_Address;
+    private String User_WbID;
+    private String User_Sex;
+    private String User_Coin;
     private String User_DeviceInfo;
     private List<String> User_Attention;
     private boolean User_VerStatus;
-
-    public User_Profile() {
-    }
-
-    public List<String> getUser_Attention() {
-        return User_Attention;
-    }
-
-    public boolean isUser_VerStatus() {
-        return User_VerStatus;
-    }
-
-    public void setUser_VerStatus(boolean user_VerStatus) {
-        User_VerStatus = user_VerStatus;
-    }
-
-    public void setUser_Attention(List<String> user_Attention) {
-        User_Attention = user_Attention;
-    }
-
-    /**
-     * 用户头像地址，50×50像素
-     */
     private String User_image_min;
-
-    public String getUser_DeviceInfo() {
-        return User_DeviceInfo;
-    }
-
-    public void setUser_DeviceInfo(String user_DeviceInfo) {
-        User_DeviceInfo = user_DeviceInfo;
-    }
-
-    /**
-     * 用户大头像地址
-     */
     private String User_image_max;
-    /**
-     * 用户高清大头像地址
-     */
-
     private String User_image_hd;
-
-    /**
-     * 认证原因
-     */
     private String User_VerifiedReason;
     private boolean User_IsV;
-    private List<String> User_Receive_Address;//用户收货地址
+    private List<String> User_Receive_Address;
+
 
     public String getUser_Name() {
         return User_Name;
@@ -142,6 +100,30 @@ public class User_Profile extends BmobObject {
 
     public void setUser_Coin(String user_Coin) {
         User_Coin = user_Coin;
+    }
+
+    public String getUser_DeviceInfo() {
+        return User_DeviceInfo;
+    }
+
+    public void setUser_DeviceInfo(String user_DeviceInfo) {
+        User_DeviceInfo = user_DeviceInfo;
+    }
+
+    public List<String> getUser_Attention() {
+        return User_Attention;
+    }
+
+    public void setUser_Attention(List<String> user_Attention) {
+        User_Attention = user_Attention;
+    }
+
+    public boolean isUser_VerStatus() {
+        return User_VerStatus;
+    }
+
+    public void setUser_VerStatus(boolean user_VerStatus) {
+        User_VerStatus = user_VerStatus;
     }
 
     public String getUser_image_min() {

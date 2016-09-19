@@ -25,6 +25,7 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
@@ -59,6 +60,7 @@ public class DynamicReleaseActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_dynamic_release);
 
         initView();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initView() {
@@ -103,7 +105,7 @@ public class DynamicReleaseActivity extends BaseActivity implements View.OnClick
      * 设置返回刷新标志
      */
     private void SetFlag() {
-        ((MyApplication)getApplication()).setDynamicRefresh(true);
+        ((MyApplication) getApplication()).setDynamicRefresh(true);
     }
 
     /**
@@ -174,11 +176,11 @@ public class DynamicReleaseActivity extends BaseActivity implements View.OnClick
         dy.save(new SaveListener<String>() {
             @Override
             public void done(String s, BmobException e) {
-                if (e == null){
+                if (e == null) {
                     Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
                     Completed();
                     finish();
-                }else {
+                } else {
                     //保存失败
 //                    Log.d(TAG, "done: ex==" + s);
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");

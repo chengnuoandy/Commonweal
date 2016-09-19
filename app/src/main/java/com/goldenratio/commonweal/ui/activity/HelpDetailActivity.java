@@ -106,8 +106,7 @@ public class HelpDetailActivity extends BaseActivity implements View.OnClickList
 
             //分享
             case R.id.iv_share:
-                ShareUtils shareUtils = new ShareUtils();
-                shareUtils.showShare(this);
+                ShareUtils.showGUI(this, "title", "http://119.29.21.253/aidian/index.html", "text", "http://119.29.21.253/aidian/index.html", "comment");
                 break;
 
             //评论

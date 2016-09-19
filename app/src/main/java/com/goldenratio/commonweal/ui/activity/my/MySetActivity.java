@@ -90,8 +90,7 @@ public class MySetActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String url = "http://123.206.89.67/loadpage/index.html";
-                ShareUtils shareUtils = new ShareUtils();
-                shareUtils.showShare(MySetActivity.this, "爱点App", "http://www.baidu.com", "一款爱心拍卖的App", "http://bmob-cdn-2263.b0.upaiyun.com/2016/09/18/6a27a0474027948580f8bcebb78adc5d.png", "内容", "推荐给你哦", "爱点");
+                ShareUtils.showGUI(MySetActivity.this, "title", "http://119.29.21.253/aidian/index.html", "text", "http://119.29.21.253/aidian/index.html", "comment");
             }
         });
         try {

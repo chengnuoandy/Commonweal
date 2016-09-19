@@ -52,6 +52,8 @@ public class MyApplication extends Application {
     private boolean UserIsV;
     private boolean UserVerStatus;
     private String WebServiceIp;
+    private String SiteUrl;
+
 
     @Override
     public void onCreate() {
@@ -95,69 +97,6 @@ public class MyApplication extends Application {
         MiStatInterface.setUploadPolicy(UPLOAD_POLICY_REALTIME, 0);
         //手机错误日志
         MiStatInterface.enableExceptionCatcher(true);
-    }
-
-    public void isLogin() {
-        if (isUserTableExist()) {
-            getUserData();
-            getWbIdFromBmob();
-        } else ObjectID = "";
-    }
-
-    public boolean isDynamicRefresh() {
-        return DynamicRefresh;
-    }
-
-    public String getObjectID() {
-        return ObjectID;
-    }
-
-    public void setObjectID(String objectID) {
-        ObjectID = objectID;
-    }
-
-    public String getWbId() {
-        return WbId;
-    }
-
-    public void setWbId(String wbId) {
-        WbId = wbId;
-    }
-
-    public String getWbVerReason() {
-        return WbVerReason;
-    }
-
-    public void setWbVerReason(String wbVerReason) {
-        WbVerReason = wbVerReason;
-    }
-
-    public String getWebServiceIp() {
-        return WebServiceIp;
-    }
-
-    public void setWebServiceIp(String webServiceIp) {
-        WebServiceIp = webServiceIp;
-    }
-
-    public boolean isUserIsV() {
-        return UserIsV;
-    }
-
-    public void setUserIsV(boolean userIsV) {
-        UserIsV = userIsV;
-    }
-
-    public boolean isUserVerStatus() {
-        return UserVerStatus;
-    }
-
-    public void setUserVerStatus(boolean userVerStatus) {
-        UserVerStatus = userVerStatus;
-    }
-
-    public void setDynamicRefresh(boolean dynamicRefresh) {
-        DynamicRefresh = dynamicRefresh;
     }
 
     /**
@@ -249,6 +188,7 @@ public class MyApplication extends Application {
                 if (e == null) {
                     if (list.size() == 1) {
                         WebServiceIp = list.get(0).getWebServiceIp();
+                        SiteUrl = list.get(0).getSiteUrl();
                     } else {
                         Toast.makeText(MyApplication.this, "App Config Error", Toast.LENGTH_SHORT).show();
                     }
@@ -257,5 +197,77 @@ public class MyApplication extends Application {
                 }
             }
         });
+    }
+
+    public void isLogin() {
+        if (isUserTableExist()) {
+            getUserData();
+            getWbIdFromBmob();
+        } else ObjectID = "";
+    }
+
+
+    public String getSiteUrl() {
+        return SiteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        SiteUrl = siteUrl;
+    }
+
+    public boolean isDynamicRefresh() {
+        return DynamicRefresh;
+    }
+
+    public String getObjectID() {
+        return ObjectID;
+    }
+
+    public void setObjectID(String objectID) {
+        ObjectID = objectID;
+    }
+
+    public String getWbId() {
+        return WbId;
+    }
+
+    public void setWbId(String wbId) {
+        WbId = wbId;
+    }
+
+    public String getWbVerReason() {
+        return WbVerReason;
+    }
+
+    public void setWbVerReason(String wbVerReason) {
+        WbVerReason = wbVerReason;
+    }
+
+    public String getWebServiceIp() {
+        return WebServiceIp;
+    }
+
+    public void setWebServiceIp(String webServiceIp) {
+        WebServiceIp = webServiceIp;
+    }
+
+    public boolean isUserIsV() {
+        return UserIsV;
+    }
+
+    public void setUserIsV(boolean userIsV) {
+        UserIsV = userIsV;
+    }
+
+    public boolean isUserVerStatus() {
+        return UserVerStatus;
+    }
+
+    public void setUserVerStatus(boolean userVerStatus) {
+        UserVerStatus = userVerStatus;
+    }
+
+    public void setDynamicRefresh(boolean dynamicRefresh) {
+        DynamicRefresh = dynamicRefresh;
     }
 }

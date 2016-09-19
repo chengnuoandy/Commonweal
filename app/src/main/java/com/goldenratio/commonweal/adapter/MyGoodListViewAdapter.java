@@ -270,7 +270,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
             String a = getItem(position).getGood_Praise() + "";
             if (!a.isEmpty() && !a.equals("null")) {
                 mTvUpNumber.setText(a);
-            }else {
+            } else {
                 mTvUpNumber.setText("0");
             }
         }
@@ -324,8 +324,7 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                     break;
                 case R.id.iv_share:
                     Good item = getItem(position);
-                    ShareUtils shareUtils = new ShareUtils();
-                    shareUtils.showShare(mContext, item.getGood_Name(), item.getGood_Photos().get(0).toString(), item.getGood_Description(), item.getGood_Photos().get(0).toString(), "content", "分享给你", "爱点");
+                    ShareUtils.showGUI(mContext, "title", "http://119.29.21.253/aidian/index.html", "text", "http://119.29.21.253/aidian/index.html", "comment");
                     break;
             }
         }

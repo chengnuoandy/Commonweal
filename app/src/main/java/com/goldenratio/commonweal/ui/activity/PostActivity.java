@@ -72,7 +72,7 @@ public class PostActivity extends BaseActivity {
                     bmobPush.pushMessage("p-我买了您的物品-么么哒");
                     finish();
                 } else {
-                    Toast.makeText(mContext, "请先进行名人认证吧！" + userIsV, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "请先进行名人认证吧！", Toast.LENGTH_SHORT).show();
                 }
             }
         });

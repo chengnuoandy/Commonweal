@@ -188,7 +188,11 @@ public class MySellGoodAdapter extends BaseAdapter {
             if (flag == 0) {
                 str = "物品拍卖失败！";
             } else if (flag == 1) {
-                str = "正在拍卖";
+                if (isBad(pos)) {
+                    str = "正在拍卖";
+                } else {
+                    str = "拍卖失败";
+                }
             } else if (flag == 2) {
                 str = "拍卖成功，等待发货";
                 addStrings();
@@ -298,6 +302,27 @@ public class MySellGoodAdapter extends BaseAdapter {
             builder.setCancelable(false);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
+        }
+    }
+
+    private boolean isBad(int pos) {
+        long now = System.currentTimeMillis();
+        long end = mList.get(pos).getGood_UpDateM();
+        if (now >= end){
+            Good good = new Good();
+            good.setObjectId(mList.get(pos).getObjectId());
+            good.setGood_Status(0);
+            good.update(new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e != null) {
+                        Toast.makeText(mContext, "更新数据失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            return false;
+        }else {
+            return true;
         }
     }
 

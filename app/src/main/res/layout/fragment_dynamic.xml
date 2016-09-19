@@ -54,7 +54,7 @@
             android:gravity="center"
             android:padding="@dimen/little_space"
             android:text="项目"
-            android:textColor="@color/ordinary"
+            android:textColor="@color/ordinary_s"
             android:textSize="15sp" />
 
 
@@ -66,7 +66,7 @@
             android:gravity="center"
             android:padding="@dimen/little_space"
             android:text="个人"
-            android:textColor="@color/ordinary"
+            android:textColor="@color/ordinary_s"
             android:textSize="15sp" />
     </LinearLayout>
 

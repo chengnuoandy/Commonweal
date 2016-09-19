@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,11 +14,9 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
-import com.goldenratio.commonweal.ui.activity.DynamicReleaseActivity;
 import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
-import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,13 +161,13 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         if (state == ViewPager.SCROLL_STATE_SETTLING) {
             switch (mVpDynamic.getCurrentItem()) {
                 case 0:
-                    changeTitleColor(R.color.colorPrimary, R.color.ordinary, R.color.ordinary);
+                    changeTitleColor(R.color.colorPrimary, R.color.ordinary_s, R.color.ordinary_s);
                     break;
                 case 1:
-                    changeTitleColor(R.color.ordinary, R.color.colorPrimary, R.color.ordinary);
+                    changeTitleColor(R.color.ordinary_s, R.color.colorPrimary, R.color.ordinary_s);
                     break;
                 case 2:
-                    changeTitleColor(R.color.ordinary, R.color.ordinary, R.color.colorPrimary);
+                    changeTitleColor(R.color.ordinary_s, R.color.ordinary_s, R.color.colorPrimary);
                     break;
 
             }

@@ -2,12 +2,10 @@ package com.goldenratio.commonweal.adapter;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
@@ -35,9 +33,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.bmob.v3.Bmob;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.iwgang.countdownview.CountdownView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -272,8 +268,10 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                 mTvStatus.setBackground(null);
             }
             String a = getItem(position).getGood_Praise() + "";
-            if (!a.isEmpty() || !a.equals("null")) {
-                mTvUpNumber.setText(getItem(position).getGood_Praise() + "");
+            if (!a.isEmpty() && !a.equals("null")) {
+                mTvUpNumber.setText(a);
+            }else {
+                mTvUpNumber.setText("0");
             }
         }
 
@@ -287,6 +285,8 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
+                                int temp = Integer.parseInt(mTvUpNumber.getText().toString()) + 1;
+                                mTvUpNumber.setText(temp + "");
                                 Toast.makeText(mContext, "点赞成功", Toast.LENGTH_SHORT).show();
                             } else {
 //                                Toast.makeText(mContext, "点赞失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();

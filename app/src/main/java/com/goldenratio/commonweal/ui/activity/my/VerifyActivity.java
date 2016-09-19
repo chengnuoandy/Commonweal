@@ -49,7 +49,6 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
     private Oauth2AccessToken mAccessToken = null;
     private User upUser = null;
     private ProgressDialog mPd;
-    private ProgressDialog progressDialog;
 
 
     @Override
@@ -99,7 +98,7 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
                 .setPositiveButton("朕知道了", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        progressDialog = ProgressDialog.show(VerifyActivity.this, null, "正在进行微博认证", false);
+                        showProgressDialog();
                         mSsoHandler.authorize(new AuthListener());
                     }
                 })
@@ -158,7 +157,6 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onComplete(Bundle values) {
-            showProgressDialog();
             // 从 Bundle 中解析 Token
             mAccessToken = Oauth2AccessToken.parseAccessToken(values);
             if (mAccessToken.isSessionValid()) {
@@ -170,7 +168,6 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
                 mUsersAPI.show(uid, mListener);
                 Toast.makeText(VerifyActivity.this,
                         "授权成功", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
             } else {
                 // 以下几种情况，您会收到 Code：
                 // 1. 当您未在平台上注册的应用程序的包名与签名时；
@@ -183,7 +180,6 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
                 }
                 closeProgressDialog();
                 Toast.makeText(VerifyActivity.this, message, Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
             }
         }
 
@@ -196,6 +192,7 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onWeiboException(WeiboException e) {
+            closeProgressDialog();
             Toast.makeText(VerifyActivity.this,
                     "Auth exception : " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -211,7 +208,7 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
     private void showProgressDialog() {
         if (mPd == null) {
             mPd = new ProgressDialog(this);
-            mPd.setMessage("加载中");
+            mPd.setMessage("正在进行微博认证...");
             mPd.setCancelable(true);
             mPd.show();
         }
@@ -237,6 +234,7 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
                         Toast.makeText(VerifyActivity.this, "该用户已绑定其他账号！", Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    closeProgressDialog();
 //                    Toast.makeText(VerifyActivity.this, "查询失败！", Toast.LENGTH_SHORT).show();
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
@@ -261,13 +259,16 @@ public class VerifyActivity extends BaseActivity implements View.OnClickListener
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
+                                closeProgressDialog();
                                 Toast.makeText(VerifyActivity.this, "名人认证上传成功！很快就会出审核结果哦~", Toast.LENGTH_SHORT).show();
                             } else {
+                                closeProgressDialog();
                                 ErrorCodeUtil.switchErrorCode(VerifyActivity.this, e.getErrorCode() + "");
                             }
                         }
                     });
                 } else {
+                    closeProgressDialog();
                     ErrorCodeUtil.switchErrorCode(VerifyActivity.this, e.getErrorCode() + "");
                 }
             }

@@ -271,16 +271,6 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                                         changeTextViewVisibitity(2);
                                                     }
                                                 });
-//                                                BmobQuery<Good> query = new BmobQuery<Good>();
-//                                                query.addWhereEqualTo("objectId", mObjectId);
-//                                                query.findObjects(new FindListener<Good>() {
-//                                                    @Override
-//                                                    public void done(List<Good> list, BmobException e) {
-//                                                        if (e == null){
-//
-//                                                        }
-//                                                    }
-//                                                })
                                                 mTvNowCoin.setText(list.get(0).getBid_Coin());
                                                 new AlertDialog.Builder(mContext)
                                                         .setTitle("提示")
@@ -290,7 +280,6 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                                         .show();
                                             }
                                         } else {
-//                    Log.d("Kiuber_LOG", "fail: " + e.getMessage());
                                             ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                                             changeTextViewVisibitity(3);
                                         }

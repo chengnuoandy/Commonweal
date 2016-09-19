@@ -89,8 +89,8 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         mUserId = ((MyApplication) getApplication()).getObjectID();
 
 
-        List<String> user_receive_address = mySqlOrder.getOrder_User().getUser_Receive_Address();
-
+        List<String> user_receive_address = new ArrayList<>();
+        user_receive_address = mySqlOrder.getOrder_User().getUser_Receive_Address();
         address = (ArrayList<String>) user_receive_address;
         if (address.size() != 1 && (address.size() - 1) % 3 == 0) {
             List list = checkDefaultAddress(user_receive_address);
@@ -125,7 +125,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_pay:
-                mySqlManager.queryUserCoinAndSixPwdByObjectId(null,null, null);
+                mySqlManager.queryUserCoinAndSixPwdByObjectId(null, null, null);
                 break;
             case R.id.btn_express:
                 Intent intent = new Intent(this, LogisticsInformation.class);

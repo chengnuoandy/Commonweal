@@ -1,13 +1,11 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
@@ -91,10 +89,10 @@ public class DonateInfoActivity extends BaseActivity {
                     } else {
                         mNoRanking.setVisibility(View.VISIBLE);
                     }
-                } else
-//                    Toast.makeText(DonateInfoActivity.this, "获取捐赠信息失败" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
                     closeProgressDialog();
-                ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
             }
         });
     }

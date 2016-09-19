@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
-import com.goldenratio.commonweal.ui.activity.LoginActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 
 import org.xutils.common.Callback;
@@ -320,7 +319,7 @@ public class MySellGoodAdapter extends BaseAdapter {
                     List list = checkDefaultAddress(user_receive_address);
                     new AlertDialog.Builder(mContext)
                             .setTitle("收件人地址")
-                            .setMessage("姓名：" + list.get(0) + "\n" + "地址：" + list.get(2) + "联系电话：" + list.get(1))
+                            .setMessage("姓名：" + list.get(0) + "\n" + "地址：" + list.get(2) + "\n联系电话：" + list.get(1))
                             .show();
                 }
             });

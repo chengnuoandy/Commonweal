@@ -2,6 +2,7 @@ package com.goldenratio.commonweal.ui.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -70,26 +71,29 @@ public class DonateInfoActivity extends BaseActivity {
                     if (list.size() != 0) {
                         User_Profile u = null;
                         int i;
-                        for (i = 0; i < list.size(); i++) {
-                            u = list.get(i).getUser_Info();
-                            if ((u.getObjectId()).equals(ID)) {
-                                mTvMyRanking.setText(String.valueOf("第" + (i + 1) + "名"));
-                                break;
-                            } else {
-                                mTvMyRanking.setText("无排名");
+                        if (!ID.equals("")) {
+                            for (i = 0; i < list.size(); i++) {
+                                u = list.get(i).getUser_Info();
+                                if ((u.getObjectId()).equals(ID)) {
+                                    mTvMyRanking.setText(String.valueOf("第" + (i + 1) + "名"));
+                                    break;
+                                } else {
+                                    mTvMyRanking.setText("无排名");
+                                }
                             }
+                            if (u != null) {
+                                Picasso.with(getApplicationContext()).load(u.getUser_image_hd()).into(mCivDonateAvatar);
+                                mTvDonateName.setText(u.getUser_Nickname());
+                                mTvDonateCoin.setText("捐赠" + list.get(i).getDonate_Coin() + "公益币");
+                            }
+                            mRlDonate.setVisibility(View.VISIBLE);
                         }
-                        if (u != null) {
-                            Picasso.with(getApplicationContext()).load(u.getUser_image_hd()).into(mCivDonateAvatar);
-                            mTvDonateName.setText(u.getUser_Nickname());
-                            mTvDonateCoin.setText("捐赠" + list.get(i).getDonate_Coin() + "公益币");
-                        }
-                        mRlDonate.setVisibility(View.VISIBLE);
                         mLvDonate.setAdapter(new DonateInfoListAdapter(list, getApplicationContext()));
                     } else {
                         mNoRanking.setVisibility(View.VISIBLE);
                     }
                 } else {
+                    Log.i("lxt", "done: " + e.getMessage());
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
                 closeProgressDialog();

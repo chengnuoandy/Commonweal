@@ -197,7 +197,7 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
                     price = data.getStringExtra("price");
                     prop = data.getStringExtra("prop");
                     if (!prop.equals("") && !price.equals(""))
-                        TVprice.setText("已设置 底价：" + price + "元 捐款比例：" + prop + "%");
+                        TVprice.setText("已设置 底价：" + price + "公益币 捐款比例：" + prop + "%");
 
                     Log.d(TAG, "onActivityResult: price=" + data.getStringExtra("price") + "prop=" + data.getStringExtra("prop"));
                 }
@@ -259,6 +259,7 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
             if (mStrObjectId == null) {
                 Toast.makeText(this, "账号信息获取失败，请登录", Toast.LENGTH_SHORT).show();
             } else {
+                mBtnRelease.setClickable(false);
                 Toast.makeText(GoodActivity.this, "正在发布", Toast.LENGTH_SHORT).show();
                 doInBackground(filePaths, mStrName, mStrDescription, mLgTime, hours[mSrTime.getSelectedItemPosition()]);
             }
@@ -295,6 +296,7 @@ public class GoodActivity extends BaseActivity implements View.OnClickListener, 
                                         finish();
                                         createAEvent(s, hours);
                                     } else {
+                                        mBtnRelease.setClickable(true);
 //                                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
                                         ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                                     }

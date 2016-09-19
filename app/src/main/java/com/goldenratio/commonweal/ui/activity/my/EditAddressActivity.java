@@ -20,6 +20,7 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.lljjcoder.citypickerview.widget.CityPickerView;
 
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class EditAddressActivity extends BaseActivity {
             mTvEditAddress.setText(editAddress[0] + " " + editAddress[1] + " " + editAddress[2]);
             mEtDetailAddress.setText(editAddress[3]);
         }
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     @OnClick({R.id.iv_edit_address_back, R.id.rl_edit_address, R.id.btn_save_address})

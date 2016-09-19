@@ -13,10 +13,12 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,8 +70,6 @@ public class MyFragment extends Fragment {
     ImageView mIvMessage;
     @BindView(R.id.rl_background)
     RelativeLayout mRlBackground;
-    @BindView(R.id.rl_background1)
-    RelativeLayout mRlBackground1;
     @BindView(R.id.tv_my_attention)
     TextView mTvMyAttention;
     @BindView(R.id.iv_notify)
@@ -99,6 +99,8 @@ public class MyFragment extends Fragment {
     boolean userIsV;
 
     private int notifyCount;
+    private ScrollView mSvMy;
+    private RelativeLayout mRlB1;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -197,6 +199,34 @@ public class MyFragment extends Fragment {
                         startActivity(new Intent(getContext(), VerifyActivity.class));
                     }
                 }
+            }
+        });
+        mRlB1 = (RelativeLayout) view.findViewById(R.id.rl_background1);
+        mSvMy = (ScrollView) view.findViewById(R.id.sv_my);
+        mSvMy.setOnTouchListener(new View.OnTouchListener() {
+            private float mLastY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mLastY = event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        float y = event.getY();
+                        float alphaDelt = (y - mLastY) / 1000;
+                        float alpha = mRlB1.getAlpha() + alphaDelt;
+                        if (alpha > 1.0) {
+                            alpha = 1.0f;
+                        } else if (alpha < 0.0) {
+                            alpha = 0.0f;
+                        }
+                        mRlB1.setAlpha(alpha);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        break;
+                }
+                return false;
             }
         });
     }
@@ -371,7 +401,7 @@ public class MyFragment extends Fragment {
                     Bitmap blurBitmap = BitmapUtil.createBlurBitmap(resource, 100);
                     Drawable drawable = new BitmapDrawable(blurBitmap);
                     mRlBackground.setBackground(drawable);
-                    mRlBackground1.setBackground(drawable);
+                    mRlB1.setBackground(drawable);
                 }
             });
         }

@@ -35,10 +35,10 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/sv_my"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,7 +58,6 @@
                     android:paddingLeft="@dimen/normal_space"
                     android:paddingRight="@dimen/normal_space"
                     android:paddingTop="@dimen/normal_space">
-
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/civ_avatar"

@@ -112,7 +112,11 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                 mGood = list.get(0);
                                 long endTimeM = mGood.getGood_UpDateM();
                                 endTime = endTimeM - (aLong * 1000L);
-                                initIsGoodStatus();
+                                if (!mGood.getGood_User().getObjectId().equals(mUserId)) {
+                                    initIsGoodStatus();
+                                } else {
+                                    mTvLoading.setVisibility(View.GONE);
+                                }
                                 initViewData();
                                 initSliderLayout();
                             }
@@ -134,7 +138,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
         Log.d(TAG, "initView: " + mGood.getGood_Photos().size());
         mPicList = mGood.getGood_Photos();
         for (int i = 0; i < mPicList.size(); i++) {
-            urlMaps.put(i + "", mPicList.get(i).toString());
+            urlMaps.put("点击查看详情", mPicList.get(i).toString());
         }
 
         for (String name : urlMaps.keySet()) {

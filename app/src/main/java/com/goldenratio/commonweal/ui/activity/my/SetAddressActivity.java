@@ -20,6 +20,7 @@ import com.goldenratio.commonweal.adapter.SetAddressListAdapter;
 import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class SetAddressActivity extends BaseActivity implements SetAddressListAd
         mAddressList = new ArrayList<List<String>>();
         showProgressDialog();
         getAddressFromBmob();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
 

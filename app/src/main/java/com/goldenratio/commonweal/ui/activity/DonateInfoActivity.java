@@ -90,9 +90,9 @@ public class DonateInfoActivity extends BaseActivity {
                         mNoRanking.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    closeProgressDialog();
                     ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
+                closeProgressDialog();
             }
         });
     }
@@ -119,7 +119,7 @@ public class DonateInfoActivity extends BaseActivity {
         if (mPd == null) {
             mPd = new ProgressDialog(this);
             mPd.setMessage("加载中");
-            mPd.setCancelable(false);
+            mPd.setCancelable(true);
             mPd.show();
         }
     }

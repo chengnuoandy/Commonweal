@@ -95,7 +95,6 @@
             android:name=".ui.activity.GoodKeypadActivity"
             android:theme="@style/MyDialogStyle" />
         <activity android:name=".ui.activity.HelpDetailActivity" />
-        <activity android:name=".ui.fragment.HelpContentFragment" />
         <activity android:name=".ui.activity.my.MessageActivity" />
 
         <receiver android:name=".receiver.NetworkReceiver">
@@ -232,7 +231,6 @@
         <activity android:name=".ui.activity.my.LogisticsInformation" />
         <activity android:name=".ui.activity.HelpInitiatorDetailActivity" />
         <activity android:name=".ui.activity.HelpTopDetailActivity" />
-        <activity android:name=".ui.fragment.DycHelpContentActivity" />
         <activity
             android:name=".ui.activity.StarInfoActivity"
             android:theme="@style/attention_theme" />

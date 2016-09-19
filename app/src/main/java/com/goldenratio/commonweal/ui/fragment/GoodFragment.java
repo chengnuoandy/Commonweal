@@ -90,7 +90,7 @@ public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefres
                     //收起刷新
                     mBGARefreshLayout.endRefreshing();
                     mLlNoNet.setVisibility(View.VISIBLE);
-                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
+//                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
 
@@ -135,7 +135,7 @@ public class GoodFragment extends Fragment implements BGARefreshLayout.BGARefres
                         Toast.makeText(getContext(), "检测到您的时钟与网络时间不符，可能会影响您的购买！", Toast.LENGTH_LONG).show();
                 } else {
 //                    Log.i("lxc", "获取服务器时间失败:" + e.getMessage() + e.getErrorCode());
-                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
+//                    ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                 }
             }
         });

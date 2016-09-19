@@ -13,7 +13,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
 import com.goldenratio.commonweal.receiver.NetworkReceiver;
@@ -178,7 +177,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     public void netState(NetworkReceiver.NetState netCode) {
         switch (netCode) {
             case NET_NO:
-                Toast.makeText(this, "亲，没有网络哟", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "亲，没有网络哟", Toast.LENGTH_SHORT).show();
                 x = true;
                 break;
             case NET_2G:

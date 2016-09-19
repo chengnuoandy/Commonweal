@@ -51,7 +51,7 @@
 
 
     <TextView
-        android:id="@+id/tv_loading"
+        android:id="@+id/tv_loading1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"

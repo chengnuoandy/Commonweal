@@ -82,7 +82,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
     private CountdownView mCountdownView1;
     private String mObjectId;
     private List mPicList;
-    private TextView getmTvLoading;
+    private TextView mTvLoading1;
     private ScrollView mSvGood;
 
     @Override
@@ -194,7 +194,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                 finish();
             }
         });
-        mTvLoading = (TextView) findViewById(R.id.tv_loading);
+        mTvLoading1 = (TextView) findViewById(R.id.tv_loading1);
         mSvGood = (ScrollView) findViewById(R.id.sv_good);
     }
 
@@ -217,10 +217,15 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                     @Override
                                     public void done(Long aLong, BmobException e) {
                                         if (e == null) {
-                                            long createdTime = StringToLongAll(list.get(0).getCreatedAt());
-                                            long nowTime = aLong * 1000L;
-                                            //30000： 30秒内所有不能再次出价。降低服务器并发及最后一位出价者的不确定性。
-                                            long leftTime = 30000 - (nowTime - createdTime);
+                                            long leftTime;
+                                            if (list.size() > 0) {
+                                                long createdTime = StringToLongAll(list.get(0).getCreatedAt());
+                                                long nowTime = aLong * 1000L;
+                                                //30000： 30秒内所有不能再次出价。降低服务器并发及最后一位出价者的不确定性。
+                                                leftTime = 30000 - (nowTime - createdTime);
+                                            } else {
+                                                leftTime = -1;
+                                            }
                                             if (leftTime < 0) {
                                                 changeTextViewVisibitity(2);
                                                 //没有出价的情况下
@@ -346,7 +351,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
      */
 
     private void initViewData() {
-        mTvLoading.setVisibility(View.GONE);
+        mTvLoading1.setVisibility(View.GONE);
         mSvGood.setVisibility(View.VISIBLE);
         mCountdownView1.start(endTime);
         mCountdownView.start(endTime);
@@ -526,7 +531,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                         @Override
                         public void run() {
                             Log.d(TAG, "fail: " + e.getMessage());
-                            Toast.makeText(GoodDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(GoodDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -544,7 +549,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                                 mTvBid.setVisibility(View.VISIBLE);
                             } else {
                                 Log.d(TAG, "run: " + result);
-                                Toast.makeText(GoodDetailActivity.this, result, Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(GoodDetailActivity.this, result, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -799,7 +804,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
                         @Override
                         public void run() {
                             if (result.contains("success")) {
-                                Toast.makeText(mContext, "出价成功" + mUserId, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "出价成功", Toast.LENGTH_SHORT).show();
                                 getLastBidUpdatedAt();
                                 mTvBid.setVisibility(View.GONE);
                                 mLlCv.setVisibility(View.VISIBLE);

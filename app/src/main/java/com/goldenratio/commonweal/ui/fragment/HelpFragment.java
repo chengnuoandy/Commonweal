@@ -146,8 +146,7 @@ HelpFragment extends Fragment implements AdapterView.OnItemClickListener, View.O
                         //收起刷新
                         mBGARefreshLayout.endRefreshing();
                         mLlNoNet.setVisibility(View.VISIBLE);
-//                        Toast.makeText(getContext(), e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
-                        ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
+//                        ErrorCodeUtil.switchErrorCode(getContext(), e.getErrorCode() + "");
                     }
                 }
             });

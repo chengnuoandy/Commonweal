@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.goldenratio.commonweal.ui.activity.my.EditAddressActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
+              tools:context="com.goldenratio.commonweal.ui.activity.my.EditAddressActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +18,7 @@
             android:id="@+id/iv_edit_address_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_selector" />
+            android:src="@drawable/ic_back_selector"/>
 
         <TextView
             android:layout_width="1dp"
@@ -25,7 +26,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/normal_space"
             android:layout_toRightOf="@+id/iv_edit_address_back"
-            android:background="@color/ordinary" />
+            android:background="@color/ordinary"/>
 
 
         <TextView
@@ -35,13 +36,13 @@
             android:layout_centerInParent="true"
             android:text="添加地址"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size" />
+            android:textSize="@dimen/title_text_size"/>
     </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/assist" />
+        android:background="@color/assist"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -54,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="收件人" />
+            android:text="收件人"/>
 
         <EditText
             android:id="@+id/et_edit_consignee"
@@ -66,13 +67,13 @@
             android:background="@null"
             android:hint="请输入收件人名称"
             android:maxLines="1"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg" />
+        android:background="@color/main_bg"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -84,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="联系电话" />
+            android:text="联系电话"/>
 
         <EditText
             android:id="@+id/et_edit_phone"
@@ -97,13 +98,13 @@
             android:hint="请输入至少七位的手机号码"
             android:inputType="phone"
             android:maxLength="11"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg" />
+        android:background="@color/main_bg"/>
 
     <RelativeLayout
         android:id="@+id/rl_edit_address"
@@ -118,7 +119,7 @@
             android:drawableRight="@mipmap/news_cate_arr"
             android:gravity="left"
             android:padding="10dp"
-            android:text="所在地区" />
+            android:text="所在地区"/>
 
         <TextView
             android:id="@+id/tv_edit_address"
@@ -129,14 +130,14 @@
             android:layout_alignTop="@+id/tv_place_address"
             android:layout_marginRight="25dp"
             android:gravity="center"
-            android:text="请选择" />
+            android:text="请选择"/>
 
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/main_bg" />
+        android:background="@color/main_bg"/>
 
     <EditText
         android:id="@+id/et_detail_address"
@@ -148,7 +149,7 @@
         android:lines="4"
         android:maxLines="4"
         android:padding="10dp"
-        android:textSize="15sp" />
+        android:textSize="15sp"/>
 
     <Button
         android:id="@+id/btn_save_address"
@@ -157,6 +158,6 @@
         android:layout_margin="20dp"
         android:background="@drawable/setting_btn_selector"
         android:text="保存地址"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"/>
 
 </LinearLayout>

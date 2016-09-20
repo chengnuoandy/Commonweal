@@ -292,7 +292,7 @@ public class HelpDonateActivity extends BaseActivity implements IMySqlManager {
     }
 
     public void showPayKeyBoard1(String inputPwd) {
-        mySqlManager = new MySqlManagerImpl(this, this, "请输入支付密码", "-" + mCoin, "您将支付" + mCoin + "公益币");
+        mySqlManager = new MySqlManagerImpl(this, this, "请输入支付密码", "" + mCoin, "您将支付" + mCoin + "公益币");
         mySqlManager.showSixPwdOnFinishInput(inputPwd, 1);
     }
 

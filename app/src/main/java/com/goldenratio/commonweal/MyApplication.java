@@ -206,6 +206,15 @@ public class MyApplication extends Application {
         } else ObjectID = "";
     }
 
+    public void reData(){
+        setObjectID("");
+        setSiteUrl("");
+        setUserIsV(false);
+        setWbId("");
+        setWbVerReason("");
+        setUserVerStatus(false);
+    }
+
 
     public String getSiteUrl() {
         return SiteUrl;

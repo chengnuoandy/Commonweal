@@ -71,7 +71,6 @@ public class MySetActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_set);
         ButterKnife.bind(this);
-
         isLogin = getIntent().getExtras().getBoolean("islogin");
 
         if (Environment.getExternalStorageState().equals(
@@ -126,7 +125,7 @@ public class MySetActivity extends BaseActivity {
                     Toast.makeText(MySetActivity.this, "您尚未登陆", Toast.LENGTH_SHORT).show();
                 } else {
                     deleteTable();
-                    ((MyApplication) getApplication()).setObjectID("");
+                    ((MyApplication) getApplication()).reData();
                     setResult(RESULT_OK, null);
                     finish();
                 }

@@ -545,6 +545,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 new String[]{userID, user.getUser_Name(), user.getUser_Password(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
                         user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max(), user.getUser_WbID(), user.getUser_Phone()});
         Completed();
+        MyApplication myApplication = (MyApplication) getApplication();
+        myApplication.setObjectID(user.getObjectId());
+        myApplication.setUserIsV(user.isUser_IsV());
+        myApplication.setUserVerStatus(user.isUser_VerStatus());
+        myApplication.setWbId(user.getUser_WbID());
+        myApplication.setWbVerReason(user.getUser_VerifiedReason());
         finish();
     }
 

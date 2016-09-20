@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
+import com.goldenratio.commonweal.ui.activity.my.MySetActivity;
 import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.ShareUtils;
 
@@ -106,7 +107,10 @@ public class HelpDetailActivity extends BaseActivity implements View.OnClickList
 
             //分享
             case R.id.iv_share:
-                ShareUtils.showGUI(this, "title", "http://119.29.21.253/aidian/index.html", "text", "http://119.29.21.253/aidian/index.html", "comment");
+                MyApplication myApplication = (MyApplication) getApplicationContext();
+                String siteUrl = myApplication.getSiteUrl();
+
+                ShareUtils.showGUI(HelpDetailActivity.this, "分享", siteUrl, mHelp.getHelp_Title() + "\n" + mHelp.getHelp_OneSentence(), siteUrl, "这款App赞哦！");
                 break;
 
             //评论

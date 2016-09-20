@@ -21,6 +21,7 @@ import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.ui.activity.DynamicPhotoShow;
 import com.goldenratio.commonweal.ui.activity.MyDynamicCommentActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ShareUtils;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 
@@ -45,7 +46,7 @@ public class MyDynamicAdapter extends BaseAdapter {
         mList = list;
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        ObjectID = ((MyApplication)context.getApplicationContext()).getObjectID();
+        ObjectID = ((MyApplication) context.getApplicationContext()).getObjectID();
     }
 
     @Override
@@ -93,6 +94,7 @@ public class MyDynamicAdapter extends BaseAdapter {
         private int pos;
         private ImageView mIvThumbUp;
         private TextView mTvUpNumber;
+        private TextView mTvShare;
 
         private void initView(View view) {
             mTvTime = (TextView) view.findViewById(R.id.tv_time);
@@ -105,6 +107,15 @@ public class MyDynamicAdapter extends BaseAdapter {
             mComment = (TextView) view.findViewById(R.id.tv_comment);
             mIvThumbUp = (ImageView) view.findViewById(R.id.iv_thumb_up);
             mTvUpNumber = (TextView) view.findViewById(R.id.tv_up_number);
+            mTvShare = (TextView) view.findViewById(R.id.tv_share);
+            mTvShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyApplication myApplication = (MyApplication) mContext.getApplicationContext();
+                    String siteUrl = myApplication.getSiteUrl();
+                    ShareUtils.showGUI(mContext, "分享", siteUrl, mList.get(pos).getDynamics_title(), siteUrl, "这款App赞哦！");
+                }
+            });
 
             mDelete.setOnClickListener(this);
             mComment.setOnClickListener(this);
@@ -144,7 +155,7 @@ public class MyDynamicAdapter extends BaseAdapter {
             mLocation.setText(mList.get(position).getDynamics_location());
             mNineGridImageView.setImagesData(mList.get(position).getDynamics_pic());
 
-            if (user.getObjectId().equals(ObjectID)){
+            if (user.getObjectId().equals(ObjectID)) {
                 mDelete.setVisibility(View.VISIBLE);
             }
 
@@ -155,7 +166,7 @@ public class MyDynamicAdapter extends BaseAdapter {
             String a = mList.get(position).getDynamic_Praise() + "";
             if (!a.isEmpty() && !a.equals("null")) {
                 mTvUpNumber.setText(a);
-            }else {
+            } else {
                 mTvUpNumber.setText("0");
             }
         }

@@ -25,6 +25,7 @@ import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Good;
 import com.goldenratio.commonweal.ui.activity.GoodDetailActivity;
+import com.goldenratio.commonweal.ui.activity.HelpDetailActivity;
 import com.goldenratio.commonweal.ui.activity.StarInfoActivity;
 import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.ShareUtils;
@@ -324,7 +325,10 @@ public class MyGoodListViewAdapter extends BaseAdapter {
                     break;
                 case R.id.iv_share:
                     Good item = getItem(position);
-                    ShareUtils.showGUI(mContext, "title", "http://119.29.21.253/aidian/index.html", "text", "http://119.29.21.253/aidian/index.html", "comment");
+                    String text = item.getGood_User().getUser_Nickname() + " 发布的 " + item.getGood_Name();
+                    MyApplication myApplication1 = (MyApplication) mContext.getApplicationContext();
+                    String siteUrl = myApplication1.getSiteUrl();
+                    ShareUtils.showGUI(mContext, "分享", siteUrl, text, siteUrl, "这款App赞哦！");
                     break;
             }
         }

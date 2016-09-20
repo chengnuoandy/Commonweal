@@ -88,8 +88,9 @@ public class MySetActivity extends BaseActivity {
         mTvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://123.206.89.67/loadpage/index.html";
-                ShareUtils.showGUI(MySetActivity.this, "title", "http://119.29.21.253/aidian/index.html", "text", "http://119.29.21.253/aidian/index.html", "comment");
+                MyApplication myApplication = (MyApplication) getApplicationContext();
+                String siteUrl = myApplication.getSiteUrl();
+                ShareUtils.showGUI(MySetActivity.this, "分享", siteUrl, "爱点下载地址", siteUrl, "这款App赞哦！");
             }
         });
         try {

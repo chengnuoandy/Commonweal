@@ -51,6 +51,7 @@ public class MyApplication extends Application {
     private String WbVerReason;    //微博认证理由
     private boolean UserIsV;
     private boolean UserVerStatus;
+
     private String WebServiceIp;
     private String SiteUrl;
 
@@ -206,7 +207,7 @@ public class MyApplication extends Application {
         } else ObjectID = "";
     }
 
-    public void reData(){
+    public void reData() {
         setObjectID("");
         setSiteUrl("");
         setUserIsV(false);

@@ -56,7 +56,7 @@
                 android:id="@+id/before_verify_image"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:src="@drawable/me_identification_before" />
+                android:src="@drawable/before" />
 
             <RelativeLayout
                 android:id="@+id/arrow_zone"
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_toRightOf="@id/arrow_zone"
-                android:src="@drawable/me_identification_after" />
+                android:src="@drawable/after" />
         </RelativeLayout>
 
         <TextView
@@ -99,7 +99,7 @@
             android:layout_below="@id/weibo_verify_desc"
             android:layout_centerInParent="true"
             android:layout_marginTop="130.0dip"
-            android:background="@drawable/unbind_weibo_verify"
+            android:background="@drawable/default_fill"
             android:gravity="center"
             android:text="去认证"
             android:textColor="@color/white" />
@@ -111,7 +111,7 @@
             android:layout_below="@id/goto_verify_button"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15.0dip"
-            android:text="注: 该功能仅提供给微博已通过v认证用户\n图片来源于网络，若有侵权立即删除。"
+            android:text="注: 该功能仅提供给微博已通过v认证用户"
             android:textColor="@color/color_black_trans_40"
             android:textSize="12.0sp" />
     </LinearLayout>

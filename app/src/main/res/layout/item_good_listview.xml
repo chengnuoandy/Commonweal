@@ -31,8 +31,7 @@
                     android:id="@+id/civ_user_avatar"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/avatar" />
+                    android:scaleType="centerCrop" />
 
                 <com.goldenratio.commonweal.util.NormalFontTextView
                     android:id="@+id/tv_user_name"

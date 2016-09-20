@@ -138,7 +138,7 @@ public class GoodDetailActivity extends BaseActivity implements View.OnClickList
         Log.d(TAG, "initView: " + mGood.getGood_Photos().size());
         mPicList = mGood.getGood_Photos();
         for (int i = 0; i < mPicList.size(); i++) {
-            urlMaps.put("点击查看详情", mPicList.get(i).toString());
+            urlMaps.put("点击查看大图", mPicList.get(i).toString());
         }
 
         for (String name : urlMaps.keySet()) {

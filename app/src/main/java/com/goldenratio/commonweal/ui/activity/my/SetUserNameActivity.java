@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity.my;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,9 +13,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.ui.activity.BaseActivity;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -26,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -33,7 +36,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * 作者：Created by 龙啸天 on 2016/7/02 0025.
  * 邮箱：jxfengmtx@163.com ---17718
  */
-public class SetUserNameActivity extends Activity implements TextWatcher {
+public class SetUserNameActivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.et_set_username)
     EditText mEtSetUsername;
@@ -49,7 +52,7 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
         ButterKnife.bind(this);
 
         mEtSetUsername.addTextChangedListener(this);
-
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     @OnClick({R.id.iv_set_name_back, R.id.btn_save_username})
@@ -72,29 +75,30 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
 
     //判断此用户名是否已经存在
     private void isHasUserName() {
-        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<U_NormalP>();
+        BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
         bmobQuery.addWhereEqualTo("User_Name", mEtSetUsername.getText().toString());
-        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+        bmobQuery.findObjects(new FindListener<User_Profile>() {
             @Override
-            public void onSuccess(List<U_NormalP> list) {
-                if (list.isEmpty()) {
-                    updateDataToSqlite();
-                    updateDataToBmob();
+            public void done(List<User_Profile> list, BmobException e) {
+                if (e == null) {
+                    if (list.isEmpty()) {
+                        updateDataToSqlite();
+                        updateDataToBmob();
+                    } else {
+                        closeProgressDialog();
+                        Log.d("query", "查询成功");
+                        Log.d("info", list + "");
+                        closeProgressDialog();
+                        Toast.makeText(SetUserNameActivity.this, "此用户名已有人用过", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     closeProgressDialog();
-                    Log.d("query", "查询成功");
-                    Log.d("info", list + "");
-                    closeProgressDialog();
-                    Toast.makeText(SetUserNameActivity.this, "此用户名已有人用过", Toast.LENGTH_SHORT).show();
+//                    Log.d("query", "查询失败");
+//                    Toast.makeText(SetUserNameActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 
-            @Override
-            public void onError(int i, String s) {
-                closeProgressDialog();
-                Log.d("query", "查询失败");
-                Toast.makeText(SetUserNameActivity.this, "网络不给力", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 
@@ -109,7 +113,7 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
 
     private void updateDataToSqlite() {
         String userName = mEtSetUsername.getText().toString();
-        String sqlCmd = "UPDATE U_NormalP SET User_Name='" + userName + "'";
+        String sqlCmd = "UPDATE User_Profile SET User_Name='" + userName + "'";
         UserDao ud = new UserDao(this);
         ud.execSQL(sqlCmd);
     }
@@ -117,26 +121,28 @@ public class SetUserNameActivity extends Activity implements TextWatcher {
     private void updateDataToBmob() {
         String userID = MyFragment.mUserID;
         String userName = mEtSetUsername.getText().toString();
-        U_NormalP u = new U_NormalP();
+        User_Profile u = new User_Profile();
         u.setUser_Name(userName);
-        u.update(SetUserNameActivity.this, userID, new UpdateListener() {
+        u.update(userID, new UpdateListener() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(SetUserNameActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                returnDataToUserSet();
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(SetUserNameActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    returnDataToUserSet();
+                } else {
+//                    Log.i("why", e.getMessage());
+//                    Toast.makeText(SetUserNameActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Log.i("why", s);
-                Toast.makeText(SetUserNameActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 
     private boolean checkUserName(String uName) {
-        //用户名由3-15个字符组  成（不能为中文）
-        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,15}$";
+        //用户名由3-15个字符组成（不能为中文）
+//        String regex = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{3,15}$";
+        String regex = "^\\w{3,15}$";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(uName);
         return m.matches();

@@ -1,14 +1,14 @@
 package com.goldenratio.commonweal.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -20,13 +20,15 @@ import com.goldenratio.commonweal.ui.fragment.DynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.GoodFragment;
 import com.goldenratio.commonweal.ui.fragment.HelpFragment;
 import com.goldenratio.commonweal.ui.fragment.MyFragment;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bmob.v3.Bmob;
+import butterknife.OnClick;
+import cn.bmob.v3.update.BmobUpdateAgent;
 
 /**
  * Created by Kiuber on 2016/6/6.
@@ -47,6 +49,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     RadioButton mRbMy;
     @BindView(R.id.rg_tabs)
     RadioGroup mRgTabs;
+    @BindView(R.id.fl_post)
+    ImageView mSend;
 
     private MyFragmentPagerAdapter mMyFragmentPagerAdapter;
     private long exitTime = 0;
@@ -67,11 +71,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         NetworkReceiver.ehList.add(this);
         //检测网络状态
         new NetworkReceiver().onReceive(getApplicationContext(), null);
-
-        String libName = "bmob"; // 库名, 注意没有前缀lib和后缀.so
-        System.loadLibrary(libName);
-        //初始化Bmob
-        Bmob.initialize(this, "727a409235aab18ae7b1e1f3933c9a64");
+        //检测更新
+        BmobUpdateAgent.update(this);
 
         mFragmentList = new ArrayList<Fragment>();
 
@@ -88,6 +89,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         mVpContent.setCurrentItem(0);
         mVpContent.addOnPageChangeListener(this);
         mVpContent.setOffscreenPageLimit(4);  //设置是适配器缓存fragment数
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     @Override
@@ -161,7 +163,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         return super.onKeyDown(keyCode, event);
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -176,7 +177,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     public void netState(NetworkReceiver.NetState netCode) {
         switch (netCode) {
             case NET_NO:
-                Toast.makeText(this, "亲，没有网络哟", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "亲，没有网络哟", Toast.LENGTH_SHORT).show();
                 x = true;
                 break;
             case NET_2G:
@@ -201,5 +202,10 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     }
 
 
+    @OnClick(R.id.fl_post)
+    public void onClick() {
+        Intent intent = new Intent(this, PostActivity.class);
+        startActivity(intent);
+    }
 }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"
+        android:text="熊猫爱吃粽子"
+        android:textColor="#AEEEEE"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tv_id"
+        android:layout_alignBottom="@+id/tv_id"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_toEndOf="@+id/tv_id"
+        android:layout_toRightOf="@+id/tv_id"
+        android:ellipsize="end"
+        android:lines="2"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:text="000000000000000000000000000000000000000000000000000000000000000000000000"
+        android:textColor="#000000"
+        android:textSize="@dimen/text_size_big" />
+</RelativeLayout>

@@ -19,15 +19,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Good;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,31 +40,36 @@ import java.util.List;
 
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Kiuber on 2016/6/11.
  */
 
-public class GoodActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class GoodActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "lxc";
+    private static final int REQUEST_IMAGE = 2;
+    private static final int GOOD_TYPE = 2;
     private LayoutInflater mLi;
     private ArrayList<String> mSelectPath;
-    private static final int REQUEST_IMAGE = 2;
     private GridView mGvShowPhoto;
     private TextView TVprice;
-
     private String price;
     private String prop;
-
     private LinearLayout mLlAddPhoto;
     private ImageConfig imageConfig;
     private MyGoodPicAdapter mPicAdapter;
     private TextView mTvType;
     private List<String> pathList;
-    private static final int GOOD_TYPE = 2;
     private Button mBtnRelease;
     private EditText mEtName, mEtDescription;
     private String mStrType = "";
@@ -74,6 +84,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         initView();
         imageSelectConfig();
 //        UploadData(1, 1);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
 
@@ -116,9 +127,6 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         }
     }
 
-    private void showTypeView() {
-    }
-
     private void showPriceView() {
         Intent mIntent = new Intent(this, GoodKeypadActivity.class);
         mIntent.putExtra("price", price);
@@ -142,18 +150,20 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
         Log.d(TAG, "testDate: now time--->" + str);
         mGood.setGood_UpDate(BmobDate.createBmobDate("yyyy-MM-dd HH:mm:ss", str));
         mGood.setGood_UpDateM(date);
-        mGood.setGood_ID(String.valueOf(5));
         mGood.setGood_Name("张杰");
-        mGood.save(this, new SaveListener() {
+        mGood.save(new SaveListener<String>() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(GoodActivity.this, "上传数据成功！", Toast.LENGTH_SHORT).show();
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(GoodActivity.this, "上传数据成功！", Toast.LENGTH_SHORT).show();
+
+                } else {
+//                    Toast.makeText(GoodActivity.this, "上传数据失败！" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(GoodActivity.this, "上传数据失败！", Toast.LENGTH_SHORT).show();
-            }
+
         });
     }
 
@@ -172,7 +182,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                 // 已选择的图片路径
                 // .pathList(path)
                 // 拍照后存放的图片路径（默认 /temp/picture） （会自动创建）
-                .filePath("/ImageSelector/Pictures")
+                .filePath("/GR_commonweal/avatarCache")
                 .build();
     }
 
@@ -187,7 +197,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                     price = data.getStringExtra("price");
                     prop = data.getStringExtra("prop");
                     if (!prop.equals("") && !price.equals(""))
-                        TVprice.setText("已设置 底价：" + price + "元 捐款比例：" + prop + "%");
+                        TVprice.setText("已设置 底价：" + price + "公益币 捐款比例：" + prop + "%");
 
                     Log.d(TAG, "onActivityResult: price=" + data.getStringExtra("price") + "prop=" + data.getStringExtra("prop"));
                 }
@@ -225,6 +235,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
     private void saveGoodInfo2Bmob() {
 
         long[] mLgTimes = {21600000, 32400000, 43200000, 64800000, 86400000};
+        int[] hours = {6, 9, 12, 18, 24};
         final String mStrName = mEtName.getText().toString();
         final String mStrDescription = mEtName.getText().toString();
         final long mLgTime = mLgTimes[mSrTime.getSelectedItemPosition()] + System.currentTimeMillis();
@@ -235,7 +246,7 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
             Toast.makeText(this, "请填写所有信息", Toast.LENGTH_SHORT).show();
         } else {
             UserDao userDao = new UserDao(GoodActivity.this);
-            Cursor cursor = userDao.query("select * from U_NormalP");
+            Cursor cursor = userDao.query("select * from User_Profile");
             while (cursor.moveToNext()) {
                 int nameColumnIndex = cursor.getColumnIndex("objectId");
                 mStrObjectId = cursor.getString(nameColumnIndex);
@@ -245,44 +256,52 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
             for (int i = 0; i < pathList.size(); i++) {
                 filePaths[i] = pathList.get(i).toString();
             }
-
-            doInBackground(filePaths, mStrName, mStrDescription, mLgTime);
-            finish();
+            if (mStrObjectId == null) {
+                Toast.makeText(this, "账号信息获取失败，请登录", Toast.LENGTH_SHORT).show();
+            } else {
+                mBtnRelease.setClickable(false);
+                Toast.makeText(GoodActivity.this, "正在发布", Toast.LENGTH_SHORT).show();
+                doInBackground(filePaths, mStrName, mStrDescription, mLgTime, hours[mSrTime.getSelectedItemPosition()]);
+            }
         }
     }
 
-    private void doInBackground(final String[] filePaths, final String mStrName, final String mStrDescription, final long mLgTime) {
+    private void doInBackground(final String[] filePaths, final String mStrName, final String mStrDescription, final long mLgTime, final int hours) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                BmobFile.uploadBatch(GoodActivity.this, filePaths, new UploadBatchListener() {
+                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
                     @Override
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
                         if (filePaths.length == list1.size()) {
+                            User_Profile user_profile = new User_Profile();
+                            user_profile.setObjectId(mStrObjectId);
                             Good good = new Good();
-                            Toast.makeText(GoodActivity.this, mStrObjectId, Toast.LENGTH_SHORT).show();
-                            good.setGood_User_ID(mStrObjectId);
+                            good.setGood_User(user_profile);
                             good.setGood_Name(mStrName);
                             good.setGood_Description(mStrDescription);
                             good.setGood_Photos(list1);
-                            good.setGood_ID("2");
                             good.setGood_Type(mStrType);
-                            good.setGood_Price(Integer.parseInt(price));
-                            good.setGood_NowPrice(Integer.parseInt(price));
+                            good.setGood_StartCoin(price);
+                            good.setGood_NowCoin(price);
                             good.setGood_DonationRate(Integer.parseInt(prop));
                             good.setGood_UpDateM(mLgTime);
-                            good.save(GoodActivity.this, new SaveListener() {
+                            good.setGood_Status(1);
+                            good.setFirstDeposit(false);
+                            good.setGood_FirstPic(list.get(0));
+                            good.save(new SaveListener<String>() {
                                 @Override
-                                public void onSuccess() {
-                                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                                    vibrator.vibrate(500);
-                                    Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                public void done(String s, BmobException e) {
+                                    if (e == null) {
+                                        finish();
+                                        createAEvent(s, hours);
+                                    } else {
+                                        mBtnRelease.setClickable(true);
+//                                        Log.d("Kiuber_LOG", "done: " + e.getMessage());
+                                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                                    }
                                 }
 
-                                @Override
-                                public void onFailure(int i, String s) {
-                                    Toast.makeText(GoodActivity.this, s, Toast.LENGTH_SHORT).show();
-                                }
                             });
                         }
                     }
@@ -299,5 +318,59 @@ public class GoodActivity extends Activity implements View.OnClickListener, Adap
                 });
             }
         }).start();
+    }
+
+    private void createAEvent(String objectId, int hours) {
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+
+        if (!(webServiceIp == null)) {
+            String URL = webServiceIp + "CreateAEvent";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("ObjectId", objectId)
+                    .add("AfterHouer", String.valueOf(hours))
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(URL)
+                    .post(body)
+                    .build();
+
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "fail: " + e.getMessage());
+                            Toast.makeText(GoodActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.equals("success")) {
+                                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                                vibrator.vibrate(500);
+                                Toast.makeText(GoodActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d(TAG, "run: " + result);
+                                Toast.makeText(GoodActivity.this, result, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.isLogin();
+            Toast.makeText(this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
+        }
     }
 }

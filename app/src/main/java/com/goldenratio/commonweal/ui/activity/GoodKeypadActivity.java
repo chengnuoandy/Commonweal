@@ -25,7 +25,7 @@ import java.math.BigDecimal;
  * Created by lvxue on 2016/6/20 0020.
  * 自定义键盘相关
  */
-public class GoodKeypadActivity extends Activity implements View.OnFocusChangeListener, View.OnClickListener {
+public class GoodKeypadActivity extends BaseActivity implements View.OnFocusChangeListener, View.OnClickListener {
     private static final String TAG = "lxc";
     private static final int MAX_MARK = 100;
     private static final int MIN_MARK = 0;
@@ -107,9 +107,17 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                 /**
                  * 限制捐款输入范围 0 - 100
                  */
-
                 if (s != null && !s.toString().equals("")) {
                     float temp1;
+                    if (s.length() > 1){
+                        String str = String.valueOf(s.charAt(0));
+                        if(s.toString().equals("00")){
+                            mEditText2.setText("0");
+                        }else if (str.equals("0")){
+                            mEditText2.setText(s.subSequence(1,s.length()));
+                        }
+                    }
+
                     if (mEditText1.getText().toString().equals("")) {
                         temp1 = 0;
                     } else
@@ -192,8 +200,8 @@ public class GoodKeypadActivity extends Activity implements View.OnFocusChangeLi
                     Toast.makeText(GoodKeypadActivity.this, "请设置底价金额", Toast.LENGTH_SHORT).show();
                     return;
                 }else if (mEditText2.getText().toString().equals("")){
-                    Toast.makeText(GoodKeypadActivity.this, "请设置捐款比例", Toast.LENGTH_SHORT).show();
-                    return;
+                    mEditText2.setText("0");
+                    Toast.makeText(GoodKeypadActivity.this, "捐款比例已设为默认值:0", Toast.LENGTH_SHORT).show();
                 }
                 returnData();
                 finish();

@@ -14,6 +14,9 @@ import com.bumptech.glide.Glide;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.bean.Help;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobDate;
@@ -55,7 +58,7 @@ public class HelpListViewAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(
-                    R.layout.view_help_item, parent, false);
+                    R.layout.item_help_listview, parent, false);
             viewHolder.initView(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -78,6 +81,7 @@ public class HelpListViewAdapter extends BaseAdapter {
         private ProgressBar mPbProgress;
         private int leftDay;
 
+
         public void initView(View view) {
             mTvCity = (TextView) view.findViewById(R.id.tv_city);
             mIvPic = (ImageView) view.findViewById(R.id.iv_pic);
@@ -91,14 +95,18 @@ public class HelpListViewAdapter extends BaseAdapter {
 
         private void initData(final int position) {
             mTvCity.setText(getItem(position).getHelp_SmilePro() + "" + getItem(position).getHelp_SmileCity());
-            Glide.with(mContext).load(getItem(position).getHelp_Pic()).into(mIvPic);
+            Glide.with(mContext).load(getItem(position)
+                    .getHelp_Pic())
+                    .into(mIvPic);
             mTvTitle.setText(getItem(position).getHelp_Title());
             mTvOneSentence.setText(getItem(position).getHelp_OneSentence());
             mTvCoin.setText(getItem(position).getHelp_Coin());
 
-            long endTime = BmobDate.getTimeStamp(getItem(position).getHelp_EndDate().getDate());
+            long endTime = StringToLongAll(getItem(position).getHelp_EndDate().getDate());
             long startTime = BmobDate.getTimeStamp(getItem(position).getHelp_StartDate().getDate());
-            long leftTime = (endTime - System.currentTimeMillis()) / (86400000);
+            long nowTime = System.currentTimeMillis();
+            long leftTime = (endTime - nowTime) / 86400000;
+            Log.d("Kiuber_LOG", "initData: " + endTime + "-->" + nowTime + "-->" + leftTime);
             if (leftTime > 0) {
                 mTvLeftDay.setText(leftTime + "");
             } else {
@@ -123,5 +131,18 @@ public class HelpListViewAdapter extends BaseAdapter {
             mPbProgress.setMax(allDay);
             mPbProgress.setProgress(usedDay);
         }
+    }
+
+
+    public long StringToLongAll(String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long updateTime = 0;
+        try {
+            updateTime = sdf.parse(time).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        System.out.println(updateTime);
+        return updateTime;
     }
 }

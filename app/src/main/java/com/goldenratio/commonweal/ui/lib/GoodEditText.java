@@ -1,18 +1,8 @@
 package com.goldenratio.commonweal.ui.lib;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.TypedArray;
-import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.TypedValue;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 
@@ -35,10 +25,11 @@ public class GoodEditText extends EditText {
 
 
     public void clickNum(String mStr) {
-        if (mStr == "."){
+        if (mStr.equals(".")){
             if (this.getId() == R.id.release2){
                 return;
             }
+            mStr = "0.";
         }
 
         //设置点击的数字 并移动游标

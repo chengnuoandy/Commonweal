@@ -28,7 +28,5 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:src="@drawable/delete_photo" />
-
-
     </RelativeLayout>
 </LinearLayout>

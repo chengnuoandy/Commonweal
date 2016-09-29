@@ -19,7 +19,6 @@ import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.amap.api.maps2d.overlay.PoiOverlay;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
 import com.amap.api.services.core.SuggestionCity;
@@ -32,7 +31,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class DynamicLocationActivity extends Activity implements LocationSource,
+public class DynamicLocationActivity extends BaseActivity implements LocationSource,
         AMapLocationListener, AMap.OnCameraChangeListener, PoiSearch.OnPoiSearchListener {
 
     private static final String TAG = "lxc";
@@ -70,13 +69,13 @@ public class DynamicLocationActivity extends Activity implements LocationSource,
     }
 
     private void init() {
+        deepType = "公司企业|道路附属设施|地名地址信息|公共设施|风景名胜|政府机构及社会团体";
+
         if (aMap == null) {
             aMap = mapView.getMap();
             aMap.setOnCameraChangeListener(this);
             setUpMap();
         }
-
-        deepType = "公司企业|道路附属设施|地名地址信息|公共设施|风景名胜|政府机构及社会团体";
     }
 
     //-------- 定位 Start ------
@@ -119,6 +118,9 @@ public class DynamicLocationActivity extends Activity implements LocationSource,
 
     }
 
+    /**
+     * 位置改变 重新设置坐标 然后进行调用poi搜素
+     */
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
@@ -219,6 +221,10 @@ public class DynamicLocationActivity extends Activity implements LocationSource,
         super.onDestroy();
     }
 
+    /**
+     * 自定义列表监听器
+     * 点击条目后回传数据
+     */
     private class mOnItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

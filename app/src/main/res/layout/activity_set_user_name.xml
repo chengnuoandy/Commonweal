@@ -1,35 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="horizontal">
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:padding="@dimen/normal_space">
 
         <ImageView
             android:id="@+id/iv_set_name_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_selector" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back"/>
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_set_name_back"
+            android:background="@color/ordinary" />
 
 
         <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/ordinary" />
+
+
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="编辑用户名"
             android:textColor="@color/black"
-            android:textSize="@dimen/title_text_size"/>
-
+            android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/assist" />
 
     <EditText
         android:id="@+id/et_set_username"
@@ -37,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/normal_space"
         android:lines="1"
-        android:padding="@dimen/normal_space"/>
+        android:padding="@dimen/normal_space" />
 
     <TextView
         android:layout_width="match_parent"
@@ -45,7 +69,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="注意：用户名由3-15个字符组成，并且只能设置一次，可以用作登陆账户使用，用户名中不包含中文，不能只含数字"
-        android:textColor="@color/colorPrimary"/>
+        android:textColor="@color/colorPrimary" />
 
     <Button
         android:id="@+id/btn_save_username"
@@ -55,7 +79,5 @@
         android:background="@drawable/setting_btn_selector"
         android:enabled="false"
         android:text="保存"
-        android:textSize="@dimen/title_text_size"/>
-
-
+        android:textSize="@dimen/title_text_size" />
 </LinearLayout>

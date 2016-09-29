@@ -1,10 +1,9 @@
 package com.goldenratio.commonweal.ui.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,11 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyGoodPicAdapter;
 import com.goldenratio.commonweal.bean.Dynamic;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
 import com.goldenratio.commonweal.util.GlideLoader;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.yancy.imageselector.ImageConfig;
 import com.yancy.imageselector.ImageSelector;
 import com.yancy.imageselector.ImageSelectorActivity;
@@ -32,10 +35,13 @@ import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 
-public class DynamicReleaseActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class DynamicReleaseActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+
+    private static final String TAG = "lxc";
 
     private ImageView mIvBack;
     private LinearLayout mLlAddPhoto;
@@ -46,6 +52,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
     private GridView mGvShowPhoto;
     private MyGoodPicAdapter mPicAdapter;
     private ImageConfig mImageConfig;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
         setContentView(R.layout.activity_dynamic_release);
 
         initView();
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     private void initView() {
@@ -86,9 +94,18 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 startActivityForResult(intent, 1);
                 break;
             case R.id.btn_release:
+                SendM();
                 UploadData();
+                SetFlag();
                 break;
         }
+    }
+
+    /**
+     * 设置返回刷新标志
+     */
+    private void SetFlag() {
+        ((MyApplication) getApplication()).setDynamicRefresh(true);
     }
 
     /**
@@ -96,6 +113,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
      */
     private void UploadData() {
         if (TextUtils.isEmpty(mEtText.getText().toString())) {
+            Completed();
             Toast.makeText(DynamicReleaseActivity.this, "请填写内容后再提交！", Toast.LENGTH_SHORT).show();
         } else {
             Dynamic dy = new Dynamic();
@@ -108,12 +126,16 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 dy.setDynamics_location(mTvLocation.getText().toString());
             }
             getUserData(dy);
-
-            final String[] filePaths = new String[pathList.size()];
-            for (int i = 0; i < pathList.size(); i++) {
-                filePaths[i] = pathList.get(i).toString();
+            if (pathList != null) {
+                final String[] filePaths = new String[pathList.size()];
+                for (int i = 0; i < pathList.size(); i++) {
+                    filePaths[i] = pathList.get(i);
+                }
+                save2Bmob(filePaths, dy);
+            } else {
+                SaveData(dy);
             }
-            save2Bmob(filePaths,dy);
+
         }
     }
 
@@ -121,23 +143,13 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
         new Thread(new Runnable() {
             @Override
             public void run() {
-                BmobFile.uploadBatch(DynamicReleaseActivity.this, filePaths, new UploadBatchListener() {
+                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
                     @Override
                     public void onSuccess(List<BmobFile> list, List<String> list1) {
-                        if (filePaths.length == list1.size()){
+                        if (filePaths.length == list1.size()) {
                             dy.setDynamics_pic(list1);
-                            dy.save(DynamicReleaseActivity.this, new SaveListener() {
-                                @Override
-                                public void onSuccess() {
-                                    Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-
-                                @Override
-                                public void onFailure(int i, String s) {
-
-                                }
-                            });
+                            Log.d("lxc", "onSuccess: " + list1);
+                            SaveData(dy);
                         }
                     }
 
@@ -156,17 +168,40 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
     }
 
     /**
+     * 上传文本数据
+     *
+     * @param dy 数据实体
+     */
+    private void SaveData(Dynamic dy) {
+        dy.save(new SaveListener<String>() {
+            @Override
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(DynamicReleaseActivity.this, "发布成功！", Toast.LENGTH_SHORT).show();
+                    Completed();
+                    finish();
+                } else {
+                    //保存失败
+//                    Log.d(TAG, "done: ex==" + s);
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
+            }
+        });
+    }
+
+    /**
      * 获取用户数据
      *
      * @param dy 保存的实体
      */
     private void getUserData(Dynamic dy) {
-        String sqlCmd = "SELECT * FROM User ";
+        String sqlCmd = "SELECT * FROM User_Profile ";
         UserDao ud = new UserDao(this);
         Cursor cursor = ud.query(sqlCmd);
         if (cursor.moveToFirst()) {
-            dy.setDynamics_uid(cursor.getString(cursor.getColumnIndex("objectId")));
-            dy.setDynamics_name(cursor.getString(cursor.getColumnIndex("User_Nickname")));
+            User_Profile user = new User_Profile();
+            user.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            dy.setDynamics_user(user);
         }
         cursor.close();
     }
@@ -183,7 +218,7 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
                 // 开启多选   （默认为多选）
                 .mutiSelect()
                 // 多选时的最大数量   （默认 9 张）
-                .mutiSelectMaxSize(8)
+                .mutiSelectMaxSize(9)
                 // 开启拍照功能 （默认关闭）
                 .showCamera()
                 // 已选择的图片路径
@@ -215,5 +250,26 @@ public class DynamicReleaseActivity extends Activity implements View.OnClickList
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    /**
+     * 进度条相关--显示进度条
+     */
+    private void SendM() {
+        pd = new ProgressDialog(this);
+        pd.setTitle("发送中...");
+        pd.setCancelable(false);
+        pd.show();
+    }
+
+    /**
+     * 进度条相关--取消进度条显示
+     */
+    private void Completed() {
+        if (pd != null && pd.isShowing()) {
+            //关闭对话框
+            pd.dismiss();
+            pd = null;
+        }
     }
 }

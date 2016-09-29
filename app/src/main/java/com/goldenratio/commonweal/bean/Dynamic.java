@@ -1,5 +1,6 @@
 package com.goldenratio.commonweal.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import cn.bmob.v3.BmobObject;
@@ -8,21 +9,29 @@ import cn.bmob.v3.BmobObject;
  * Created by 冰封承諾Andy on 2016/8/6 0006.
  * 动态页面的信息
  */
-public class Dynamic extends BmobObject{
+public class Dynamic extends BmobObject implements Serializable{
     private String Dynamics_title;
     private List Dynamics_pic;
     private String Dynamics_location;
     private String Dynamics_time;
-    private String Dynamics_name;
-    private String Dynamics_uid;
+    private User_Profile Dynamics_user;
+    private Integer Dynamic_Praise;
 
 
-    public String getDynamics_name() {
-        return Dynamics_name;
+    public Integer getDynamic_Praise() {
+        return Dynamic_Praise;
     }
 
-    public void setDynamics_name(String dynamics_name) {
-        Dynamics_name = dynamics_name;
+    public void setDynamic_Praise(Integer dynamic_Praise) {
+        Dynamic_Praise = dynamic_Praise;
+    }
+
+    public User_Profile getDynamics_user() {
+        return Dynamics_user;
+    }
+
+    public void setDynamics_user(User_Profile dynamics_user) {
+        Dynamics_user = dynamics_user;
     }
 
     public String getDynamics_time() {
@@ -31,14 +40,6 @@ public class Dynamic extends BmobObject{
 
     public void setDynamics_time(String dynamics_time) {
         Dynamics_time = dynamics_time;
-    }
-
-    public String getDynamics_uid() {
-        return Dynamics_uid;
-    }
-
-    public void setDynamics_uid(String dynamics_uid) {
-        Dynamics_uid = dynamics_uid;
     }
 
     public String getDynamics_location() {

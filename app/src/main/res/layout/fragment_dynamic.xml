@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="@dimen/normal_space">
 
@@ -19,12 +20,6 @@
             android:text="动态"
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
-        <ImageView
-            android:id="@+id/iv_add_dynamic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/fragment_good_add" />
     </RelativeLayout>
 
     <View
@@ -59,7 +54,7 @@
             android:gravity="center"
             android:padding="@dimen/little_space"
             android:text="项目"
-            android:textColor="@color/ordinary"
+            android:textColor="@color/ordinary_s"
             android:textSize="15sp" />
 
 
@@ -71,7 +66,7 @@
             android:gravity="center"
             android:padding="@dimen/little_space"
             android:text="个人"
-            android:textColor="@color/ordinary"
+            android:textColor="@color/ordinary_s"
             android:textSize="15sp" />
     </LinearLayout>
 

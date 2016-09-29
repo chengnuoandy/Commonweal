@@ -79,11 +79,11 @@ public class EditPage extends OnekeySharePage implements OnClickListener, TextWa
 		super.setActivity(activity);
 		if (isDialogMode()) {
 			System.err.println("Theme classic does not support dialog mode!");
-//			activity.setTheme(android.R.style.Theme_Dialog);
-//			activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//			activity_good_auction.setTheme(android.R.style.Theme_Dialog);
+//			activity_good_auction.requestWindowFeature(Window.FEATURE_NO_TITLE);
 //			if (Build.VERSION.SDK_INT >= 11) {
 //				try {
-//					ReflectHelper.invokeInstanceMethod(activity, "setFinishOnTouchOutside", false);
+//					ReflectHelper.invokeInstanceMethod(activity_good_auction, "setFinishOnTouchOutside", false);
 //				} catch (Throwable e) {}
 //			}
 		}

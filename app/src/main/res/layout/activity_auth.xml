@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:padding="@dimen/normal_space">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back_selector" />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/normal_space"
+                android:layout_toRightOf="@+id/iv_back"
+                android:background="@color/ordinary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="名人认证"
+                android:textColor="@color/black"
+                android:textSize="@dimen/title_text_size" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/assist" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="174.66998dip"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="52.669983dip">
+
+            <ImageView
+                android:id="@+id/before_verify_image"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:src="@drawable/before" />
+
+            <RelativeLayout
+                android:id="@+id/arrow_zone"
+                android:layout_width="40.0dip"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@id/before_verify_image">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/me_identification_arrow" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/after_verify_image"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_toRightOf="@id/arrow_zone"
+                android:src="@drawable/after" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/weibo_verify_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_zone"
+            android:layout_marginLeft="50.0dip"
+            android:layout_marginRight="50.0dip"
+            android:layout_marginTop="26.669983dip"
+            android:gravity="center"
+            android:text="微博认证后将共享您的微博认证信息并获得平台专属图标"
+            android:textColor="#ffff8a01"
+            android:textSize="14.0sp" />
+
+        <TextView
+            android:id="@+id/goto_verify_button"
+            android:layout_width="300.0dip"
+            android:layout_height="43.329987dip"
+            android:layout_below="@id/weibo_verify_desc"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="130.0dip"
+            android:background="@drawable/default_fill"
+            android:gravity="center"
+            android:text="去认证"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/weibo_verify_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/goto_verify_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15.0dip"
+            android:text="注: 该功能仅提供给微博已通过v认证用户"
+            android:textColor="@color/color_black_trans_40"
+            android:textSize="12.0sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/normal_space">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/normal_space">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_no_v"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/iv_unregister_head" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:src="@drawable/me_identification_arrow" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/normal_space">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/civ_v"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/iv_unregister_head" />
+
+                    <ImageView
+                        android:id="@+id/iv_v"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/civ_v"
+                        android:layout_alignRight="@+id/civ_v"
+                        android:src="@mipmap/v_yellow" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="微博" />
+    </LinearLayout>
+</LinearLayout>

@@ -2,23 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorContext"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/snow"
-        android:orientation="horizontal">
+        android:background="@color/white"
+        android:padding="@dimen/normal_space">
 
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/normal_space"
-            android:src="@mipmap/ic_back" />
+            android:src="@drawable/ic_back_selector" />
 
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/normal_space"
+            android:layout_toRightOf="@+id/iv_back"
+            android:background="@color/ordinary" />
 
         <TextView
             android:id="@+id/tv_registerTitle"
@@ -29,6 +34,11 @@
             android:textColor="@color/black"
             android:textSize="@dimen/title_text_size" />
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/assist" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,6 +83,7 @@
     </LinearLayout>
 
     <EditText
+
         android:id="@+id/et_phone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/normal_input_height"

@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.adapter.MyFragmentPagerAdapter;
-import com.goldenratio.commonweal.ui.activity.DynamicReleaseActivity;
 import com.goldenratio.commonweal.ui.fragment.dynamic.HelpDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.OfficialDynamicFragment;
 import com.goldenratio.commonweal.ui.fragment.dynamic.PersonalDynamicFragment;
@@ -44,8 +42,6 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
     ImageView mTabLineIv;
     @BindView(R.id.id_switch_tab_ll)
     LinearLayout mSwitchTabLl;
-    @BindView(R.id.iv_add_dynamic)
-    ImageView mIvAddDynamic;
 
     private List<Fragment> mFragmentList;
 
@@ -74,10 +70,11 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         initTabLineWidth();
         mVpDynamic.setAdapter(new MyFragmentPagerAdapter(getFragmentManager(), mFragmentList));
         mVpDynamic.addOnPageChangeListener(this);
+        mVpDynamic.setOffscreenPageLimit(3);
         return view;
     }
 
-    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal,R.id.iv_add_dynamic})
+    @OnClick({R.id.tv_official, R.id.tv_Help, R.id.tv_personal})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_official:
@@ -88,10 +85,6 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
                 break;
             case R.id.tv_personal:
                 mVpDynamic.setCurrentItem(2);
-                break;
-            case R.id.iv_add_dynamic:
-                Intent intent = new Intent(getContext(), DynamicReleaseActivity.class);
-                startActivity(intent);
                 break;
         }
     }
@@ -168,13 +161,13 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         if (state == ViewPager.SCROLL_STATE_SETTLING) {
             switch (mVpDynamic.getCurrentItem()) {
                 case 0:
-                    changeTitleColor(R.color.colorPrimary, R.color.ordinary, R.color.ordinary);
+                    changeTitleColor(R.color.colorPrimary, R.color.ordinary_s, R.color.ordinary_s);
                     break;
                 case 1:
-                    changeTitleColor(R.color.ordinary, R.color.colorPrimary, R.color.ordinary);
+                    changeTitleColor(R.color.ordinary_s, R.color.colorPrimary, R.color.ordinary_s);
                     break;
                 case 2:
-                    changeTitleColor(R.color.ordinary, R.color.ordinary, R.color.colorPrimary);
+                    changeTitleColor(R.color.ordinary_s, R.color.ordinary_s, R.color.colorPrimary);
                     break;
 
             }
@@ -205,10 +198,5 @@ public class DynamicFragment extends Fragment implements ViewPager.OnPageChangeL
         mTvOfficial.setTextColor(getResources().getColor(color1));
         mTvDynamic.setTextColor(getResources().getColor(color2));
         mTvPersonal.setTextColor(getResources().getColor(color3));
-    }
-
-
-    @OnClick(R.id.iv_add_dynamic)
-    public void onClick() {
     }
 }

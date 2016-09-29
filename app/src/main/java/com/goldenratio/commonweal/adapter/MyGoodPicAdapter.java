@@ -59,7 +59,6 @@ public class MyGoodPicAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
         Glide.with(mContext)
                 .load(getItem(position).toString())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

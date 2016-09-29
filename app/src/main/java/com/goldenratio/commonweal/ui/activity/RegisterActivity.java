@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,14 +22,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
-import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -39,13 +43,21 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.listener.FindCallback;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by 龙啸天 on 2016/6/20 0020.
@@ -53,7 +65,7 @@ import cn.smssdk.SMSSDK;
  * 承担注册与找回密码的功能
  */
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.et_phone)
     EditText mEtPhone;
@@ -97,8 +109,10 @@ public class RegisterActivity extends Activity {
     private EditText mEtUserNickname;
     private String mObjectId;
     private boolean isClickRegisterBtn = false;
+    private boolean isResetPayPwd = false;
 
     ListView mListView;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +133,11 @@ public class RegisterActivity extends Activity {
         addTextChangeEvent(mEtPhone);
         addTextChangeEvent(mEtCode);
 
+        if (isResetPayPwd) {
+            mEtPhone.setText(phone);
+            mEtPhone.setFocusable(false);
+        }
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     /**
@@ -128,8 +147,12 @@ public class RegisterActivity extends Activity {
     private void isClickRegister() {
         Intent intent = getIntent();
         int code = intent.getIntExtra("type", 1);
-        if (code == 0)
+        if (code == 0) {
             isClickRegisterBtn = true;
+        } else if (code == 3) {
+            isResetPayPwd = true;
+            phone = intent.getStringExtra("phone");
+        }
     }
 
     @Override
@@ -283,6 +306,13 @@ public class RegisterActivity extends Activity {
                     changeStepTextColor(R.color.ordinary, R.color.colorPrimary, R.color.ordinary);
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     Toast.makeText(getApplicationContext(), "提交验证码成功", Toast.LENGTH_SHORT).show();
+                    //如果是来自重置支付密码的回调
+                    if (isResetPayPwd) {
+                        Intent intent = new Intent();
+                        intent.putExtra("type", 1);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                     closeProgressDialog();
                     showWhichStep(View.GONE, View.GONE, View.VISIBLE);
                     changeStepTextColor(R.color.ordinary, R.color.ordinary, R.color.colorPrimary);
@@ -409,8 +439,6 @@ public class RegisterActivity extends Activity {
         AlertDialog.Builder builder = null;
 
         builder = new AlertDialog.Builder(this);
-        builder.setTitle("昵称");
-
         /**
          * 设置内容区域为自定义View
          */
@@ -456,7 +484,7 @@ public class RegisterActivity extends Activity {
         if (TextUtils.isEmpty(mUserNickname)) {
             mUserNickname = "Love" + getRndUserName(6);
         }
-        U_NormalP u = new U_NormalP();
+        User_Profile u = new User_Profile();
         u.setUser_Phone(mPhone);
         u.setUser_Nickname(mUserNickname);
         u.setUser_Password(mD5Pwd);
@@ -464,20 +492,21 @@ public class RegisterActivity extends Activity {
         u.setUser_image_max(maxUrl);
         u.setUser_image_min(minUrl);
         u.setUser_Autograph(aut);
-        u.save(this, new SaveListener() {
+        u.setUser_DeviceInfo(BmobInstallation.getCurrentInstallation().getInstallationId());
+        u.setUser_Receive_Address(Arrays.asList("0"));
+        u.save(new SaveListener<String>() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
-                returnUInfoToMyFra();
+            public void done(String s, BmobException e) {
+                if (e == null) {
+                    saveUser2Mysql(s);
+                } else {
+                    mBtnRegister.setClickable(true);
+                    closeProgressDialog();
+//                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
             }
 
-            @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-                closeProgressDialog();
-                mBtnRegister.setClickable(true);
-            }
         });
     }
 
@@ -485,64 +514,92 @@ public class RegisterActivity extends Activity {
     private void updateUserPwdToDb() {
         //md5加密
         String mD5Pwd = MD5Util.createMD5(mEtPassword.getText().toString());
-        U_NormalP u = new U_NormalP();
+        User_Profile u = new User_Profile();
         u.setUser_Password(mD5Pwd);
         closeProgressDialog();
-        u.update(RegisterActivity.this, mObjectId, new UpdateListener() {
+        u.update(mObjectId, new UpdateListener() {
             @Override
-            public void onSuccess() {
-                Toast.makeText(RegisterActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
-                returnUInfoToMyFra();
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                Toast.makeText(RegisterActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
+            public void done(BmobException e) {
+                if (e == null) {
+                    Toast.makeText(RegisterActivity.this, "密码修改成功", Toast.LENGTH_SHORT).show();
+                    returnUInfoToMyFra();
+                } else {
+//                    Toast.makeText(RegisterActivity.this, "修改失败" + e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                }
             }
         });
     }
 
 
+  /*  private void updateDeviceInfo() {
+        BmobQuery<U_DeviceInfo> query = new BmobQuery<U_DeviceInfo>();
+        query.addWhereEqualTo("installationId", BmobInstallation.getInstallationId(this));
+        query.findObjects(new FindListener<U_DeviceInfo>() {
+                              @Override
+                              public void done(List<U_DeviceInfo> list, BmobException e) {
+                                  if (list.size() > 0) {
+                                      U_DeviceInfo mbi = list.get(0);
+                                      mbi.setUid("");
+                                      mbi.update(new UpdateListener() {
+                                          @Override
+                                          public void done(BmobException e) {
+                                              if (e == null) {
+                                                  Log.i("bmob", "设备信息更新成功");
+
+                                              } else Log.i("bmob", "设备信息更新失败:" + e.getMessage());
+                                          }
+                                      });
+
+                                  }
+                              }
+
+                          }
+
+        );
+    }*/
+
     //判断此用户是否已经注册
     private void isRegister() {
-        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<U_NormalP>();
+        BmobQuery<User_Profile> bmobQuery = new BmobQuery<User_Profile>();
         bmobQuery.addWhereEqualTo("User_Phone", mPhone);
         Log.d("queryPhone", mPhone);
-        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+        bmobQuery.findObjects(new FindListener<User_Profile>() {
             @Override
-            public void onSuccess(List<U_NormalP> list) {
-                if (list.isEmpty()) {
-                    //判断点击的是否是注册按钮
-                    if (isClickRegisterBtn) {
-                        mBtnSendCode.setClickable(false);
-                        sendVerification();
-                    } else {
-                        closeProgressDialog();
-                        Toast.makeText(RegisterActivity.this, "您好像并未注册哟", Toast.LENGTH_SHORT).show();
-                    }
+            public void done(List<User_Profile> list, BmobException e) {
+                if (e == null) {
+                    if (list.isEmpty()) {
+                        //判断点击的是否是注册按钮
+                        if (isClickRegisterBtn) {
+                            mBtnSendCode.setClickable(false);
+                            sendVerification();
+                        } else {
+                            closeProgressDialog();
+                            Toast.makeText(RegisterActivity.this, "您好像并未注册哟", Toast.LENGTH_SHORT).show();
+                        }
 
-                } else {
-                    if (isClickRegisterBtn) {
-                        closeProgressDialog();
-                        Log.d("query", "查询成功");
-                        Log.d("info", list + "");
-                        Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
                     } else {
-                        String id = list.get(0).getObjectId();
-                        Log.i("id", "onSuccess: " + list.get(0).getObjectId());
-                        mObjectId = id;
-                        mBtnSendCode.setClickable(false);
-                        sendVerification();
+                        if (isClickRegisterBtn) {
+                            closeProgressDialog();
+                            Log.d("query", "查询成功");
+                            Log.d("info", list + "");
+                            Toast.makeText(RegisterActivity.this, "此用户已经注册", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String id = list.get(0).getObjectId();
+                            Log.i("id", "onSuccess: " + list.get(0).getObjectId());
+                            mObjectId = id;
+                            mBtnSendCode.setClickable(false);
+                            sendVerification();
+                        }
                     }
+                } else {
+                    closeProgressDialog();
+//                    Log.d("query", "查询失败");
+//                    Toast.makeText(RegisterActivity.this, e.getMessage() + e.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
             }
 
-            @Override
-            public void onError(int i, String s) {
-                closeProgressDialog();
-                Log.d("query", "查询失败");
-                Toast.makeText(RegisterActivity.this, "网络不给力", Toast.LENGTH_SHORT).show();
-            }
         });
     }
 
@@ -553,31 +610,31 @@ public class RegisterActivity extends Activity {
         BmobQuery bmobQuery = new BmobQuery("User_Default");
         bmobQuery.addWhereEqualTo("User_Default_Res_ID", rndNum);
         bmobQuery.addQueryKeys("User_Def_Av_Hd_Url,User_Def_Av_Max_Url,User_Def_Av_Min_Url,User_Def_Aut");
-        bmobQuery.findObjects(this, new FindCallback() {
+        bmobQuery.findObjectsByTable(new QueryListener<JSONArray>() {
+
             @Override
-            public void onSuccess(JSONArray jsonArray) {
-                String data = jsonArray.toString();
-                try {
+            public void done(JSONArray jsonArray, BmobException e) {
+                if (e == null) {
+                    String data = jsonArray.toString();
+                    try {
 
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    String UDefAvHdUrl = jsonObject.getString("User_Def_Av_Hd_Url");
-                    String UDefAvMaxUrl = jsonObject.getString("User_Def_Av_Max_Url");
-                    String UDefAvMinUrl = jsonObject.getString("User_Def_Av_Min_Url");
-                    String UDefAut = jsonObject.getString("User_Def_Aut");
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String UDefAvHdUrl = jsonObject.getString("User_Def_Av_Hd_Url");
+                        String UDefAvMaxUrl = jsonObject.getString("User_Def_Av_Max_Url");
+                        String UDefAvMinUrl = jsonObject.getString("User_Def_Av_Min_Url");
+                        String UDefAut = jsonObject.getString("User_Def_Aut");
 
-                    Log.d("url", UDefAvHdUrl);
-                    Log.d("aut", UDefAut);
-                    addUserInfoToDB(UDefAvHdUrl, UDefAvMaxUrl, UDefAvMinUrl, UDefAut);
-                } catch (JSONException e) {
-                    Log.d("jsexc", e + "，出现异常");
+                        Log.d("url", UDefAvHdUrl);
+                        Log.d("aut", UDefAut);
+                        addUserInfoToDB(UDefAvHdUrl, UDefAvMaxUrl, UDefAvMinUrl, UDefAut);
+                    } catch (JSONException je) {
+                        Log.d("jsexc", je.getMessage() + "出现异常");
+                    }
+                    Log.d("data", data);
+                } else {
+//                    Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
-                Log.d("data", data);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                Log.d("data1", i + "");
-                Log.d("data2", s);
             }
         });
 
@@ -637,4 +694,53 @@ public class RegisterActivity extends Activity {
     }
 
 
+    private void saveUser2Mysql(String objectId) {
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String url = webServiceIp + "AddNewUser";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("Object_Id", objectId)
+                    .build();
+
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(RegisterActivity.this, e1, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.contains("success")) {
+                                Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                                closeProgressDialog();
+                                returnUInfoToMyFra();
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.isLogin();
+            Toast.makeText(this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

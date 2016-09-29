@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <ProgressBar
         android:id="@+id/pb_loading"
@@ -19,6 +19,6 @@
         android:layout_marginLeft="5dp"
         android:text="加载中..."
         android:textColor="#f00"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

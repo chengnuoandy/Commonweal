@@ -8,5 +8,4 @@
         android:id="@+id/iv_good_detail_pic_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
 </LinearLayout>

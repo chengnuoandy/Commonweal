@@ -4,33 +4,39 @@ import java.util.List;
 
 import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobFile;
 
 /**
- *
  * Created by Kiuber on 2016/6/10.
  */
 
 public class Good extends BmobObject {
-    private String Good_User_ID;
+    private User_Profile Good_User;
     private BmobDate Good_UpDate; //截至日期
     private Long Good_UpDateM; //截止日期 毫秒值
     private String Good_NO; //物品发布顺序
-    private String Good_ID; //物品ID（Good+用户ID+随机码）
     private String Good_Type; //物品类型
     private String Good_Name; //物品名称
     private String Good_Video; //物品介绍视频
     private List Good_Photos; //物品介绍照片
     private String Good_Description; //物品描述
-    private int Good_DonationRate; //物品用于捐款的比例
-    private int Good_Price; //物品的起步价
-    private int Good_NowPrice; //物品的起步价
+    private Integer Good_DonationRate; //物品用于捐款的比例
+    private String Good_NowCoin; //物品的现在价
+    private String Good_StartCoin; //物品的起步价
+    private Integer Good_Praise;
+    private User_Profile Good_NowBidUser;
+    private Long Good_Five;//五分钟之内不可出价
+    private Integer Good_Status;
+    private Boolean isFirstDeposit;
+    private Bid Good_Bid;
+    private BmobFile Good_FirstPic;
 
-    public String getGood_User_ID() {
-        return Good_User_ID;
+    public User_Profile getGood_User() {
+        return Good_User;
     }
 
-    public void setGood_User_ID(String good_User_ID) {
-        Good_User_ID = good_User_ID;
+    public void setGood_User(User_Profile good_User) {
+        Good_User = good_User;
     }
 
     public BmobDate getGood_UpDate() {
@@ -55,14 +61,6 @@ public class Good extends BmobObject {
 
     public void setGood_NO(String good_NO) {
         Good_NO = good_NO;
-    }
-
-    public String getGood_ID() {
-        return Good_ID;
-    }
-
-    public void setGood_ID(String good_ID) {
-        Good_ID = good_ID;
     }
 
     public String getGood_Type() {
@@ -105,27 +103,83 @@ public class Good extends BmobObject {
         Good_Description = good_Description;
     }
 
-    public int getGood_DonationRate() {
+    public Integer getGood_DonationRate() {
         return Good_DonationRate;
     }
 
-    public void setGood_DonationRate(int good_DonationRate) {
+    public void setGood_DonationRate(Integer good_DonationRate) {
         Good_DonationRate = good_DonationRate;
     }
 
-    public int getGood_Price() {
-        return Good_Price;
+    public String getGood_NowCoin() {
+        return Good_NowCoin;
     }
 
-    public void setGood_Price(int good_Price) {
-        Good_Price = good_Price;
+    public void setGood_NowCoin(String good_NowCoin) {
+        Good_NowCoin = good_NowCoin;
     }
 
-    public int getGood_NowPrice() {
-        return Good_NowPrice;
+    public String getGood_StartCoin() {
+        return Good_StartCoin;
     }
 
-    public void setGood_NowPrice(int good_NowPrice) {
-        Good_NowPrice = good_NowPrice;
+    public void setGood_StartCoin(String good_StartCoin) {
+        Good_StartCoin = good_StartCoin;
+    }
+
+    public Integer getGood_Praise() {
+        return Good_Praise;
+    }
+
+    public void setGood_Praise(Integer good_Praise) {
+        Good_Praise = good_Praise;
+    }
+
+    public User_Profile getGood_NowBidUser() {
+        return Good_NowBidUser;
+    }
+
+    public void setGood_NowBidUser(User_Profile good_NowBidUser) {
+        Good_NowBidUser = good_NowBidUser;
+    }
+
+    public Long getGood_Five() {
+        return Good_Five;
+    }
+
+    public void setGood_Five(Long good_Five) {
+        Good_Five = good_Five;
+    }
+
+    public Integer getGood_Status() {
+        return Good_Status;
+    }
+
+    public void setGood_Status(Integer good_Status) {
+        Good_Status = good_Status;
+    }
+
+    public Boolean getFirstDeposit() {
+        return isFirstDeposit;
+    }
+
+    public void setFirstDeposit(Boolean firstDeposit) {
+        isFirstDeposit = firstDeposit;
+    }
+
+    public Bid getGood_Bid() {
+        return Good_Bid;
+    }
+
+    public void setGood_Bid(Bid good_Bid) {
+        Good_Bid = good_Bid;
+    }
+
+    public BmobFile getGood_FirstPic() {
+        return Good_FirstPic;
+    }
+
+    public void setGood_FirstPic(BmobFile good_FirstPic) {
+        Good_FirstPic = good_FirstPic;
     }
 }

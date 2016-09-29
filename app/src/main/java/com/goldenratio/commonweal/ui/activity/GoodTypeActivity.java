@@ -1,6 +1,5 @@
 package com.goldenratio.commonweal.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,17 +8,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.goldenratio.commonweal.R;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 
 /**
  * Created by Kiuber on 2016/6/24.
  */
-public class GoodTypeActivity extends Activity {
+public class GoodTypeActivity extends BaseActivity {
 
     private ListView mLv;
     private String[] mGoodType =
 
             {
-                    "演唱会物品", "日常衣服", "", "", "", "", "", "", "", "", "", ""
+                    "演唱会物品", "日常衣服", "演出道具", "珠宝黄金", "生活家电", "运动器材", "其它", "", "", "", "", ""
             };
 
 
@@ -38,5 +38,6 @@ public class GoodTypeActivity extends Activity {
                 finish();
             }
         });
+        new ImmersiveUtil(this, R.color.white, true);
     }
 }

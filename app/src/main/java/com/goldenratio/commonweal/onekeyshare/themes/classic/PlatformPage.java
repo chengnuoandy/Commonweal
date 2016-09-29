@@ -11,18 +11,28 @@ package com.goldenratio.commonweal.onekeyshare.themes.classic;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import cn.sharesdk.framework.CustomPlatform;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.ShareSDK;
+
 import com.goldenratio.commonweal.onekeyshare.CustomerLogo;
 import com.goldenratio.commonweal.onekeyshare.OnekeySharePage;
 import com.goldenratio.commonweal.onekeyshare.OnekeyShareThemeImpl;
@@ -30,173 +40,191 @@ import com.goldenratio.commonweal.onekeyshare.OnekeyShareThemeImpl;
 import com.mob.tools.gui.MobViewPager;
 import com.mob.tools.utils.R;
 
-/** 九宫格的抽象类 */
+/**
+ * 九宫格的抽象类
+ */
 public abstract class PlatformPage extends OnekeySharePage {
-	private ClassicTheme impl;
-	/** 点击九格宫，展示编辑界面，要执行的子线程 */
-	private Runnable beforeFinish;
-	/** 九宫格显示时的动画 */
-	private Animation animShow;
-	/** 九宫格隐藏时的动画 */
-	private Animation animHide;
-	private LinearLayout llPanel;
-	private boolean finished;
+    private ClassicTheme impl;
+    /**
+     * 点击九格宫，展示编辑界面，要执行的子线程
+     */
+    private Runnable beforeFinish;
+    /**
+     * 九宫格显示时的动画
+     */
+    private Animation animShow;
+    /**
+     * 九宫格隐藏时的动画
+     */
+    private Animation animHide;
+    private LinearLayout llPanel;
+    private boolean finished;
 
-	public PlatformPage(OnekeyShareThemeImpl impl) {
-		super(impl);
-		this.impl = R.forceCast(impl);
-	}
+    public PlatformPage(OnekeyShareThemeImpl impl) {
+        super(impl);
+        this.impl = R.forceCast(impl);
+    }
 
-	public void onCreate() {
-		activity.getWindow().setBackgroundDrawable(new ColorDrawable(0x4c000000));
-		initAnims();
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void onCreate() {
+        activity.getWindow().setBackgroundDrawable(new ColorDrawable(0x4c000000));
+        initAnims();
 
-		LinearLayout llPage = new LinearLayout(activity);
-		llPage.setOrientation(LinearLayout.VERTICAL);
-		activity.setContentView(llPage);
+        LinearLayout llPage = new LinearLayout(activity);
+        llPage.setGravity(Gravity.CENTER_VERTICAL);
+        llPage.setOrientation(LinearLayout.VERTICAL);
+        activity.setContentView(llPage);
 
-		TextView vTop = new TextView(activity);
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		lp.weight = 1;
-		vTop.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				finish();
-			}
-		});
-		llPage.addView(vTop, lp);
+        TextView vTop = new TextView(activity);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.weight = 1;
+        vTop.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        llPage.addView(vTop, lp);
 
-		llPanel = new LinearLayout(activity);
-		llPanel.setOrientation(LinearLayout.VERTICAL);
-		lp = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		llPanel.setAnimation(animShow);
-		llPage.addView(llPanel, lp);
+        llPanel = new LinearLayout(activity);
+        llPanel.setOrientation(LinearLayout.VERTICAL);
+        lp = new LinearLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        llPanel.setAnimation(animShow);
+        llPage.addView(llPanel, lp);
 
-		MobViewPager mvp = new MobViewPager(activity);
-		ArrayList<Object> cells = collectCells();
-		PlatformPageAdapter adapter = newAdapter(cells);
-		lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, adapter.getPanelHeight());
-		llPanel.addView(mvp, lp);
 
-		IndicatorView vInd = new IndicatorView(activity);
-		lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, adapter.getBottomHeight());
-		llPanel.addView(vInd, lp);
+        MobViewPager mvp = new MobViewPager(activity);
+        ArrayList<Object> cells = collectCells();
+        PlatformPageAdapter adapter = newAdapter(cells);
+        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, adapter.getPanelHeight());
+        llPanel.addView(mvp, lp);
 
-		vInd.setScreenCount(adapter.getCount());
-		vInd.onScreenChange(0, 0);
-		adapter.setIndicator(vInd);
-		mvp.setAdapter(adapter);
-	}
+        IndicatorView vInd = new IndicatorView(activity);
+        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, adapter.getBottomHeight());
+        llPanel.addView(vInd, lp);
 
-	protected abstract PlatformPageAdapter newAdapter(ArrayList<Object> cells);
+        vInd.setScreenCount(adapter.getCount());
+        vInd.onScreenChange(0, 0);
+        adapter.setIndicator(vInd);
+        mvp.setAdapter(adapter);
 
-	protected ArrayList<Object> collectCells() {
-		ArrayList<Object> cells = new ArrayList<Object>();
 
-		Platform[] platforms = ShareSDK.getPlatformList();
-		if (platforms == null) {
-			platforms = new Platform[0];
-		}
-		HashMap<String, String> hides = getHiddenPlatforms();
-		if (hides == null) {
-			hides = new HashMap<String, String>();
-		}
-		for (Platform p : platforms) {
-			if (!hides.containsKey(p.getName())) {
-				cells.add(p);
-			}
-		}
+        ///////////////增加更多
+        lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 120);
+        lp.setMargins(0, 0, 0, 0);
+        LinearLayout buttonLayout2 = new LinearLayout(activity);
+        buttonLayout2.setBackgroundColor(Color.WHITE);
+    }
 
-		ArrayList<CustomerLogo> customers = getCustomerLogos();
-		if (customers != null && customers.size() > 0) {
-			cells.addAll(customers);
-		}
+    protected abstract PlatformPageAdapter newAdapter(ArrayList<Object> cells);
 
-		return cells;
-	}
+    protected ArrayList<Object> collectCells() {
+        ArrayList<Object> cells = new ArrayList<Object>();
 
-	public final void showEditPage(final Platform platform) {
-		beforeFinish = new Runnable() {
-			public void run() {
-				boolean isSilent = isSilent();
-				boolean isCustomPlatform = platform instanceof CustomPlatform;
-				boolean isUseClientToShare = isUseClientToShare(platform);
-				if (isSilent || isCustomPlatform || isUseClientToShare) {
-					shareSilently(platform);
-				} else {
-					ShareParams sp = formateShareData(platform);
-					if (sp != null) {
-						// 编辑分享内容的统计
-						ShareSDK.logDemoEvent(3, null);
-						if (getCustomizeCallback() != null) {
-							getCustomizeCallback().onShare(platform, sp);
-						}
-						impl.showEditPage(activity, platform, sp);
-					}
-				}
-			}
-		};
-		finish();
-	}
+        Platform[] platforms = ShareSDK.getPlatformList();
+        if (platforms == null) {
+            platforms = new Platform[0];
+        }
+        HashMap<String, String> hides = getHiddenPlatforms();
+        if (hides == null) {
+            hides = new HashMap<String, String>();
+        }
+        for (Platform p : platforms) {
+            if (!hides.containsKey(p.getName())) {
+                cells.add(p);
+            }
+        }
 
-	public final void performCustomLogoClick(final View v, final CustomerLogo logo) {
-		beforeFinish = new Runnable() {
-			public void run() {
-				logo.listener.onClick(v);
-			}
-		};
-		finish();
-	}
+        ArrayList<CustomerLogo> customers = getCustomerLogos();
+        if (customers != null && customers.size() > 0) {
+            cells.addAll(customers);
+        }
 
-	private void initAnims() {
-		animShow = new TranslateAnimation(
-				Animation.RELATIVE_TO_SELF, 0,
-				Animation.RELATIVE_TO_SELF, 0,
-				Animation.RELATIVE_TO_SELF, 1,
-				Animation.RELATIVE_TO_SELF, 0);
-		animShow.setDuration(300);
+        return cells;
+    }
 
-		animHide = new TranslateAnimation(
-				Animation.RELATIVE_TO_SELF, 0,
-				Animation.RELATIVE_TO_SELF, 0,
-				Animation.RELATIVE_TO_SELF, 0,
-				Animation.RELATIVE_TO_SELF, 1);
-		animHide.setDuration(300);
-	}
+    public final void showEditPage(final Platform platform) {
+        beforeFinish = new Runnable() {
+            public void run() {
+                boolean isSilent = isSilent();
+                boolean isCustomPlatform = platform instanceof CustomPlatform;
+                boolean isUseClientToShare = isUseClientToShare(platform);
+                if (isSilent || isCustomPlatform || isUseClientToShare) {
+                    shareSilently(platform);
+                } else {
+                    ShareParams sp = formateShareData(platform);
+                    if (sp != null) {
+                        // 编辑分享内容的统计
+                        ShareSDK.logDemoEvent(3, null);
+                        if (getCustomizeCallback() != null) {
+                            getCustomizeCallback().onShare(platform, sp);
+                        }
+                        impl.showEditPage(activity, platform, sp);
+                    }
+                }
+            }
+        };
+        finish();
+    }
 
-	public boolean onFinish() {
-		if (finished) {
-			finished = false;
-			return false;
-		}
+    public final void performCustomLogoClick(final View v, final CustomerLogo logo) {
+        beforeFinish = new Runnable() {
+            public void run() {
+                logo.listener.onClick(v);
+            }
+        };
+        finish();
+    }
 
-		animHide.setAnimationListener(new Animation.AnimationListener() {
-			public void onAnimationStart(Animation animation) {
+    private void initAnims() {
+        animShow = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 1,
+                Animation.RELATIVE_TO_SELF, 0);
+        animShow.setDuration(300);
 
-			}
+        animHide = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 1);
+        animHide.setDuration(300);
+    }
 
-			public void onAnimationRepeat(Animation animation) {
+    public boolean onFinish() {
+        if (finished) {
+            finished = false;
+            return false;
+        }
 
-			}
+        animHide.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
 
-			public void onAnimationEnd(Animation animation) {
-				if (beforeFinish == null) {
-					// 取消分享菜单的统计
-					ShareSDK.logDemoEvent(2, null);
-				} else {
-					beforeFinish.run();
-					beforeFinish = null;
-				}
+            }
 
-				finished = true;
-				finish();
-			}
-		});
-		llPanel.clearAnimation();
-		llPanel.setAnimation(animHide);
-		llPanel.setVisibility(View.GONE);
-		return true;
-	}
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                if (beforeFinish == null) {
+                    // 取消分享菜单的统计
+                    ShareSDK.logDemoEvent(2, null);
+                } else {
+                    beforeFinish.run();
+                    beforeFinish = null;
+                }
+
+                finished = true;
+                finish();
+            }
+        });
+        llPanel.clearAnimation();
+        llPanel.setAnimation(animHide);
+        llPanel.setVisibility(View.GONE);
+        return true;
+    }
 
 }

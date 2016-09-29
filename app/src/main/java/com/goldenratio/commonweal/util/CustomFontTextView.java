@@ -26,7 +26,7 @@ public class CustomFontTextView extends TextView {
 
     private void init(Context context) {
         AssetManager assetManager = context.getAssets();
-        Typeface typeface = Typeface.createFromAsset(assetManager, "fonts/BOD_BI.TTF");
+        Typeface typeface = Typeface.createFromAsset(assetManager, "fonts/webfont.ttf");
         setTypeface(typeface);
     }
 }

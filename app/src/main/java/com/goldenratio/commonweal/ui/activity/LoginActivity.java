@@ -17,13 +17,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.goldenratio.commonweal.MyApplication;
 import com.goldenratio.commonweal.R;
 import com.goldenratio.commonweal.api.Constants;
 import com.goldenratio.commonweal.api.ErrorInfo;
 import com.goldenratio.commonweal.api.User;
 import com.goldenratio.commonweal.api.UsersAPI;
-import com.goldenratio.commonweal.bean.U_NormalP;
+import com.goldenratio.commonweal.bean.User_Profile;
 import com.goldenratio.commonweal.dao.UserDao;
+import com.goldenratio.commonweal.util.ErrorCodeUtil;
+import com.goldenratio.commonweal.util.ImmersiveUtil;
 import com.goldenratio.commonweal.util.MD5Util;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -32,22 +35,31 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import cn.bmob.v3.BmobInstallation;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by lvxue on 2016/6/7 0007.
  * 登陆的相关功能
  */
-public class LoginActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "lxc";
     @BindView(R.id.login_phone)
@@ -59,10 +71,10 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     @BindView(R.id.login_btn)
     Button mLoginBtn;
     @BindView(R.id.ib_sina)
-    ImageButton mIbSina;
+    ImageView mIbSina;
     @BindView(R.id.tv_sina)
     TextView mTvSina;
-    @BindView(R.id.iv_return)
+    @BindView(R.id.iv_back)
     ImageView mReturn;
     @BindView(R.id.forgetPWD)
     TextView mForgetPWD;
@@ -113,6 +125,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         mForgetPWD.setOnClickListener(this);
         mLoginPassword.setOnFocusChangeListener(this);
         mLoginPhone.setOnFocusChangeListener(this);
+        new ImmersiveUtil(this, R.color.white, true);
     }
 
     @Override
@@ -147,7 +160,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
                 Intent intentFp = new Intent(this, RegisterActivity.class);
                 startActivityForResult(intentFp, 2);
                 break;
-            case R.id.iv_return:
+            case R.id.iv_back:
                 finish();
                 break;
             default:
@@ -198,74 +211,75 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     private void isLogin(String Phone, final String Password, Boolean flag) {
         if (flag) {
             Loing();
-            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+            BmobQuery<User_Profile> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Phone", Phone);
             //执行查询方法
-            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+            bmobQuery.findObjects(new FindListener<User_Profile>() {
                 @Override
-                public void onSuccess(List<U_NormalP> object) {
-                    //判断查询到的行数
-                    if (object.size() == 1) {
-                        U_NormalP mUser = object.get(0);
-                        if (Password.equals(mUser.getUser_Password())) {
-                            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                            //获得数据的objectId信息
-                            userID = mUser.getObjectId();
+                public void done(List<User_Profile> list, BmobException e) {
+                    if (e == null) {
+                        //判断查询到的行数
+                        if (list.size() == 1) {
+                            User_Profile mUser = list.get(0);
+                            if (Password.equals(mUser.getUser_Password())) {
+                                Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                                //获得数据的objectId信息
+                                userID = mUser.getObjectId();
 
-                            returnData();
-                            saveDB(mUser);
+                                returnData();
+                                saveDB(mUser);
+                            } else {
+                                Completed();
+                                Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Completed();
-                            Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        //查询失败
                         Completed();
-                        Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     }
-                }
-
-                @Override
-                public void onError(int code, String msg) {
-                    Completed();
-                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
             Loing();
-            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+            BmobQuery<User_Profile> bmobQuery = new BmobQuery<>();
             bmobQuery.addWhereEqualTo("User_Name", Phone);
             //执行查询方法
-            bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+            bmobQuery.findObjects(new FindListener<User_Profile>() {
                 @Override
-                public void onSuccess(List<U_NormalP> object) {
-                    //判断查询到的行数
-                    if (object.size() == 1) {
-                        U_NormalP mUser = object.get(0);
-                        if (Password.equals(mUser.getUser_Password())) {
-                            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                            //获得数据的objectId信息
-                            userID = mUser.getObjectId();
+                public void done(List<User_Profile> list, BmobException e) {
+                    if (e == null) {
+                        //判断查询到的行数
+                        if (list.size() == 1) {
+                            User_Profile mUser = list.get(0);
+                            if (Password.equals(mUser.getUser_Password())) {
+                                Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                                //获得数据的objectId信息
+                                userID = mUser.getObjectId();
 
-                            returnData();
-                            saveDB(mUser);
+                                returnData();
+                                saveDB(mUser);
+                            } else {
+                                Completed();
+                                Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Completed();
-                            Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        //查询失败
                         Completed();
-                        Toast.makeText(LoginActivity.this, "账户未注册", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                     }
-                }
-
-                @Override
-                public void onError(int code, String msg) {
-                    Completed();
-                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
                 }
             });
         }
-
     }
 
     /**
@@ -274,31 +288,32 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      * @param id 微博授权的ID
      */
     private void isLogin(String id) {
-        BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
+        BmobQuery<User_Profile> bmobQuery = new BmobQuery<>();
         bmobQuery.addWhereEqualTo("User_WbID", id);
         //执行查询方法
-        bmobQuery.findObjects(this, new FindListener<U_NormalP>() {
+        bmobQuery.findObjects(new FindListener<User_Profile>() {
             @Override
-            public void onSuccess(List<U_NormalP> object) {
-                //判断查询到的行数
-                if (object.size() == 1) {
-                    //如果此用户已存在，获得数据的objectId信息
-                    com.goldenratio.commonweal.bean.U_NormalP mUser = object.get(0);
-                    userID = mUser.getObjectId();
-                    returnData();
-                    saveDB(mUser);
-                } else if (object.size() == 0) {
-                    if (upUser != null) {
-                        //异步上传数据
-                        new myAsyncTask(upUser).execute(upUser.profile_image_url);
+            public void done(List<User_Profile> list, BmobException e) {
+                if (e == null) {
+                    //判断查询到的行数
+                    if (list.size() == 1) {
+                        //如果此用户已存在，获得数据的objectId信息
+                        User_Profile mUser = list.get(0);
+                        userID = mUser.getObjectId();
+                        returnData();
+                        saveDB(mUser);
+                    } else if (list.size() == 0) {
+                        if (upUser != null) {
+                            //异步上传数据
+                            new myAsyncTask(upUser).execute(upUser.profile_image_url);
+                        }
                     }
+                } else {
+                    //查询失败
+                    Completed();
+//                    Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
+                    ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
                 }
-            }
-
-            @Override
-            public void onError(int code, String msg) {
-                Completed();
-                Toast.makeText(LoginActivity.this, "数据不存在", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -358,7 +373,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
     }
 
     /**
-     * activity 的回调页
+     * activity_good_auction 的回调页
      *
      * @param requestCode 请求码
      * @param resultCode  结果码
@@ -401,7 +416,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         public void onComplete(String response) {
             if (!TextUtils.isEmpty(response)) {
-                // 调用 U_NormalP#parse 将JSON串解析成User对象
+                // 调用 User_Profile#parse 将JSON串解析成User对象
                 upUser = User.parse(response);
                 if (upUser != null) {
                     //是否已经注册
@@ -453,7 +468,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
      */
     class myAsyncTask extends AsyncTask<String, Void, Void> {
 
-        private U_NormalP user = new U_NormalP();
+        private User_Profile user = new User_Profile();
         private User wbuser;
 
         public myAsyncTask(User wbuser) {
@@ -472,7 +487,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         protected Void doInBackground(String... params) {
             //提交数据
             user.setUser_Nickname(wbuser.screen_name);
-            user.setUser_IsRealName(wbuser.verified);
+            user.setUser_IsV(wbuser.verified);
             if ("m".equals(wbuser.gender)) {
                 user.setUser_Sex("男");
             } else if ("f".equals(wbuser.gender)) {
@@ -480,21 +495,28 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
             } else {
                 user.setUser_Sex("未知");
             }
+            user.setUser_Name(wbuser.screen_name);
             user.setUser_WbID(wbuser.id);
             user.setUser_image_max(wbuser.avatar_large);
             user.setUser_image_min(wbuser.profile_image_url);
+            user.setUser_DeviceInfo(BmobInstallation.getCurrentInstallation().getInstallationId());
             user.setUser_image_hd(wbuser.avatar_hd);
-            user.setVerified_reason(wbuser.verified_reason); //认证原因
+            user.setUser_VerifiedReason(wbuser.verified_reason); //认证原因
             user.setUser_Autograph(wbuser.description);
-            user.save(LoginActivity.this, new SaveListener() {
+            user.setUser_Receive_Address(Arrays.asList("0"));
+            user.save(new SaveListener<String>() {
                 @Override
-                public void onSuccess() {
-                    Toast.makeText(LoginActivity.this, "成功提交数据", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(int i, String s) {
-                    Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        if (TextUtils.isEmpty(s)) {
+                            Toast.makeText(LoginActivity.this, "提交数据失败", Toast.LENGTH_SHORT).show();
+                        } else {
+                            saveUser2Mysql(s, user);
+                        }
+                    } else {
+//                        Toast.makeText(LoginActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                        ErrorCodeUtil.switchErrorCode(getApplicationContext(), e.getErrorCode() + "");
+                    }
                 }
             });
 
@@ -504,42 +526,83 @@ public class LoginActivity extends Activity implements View.OnClickListener, Vie
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            BmobQuery<U_NormalP> bmobQuery = new BmobQuery<>();
-            bmobQuery.addWhereEqualTo("User_WbID", wbuser.id);
-            //执行查询方法
-            bmobQuery.findObjects(LoginActivity.this, new FindListener<U_NormalP>() {
-                @Override
-                public void onSuccess(List<U_NormalP> object) {
-                    //判断查询到的行数
-                    if (object.size() == 1) {
-                        //如果此用户已存在，获得数据的objectId信息
-                        U_NormalP mUser = object.get(0);
-                        userID = mUser.getObjectId();
-                        returnData();
-                        saveDB(mUser);
-                    }
-                }
-
-                @Override
-                public void onError(int i, String s) {
-                    Completed();
-                    Toast.makeText(LoginActivity.this, "查找数据失败", Toast.LENGTH_SHORT).show();
-                }
-            });
+            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * 保存数据到本地
      */
-    private void saveDB(U_NormalP user) {
+    private void saveDB(User_Profile user) {
+        try {
+            user.getUser_WbID();
+        } catch (Exception e) {
+            user.setUser_WbID("");
+        }
         UserDao mUserDao = new UserDao(LoginActivity.this);
-        mUserDao.execSQL("insert into U_NormalP (objectId,User_Name,User_Autograph,User_Avatar,User_Nickname" +
-                        ",User_Address,User_sex,User_image_min,User_sex,User_image_min) values(?,?,?,?,?,?,?,?,?,?)",
-                new String[]{userID, user.getUser_Name(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
-                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max()});
+        mUserDao.execSQL("insert into User_Profile (objectId,User_Name,User_Password,User_Autograph,User_Avatar,User_Nickname" +
+                        ",User_Address,User_sex,User_image_min,User_image_max,User_weiboID,User_phone) values(?,?,?,?,?,?,?,?,?,?,?,?)",
+                new String[]{userID, user.getUser_Name(), user.getUser_Password(), user.getUser_Autograph(), user.getUser_image_hd(), user.getUser_Nickname(),
+                        user.getUser_Address(), user.getUser_Sex(), user.getUser_image_min(), user.getUser_image_max(), user.getUser_WbID(), user.getUser_Phone()});
         Completed();
+        MyApplication myApplication = (MyApplication) getApplication();
+        myApplication.setObjectID(user.getObjectId());
+        myApplication.setUserIsV(user.isUser_IsV());
+        myApplication.setUserVerStatus(user.isUser_VerStatus());
+        myApplication.setWbId(user.getUser_WbID());
+        myApplication.setWbVerReason(user.getUser_VerifiedReason());
         finish();
+    }
+
+    private void saveUser2Mysql(final String objectId, final User_Profile user) {
+        String webServiceIp = ((MyApplication) (getApplication())).getWebServiceIp();
+        if (!(webServiceIp == null)) {
+            String url = webServiceIp + "AddNewUser";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            RequestBody body = new FormBody.Builder()
+                    .add("Object_Id", objectId)
+                    .build();
+
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, final IOException e) {
+                    final String e1 = e.getMessage();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this, e1, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String result = response.body().string();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.contains("success")) {
+                                userID = objectId;
+                                Toast.makeText(LoginActivity.this, "成功提交数据", Toast.LENGTH_SHORT).show();
+                                returnData();
+                                saveDB(user);
+                            } else {
+                                Log.d("Kiuber_LOG", "fail: " + result);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            MyApplication myApplication = (MyApplication) getApplication();
+            myApplication.isLogin();
+            Toast.makeText(LoginActivity.this, "服务器地址获取失败，请重新试一次~", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
